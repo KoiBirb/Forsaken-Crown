@@ -1,7 +1,6 @@
 package Main.Panels;
 
 import Main.KeyInput;
-
 import javax.swing.*;
 import java.awt.*;
 
