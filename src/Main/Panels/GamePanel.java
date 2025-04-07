@@ -1,36 +1,43 @@
 package Main.Panels;
 
+import Entitys.Player;
+import Handlers.Vector2;
 import Main.KeyInput;
+import Map.TiledMap;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class GamePanel extends JPanel implements Runnable{
 
-    public double screenWidth = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
-    public double screenHeight = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
+    public final static double screenWidth = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+    public final static double screenHeight = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
+
+    private TiledMap tileMap;
+    private Player player;
 
     private final int FPS = 60;
 
-    KeyInput keyI = new KeyInput(this);
+    public KeyInput keyI = new KeyInput(this);
 
     Thread gameThread;
 
     public GamePanel(){
         this.setPreferredSize(Toolkit.getDefaultToolkit().getScreenSize());
-        this.setBackground(Color.BLACK);
+        this.setBackground(Color.WHITE);
         this.setDoubleBuffered(true);
         this.addKeyListener(keyI);
         this.setFocusable(true);
+
+        // initialize classes
+
+        tileMap = new TiledMap();
+        player = new Player(new Vector2(100,100), 32,16, keyI);
     }
 
 
 
     public void setupGame() {
-        loadMaps();
-    }
-
-    public void loadMaps(){
-
     }
 
     public void startThread() {
@@ -67,7 +74,7 @@ public class GamePanel extends JPanel implements Runnable{
     }
 
     public void update() {
-
+        player.update();
     }
 
     public void paintComponent(Graphics g){
@@ -75,6 +82,9 @@ public class GamePanel extends JPanel implements Runnable{
             super.paintComponent(g);
 
             Graphics2D g2 = (Graphics2D)g;
+
+            tileMap.drawMap(g2, player);
+            player.draw(g2);
 
             g2.dispose();
         }
