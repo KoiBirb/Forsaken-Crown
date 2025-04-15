@@ -12,7 +12,7 @@ public class GamePanel extends JPanel implements Runnable{
 
     public final static double screenWidth = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
     public final static double screenHeight = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
-    public final static double scale = 2;
+    public final static double scale = 1;
 
     public static TiledMap tileMap;
     public static KeyInput keyI = new KeyInput();
