@@ -12,13 +12,14 @@ public class GamePanel extends JPanel implements Runnable{
 
     public final static double screenWidth = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
     public final static double screenHeight = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
+    public final static double scale = 2;
 
-    private TiledMap tileMap;
-    private Player player;
+    public static TiledMap tileMap;
+    public static KeyInput keyI = new KeyInput();
+    public static final Player player = new Player(new Vector2(200,150), 32,16);
 
     private final int FPS = 60;
 
-    public KeyInput keyI = new KeyInput(this);
 
     Thread gameThread;
 
@@ -32,7 +33,6 @@ public class GamePanel extends JPanel implements Runnable{
         // initialize classes
 
         tileMap = new TiledMap();
-        player = new Player(new Vector2(100,100), 32,16, keyI);
     }
 
 
@@ -75,6 +75,7 @@ public class GamePanel extends JPanel implements Runnable{
 
     public void update() {
         player.update();
+        tileMap.update(player);
     }
 
     public void paintComponent(Graphics g){

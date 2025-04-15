@@ -1,18 +1,11 @@
 package Main;
 
-import Main.Panels.GamePanel;
-
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class KeyInput implements KeyListener {
 
-    GamePanel gp;
     public boolean wPressed, sPressed, aPressed, dPressed;
-
-    public KeyInput(GamePanel gp) {
-        this.gp = gp;
-    }
 
     @Override
     public void keyTyped(KeyEvent e) {}
