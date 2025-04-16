@@ -8,7 +8,8 @@ public abstract class Entity {
 
     public Vector2 position;
     private Vector2 velocity;
-    private int width, height;
+    public int width;
+    public int height;
     private Rectangle Hitbox;
 
     public Entity(Vector2 position, Vector2 velocity, int width, int height) {

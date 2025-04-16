@@ -40,15 +40,11 @@ public class Player extends Entity {
 
     @Override
     public void draw(Graphics2D g2) {
-        // Calculate player's screen position
-        double cameraX = position.x - GamePanel.screenWidth / 2;
-        double cameraY = position.y - GamePanel.screenHeight / 2;
 
-        cameraX = Math.max(GamePanel.tileMap.roomPosition.x, Math.min(cameraX, GamePanel.tileMap.roomPosition.x + GamePanel.tileMap.roomWidth - GamePanel.screenWidth));
-        cameraY = Math.max(GamePanel.tileMap.roomPosition.y, Math.min(cameraY, GamePanel.tileMap.roomPosition.y + GamePanel.tileMap.roomHeight - GamePanel.screenHeight));
+        Vector2 cameraPos = GamePanel.tileMap.getCameraPos();
 
-        double screenX = position.x - cameraX;
-        double screenY = position.y - cameraY;
+        double screenX = position.x - cameraPos.x;
+        double screenY = position.y - cameraPos.y;
 
         g2.setColor(Color.red);
         g2.fillRect((int) screenX, (int) screenY,16, 32);

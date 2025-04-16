@@ -13,7 +13,9 @@ package Map;
     import org.json.simple.JSONObject;
     import org.json.simple.parser.JSONParser;
 
-    public class TiledMap {
+    import static Main.Panels.GamePanel.player;
+
+public class TiledMap {
 
         private ArrayList<BufferedImage> tileSets;
         private String mapPath;
@@ -90,14 +92,12 @@ package Map;
             int playerTileX = (int) (player.position.x / scaledTileSize);
             int playerTileY = (int) (player.position.y / scaledTileSize);
 
-//            // Check if the player is inside a wall
-//            if (playerTileX < 0 || playerTileX >= mapWidth || playerTileY < 0 || playerTileY >= mapHeight ||
-//                ((Long) roomData.get(playerTileY * mapWidth + playerTileX)).intValue() == 0) {
-//                // Player is in an invalid position; keep the camera centered on the room
-//                return;
-//            }
-
             int tileId = 1;
+
+            if (playerTileX < 0 || playerTileX >= mapWidth || playerTileY < 0 || playerTileY >= mapHeight ||
+                ((Long) roomData.get(playerTileY * mapWidth + playerTileX)).intValue() == tileId) {
+                return;
+            }
 
             int minX = playerTileX, maxX = playerTileX;
             int minY = playerTileY, maxY = playerTileY;
@@ -127,21 +127,37 @@ package Map;
             );
 
             // Smoothly interpolate the room position
-            double lerpFactor = 0.1; // Adjust for smoother or faster transitions
+            double lerpFactor = 0.08; // Adjust for smoother or faster transitions
             roomPosition.x += (targetRoomPosition.x - roomPosition.x) * lerpFactor;
             roomPosition.y += (targetRoomPosition.y - roomPosition.y) * lerpFactor;
         }
 
-        public void drawMap(Graphics2D g2, Player player) {
-            int scaledTileSize = (int) (tileSetTileSize * scale);
-
+        public Vector2 getCameraPos () {
             // Calculate camera position to center on the player
             double cameraX = player.position.x - GamePanel.screenWidth / 2;
             double cameraY = player.position.y - GamePanel.screenHeight / 2;
 
-            // Constrain camera within room boundaries
-            cameraX = Math.max(roomPosition.x, Math.min(cameraX, roomPosition.x + roomWidth - GamePanel.screenWidth));
-            cameraY = Math.max(roomPosition.y, Math.min(cameraY, roomPosition.y + roomHeight - GamePanel.screenHeight));
+            int cameraMargin = 400;
+
+            if (roomWidth > GamePanel.screenWidth) {
+                cameraX = (cameraX < roomPosition.x) ? Math.max(roomPosition.x - cameraMargin, cameraX) : Math.min(cameraX, roomPosition.x + roomWidth - GamePanel.screenWidth);
+            } else {
+                cameraX = roomPosition.x;
+            }
+
+            if (roomHeight > GamePanel.screenHeight) {
+                cameraY = (cameraY < roomPosition.y) ? Math.max(roomPosition.y - 2 * cameraMargin, cameraY) : Math.min(cameraY, roomPosition.y + roomHeight - GamePanel.screenHeight);
+            } else {
+                cameraY = roomPosition.y;
+            }
+
+            return new Vector2(cameraX, cameraY);
+        }
+
+        public void drawMap(Graphics2D g2) {
+            int scaledTileSize = (int) (tileSetTileSize * scale);
+
+            Vector2 cameraPos = getCameraPos();
 
             for (int i = 0; i < mapHeight; i++) {
                 for (int j = 0; j < mapWidth; j++) {
@@ -152,10 +168,10 @@ package Map;
                     int tileWorldY = i * scaledTileSize;
 
                     // Check if the tile is within the camera's view
-                    if (tileWorldX + scaledTileSize > cameraX &&
-                        tileWorldX < cameraX + GamePanel.screenWidth &&
-                        tileWorldY + scaledTileSize > cameraY &&
-                        tileWorldY < cameraY + GamePanel.screenHeight) {
+                    if (tileWorldX + scaledTileSize > cameraPos.x &&
+                        tileWorldX < cameraPos.x + GamePanel.screenWidth &&
+                        tileWorldY + scaledTileSize > cameraPos.y &&
+                        tileWorldY < cameraPos.y + GamePanel.screenHeight) {
 
                         BufferedImage tileSetImage = tileSets.get(0);
                         int tileCol = (tileId - 1) % (tileSetImage.getWidth() / tileSetTileSize);
@@ -163,10 +179,10 @@ package Map;
 
                         // Draw the tile
                         g2.drawImage(tileSetImage,
-                                (int) (tileWorldX - cameraX),
-                                (int) (tileWorldY - cameraY),
-                                (int) (tileWorldX - cameraX + scaledTileSize),
-                                (int) (tileWorldY - cameraY + scaledTileSize),
+                                (int) (tileWorldX - cameraPos.x),
+                                (int) (tileWorldY - cameraPos.y),
+                                (int) (tileWorldX - cameraPos.x + scaledTileSize),
+                                (int) (tileWorldY - cameraPos.y + scaledTileSize),
                                 tileCol * tileSetTileSize, tileRow * tileSetTileSize,
                                 (tileCol + 1) * tileSetTileSize, (tileRow + 1) * tileSetTileSize, null);
                     }
