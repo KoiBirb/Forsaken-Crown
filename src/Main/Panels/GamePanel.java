@@ -20,12 +20,18 @@ public class GamePanel extends JPanel implements Runnable{
 
     private final int FPS = 60;
 
+    private static boolean fading = false;
+    private static double fadeAlpha = 0.0;
+    private static boolean fadeIn = true;
+    private int fadeDelay = 20;
+    private int fadeDelayCounter = 0;
+
 
     Thread gameThread;
 
     public GamePanel(){
         this.setPreferredSize(Toolkit.getDefaultToolkit().getScreenSize());
-        this.setBackground(Color.WHITE);
+        this.setBackground(Color.BLACK);
         this.setDoubleBuffered(true);
         this.addKeyListener(keyI);
         this.setFocusable(true);
@@ -35,7 +41,11 @@ public class GamePanel extends JPanel implements Runnable{
         tileMap = new TiledMap();
     }
 
-
+    public static void roomTransition() {
+        fading = true;
+        fadeAlpha = 0.0;
+        fadeIn = true;
+    }
 
     public void setupGame() {
     }
@@ -74,19 +84,47 @@ public class GamePanel extends JPanel implements Runnable{
     }
 
     public void update() {
+        // Update player and tile map regardless of fading
         player.update();
         tileMap.update(player);
+
+        // Handle fade logic
+        if (fading) {
+            if (fadeIn) {
+                fadeAlpha += 0.07; // Increase alpha for fade-in
+                if (fadeAlpha >= 1.0) {
+                    fadeAlpha = 1.0;
+                    fadeIn = false; // Start delay before fade-out
+                    fadeDelayCounter = fadeDelay;
+                    tileMap.update(player); // Switch room during full black
+                }
+            } else if (fadeDelayCounter > 0) {
+                fadeDelayCounter--; // Stay on pure black
+            } else {
+                fadeAlpha -= 0.05; // Decrease alpha for fade-out
+                if (fadeAlpha <= 0.0) {
+                    fadeAlpha = 0.0;
+                    fading = false; // End transition
+                }
+            }
+        }
     }
 
-    public void paintComponent(Graphics g){
 
-            super.paintComponent(g);
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
 
-            Graphics2D g2 = (Graphics2D)g;
+        Graphics2D g2 = (Graphics2D) g;
 
-            tileMap.drawMap(g2);
-            player.draw(g2);
+        tileMap.drawMap(g2);
+        player.draw(g2);
 
-            g2.dispose();
+        // Draw fade effect
+        if (fading) {
+            g2.setColor(new Color(0, 0, 0, (float) fadeAlpha));
+            g2.fillRect(0, 0, (int) screenWidth, (int) screenHeight);
         }
+
+        g2.dispose();
+    }
 }

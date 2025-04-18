@@ -22,19 +22,19 @@ public class Player extends Entity {
         super.update();
 
         if (keyI.wPressed) {
-            position.y -= 5;
+            position.y -= 10;
         }
 
         if (keyI.sPressed) {
-            position.y += 5;
+            position.y += 10;
         }
 
         if (keyI.aPressed) {
-            position.x -= 5;
+            position.x -= 10;
         }
 
         if (keyI.dPressed) {
-            position.x += 5;
+            position.x += 10;
         }
     }
 
