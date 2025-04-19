@@ -31,7 +31,7 @@ public class GamePanel extends JPanel implements Runnable{
 
     public GamePanel(){
         this.setPreferredSize(Toolkit.getDefaultToolkit().getScreenSize());
-        this.setBackground(Color.BLACK);
+        this.setBackground(Color.WHITE);
         this.setDoubleBuffered(true);
         this.addKeyListener(keyI);
         this.setFocusable(true);
@@ -86,25 +86,27 @@ public class GamePanel extends JPanel implements Runnable{
     public void update() {
         // Update player and tile map regardless of fading
         player.update();
-        tileMap.update(player);
+        tileMap.update();
 
         // Handle fade logic
         if (fading) {
+            player.setCanMove(false);
             if (fadeIn) {
-                fadeAlpha += 0.07; // Increase alpha for fade-in
+                fadeAlpha += 0.07;
                 if (fadeAlpha >= 1.0) {
                     fadeAlpha = 1.0;
-                    fadeIn = false; // Start delay before fade-out
+                    fadeIn = false;
                     fadeDelayCounter = fadeDelay;
-                    tileMap.update(player); // Switch room during full black
                 }
             } else if (fadeDelayCounter > 0) {
                 fadeDelayCounter--; // Stay on pure black
             } else {
-                fadeAlpha -= 0.05; // Decrease alpha for fade-out
+                fadeAlpha -= 0.07;
                 if (fadeAlpha <= 0.0) {
                     fadeAlpha = 0.0;
-                    fading = false; // End transition
+                    fading = false;
+                    player.setCanMove(true);
+
                 }
             }
         }
@@ -118,6 +120,8 @@ public class GamePanel extends JPanel implements Runnable{
 
         tileMap.drawMap(g2);
         player.draw(g2);
+
+        tileMap.coverScreen(g2);
 
         // Draw fade effect
         if (fading) {

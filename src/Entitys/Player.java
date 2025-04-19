@@ -9,10 +9,13 @@ import static Main.Panels.GamePanel.keyI;
 
 public class Player extends Entity {
 
-    public Vector2 screenPosition;
+    private Vector2 screenPosition;
+    private boolean canMove;
 
     public Player(Vector2 position, int width, int height) {
         super(position, new Vector2(0,0), width, height);
+
+        canMove = true;
 
         screenPosition = new Vector2(GamePanel.screenWidth /2 - 16, GamePanel.screenHeight - 128);
     }
@@ -21,22 +24,27 @@ public class Player extends Entity {
     public void update() {
         super.update();
 
-        if (keyI.wPressed) {
-            position.y -= 10;
-        }
+        if (canMove) {
+            if (keyI.wPressed)
+                position.y -= 10;
+            if (keyI.sPressed)
+                position.y += 10;
+            if (keyI.aPressed)
+                position.x -= 10;
+            if (keyI.dPressed)
+                position.x += 10;
 
-        if (keyI.sPressed) {
-            position.y += 10;
-        }
-
-        if (keyI.aPressed) {
-            position.x -= 10;
-        }
-
-        if (keyI.dPressed) {
-            position.x += 10;
         }
     }
+
+    public Vector2 getPosition(){
+        return position;
+    }
+
+    public void setCanMove(boolean canMove) {
+        this.canMove = canMove;
+    }
+
 
     @Override
     public void draw(Graphics2D g2) {
