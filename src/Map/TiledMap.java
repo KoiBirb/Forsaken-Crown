@@ -104,7 +104,7 @@ public class TiledMap {
             JSONArray layers = (JSONArray) mapData.get("layers");
 
             // base tile layer
-            JSONObject baseLayer = (JSONObject) layers.get(3);
+            JSONObject baseLayer = (JSONObject) layers.get(0);
             JSONArray data = (JSONArray) baseLayer.get("data");
 
             baseLayerTiles = new int[mapHeight][mapWidth];
