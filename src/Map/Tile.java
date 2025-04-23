@@ -9,23 +9,22 @@ public class Tile {
 
     //Tile size is determined based on screen ratio
     public static final int tileSize = normalTileSize*tileMultipler;
-    public static final int tileRatio = tileSize/normalTileSize;
 
-    private int value, orgValue;
-    private int row, col;
+    private final int value, orgValue;
+    private final int row, col;
     private int imageRow, imageCol;
     private double worldXPos, worldYPos;
     private double screenXPos, screenYPos;
 
     public boolean walkable;
 
-    private int numTilesHeight, numTilesWidth;
+    private final int numTilesHeight, numTilesWidth;
 
     /**
-     * Constructor for the Tile class - sets positions and values
+     * Constructor
      * @param row Tile row
      * @param col Tile column
-     * @param value Tile value (used for image)
+     * @param value Tile value
      * @param walkable Whether the tile is walkable or not
      */
     Tile(int row, int col, int value, boolean walkable, int numTilesHeight, int numTilesWidth) {

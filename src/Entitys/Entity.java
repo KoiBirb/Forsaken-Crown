@@ -3,30 +3,75 @@ package Entitys;
 import Handlers.Vector2;
 
 import java.awt.*;
+import java.util.HashMap;
+
+import static Main.Panels.GamePanel.keyI;
 
 public abstract class Entity {
 
     Vector2 position;
-    private Vector2 velocity;
-    private int width;
-    private int height;
-    private Rectangle Hitbox;
+    boolean isColliding;
+    Vector2 velocity;
+    double speed;
+    final int width,height;
+    int solidAreaOffsetX, solidAreaOffsetY;
+    Rectangle solidArea;
+    String direction;
+    HashMap<String, Double> directionToRad;
 
-    public Entity(Vector2 position, Vector2 velocity, int width, int height) {
+    public Entity(Vector2 position, Vector2 velocity, int width, int height, int solidAreaOffsetX, int solidAreaOffsetY, int speed) {
         this.position = position;
         this.velocity = velocity;
         this.width = width;
         this.height = height;
+        this.solidAreaOffsetX = solidAreaOffsetX;
+        this.solidAreaOffsetY = solidAreaOffsetY;
+        this.speed = speed;
 
-        Hitbox = new Rectangle((int)position.x, (int)position.y, width, height);
+        this.isColliding = false;
+        this.direction = "right";
+
+        directionToRad = new HashMap<>();
+
+        directionToRad.put("up", 0.0);
+        directionToRad.put("up-right", 45.0);
+        directionToRad.put("right", 90.0);
+        directionToRad.put("down-right", 135.0);
+        directionToRad.put("down", 180.0);
+        directionToRad.put("down-left", 225.0);
+        directionToRad.put("left", 270.0);
+        directionToRad.put("up-left", 315.0);
+
+        solidArea = new Rectangle((int)position.x + solidAreaOffsetX, (int)position.y + solidAreaOffsetY, 16, 32);
     }
     public void update() {
         position.add(velocity);
-        Hitbox.setLocation((int)position.x, (int)position.y);
+        solidArea.setLocation((int) position.x + solidAreaOffsetX, (int)position.y + solidAreaOffsetY);
     }
 
     public void draw(Graphics2D g2) {
         g2.setColor(Color.RED);
         g2.drawRect((int)position.x, (int)position.y, width, height);
     }
+
+    public Vector2 getPosition(){
+        return position;
+    }
+
+    public Rectangle getSolidArea(){
+        return solidArea;
+    }
+
+    public String getDirection() {
+        return direction;
+    }
+
+    public void setColliding(boolean colliding) {
+        isColliding = colliding;
+    }
+
+    public double getSpeed(){
+        return speed;
+    }
+
 }

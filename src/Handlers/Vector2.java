@@ -9,6 +9,16 @@ public class Vector2 {
         this.y = y;
     }
 
+    public Vector2(double length, double theta, boolean isRadians) {
+        if(!isRadians)
+            theta = Math.toRadians(theta);
+
+        theta -= Math.PI/2;
+
+        this.x = length * Math.cos(theta);
+        this.y = length * Math.sin(theta);
+    }
+
     public void add(Vector2 v) {
         this.x += v.x;
         this.y += v.y;
