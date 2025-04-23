@@ -59,9 +59,6 @@ public class Player extends Entity {
         double screenY = position.y - cameraPos.y;
 
         g2.setColor(Color.red);
-        g2.fillRect((int) screenX, (int) screenY,width, height);
-
-        g2.setColor(Color.blue);
-        g2.fillRect(solidArea.x, solidArea.y, solidArea.width, solidArea.height);
+        g2.fillRect((int) screenX, (int) screenY, 16, 32);
     }
 }
