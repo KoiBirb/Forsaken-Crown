@@ -78,7 +78,7 @@ public class TiledMap {
         tilesetOffset = new HashMap<>();
 
         // Add each tileset image to the list
-        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/pixil-frame-0 (2).png"));
+        tileSets.add(ImageHandler.loadImage("Images/Tilesets/Map/pixil-frame-0 (1).png"));
         tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/pixil-frame-0.png"));
         tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/DARK Edition Tileset No background.png"));
 
@@ -379,12 +379,15 @@ public class TiledMap {
      * Draws Map and backgrounds
      * @param g2 Graphics2D object
      */
-    public void drawMap(Graphics2D g2) {
+   public void drawMap(Graphics2D g2) {
         int scaledTileSize = (int) (tileSetTileSize * SCALE);
 
         drawParallaxBackground(g2, backgrounds.get(0), new double[]{0.1, 0.2, 0.4, 0.6});
 
-        // loop through layers
+        // glow opacity
+        float alpha = (float) (0.75 + 0.2 * Math.sin(System.currentTimeMillis() * 0.002));
+
+        // Loop through layers
         for (int k = 0; k < 3; k++) {
 
             // Only draw tiles in room boundaries
@@ -396,13 +399,11 @@ public class TiledMap {
 
                     int tileId = mapLayers.get(k)[i][j];
 
-
                     if (tileId == 0)
                         continue;
 
                     int tileWorldX = j * scaledTileSize;
                     int tileWorldY = i * scaledTileSize;
-
 
                     BufferedImage tileSetImage = tileSets.get(k);
 
@@ -428,11 +429,21 @@ public class TiledMap {
                     int tileCol = ((tileId & 0x1FFFFFFF) - 1) % (tileSetImage.getWidth() / tileSetTileSize);
                     int tileRow = ((tileId & 0x1FFFFFFF) - 1 - tilesetOffset.get(tileSetImage)) / (tileSetImage.getWidth() / tileSetTileSize);
 
+                    // Apply flashing effect for layer 0
+                    if (k == 0) {
+                        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
+                    }
+
                     g2.drawImage(tileSetImage,
                             -scaledTileSize / 2, -scaledTileSize / 2,
                             scaledTileSize / 2, scaledTileSize / 2,
                             tileCol * tileSetTileSize, tileRow * tileSetTileSize,
                             (tileCol + 1) * tileSetTileSize, (tileRow + 1) * tileSetTileSize, null);
+
+                    // Reset alpha composite for other layers
+                    if (k == 0) {
+                        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
+                    }
 
                     g2.setTransform(originalTransform);
                 }
