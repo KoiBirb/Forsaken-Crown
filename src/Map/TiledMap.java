@@ -63,7 +63,7 @@ public class TiledMap {
      * Initializes the map path and loads the map data.
      */
     public TiledMap() {
-        this.mapPath = "src/Assets/Map/forsakenMap.json";
+        this.mapPath = "src/Assets/Map/forsakenMap.tmj";
         this.parser = new JSONParser();
         this.tileSets = new ArrayList<>();
 
@@ -425,8 +425,9 @@ public class TiledMap {
                         g2.scale(1, -1); // Flip vertically
                     }
 
-                    int tileCol = (tileId - 1) % (tileSetImage.getWidth() / tileSetTileSize);
+                    int tileCol = ((tileId & 0x1FFFFFFF) - 1) % (tileSetImage.getWidth() / tileSetTileSize);
                     int tileRow = ((tileId & 0x1FFFFFFF) - 1 - tilesetOffset.get(tileSetImage)) / (tileSetImage.getWidth() / tileSetTileSize);
+
                     g2.drawImage(tileSetImage,
                             -scaledTileSize / 2, -scaledTileSize / 2,
                             scaledTileSize / 2, scaledTileSize / 2,
