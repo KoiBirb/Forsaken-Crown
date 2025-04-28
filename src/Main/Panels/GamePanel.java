@@ -16,7 +16,7 @@ public class GamePanel extends JPanel implements Runnable{
 
     public static TiledMap tileMap;
     public static KeyInput keyI = new KeyInput();
-    public static final Player player = new Player(new Vector2(200,150), 32,16);
+    public static final Player player = new Player(new Vector2(200,150), 90,37);
 
     private final int FPS = 60;
 
