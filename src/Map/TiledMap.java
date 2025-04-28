@@ -58,6 +58,8 @@ public class TiledMap {
     private int roomHeight;
     private int minX, maxX, minY, maxY;
 
+    public int[][] collidablesTiles;
+
     /**
      * Constructor
      * Initializes the map path and loads the map data.
@@ -177,7 +179,7 @@ public class TiledMap {
             JSONObject collidables = (JSONObject) layers.get(4);
             JSONArray collidablesData = (JSONArray) collidables.get("data");
 
-            int[][] collidablesTiles = new int[mapHeight][mapWidth];
+            collidablesTiles = new int[mapHeight][mapWidth];
             for (int i = 0; i < mapHeight; i++) {
                 for (int j = 0; j < mapWidth; j++) {
                     collidablesTiles[i][j] = ((Long) collidablesData.get(i * mapWidth + j)).intValue();
@@ -449,7 +451,27 @@ public class TiledMap {
         }
     }
 
+    /**
+     * Determines the size of one tile
+     * @return int value of the size of one tile in pixels
+     */
     public static int getScaledTileSize() {
         return (int) (tileSetTileSize * scale);
+    }
+
+    /**
+     * Determines if the given tile is passable
+     * @param gridX int value of x-coordinates of the grid
+     * @param gridY int value of y-coordinates of the grid
+     * @return
+     */
+    public boolean isWalkable(int gridX, int gridY) {
+        // if out of map bounds, false
+        if (gridX < 0 || gridX >= mapWidth || gridY < 0 || gridY >= mapHeight) {
+            return false;
+        }
+
+        // collidablesTiles[y][x] == 0 means empty
+        return collidablesTiles[gridY][gridX] == 0;
     }
 }
