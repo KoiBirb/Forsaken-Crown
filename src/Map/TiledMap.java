@@ -357,4 +357,25 @@ public class TiledMap {
             }
         }
     }
+
+    /**
+     * Determines the size of one tile
+     * @return the size of one tile in pixels
+     */
+    public int getScaledTileSize() {
+        return (int)(tileSetTileSize * SCALE);
+    }
+
+    /**
+     * Determines if the tile at the given coordinates is walkable
+     * @return true if the tile at grid coordinates (x,y) is walkable, false otherwise
+     */
+    public boolean isWalkable(int gridX, int gridY) {
+        // out of map is not walkable
+        if (gridX < 0 || gridX >= mapWidth || gridY < 0 || gridY >= mapHeight) {
+            return false;
+        }
+        // baseLayerTiles[y][x] == 0 means empty
+        return baseLayerTiles[gridY][gridX] == 0;
+    }
 }
