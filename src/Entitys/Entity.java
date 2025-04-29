@@ -3,9 +3,8 @@ package Entitys;
 import Handlers.Vector2;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.HashMap;
-
-import static Main.Panels.GamePanel.keyI;
 
 public abstract class Entity {
 
@@ -18,15 +17,17 @@ public abstract class Entity {
     Rectangle solidArea;
     String direction;
     HashMap<String, Double> directionToRad;
+    BufferedImage image;
 
-    public Entity(Vector2 position, Vector2 velocity, int width, int height, int solidAreaOffsetX, int solidAreaOffsetY, int speed) {
+    public Entity(Vector2 position, Vector2 velocity, int width, int height, int speed, Rectangle solidArea, BufferedImage image) {
         this.position = position;
         this.velocity = velocity;
         this.width = width;
         this.height = height;
-        this.solidAreaOffsetX = solidAreaOffsetX;
-        this.solidAreaOffsetY = solidAreaOffsetY;
+        this.solidAreaOffsetX = solidArea.x;
+        this.solidAreaOffsetY = solidArea.y;
         this.speed = speed;
+        this.image = image;
 
         this.isColliding = false;
         this.direction = "right";
@@ -42,7 +43,7 @@ public abstract class Entity {
         directionToRad.put("left", 270.0);
         directionToRad.put("up-left", 315.0);
 
-        solidArea = new Rectangle((int)position.x + solidAreaOffsetX, (int)position.y + solidAreaOffsetY, 16, 32);
+        this.solidArea = solidArea;
     }
     public void update() {
         position.add(velocity);

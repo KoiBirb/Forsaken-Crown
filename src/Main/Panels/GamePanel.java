@@ -1,6 +1,7 @@
 package Main.Panels;
 
 import Entitys.Player;
+import Handlers.CollisionHandler;
 import Handlers.Vector2;
 import Main.KeyInput;
 import Map.TiledMap;
@@ -120,6 +121,8 @@ public class GamePanel extends JPanel implements Runnable{
 
         tileMap.drawMap(g2);
         player.draw(g2);
+
+        //CollisionHandler.draw(g2, player);
 
         tileMap.coverScreen(g2);
 

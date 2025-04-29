@@ -80,7 +80,7 @@ public class TiledMap {
         tilesetOffset = new HashMap<>();
 
         // Add each tileset image to the list
-        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/pixil-frame-0 (2).png"));
+        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Glow.png"));
         tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/pixil-frame-0.png"));
         tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/DARK Edition Tileset No background.png"));
 
@@ -112,9 +112,9 @@ public class TiledMap {
     private void loadMap() {
         try (FileReader reader = new FileReader(mapPath)) {
 
-            tilesetOffset.put (tileSets.get(0), 775);
+            tilesetOffset.put (tileSets.get(0), 774);
             tilesetOffset.put(tileSets.get(1), 0);
-            tilesetOffset.put(tileSets.get(2), 307);
+            tilesetOffset.put(tileSets.get(2), 306);
 
             JSONObject mapData = (JSONObject) parser.parse(reader);
             mapWidth = ((Long) mapData.get("width")).intValue();
@@ -440,6 +440,12 @@ public class TiledMap {
                             tileCol * tileSetTileSize, tileRow * tileSetTileSize,
                             (tileCol + 1) * tileSetTileSize, (tileRow + 1) * tileSetTileSize, null);
 
+//                    String tileIdText = String.valueOf((tileId & 0x1FFFFFFF) - 1 - tilesetOffset.get(tileSetImage));
+//                    g2.setColor(Color.WHITE); // Set text color
+//                    g2.setFont(new Font("Arial", Font.BOLD, 12)); // Set font
+//                    g2.drawString(tileIdText, -scaledTileSize / 4, scaledTileSize / 4);
+
+
                     // Reset alpha composite for other layers
                     if (k == 0) {
                         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
@@ -457,6 +463,10 @@ public class TiledMap {
      */
     public static int getScaledTileSize() {
         return (int) (tileSetTileSize * scale);
+    }
+
+    public static int getTileSize() {
+        return tileSetTileSize;
     }
 
     /**
