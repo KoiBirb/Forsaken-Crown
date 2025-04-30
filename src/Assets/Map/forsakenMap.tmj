@@ -818,10 +818,6 @@
         }, 
         {
          "firstgid":811,
-         "source":"..\/..\/..\/..\/..\/Castle of Bones Tileset.tsx"
-        }, 
-        {
-         "firstgid":811,
          "source":"..\/Images\/Tilesets\/Map\/Castle of Bones Tileset.tsx"
         }],
  "tilewidth":16,
