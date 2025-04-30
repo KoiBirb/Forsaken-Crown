@@ -24,44 +24,50 @@ public class Player extends Entity {
 
     @Override
     public void update() {
-
         if (keyI.wPressed || keyI.sPressed || keyI.aPressed || keyI.dPressed) {
             spriteRow = 3;
 
             if (canMove) {
-                velocity.x = 0;
-                velocity.y = 0;
+                velocity = new Vector2(0, 0);
 
-                if (keyI.wPressed)
-                    direction = "up";
+                if (keyI.wPressed && keyI.aPressed) {
+                    direction = "up-left";
+                    velocity = new Vector2(speed, directionToRad.get(direction), false);
+                } else if (keyI.wPressed && keyI.dPressed) {
+                    direction = "up-right";
+                    velocity = new Vector2(speed, directionToRad.get(direction), false);
+                } else if (keyI.sPressed && keyI.aPressed) {
+                    direction = "down-left";
+                    velocity = new Vector2(speed, directionToRad.get(direction), false);
+                } else if (keyI.sPressed && keyI.dPressed) {
+                    direction = "down-right";
+                    velocity = new Vector2(speed, directionToRad.get(direction), false);
+                } else {
+                    // Handle single direction movement
+                    if (keyI.wPressed) {
+                        direction = "up";
+                        velocity = new Vector2(0, -speed);
+                    }
+                    if (keyI.sPressed) {
+                        direction = "down";
+                        velocity = new Vector2(0, speed);
+                    }
+                    if (keyI.aPressed) {
+                        direction = "left";
+                        velocity = new Vector2(-speed, 0);
+                    }
+                    if (keyI.dPressed) {
+                        direction = "right";
+                        velocity = new Vector2(speed, 0);
+                    }
+                }
 
-                if (keyI.sPressed)
-                    direction = "down";
-
-                if (keyI.aPressed)
-                    direction = "left";
-
-                if (keyI.dPressed)
-                    direction = "right";
-
+                isColliding = false;
                 CollisionHandler.checkTileCollision(this);
 
                 if (!isColliding) {
-                    if (keyI.wPressed) {
-                        position.y -= speed;
-                    }
-
-                    if (keyI.sPressed) {
-                        position.y += speed;
-                    }
-
-                    if (keyI.aPressed) {
-                        position.x -= speed;
-                    }
-
-                    if (keyI.dPressed) {
-                        position.x += speed;
-                    }
+                    position.x += velocity.x;
+                    position.y += velocity.y;
                 }
             }
 

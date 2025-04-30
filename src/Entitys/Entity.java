@@ -59,6 +59,10 @@ public abstract class Entity {
         return position;
     }
 
+    public Vector2 getVelocity(){
+        return velocity;
+    }
+
     public Rectangle getSolidArea(){
         return solidArea;
     }

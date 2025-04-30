@@ -83,6 +83,9 @@ public class TiledMap {
         tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Glow.png"));
         tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/pixil-frame-0.png"));
         tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/DARK Edition Tileset No background.png"));
+        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Castle of Bones Tileset.png"));
+        tileSets.add(tileSets.get(3));
+
 
         loadMap();
         loadBackgrounds();
@@ -115,6 +118,8 @@ public class TiledMap {
             tilesetOffset.put (tileSets.get(0), 774);
             tilesetOffset.put(tileSets.get(1), 0);
             tilesetOffset.put(tileSets.get(2), 306);
+            tilesetOffset.put(tileSets.get(3), 810);
+            tilesetOffset.put(tileSets.get(4), 810);
 
             JSONObject mapData = (JSONObject) parser.parse(reader);
             mapWidth = ((Long) mapData.get("width")).intValue();
@@ -156,8 +161,30 @@ public class TiledMap {
                 }
             }
 
+            // bones 1
+            layer = (JSONObject) layers.get(3);
+            data = (JSONArray) layer.get("data");
+
+            mapLayers.add(new int[mapHeight][mapWidth]);
+            for (int i = 0; i < mapHeight; i++) {
+                for (int j = 0; j < mapWidth; j++) {
+                    mapLayers.get(3)[i][j] = ((Long) data.get(i * mapWidth + j)).intValue();
+                }
+            }
+
+            // bones 2
+            layer = (JSONObject) layers.get(4);
+            data = (JSONArray) layer.get("data");
+
+            mapLayers.add(new int[mapHeight][mapWidth]);
+            for (int i = 0; i < mapHeight; i++) {
+                for (int j = 0; j < mapWidth; j++) {
+                    mapLayers.get(4)[i][j] = ((Long) data.get(i * mapWidth + j)).intValue();
+                }
+            }
+
             // Room positions
-            JSONObject roomLayer = (JSONObject) layers.get(3);
+            JSONObject roomLayer = (JSONObject) layers.get(5);
             roomData = (JSONArray) roomLayer.get("data");
 
             minX = mapWidth; minY = mapHeight;
@@ -176,7 +203,7 @@ public class TiledMap {
                 }
             }
 
-            JSONObject collidables = (JSONObject) layers.get(4);
+            JSONObject collidables = (JSONObject) layers.get(6);
             JSONArray collidablesData = (JSONArray) collidables.get("data");
 
             collidablesTiles = new int[mapHeight][mapWidth];
@@ -238,11 +265,11 @@ public class TiledMap {
         }
 
         // Check if the room has changed
-        if (roomWidth != (newMaxX - newMinX + 1) * scaledTileSize ||
-                roomHeight != (newMaxY - newMinY + 1) * scaledTileSize) {
+        if (roomWidth != (newMaxX - newMinX) * scaledTileSize ||
+                roomHeight != (newMaxY - newMinY) * scaledTileSize) {
 
-            roomWidth = (newMaxX - newMinX + 1) * scaledTileSize;
-            roomHeight = (newMaxY - newMinY + 1) * scaledTileSize;
+            roomWidth = (newMaxX - newMinX) * scaledTileSize;
+            roomHeight = (newMaxY - newMinY) * scaledTileSize;
 
             GamePanel.roomTransition();
             roomChanged = true;
@@ -388,7 +415,11 @@ public class TiledMap {
 
         float alpha = (float) (0.75 + 0.15 * Math.sin(System.currentTimeMillis() * 0.002));
         // Loop through layers
-        for (int k = 0; k < 3; k++) {
+        for (int k = 0; k < 5; k++) {
+
+            if (k == 1){
+                continue;
+            }
 
             // Only draw tiles in room boundaries
             for (int i = minY - 1; i <= maxY + 1; i++) {
@@ -416,17 +447,31 @@ public class TiledMap {
                     g2.translate(tileWorldX - cameraPosition.x + scaledTileSize / 2.0,
                             tileWorldY - cameraPosition.y + scaledTileSize / 2.0);
 
+                    // Handle diagonal flip
                     if (flipDiagonally) {
                         g2.rotate(Math.PI / 2); // Rotate 90 degrees
-                    }
-                    if (flipHorizontally) {
-                        g2.scale(-1, 1); // Flip horizontally
-                    }
-                    if (flipVertically) {
-                        g2.scale(1, -1); // Flip vertically
+                        if (flipHorizontally && flipVertically) {
+                            g2.scale(-1, 1); // Flip both horizontally and vertically
+                        } else if (flipHorizontally) {
+                            g2.scale(1, 1); // Flip horizontally
+                        } else if (flipVertically) {
+                            g2.scale(-1, -1); // Flip vertically
+                        } else {
+                            g2.scale(1, -1);
+                        }
+                    } else {
+                        // Handle horizontal and vertical flips without diagonal
+                        if (flipHorizontally && flipVertically) {
+                            g2.scale(-1, -1); // Flip both horizontally and vertically
+                        } else if (flipHorizontally) {
+                            g2.scale(-1, 1); // Flip horizontally
+                        } else if (flipVertically) {
+                            g2.scale(1, -1); // Flip vertically
+                        }
                     }
 
-                    int tileCol = ((tileId & 0x1FFFFFFF) - 1) % (tileSetImage.getWidth() / tileSetTileSize);
+
+                    int tileCol = ((tileId & 0x1FFFFFFF) - 1 - tilesetOffset.get(tileSetImage)) % (tileSetImage.getWidth() / tileSetTileSize);
                     int tileRow = ((tileId & 0x1FFFFFFF) - 1 - tilesetOffset.get(tileSetImage)) / (tileSetImage.getWidth() / tileSetTileSize);
 
                     // Apply flashing effect for layer 0
@@ -440,10 +485,10 @@ public class TiledMap {
                             tileCol * tileSetTileSize, tileRow * tileSetTileSize,
                             (tileCol + 1) * tileSetTileSize, (tileRow + 1) * tileSetTileSize, null);
 
-//                    String tileIdText = String.valueOf((tileId & 0x1FFFFFFF) - 1 - tilesetOffset.get(tileSetImage));
-//                    g2.setColor(Color.WHITE); // Set text color
-//                    g2.setFont(new Font("Arial", Font.BOLD, 12)); // Set font
-//                    g2.drawString(tileIdText, -scaledTileSize / 4, scaledTileSize / 4);
+//                        String tileIdText = (flipHorizontally ? 1 : 0) + " " + (flipVertically ? 1 : 0) + " " + (flipDiagonally ? 1 : 0);
+//                        g2.setColor(Color.GREEN); // Set text color
+//                        g2.setFont(new Font("Arial", Font.BOLD, 12)); // Set font
+//                        g2.drawString(tileIdText, -scaledTileSize / 4, scaledTileSize / 4);
 
 
                     // Reset alpha composite for other layers

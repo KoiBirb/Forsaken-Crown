@@ -10,11 +10,11 @@ public class CollisionHandler {
 
     private static int[][] collidableTiles;
 
-    public static void checkTileCollision (Entity entity){
+    public static void checkTileCollision(Entity entity) {
         double entityLeftWorldX = entity.getPosition().x + (entity.getSolidArea().x - entity.getPosition().x) / 2;
-        double entityRightWorldX = (entity.getPosition().x + (entity.getSolidArea().x - entity.getPosition().x) / 2) + entity.getSolidArea().width;
+        double entityRightWorldX = entityLeftWorldX + entity.getSolidArea().width;
         double entityTopWorldY = entity.getPosition().y + (entity.getSolidArea().y - entity.getPosition().y) / 2;
-        double entityBottomWorldY = (entity.getPosition().y + (entity.getSolidArea().y - entity.getPosition().y) / 2) + entity.getSolidArea().height;
+        double entityBottomWorldY = entityTopWorldY + entity.getSolidArea().height;
 
         int entityLeftCol = (int) (entityLeftWorldX / TiledMap.getScaledTileSize());
         int entityRightCol = (int) (entityRightWorldX / TiledMap.getScaledTileSize());
@@ -26,38 +26,62 @@ public class CollisionHandler {
         try {
             switch (entity.getDirection()) {
                 case "up":
+                case "up-left":
+                case "up-right":
                     entityTopRow = (int) ((entityTopWorldY - entity.getSpeed()) / TiledMap.getScaledTileSize());
                     tileNum1 = collidableTiles[entityTopRow][entityLeftCol];
                     tileNum2 = collidableTiles[entityTopRow][entityRightCol];
 
-                    entity.setColliding(tileNum1 == 1 || tileNum2 == 1);
+                    if (tileNum1 != 0 || tileNum2 != 0) {
+                        entity.setColliding(true);
+                        entity.getPosition().y = (entityTopRow + 1) * TiledMap.getScaledTileSize() - ((entity.getSolidArea().y - entity.getPosition().y) / 2) + 2;
+                        entity.getVelocity().add(new Vector2(0, -entity.getVelocity().y));
+                    }
 
                     break;
                 case "down":
-                    entityBottomRow = (int) ((entityBottomWorldY) / TiledMap.getScaledTileSize());
+                case "down-left":
+                case "down-right":
+                    entityBottomRow = (int) ((entityBottomWorldY + entity.getSpeed()) / TiledMap.getScaledTileSize());
                     tileNum1 = collidableTiles[entityBottomRow][entityLeftCol];
                     tileNum2 = collidableTiles[entityBottomRow][entityRightCol];
 
-                    entity.setColliding(tileNum1 != 0 || tileNum2 != 0);
-
+                    if (tileNum1 != 0 || tileNum2 != 0) {
+                        entity.setColliding(true);
+                        entity.getPosition().y = entityBottomRow * TiledMap.getScaledTileSize() - entity.getSolidArea().height - ((entity.getSolidArea().y - entity.getPosition().y) / 2) - 9;
+                        entity.getVelocity().add(new Vector2(0, entity.getVelocity().y));
+                    }
                     break;
+            }
+
+            switch (entity.getDirection()) {
                 case "left":
                     entityLeftCol = (int) ((entityLeftWorldX - entity.getSpeed()) / TiledMap.getScaledTileSize());
                     tileNum1 = collidableTiles[entityTopRow][entityLeftCol];
                     tileNum2 = collidableTiles[entityBottomRow][entityLeftCol];
 
-                    entity.setColliding(tileNum1 != 0 || tileNum2 != 0);
+                    if (tileNum1 != 0 || tileNum2 != 0) {
+                        entity.setColliding(true);
+                        entity.getPosition().x = (entityLeftCol + 1) * TiledMap.getScaledTileSize() - ((entity.getSolidArea().x - entity.getPosition().x) / 2) + 10;
+                        entity.getVelocity().add(new Vector2(entity.getVelocity().x,0));
+                    }
                     break;
                 case "right":
                     entityRightCol = (int) ((entityRightWorldX + entity.getSpeed()) / TiledMap.getScaledTileSize());
                     tileNum1 = collidableTiles[entityTopRow][entityRightCol];
                     tileNum2 = collidableTiles[entityBottomRow][entityRightCol];
 
-                    entity.setColliding(tileNum1 != 0 || tileNum2 != 0);
+                    if (tileNum1 != 0 || tileNum2 != 0) {
+                        entity.setColliding(true);
+                        entity.getPosition().x = entityRightCol * TiledMap.getScaledTileSize() - entity.getSolidArea().width - ((entity.getSolidArea().x - entity.getPosition().x) / 2) - 3;
+                        entity.getVelocity().add(new Vector2(-entity.getVelocity().x,0));
+                    }
                     break;
             }
         } catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println("ArrayIndexOutOfBoundsException: " + e.getMessage());
+            System.out.println("Player out of bounds: " + e.getMessage());
+            entity.getPosition().x = 100;
+            entity.getPosition().y = 100;
             entity.setColliding(true);
         }
     }
