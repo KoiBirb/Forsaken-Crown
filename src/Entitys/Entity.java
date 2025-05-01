@@ -9,7 +9,7 @@ import java.util.HashMap;
 public abstract class Entity {
 
     Vector2 position;
-    boolean isColliding;
+    boolean isColliding, onGround;
     Vector2 velocity;
     double speed;
     final int width,height;

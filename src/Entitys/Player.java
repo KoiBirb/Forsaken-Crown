@@ -15,6 +15,11 @@ public class Player extends Entity {
     private boolean canMove;
     int spriteCounter = 0, spriteRow = 0, spriteCol = 0;
 
+    final double terminalVelocity = 5; // Maximum falling speed
+    final double jumpStrength = -3;
+
+    private long jumpKeyPressStartTime = 0;
+
     public Player(Vector2 position, int width, int height) {
         super(position, new Vector2(0,0), width,
                 height, 4, new Rectangle(30,8,18, 47),
@@ -25,50 +30,66 @@ public class Player extends Entity {
 
     @Override
     public void update() {
-        if (keyI.wPressed || keyI.sPressed || keyI.aPressed || keyI.dPressed) {
+        velocity.x = 0;
+
+        // Check if the player is on the ground
+        boolean onGround = CollisionHandler.onGround(this);
+
+        if (onGround) {
+            velocity.y = 0; // Reset vertical velocity when on the ground
+        }
+
+        isColliding = false;
+
+        boolean continuousJumping;
+
+        if (keyI.wPressed) {
+
+            if (onGround && jumpKeyPressStartTime == 0)
+                jumpKeyPressStartTime = System.currentTimeMillis();
+
+            if (System.currentTimeMillis() - jumpKeyPressStartTime <= 400) {
+                continuousJumping = true;
+            } else {
+                jumpKeyPressStartTime = 0;
+                continuousJumping = false;
+            }
+
+        } else {
+            jumpKeyPressStartTime = 0;
+            continuousJumping = false;
+        }
+
+        // Handle jumping
+        if (keyI.wPressed && continuousJumping) {
+            velocity.y = jumpStrength; // Apply stronger upward force
+            isColliding = false; // Temporarily disable ground collision
+        }
+
+        if (!onGround && !continuousJumping) {
+            if (velocity.y < terminalVelocity) {
+                velocity.y += 0.6;
+            }
+        }
+
+        // Check for collisions after applying gravity
+        CollisionHandler.checkTileCollision(this);
+
+        // Apply velocity to position
+        position.add(velocity);
+
+        // Handle movement input
+        if (keyI.aPressed || keyI.dPressed) {
             spriteRow = 3;
 
             if (canMove) {
-                velocity = new Vector2(0, 0);
-
-                if (keyI.wPressed && keyI.aPressed) {
-                    direction = "up-left";
-                    velocity = new Vector2(speed, directionToRad.get(direction), false);
-                } else if (keyI.wPressed && keyI.dPressed) {
-                    direction = "up-right";
-                    velocity = new Vector2(speed, directionToRad.get(direction), false);
-                } else if (keyI.sPressed && keyI.aPressed) {
-                    direction = "down-left";
-                    velocity = new Vector2(speed, directionToRad.get(direction), false);
-                } else if (keyI.sPressed && keyI.dPressed) {
-                    direction = "down-right";
-                    velocity = new Vector2(speed, directionToRad.get(direction), false);
-                } else {
-                    // Handle single direction movement
-                    if (keyI.wPressed) {
-                        direction = "up";
-                        velocity = new Vector2(0, -speed);
-                    }
-                    if (keyI.sPressed) {
-                        direction = "down";
-                        velocity = new Vector2(0, speed);
-                    }
-                    if (keyI.aPressed) {
-                        direction = "left";
-                        velocity = new Vector2(-speed, 0);
-                    }
-                    if (keyI.dPressed) {
-                        direction = "right";
-                        velocity = new Vector2(speed, 0);
-                    }
+                if (keyI.aPressed) {
+                    direction = "left";
+                    velocity.x = -speed;
                 }
-
-                isColliding = false;
-                CollisionHandler.checkTileCollision(this);
-
-                if (!isColliding) {
-                    position.x += velocity.x;
-                    position.y += velocity.y;
+                if (keyI.dPressed) {
+                    direction = "right";
+                    velocity.x = speed;
                 }
             }
 
@@ -80,9 +101,12 @@ public class Player extends Entity {
                     spriteCol = 0;
                 }
             }
-
-            super.update();
+        } else {
+            spriteCol = 0;
+            spriteCounter = 0;
         }
+
+        super.update();
     }
 
     public void setCanMove(boolean canMove) {
