@@ -1,3 +1,9 @@
+/*
+ * Player.java
+ * Leo Bogaert
+ * May 1, 2025,
+ * Handles all player actions
+ */
 package Entitys;
 
 import Handlers.CollisionHandler;
@@ -20,6 +26,12 @@ public class Player extends Entity {
 
     private long jumpKeyPressStartTime = 0;
 
+    /**
+     * Constructor for the player
+     * @param position Initial coordinates of the player
+     * @param width width of player
+     * @param height height of player
+     */
     public Player(Vector2 position, int width, int height) {
         super(position, new Vector2(0,0), width,
                 height, 4, new Rectangle(30,8,18, 47),
@@ -28,16 +40,19 @@ public class Player extends Entity {
         canMove = true;
     }
 
+    /**
+     * Update method for the player
+     * Handles collision and movement
+     */
     @Override
     public void update() {
+
         velocity.x = 0;
 
-        // Check if the player is on the ground
         boolean onGround = CollisionHandler.onGround(this);
 
-        if (onGround) {
-            velocity.y = 0; // Reset vertical velocity when on the ground
-        }
+        if (onGround)
+            velocity.y = 0;
 
         isColliding = false;
 
@@ -60,10 +75,9 @@ public class Player extends Entity {
             continuousJumping = false;
         }
 
-        // Handle jumping
         if (keyI.wPressed && continuousJumping) {
-            velocity.y = jumpStrength; // Apply stronger upward force
-            isColliding = false; // Temporarily disable ground collision
+            velocity.y = jumpStrength;
+            isColliding = false;
         }
 
         if (!onGround && !continuousJumping) {
@@ -72,13 +86,10 @@ public class Player extends Entity {
             }
         }
 
-        // Check for collisions after applying gravity
         CollisionHandler.checkTileCollision(this);
 
-        // Apply velocity to position
         position.add(velocity);
 
-        // Handle movement input
         if (keyI.aPressed || keyI.dPressed) {
             spriteRow = 3;
 
@@ -109,11 +120,19 @@ public class Player extends Entity {
         super.update();
     }
 
+    /**
+     * Sets the players ability to move
+     * @param canMove true to let player move
+     */
     public void setCanMove(boolean canMove) {
         this.canMove = canMove;
     }
 
 
+    /**
+     * Draws the player on the screen
+     * @param g2 Graphics2D object to draw on
+     */
     @Override
     public void draw(Graphics2D g2) {
 
@@ -124,6 +143,7 @@ public class Player extends Entity {
 
         AffineTransform originalTransform = g2.getTransform();
 
+        // flip image
         if (direction.contains("left")) {
             g2.scale(-1, 1);
             screenX = -screenX - solidArea.width * GamePanel.scale - 10; // Adjust for flipped coordinates

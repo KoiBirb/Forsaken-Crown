@@ -1,7 +1,7 @@
 /*
  * TiledMap.java
  * Leo Bogaert
- * April 19, 2025,
+ * May 1, 2025,
  * This class reads map data from a jar file and calculates
  * the correct camera position to display the map and backgrounds.
  */
@@ -447,26 +447,25 @@ public class TiledMap {
                     g2.translate(tileWorldX - cameraPosition.x + scaledTileSize / 2.0,
                             tileWorldY - cameraPosition.y + scaledTileSize / 2.0);
 
-                    // Handle diagonal flip
+                    // Handle flips
                     if (flipDiagonally) {
-                        g2.rotate(Math.PI / 2); // Rotate 90 degrees
+                        g2.rotate(Math.PI / 2);
                         if (flipHorizontally && flipVertically) {
-                            g2.scale(-1, 1); // Flip both horizontally and vertically
+                            g2.scale(-1, 1);
                         } else if (flipHorizontally) {
-                            g2.scale(1, 1); // Flip horizontally
+                            g2.scale(1, 1);
                         } else if (flipVertically) {
-                            g2.scale(-1, -1); // Flip vertically
+                            g2.scale(-1, -1);
                         } else {
                             g2.scale(1, -1);
                         }
                     } else {
-                        // Handle horizontal and vertical flips without diagonal
                         if (flipHorizontally && flipVertically) {
-                            g2.scale(-1, -1); // Flip both horizontally and vertically
+                            g2.scale(-1, -1);
                         } else if (flipHorizontally) {
-                            g2.scale(-1, 1); // Flip horizontally
+                            g2.scale(-1, 1);
                         } else if (flipVertically) {
-                            g2.scale(1, -1); // Flip vertically
+                            g2.scale(1, -1);
                         }
                     }
 
@@ -474,7 +473,7 @@ public class TiledMap {
                     int tileCol = ((tileId & 0x1FFFFFFF) - 1 - tilesetOffset.get(tileSetImage)) % (tileSetImage.getWidth() / tileSetTileSize);
                     int tileRow = ((tileId & 0x1FFFFFFF) - 1 - tilesetOffset.get(tileSetImage)) / (tileSetImage.getWidth() / tileSetTileSize);
 
-                    // Apply flashing effect for layer 0
+                    // Door flashing effect
                     if (k == 0) {
                         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
                     }
@@ -485,6 +484,8 @@ public class TiledMap {
                             tileCol * tileSetTileSize, tileRow * tileSetTileSize,
                             (tileCol + 1) * tileSetTileSize, (tileRow + 1) * tileSetTileSize, null);
 
+
+                        // Draw tile ID for debugging
 //                        String tileIdText = (flipHorizontally ? 1 : 0) + " " + (flipVertically ? 1 : 0) + " " + (flipDiagonally ? 1 : 0);
 //                        g2.setColor(Color.GREEN); // Set text color
 //                        g2.setFont(new Font("Arial", Font.BOLD, 12)); // Set font
@@ -508,10 +509,6 @@ public class TiledMap {
      */
     public static int getScaledTileSize() {
         return (int) (tileSetTileSize * scale);
-    }
-
-    public static int getTileSize() {
-        return tileSetTileSize;
     }
 
     /**

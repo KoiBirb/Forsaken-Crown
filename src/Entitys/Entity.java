@@ -1,3 +1,10 @@
+/*
+ * Entity.java
+ * Leo Bogaert
+ * May 1, 2025,
+ * Abstract entity class, defines basic functionality of entities
+ */
+
 package Entitys;
 
 import Handlers.Vector2;
@@ -9,7 +16,7 @@ import java.util.HashMap;
 public abstract class Entity {
 
     Vector2 position;
-    boolean isColliding, onGround;
+    boolean isColliding;
     Vector2 velocity;
     double speed;
     final int width,height;
