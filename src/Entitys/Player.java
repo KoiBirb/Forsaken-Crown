@@ -16,7 +16,7 @@ public class Player extends Entity {
     int spriteCounter = 0, spriteRow = 0, spriteCol = 0;
 
     final double terminalVelocity = 5; // Maximum falling speed
-    final double jumpStrength = -3;
+    final double jumpStrength = -4.5;
 
     private long jumpKeyPressStartTime = 0;
 
@@ -48,7 +48,7 @@ public class Player extends Entity {
             if (onGround && jumpKeyPressStartTime == 0)
                 jumpKeyPressStartTime = System.currentTimeMillis();
 
-            if (System.currentTimeMillis() - jumpKeyPressStartTime <= 400) {
+            if (System.currentTimeMillis() - jumpKeyPressStartTime <= 200) {
                 continuousJumping = true;
             } else {
                 jumpKeyPressStartTime = 0;
