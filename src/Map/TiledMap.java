@@ -265,11 +265,11 @@ public class TiledMap {
         }
 
         // Check if the room has changed
-        if (roomWidth != (newMaxX - newMinX) * scaledTileSize ||
-                roomHeight != (newMaxY - newMinY) * scaledTileSize) {
+        if (roomWidth != (newMaxX - newMinX + 1) * scaledTileSize ||
+                roomHeight != (newMaxY - newMinY + 1) * scaledTileSize) {
 
-            roomWidth = (newMaxX - newMinX) * scaledTileSize;
-            roomHeight = (newMaxY - newMinY) * scaledTileSize;
+            roomWidth = (newMaxX - newMinX + 1) * scaledTileSize;
+            roomHeight = (newMaxY - newMinY + 1) * scaledTileSize;
 
             GamePanel.roomTransition();
             roomChanged = true;

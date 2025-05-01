@@ -79,4 +79,12 @@ public abstract class Entity {
         return speed;
     }
 
+    public double getSolidAreaOffsetX(){
+        return solidAreaOffsetX;
+    }
+
+    public double getSolidAreaOffsetY(){
+        return solidAreaOffsetY;
+    }
+
 }

@@ -63,4 +63,8 @@ public class Vector2 {
         normalize();
         multiplyScalar(length);
     }
+
+    public String toString() {
+        return"X: " + x + " Y: " + y;
+    }
 }

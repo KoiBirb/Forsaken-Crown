@@ -6,6 +6,7 @@ import Handlers.Vector2;
 import Main.Panels.GamePanel;
 
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 
 import static Main.Panels.GamePanel.keyI;
 
@@ -97,6 +98,13 @@ public class Player extends Entity {
         double screenX = position.x - cameraPos.x;
         double screenY = position.y - cameraPos.y;
 
+        AffineTransform originalTransform = g2.getTransform();
+
+        if (direction.contains("left")) {
+            g2.scale(-1, 1);
+            screenX = -screenX - solidArea.width * GamePanel.scale - 10; // Adjust for flipped coordinates
+        }
+
         g2.setColor(Color.red);
         g2.drawImage(image,
                 (int) screenX - 30, (int) screenY - 17,
@@ -105,5 +113,7 @@ public class Player extends Entity {
                 (spriteCol + 1) * 90, (spriteRow + 1) * 37, null);
 
 //        g2.drawRect((int) screenX, (int) screenY, (int) (90 * GamePanel.scale), (int) (37 * GamePanel.scale));
+
+        g2.setTransform(originalTransform);
     }
 }
