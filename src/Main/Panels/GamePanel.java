@@ -128,11 +128,13 @@ public class GamePanel extends JPanel implements Runnable{
         tileMap.drawMap(g2);
         player.draw(g2);
 
+        // Draw player hit box and colidable tiles
         //CollisionHandler.draw(g2, player);
 
-        for (int i = 0; i < meleeAttacks.size(); i++) {
-            meleeAttacks.get(i).draw(g2);
-        }
+        // Draw melee attacks
+//        for (int i = 0; i < meleeAttacks.size(); i++) {
+//            meleeAttacks.get(i).draw(g2);
+//        }
 
         tileMap.coverScreen(g2);
 
