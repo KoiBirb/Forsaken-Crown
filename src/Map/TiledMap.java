@@ -16,6 +16,7 @@ package Map;
     import java.io.IOException;
     import java.util.ArrayList;
     import java.util.HashMap;
+    import java.util.Random;
 
     import Handlers.CollisionHandler;
     import Handlers.ImageHandler;
@@ -34,13 +35,13 @@ public class TiledMap {
     private final ArrayList<BufferedImage> tileSets;
     private final String mapPath;
     private final JSONParser parser;
-    private ArrayList<int[][]> mapLayers;
+    private final ArrayList<int[][]> mapLayers;
     private int mapWidth;
     private int mapHeight;
     private static int tileSetTileSize;
     private JSONArray roomData;
     private ArrayList<BufferedImage[]> backgrounds;
-    private HashMap<BufferedImage, Integer> tilesetOffset;
+    private final HashMap<BufferedImage, Integer> tilesetOffset;
 
     // Camera room switching
     private final int CAMERADELAY = 15;
@@ -59,6 +60,11 @@ public class TiledMap {
     private int minX, maxX, minY, maxY;
 
     public int[][] collidablesTiles;
+
+    private Vector2 cameraShakeOffset = new Vector2(0, 0);
+    private int shakeDuration = 0;
+    private int intensity = 0;
+    private final Random random = new Random();
 
     /**
      * Constructor
@@ -228,11 +234,41 @@ public class TiledMap {
         }
     }
 
+    /**
+     * Applies a camera shake effect.
+     * @param intensity The maximum offset for the shake.
+     * @param duration The duration of the shake in frames.
+     */
+    public void cameraShake(int intensity, int duration) {
+        shakeDuration = duration;
+        cameraShakeOffset = new Vector2(
+                random.nextInt(intensity * 2 + 1) - intensity,
+                random.nextInt(intensity * 2 + 1) - intensity
+        );
+
+        this.intensity = intensity;
+
+    }
+
 
     /**
      * Finds room dimensions, and updates cameras target position
      */
     public void update() {
+
+        // Update camera shake effect
+        if (shakeDuration > 0) {
+            cameraShakeOffset.x = random.nextInt(intensity * 2 + 1) - intensity;
+            cameraShakeOffset.y = random.nextInt(intensity * 2 + 1) - intensity;
+            shakeDuration--;
+        } else {
+            cameraShakeOffset = new Vector2(0, 0);
+        }
+
+        // Apply camera shake offset to the camera position
+        cameraPosition.x += cameraShakeOffset.x;
+        cameraPosition.y += cameraShakeOffset.y;
+
         int scaledTileSize = (int) (tileSetTileSize * SCALE);
 
         int playerTileX = (int) (player.getPosition().x / scaledTileSize);

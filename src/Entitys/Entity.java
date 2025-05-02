@@ -26,7 +26,7 @@ public abstract class Entity {
     HashMap<String, Double> directionToRad;
     BufferedImage image;
 
-    public Entity(Vector2 position, Vector2 velocity, int width, int height, int speed, Rectangle solidArea, BufferedImage image) {
+    public Entity(Vector2 position, Vector2 velocity, int width, int height, double speed, Rectangle solidArea, BufferedImage image) {
         this.position = position;
         this.velocity = velocity;
         this.width = width;

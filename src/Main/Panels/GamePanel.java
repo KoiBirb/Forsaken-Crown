@@ -1,5 +1,6 @@
 package Main.Panels;
 
+import Entitys.MeleeAttacks.MeleeAttack;
 import Entitys.Player;
 import Handlers.CollisionHandler;
 import Handlers.Vector2;
@@ -8,6 +9,7 @@ import Map.TiledMap;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class GamePanel extends JPanel implements Runnable{
 
@@ -17,9 +19,8 @@ public class GamePanel extends JPanel implements Runnable{
 
     public static TiledMap tileMap;
     public static KeyInput keyI = new KeyInput();
-    public static final Player player = new Player(new Vector2(200,150), 90,37);
-
-    private final int FPS = 60;
+    public static final Player player = new Player(new Vector2(100,150), 90,37);
+    public static ArrayList<MeleeAttack> meleeAttacks = new ArrayList<>();
 
     private static boolean fading = false;
     private static double fadeAlpha = 0.0;
@@ -59,7 +60,8 @@ public class GamePanel extends JPanel implements Runnable{
     @Override
     public void run() {
         // Delta method FPS clock
-        double drawInterval = 1000000000.0/FPS;
+        int FPS = 60;
+        double drawInterval = 1000000000.0/ FPS;
         double delta = 0;
         long lastTime = System.nanoTime();
         long currentTime;
@@ -88,6 +90,10 @@ public class GamePanel extends JPanel implements Runnable{
         // Update player and tile map regardless of fading
         player.update();
         tileMap.update();
+
+        for (int i = 0; i < meleeAttacks.size(); i++) {
+            meleeAttacks.get(i).update();
+        }
 
         // Handle fade logic
         if (fading) {
@@ -123,6 +129,10 @@ public class GamePanel extends JPanel implements Runnable{
         player.draw(g2);
 
         //CollisionHandler.draw(g2, player);
+
+        for (int i = 0; i < meleeAttacks.size(); i++) {
+            meleeAttacks.get(i).draw(g2);
+        }
 
         tileMap.coverScreen(g2);
 

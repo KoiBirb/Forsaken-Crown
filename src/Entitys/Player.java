@@ -6,6 +6,9 @@
  */
 package Entitys;
 
+import Entitys.MeleeAttacks.MeleeAttack;
+import Entitys.MeleeAttacks.PlayerHeavyAttack;
+import Entitys.MeleeAttacks.PlayerQuickAttack;
 import Handlers.CollisionHandler;
 import Handlers.ImageHandler;
 import Handlers.Vector2;
@@ -18,13 +21,14 @@ import static Main.Panels.GamePanel.keyI;
 
 public class Player extends Entity {
 
-    private boolean canMove;
+    private boolean canMove, attacking, chain, jump;
     int spriteCounter = 0, spriteRow = 0, spriteCol = 0, maxSpriteCol = 0, lastSpriteRow = 0;
+    private MeleeAttack attack;
 
-    final double terminalVelocity = 5; // Maximum falling speed
-    final double jumpStrength = -4.5;
+    final double terminalVelocity = 4.5; // Maximum falling speed
+    final double jumpStrength = -4;
 
-    private long jumpKeyPressStartTime = 0;
+    private long jumpKeyPressStartTime = 0, lastQuickAttackTime = 0, lastHeavyAttackTime = 0;
 
     /**
      * Constructor for the player
@@ -34,7 +38,7 @@ public class Player extends Entity {
      */
     public Player(Vector2 position, int width, int height) {
         super(position, new Vector2(0,0), width,
-                height, 4, new Rectangle(30,8,18, 47),
+                height, 3.2, new Rectangle(30,8,18, 47),
                 ImageHandler.loadImage("Assets/Images/Hero/SwordMaster/The SwordMaster/Sword Master Sprite Sheet 90x37.png"));
 
         canMove = true;
@@ -46,7 +50,6 @@ public class Player extends Entity {
      */
     @Override
     public void update() {
-
         velocity.x = 0;
 
         boolean onGround = CollisionHandler.onGround(this);
@@ -58,11 +61,12 @@ public class Player extends Entity {
 
         boolean continuousJumping;
 
-        // jumping
+        // Jumping logic
         if (keyI.wPressed) {
-
-            if (onGround && jumpKeyPressStartTime == 0)
+            if (jump && onGround && jumpKeyPressStartTime == 0) {
                 jumpKeyPressStartTime = System.currentTimeMillis();
+                jump = false; // Mark that the key has been pressed
+            }
 
             if (System.currentTimeMillis() - jumpKeyPressStartTime <= 200) {
                 continuousJumping = true;
@@ -70,42 +74,83 @@ public class Player extends Entity {
                 jumpKeyPressStartTime = 0;
                 continuousJumping = false;
             }
-
         } else {
             jumpKeyPressStartTime = 0;
             continuousJumping = false;
+            jump = true; // Mark that the key has been released
         }
 
-        //jump animation
+        // Jump animation
         if (keyI.wPressed && continuousJumping) {
             velocity.y = jumpStrength;
             isColliding = false;
 
-            spriteRow = 13;
-            maxSpriteCol = 2;
-        } else if (!onGround && (System.currentTimeMillis() - jumpKeyPressStartTime <= 60 || spriteCol == maxSpriteCol)) {
+            if (!attacking) {
+                spriteRow = 13;
+                maxSpriteCol = 2;
+            }
+        } else if (!onGround && (System.currentTimeMillis() - jumpKeyPressStartTime <= 80 || spriteCol == maxSpriteCol) && !attacking) {
             spriteRow = 14;
             maxSpriteCol = 3;
-        } else if (!onGround && velocity.y > 4) {
+        } else if (!onGround && velocity.y > 4 && !attacking) {
             spriteRow = 15;
             maxSpriteCol = 2;
         }
 
         if (!onGround && !continuousJumping) {
             if (velocity.y < terminalVelocity) {
-                velocity.y += 0.6;
+                velocity.y += 0.4;
             }
         }
+
+        if (keyI.uPressed) {
+            long currentTime = System.currentTimeMillis();
+
+            if (!attacking) {
+                if (!chain) {
+                    // Normal attack
+                    if (currentTime - lastQuickAttackTime >= PlayerQuickAttack.getCooldown()) {
+                        spriteRow = 8;
+                        maxSpriteCol = 4;
+                        attack = new PlayerQuickAttack(this, false);
+                        GamePanel.tileMap.cameraShake(5, 60);
+                        chain = true; // Enable chain attack
+                        lastQuickAttackTime = currentTime;
+                    }
+                } else {
+                    // Chain attack
+                    spriteRow = 7;
+                    maxSpriteCol = 6;
+                    attack = new PlayerQuickAttack(this, true);
+                    GamePanel.tileMap.cameraShake(5, 60);
+                    chain = false; // Reset chain flag
+                    lastQuickAttackTime = currentTime;
+                }
+            }
+        }
+
+        if (keyI.jPressed && !attacking) {
+            long currentTime = System.currentTimeMillis();
+            if (currentTime - lastHeavyAttackTime >= PlayerHeavyAttack.getCooldown()) {
+                spriteRow = 9;
+                maxSpriteCol = 4;
+                attack = new PlayerHeavyAttack(this);
+                lastHeavyAttackTime = currentTime;
+            }
+        }
+
 
         CollisionHandler.checkTileCollision(this);
 
         position.add(velocity);
 
-        if (keyI.aPressed || keyI.dPressed) {
-            if (onGround && !continuousJumping) {
+        if ((keyI.aPressed || keyI.dPressed)) {
+            if (onGround && !continuousJumping && !attacking) {
                 maxSpriteCol = 7;
                 spriteRow = 3;
             }
+
+            speed = (attacking) ? 2.8 : 3;
 
             if (canMove) {
                 if (keyI.aPressed) {
@@ -117,13 +162,13 @@ public class Player extends Entity {
                     velocity.x = speed;
                 }
             }
-        } else if (onGround && !continuousJumping) {
+        } else if (onGround && !continuousJumping && !attacking) {
             spriteRow = 1;
             maxSpriteCol = 8;
         }
 
         spriteCounter++;
-        if (spriteCounter > 3) {
+        if (spriteCounter > 4) {
             spriteCounter = 0;
             spriteCol++;
             if (spriteCol >= maxSpriteCol) {
@@ -147,6 +192,10 @@ public class Player extends Entity {
      */
     public void setCanMove(boolean canMove) {
         this.canMove = canMove;
+    }
+
+    public void setAttacking(boolean attacking) {
+        this.attacking = attacking;
     }
 
 
