@@ -19,7 +19,7 @@ import static Main.Panels.GamePanel.keyI;
 public class Player extends Entity {
 
     private boolean canMove;
-    int spriteCounter = 0, spriteRow = 0, spriteCol = 0;
+    int spriteCounter = 0, spriteRow = 0, spriteCol = 0, maxSpriteCol = 0, lastSpriteRow = 0;
 
     final double terminalVelocity = 5; // Maximum falling speed
     final double jumpStrength = -4.5;
@@ -58,6 +58,7 @@ public class Player extends Entity {
 
         boolean continuousJumping;
 
+        // jumping
         if (keyI.wPressed) {
 
             if (onGround && jumpKeyPressStartTime == 0)
@@ -75,9 +76,19 @@ public class Player extends Entity {
             continuousJumping = false;
         }
 
+        //jump animation
         if (keyI.wPressed && continuousJumping) {
             velocity.y = jumpStrength;
             isColliding = false;
+
+            spriteRow = 13;
+            maxSpriteCol = 2;
+        } else if (!onGround && (System.currentTimeMillis() - jumpKeyPressStartTime <= 60 || spriteCol == maxSpriteCol)) {
+            spriteRow = 14;
+            maxSpriteCol = 3;
+        } else if (!onGround && velocity.y > 4) {
+            spriteRow = 15;
+            maxSpriteCol = 2;
         }
 
         if (!onGround && !continuousJumping) {
@@ -91,7 +102,10 @@ public class Player extends Entity {
         position.add(velocity);
 
         if (keyI.aPressed || keyI.dPressed) {
-            spriteRow = 3;
+            if (onGround && !continuousJumping) {
+                maxSpriteCol = 7;
+                spriteRow = 3;
+            }
 
             if (canMove) {
                 if (keyI.aPressed) {
@@ -103,21 +117,28 @@ public class Player extends Entity {
                     velocity.x = speed;
                 }
             }
+        } else if (onGround && !continuousJumping) {
+            spriteRow = 1;
+            maxSpriteCol = 8;
+        }
 
-            spriteCounter++;
-            if (spriteCounter > 2) {
-                spriteCounter = 0;
-                spriteCol++;
-                if (spriteCol > 7) {
-                    spriteCol = 0;
-                }
+        spriteCounter++;
+        if (spriteCounter > 3) {
+            spriteCounter = 0;
+            spriteCol++;
+            if (spriteCol >= maxSpriteCol) {
+                spriteCol = 0;
             }
-        } else {
+        }
+
+        super.update();
+
+        if (lastSpriteRow != spriteRow) {
             spriteCol = 0;
             spriteCounter = 0;
         }
 
-        super.update();
+        lastSpriteRow = spriteRow;
     }
 
     /**
