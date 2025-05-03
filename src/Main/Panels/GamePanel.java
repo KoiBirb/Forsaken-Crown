@@ -5,6 +5,7 @@ import Entitys.Player;
 import Handlers.CollisionHandler;
 import Handlers.Vector2;
 import Main.KeyInput;
+import Main.UI.UIManager;
 import Map.TiledMap;
 
 import javax.swing.*;
@@ -20,6 +21,8 @@ public class GamePanel extends JPanel implements Runnable{
     public static TiledMap tileMap;
     public static KeyInput keyI = new KeyInput();
     public static final Player player = new Player(new Vector2(100,150), 90,37);
+    public static UIManager ui = new UIManager();
+
     public static ArrayList<MeleeAttack> meleeAttacks = new ArrayList<>();
 
     private static boolean fading = false;
@@ -90,6 +93,7 @@ public class GamePanel extends JPanel implements Runnable{
         // Update player and tile map regardless of fading
         player.update();
         tileMap.update();
+        ui.update();
 
         for (int i = 0; i < meleeAttacks.size(); i++) {
             meleeAttacks.get(i).update();
@@ -137,6 +141,8 @@ public class GamePanel extends JPanel implements Runnable{
 //        }
 
         tileMap.coverScreen(g2);
+
+        ui.draw(g2);
 
         if (fading) {
             g2.setColor(new Color(0, 0, 0, (float) fadeAlpha));

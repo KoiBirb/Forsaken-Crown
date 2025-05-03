@@ -15,18 +15,22 @@ import java.util.HashMap;
 
 public abstract class Entity {
 
-    Vector2 position;
     boolean isColliding;
-    Vector2 velocity;
+
     double speed;
-    final int width,height;
+    final int width;
+    final int height;
+    final int maxHealth;
+    int currentHealth;
     int solidAreaOffsetX, solidAreaOffsetY;
+
     Rectangle solidArea;
     String direction;
     HashMap<String, Double> directionToRad;
     BufferedImage image;
+    Vector2 position, velocity;
 
-    public Entity(Vector2 position, Vector2 velocity, int width, int height, double speed, Rectangle solidArea, BufferedImage image) {
+    public Entity(Vector2 position, Vector2 velocity, int width, int height, double speed, Rectangle solidArea, BufferedImage image, int maxHealth) {
         this.position = position;
         this.velocity = velocity;
         this.width = width;
@@ -35,6 +39,8 @@ public abstract class Entity {
         this.solidAreaOffsetY = solidArea.y;
         this.speed = speed;
         this.image = image;
+        this.maxHealth = maxHealth;
+        this.currentHealth = maxHealth;
 
         this.isColliding = false;
         this.direction = "right";
@@ -92,6 +98,14 @@ public abstract class Entity {
 
     public double getSolidAreaOffsetY(){
         return solidAreaOffsetY;
+    }
+
+    public int getMaxHealth() {
+        return maxHealth;
+    }
+
+    public int getCurrentHealth() {
+        return currentHealth;
     }
 
 }

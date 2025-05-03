@@ -43,7 +43,7 @@ public class Player extends Entity {
     public Player(Vector2 position, int width, int height) {
         super(position, new Vector2(0,0), width,
                 height, 3.2, new Rectangle(30,8,18, 47),
-                ImageHandler.loadImage("Assets/Images/Hero/SwordMaster/The SwordMaster/Sword Master Sprite Sheet 90x37.png"));
+                ImageHandler.loadImage("Assets/Images/Hero/SwordMaster/The SwordMaster/Sword Master Sprite Sheet 90x37.png"), 10);
     }
 
     /**
@@ -137,6 +137,7 @@ public class Player extends Entity {
                 spriteRow = 9;
                 maxSpriteCol = 4;
                 attack = new PlayerHeavyAttack(this);
+                currentHealth--;
                 lastHeavyAttackTime = currentTime;
             }
         }
