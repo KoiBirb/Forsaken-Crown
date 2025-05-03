@@ -173,7 +173,7 @@ package Main.UI;
 
             g2.drawImage(
                     image,
-                    x + 24, y + 45, (x + shakeOffsetX + (69 * 3)) + 24, (y + 14 * 3) + 45,
+                    x + shakeOffsetX + 24, y + 45, (x + shakeOffsetX + (69 * 3)) + 24, (y + 14 * 3) + 45,
                     206, 39, 273, 52, null);
 
             float alpha = (float) (0.75 + 0.25 * Math.sin(System.currentTimeMillis() * 0.002));
@@ -181,7 +181,7 @@ package Main.UI;
 
             g2.drawImage(
                     imageGlow,
-                    x + 23, y + 44, (x + shakeOffsetX + (69 * 3)) + 25, (y + 14 * 3) + 46,
+                    x + shakeOffsetX + 23, y + 44, (x + shakeOffsetX + (69 * 3)) + 25, (y + 14 * 3) + 46,
                     206, 39, 273, 52, null);
 
             g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
