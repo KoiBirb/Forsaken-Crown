@@ -1,3 +1,10 @@
+/*
+ * Vector2.java
+ * Leo Bogaert
+ * May 2, 2025,
+ * Simple vector class to handle vector operations
+ */
+
 package Handlers;
 
 public class Vector2 {

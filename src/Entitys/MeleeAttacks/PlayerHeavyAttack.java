@@ -2,6 +2,7 @@ package Entitys.MeleeAttacks;
 
 import Entitys.Player;
 import Main.Panels.GamePanel;
+import Map.TiledMap;
 
 import java.awt.*;
 
@@ -29,6 +30,7 @@ public class PlayerHeavyAttack extends MeleeAttack{
             hitBox = new Rectangle( (player.getDirection().equals("right")) ? (int) player.getPosition().x : (int) player.getPosition().x + 12, (int) (player.getPosition().y), 30, 40);
         } else if (frame == 1 || frame == 2){
             hitBox = new Rectangle((player.getDirection().equals("right")) ? (int) player.getPosition().x + 7: (int) player.getPosition().x - 90, (int) (player.getPosition().y - 10), 128, 63);
+            TiledMap.cameraShake(5,1);
         } else
             hitBox = null;
 

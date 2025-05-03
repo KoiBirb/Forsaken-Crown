@@ -1,7 +1,7 @@
 /*
  * Player.java
  * Leo Bogaert
- * May 1, 2025,
+ * May 2, 2025,
  * Handles all player actions
  */
 package Entitys;
@@ -13,6 +13,7 @@ import Handlers.CollisionHandler;
 import Handlers.ImageHandler;
 import Handlers.Vector2;
 import Main.Panels.GamePanel;
+import Map.TiledMap;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -21,14 +22,17 @@ import static Main.Panels.GamePanel.keyI;
 
 public class Player extends Entity {
 
+    // Constants
+    final double TERMINALVELOCITY = 4.5;
+    final double JUMPSTRENGTH = -4;
+
     private boolean canMove, attacking, chain, jump;
-    int spriteCounter = 0, spriteRow = 0, spriteCol = 0, maxSpriteCol = 0, lastSpriteRow = 0;
-    private MeleeAttack attack;
+    private int spriteCounter, spriteRow, spriteCol, maxSpriteCol, lastSpriteRow;
 
-    final double terminalVelocity = 4.5; // Maximum falling speed
-    final double jumpStrength = -4;
+    // timers
+    private long jumpKeyPressStartTime, lastQuickAttackTime, lastHeavyAttackTime;
 
-    private long jumpKeyPressStartTime = 0, lastQuickAttackTime = 0, lastHeavyAttackTime = 0;
+    MeleeAttack attack;
 
     /**
      * Constructor for the player
@@ -40,8 +44,6 @@ public class Player extends Entity {
         super(position, new Vector2(0,0), width,
                 height, 3.2, new Rectangle(30,8,18, 47),
                 ImageHandler.loadImage("Assets/Images/Hero/SwordMaster/The SwordMaster/Sword Master Sprite Sheet 90x37.png"));
-
-        canMove = true;
     }
 
     /**
@@ -77,12 +79,12 @@ public class Player extends Entity {
         } else {
             jumpKeyPressStartTime = 0;
             continuousJumping = false;
-            jump = true; // Mark that the key has been released
+            jump = true;
         }
 
         // Jump animation
         if (keyI.wPressed && continuousJumping) {
-            velocity.y = jumpStrength;
+            velocity.y = JUMPSTRENGTH;
             isColliding = false;
 
             if (!attacking) {
@@ -92,14 +94,16 @@ public class Player extends Entity {
         } else if (!onGround && (System.currentTimeMillis() - jumpKeyPressStartTime <= 80 || spriteCol == maxSpriteCol) && !attacking) {
             spriteRow = 14;
             maxSpriteCol = 3;
-        } else if (!onGround && velocity.y > 4 && !attacking) {
+        } else if (!onGround && velocity.y > 3 && !attacking) {
             spriteRow = 15;
             maxSpriteCol = 2;
         }
 
         if (!onGround && !continuousJumping) {
-            if (velocity.y < terminalVelocity) {
+            if (velocity.y < TERMINALVELOCITY) {
                 velocity.y += 0.4;
+            } else {
+                TiledMap.cameraShake(1,6);
             }
         }
 
@@ -113,7 +117,6 @@ public class Player extends Entity {
                         spriteRow = 8;
                         maxSpriteCol = 4;
                         attack = new PlayerQuickAttack(this, false);
-                        GamePanel.tileMap.cameraShake(5, 60);
                         chain = true; // Enable chain attack
                         lastQuickAttackTime = currentTime;
                     }
@@ -122,7 +125,6 @@ public class Player extends Entity {
                     spriteRow = 7;
                     maxSpriteCol = 6;
                     attack = new PlayerQuickAttack(this, true);
-                    GamePanel.tileMap.cameraShake(5, 60);
                     chain = false; // Reset chain flag
                     lastQuickAttackTime = currentTime;
                 }
@@ -206,7 +208,7 @@ public class Player extends Entity {
     @Override
     public void draw(Graphics2D g2) {
 
-        Vector2 cameraPos = GamePanel.tileMap.getCameraPos();
+        Vector2 cameraPos = GamePanel.tileMap.returnCameraPos();
 
         double screenX = position.x - cameraPos.x;
         double screenY = position.y - cameraPos.y;

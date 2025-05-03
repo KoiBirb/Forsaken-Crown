@@ -138,7 +138,6 @@ public class GamePanel extends JPanel implements Runnable{
 
         tileMap.coverScreen(g2);
 
-        // Draw fade effect
         if (fading) {
             g2.setColor(new Color(0, 0, 0, (float) fadeAlpha));
             g2.fillRect(0, 0, (int) screenWidth, (int) screenHeight);

@@ -61,10 +61,9 @@ public class TiledMap {
 
     public int[][] collidablesTiles;
 
-    private Vector2 cameraShakeOffset = new Vector2(0, 0);
-    private int shakeDuration = 0;
-    private int intensity = 0;
-    private final Random random = new Random();
+    private static Vector2 cameraShakeOffset = new Vector2(0, 0);
+    private static int shakeDuration = 0;
+    private static final Random random = new Random();
 
     /**
      * Constructor
@@ -239,15 +238,14 @@ public class TiledMap {
      * @param intensity The maximum offset for the shake.
      * @param duration The duration of the shake in frames.
      */
-    public void cameraShake(int intensity, int duration) {
-        shakeDuration = duration;
-        cameraShakeOffset = new Vector2(
-                random.nextInt(intensity * 2 + 1) - intensity,
-                random.nextInt(intensity * 2 + 1) - intensity
-        );
-
-        this.intensity = intensity;
-
+    public static void cameraShake(int intensity, int duration) {
+        if (shakeDuration == 0) {
+            shakeDuration = duration;
+            cameraShakeOffset = new Vector2(
+                    random.nextInt(intensity * 2 + 1) - intensity,
+                    random.nextInt(intensity * 2 + 1) - intensity
+            );
+        }
     }
 
 
@@ -258,16 +256,10 @@ public class TiledMap {
 
         // Update camera shake effect
         if (shakeDuration > 0) {
-            cameraShakeOffset.x = random.nextInt(intensity * 2 + 1) - intensity;
-            cameraShakeOffset.y = random.nextInt(intensity * 2 + 1) - intensity;
             shakeDuration--;
         } else {
             cameraShakeOffset = new Vector2(0, 0);
         }
-
-        // Apply camera shake offset to the camera position
-        cameraPosition.x += cameraShakeOffset.x;
-        cameraPosition.y += cameraShakeOffset.y;
 
         int scaledTileSize = (int) (tileSetTileSize * SCALE);
 
@@ -340,6 +332,7 @@ public class TiledMap {
         }
 
         cameraPosition = getCameraPos();
+        cameraPosition.add(cameraShakeOffset);
     }
 
     /**
@@ -561,5 +554,9 @@ public class TiledMap {
 
         // collidablesTiles[y][x] == 0 means empty
         return collidablesTiles[gridY][gridX] == 0;
+    }
+
+    public Vector2 returnCameraPos() {
+        return cameraPosition;
     }
 }
