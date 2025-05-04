@@ -11,6 +11,8 @@ public class MusicHandler {
     public static final Sound falling = new Sound();
     private static final Random rand = new Random();
 
+    private static boolean footstepsPlaying = false, fallingPlaying = false;
+
     public static void playBackgroundMusic() {
         playMusic(0);
     }
@@ -46,15 +48,24 @@ public class MusicHandler {
     }
 
     public static void footsteps() {
-        if (!footsteps.isPlaying()) {
+        if (!footstepsPlaying) {
+            footstepsPlaying = true;
             footsteps.setFile(8);
             footsteps.play();
             footsteps.loop();
         }
     }
 
+    public static void stopFootsteps() {
+        if (footstepsPlaying) {
+            footstepsPlaying = false;
+            footsteps.stop();
+        }
+    }
+
     public static void falling() {
-        if (!falling.isPlaying()) {
+        if (!fallingPlaying) {
+            fallingPlaying = true;
             falling.setFile(10);
             falling.play();
             falling.loop();
@@ -62,14 +73,9 @@ public class MusicHandler {
     }
 
     public static void stopFalling() {
-        if (falling.isPlaying()) {
+        if (fallingPlaying) {
+            fallingPlaying = false;
             falling.stop();
-        }
-    }
-
-    public static void stopFootsteps() {
-        if (footsteps.isPlaying()) {
-            footsteps.stop();
         }
     }
 

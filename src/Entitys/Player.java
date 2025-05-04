@@ -58,6 +58,7 @@ public class Player extends Entity {
 
         onGround = CollisionHandler.onGround(this);
 
+        // falling sound effects
         if (velocity.y > 0) {
             if (fallStartTime == 0)
                 fallStartTime = System.currentTimeMillis();
@@ -70,7 +71,7 @@ public class Player extends Entity {
         }
 
 
-
+        // landing sound effects
         if (onGround) {
             if (fallStartTime > 0 && System.currentTimeMillis() - fallStartTime > 400) {
                 MusicHandler.landHard();
@@ -86,7 +87,7 @@ public class Player extends Entity {
         boolean continuousJumping;
 
         // Jumping logic
-        if (keyI.wPressed) {
+        if (keyI.wPressed && canMove) {
             if (jump && onGround && jumpKeyPressStartTime == 0) {
                 jumpKeyPressStartTime = System.currentTimeMillis();
                 jump = false;
@@ -130,6 +131,7 @@ public class Player extends Entity {
             }
         }
 
+        // attacking
         if (keyI.uPressed) {
             long currentTime = System.currentTimeMillis();
 
@@ -172,6 +174,7 @@ public class Player extends Entity {
 
         position.add(velocity);
 
+        // movement
         if ((keyI.aPressed || keyI.dPressed)) {
             if (onGround && !continuousJumping && !attacking) {
                 maxSpriteCol = 7;
@@ -192,7 +195,7 @@ public class Player extends Entity {
             }
 
             // Play footsteps when moving
-            if (onGround)
+            if (onGround && canMove)
                 MusicHandler.footsteps();
              else
                 MusicHandler.stopFootsteps();
