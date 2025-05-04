@@ -4,6 +4,7 @@ import Entitys.MeleeAttacks.MeleeAttack;
 import Entitys.Player;
 import Handlers.CollisionHandler;
 import Handlers.Vector2;
+import Handlers.EnemySpawnHandler;
 import Main.KeyInput;
 import Main.UI.UIManager;
 import Map.TiledMap;
@@ -53,6 +54,7 @@ public class GamePanel extends JPanel implements Runnable{
     }
 
     public void setupGame() {
+        EnemySpawnHandler.setup();
     }
 
     public void startThread() {
@@ -93,6 +95,7 @@ public class GamePanel extends JPanel implements Runnable{
         // Update player and tile map regardless of fading
         player.update();
         tileMap.update();
+        EnemySpawnHandler.updateAll();
         ui.update();
 
         for (int i = 0; i < meleeAttacks.size(); i++) {
@@ -131,6 +134,7 @@ public class GamePanel extends JPanel implements Runnable{
 
         tileMap.drawMap(g2);
         player.draw(g2);
+        EnemySpawnHandler.drawAll(g2);
 
         // Draw player hit box and colidable tiles
         //CollisionHandler.draw(g2, player);

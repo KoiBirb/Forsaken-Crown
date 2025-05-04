@@ -10,8 +10,10 @@ public class EnemySpawnHandler {
 
     // Place enemies
     public static void setup() {
-        enemies.add(new Enemy(new Vector2(400, 200), 2, 5));
-        enemies.add(new Enemy(new Vector2(600, 300), 2, 5));
+        Vector2 p = Main.Panels.GamePanel.player.getPosition();
+        double spawnX = p.x + 150;
+        double spawnY = p.y - 22;
+        enemies.add(new Enemy(new Vector2(spawnX, spawnY), 0, 5));
     }
 
     /** Call every enemy object to update */
