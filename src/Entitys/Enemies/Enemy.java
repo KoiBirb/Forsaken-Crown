@@ -1,4 +1,4 @@
-package Entitys;
+package Entitys.Enemies;
 
 import Handlers.CollisionHandler;
 import Handlers.Pathfinding;
@@ -9,7 +9,7 @@ import Map.TiledMap;
 import java.awt.*;
 import java.util.List;
 
-public class Enemy extends Entity {
+public class Enemy extends Entitys.Entity {
 
     private final Vector2 spawnPos;         // original position
     private final int detectionRadiusTiles; // how far (horizontally) to spot you

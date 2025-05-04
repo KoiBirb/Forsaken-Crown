@@ -6,11 +6,12 @@
  */
 package Entitys;
 
-import Entitys.MeleeAttacks.MeleeAttack;
-import Entitys.MeleeAttacks.PlayerHeavyAttack;
-import Entitys.MeleeAttacks.PlayerQuickAttack;
+import Attacks.MeleeAttacks.MeleeAttack;
+import Attacks.MeleeAttacks.PlayerHeavyAttack;
+import Attacks.MeleeAttacks.PlayerQuickAttack;
 import Handlers.CollisionHandler;
 import Handlers.ImageHandler;
+import Handlers.Sound.MusicHandler;
 import Handlers.Vector2;
 import Main.Panels.GamePanel;
 import Map.TiledMap;
@@ -26,11 +27,11 @@ public class Player extends Entity {
     final double TERMINALVELOCITY = 4.5;
     final double JUMPSTRENGTH = -4;
 
-    private boolean canMove, attacking, chain, jump;
+    private boolean canMove, attacking, chain, jump, onGround;
     private int spriteCounter, spriteRow, spriteCol, maxSpriteCol, lastSpriteRow;
 
     // timers
-    private long jumpKeyPressStartTime, lastQuickAttackTime, lastHeavyAttackTime;
+    private long jumpKeyPressStartTime, lastQuickAttackTime, lastHeavyAttackTime, fallStartTime;
 
     MeleeAttack attack;
 
@@ -50,14 +51,35 @@ public class Player extends Entity {
      * Update method for the player
      * Handles collision and movement
      */
+
     @Override
     public void update() {
         velocity.x = 0;
 
-        boolean onGround = CollisionHandler.onGround(this);
+        onGround = CollisionHandler.onGround(this);
 
-        if (onGround)
+        if (velocity.y > 0) {
+            if (fallStartTime == 0)
+                fallStartTime = System.currentTimeMillis();
+
+            if (velocity.y > TERMINALVELOCITY)
+                MusicHandler.falling();
+        } else {
+            fallStartTime = 0;
+            MusicHandler.stopFalling();
+        }
+
+
+
+        if (onGround) {
+            if (fallStartTime > 0 && System.currentTimeMillis() - fallStartTime > 400) {
+                MusicHandler.landHard();
+            } else if (fallStartTime > 0) {
+                MusicHandler.land();
+            }
             velocity.y = 0;
+            fallStartTime = 0;
+        }
 
         isColliding = false;
 
@@ -67,7 +89,8 @@ public class Player extends Entity {
         if (keyI.wPressed) {
             if (jump && onGround && jumpKeyPressStartTime == 0) {
                 jumpKeyPressStartTime = System.currentTimeMillis();
-                jump = false; // Mark that the key has been pressed
+                jump = false;
+                MusicHandler.jump();
             }
 
             if (System.currentTimeMillis() - jumpKeyPressStartTime <= 200) {
@@ -117,6 +140,7 @@ public class Player extends Entity {
                         spriteRow = 8;
                         maxSpriteCol = 4;
                         attack = new PlayerQuickAttack(this, false);
+                        MusicHandler.hit();
                         chain = true; // Enable chain attack
                         lastQuickAttackTime = currentTime;
                     }
@@ -125,6 +149,7 @@ public class Player extends Entity {
                     spriteRow = 7;
                     maxSpriteCol = 6;
                     attack = new PlayerQuickAttack(this, true);
+                    MusicHandler.hit();
                     chain = false; // Reset chain flag
                     lastQuickAttackTime = currentTime;
                 }
@@ -137,11 +162,11 @@ public class Player extends Entity {
                 spriteRow = 9;
                 maxSpriteCol = 4;
                 attack = new PlayerHeavyAttack(this);
+                MusicHandler.heavyAttack();
                 currentHealth--;
                 lastHeavyAttackTime = currentTime;
             }
         }
-
 
         CollisionHandler.checkTileCollision(this);
 
@@ -165,9 +190,20 @@ public class Player extends Entity {
                     velocity.x = speed;
                 }
             }
-        } else if (onGround && !continuousJumping && !attacking) {
-            spriteRow = 1;
-            maxSpriteCol = 8;
+
+            // Play footsteps when moving
+            if (onGround)
+                MusicHandler.footsteps();
+             else
+                MusicHandler.stopFootsteps();
+
+        } else {
+            MusicHandler.stopFootsteps();
+
+            if (onGround && !continuousJumping && !attacking) {
+                spriteRow = 1;
+                maxSpriteCol = 8;
+            }
         }
 
         spriteCounter++;
@@ -199,6 +235,10 @@ public class Player extends Entity {
 
     public void setAttacking(boolean attacking) {
         this.attacking = attacking;
+    }
+
+    public boolean isOnGround() {
+        return onGround;
     }
 
 

@@ -1,8 +1,8 @@
 package Main.Panels;
 
-import Entitys.MeleeAttacks.MeleeAttack;
+import Attacks.MeleeAttacks.MeleeAttack;
+import Entitys.Enemies.Enemy;
 import Entitys.Player;
-import Handlers.CollisionHandler;
 import Handlers.Vector2;
 import Handlers.EnemySpawnHandler;
 import Main.KeyInput;
@@ -64,13 +64,14 @@ public class GamePanel extends JPanel implements Runnable{
 
     @Override
     public void run() {
+
         // Delta method FPS clock
-        int FPS = 60;
-        double drawInterval = 1000000000.0/ FPS;
+        double drawInterval = 1000000000.0/60; // 60 FPS
         double delta = 0;
         long lastTime = System.nanoTime();
         long currentTime;
         long timer = 0;
+        int drawCount = 0;
 
         while (gameThread != null) {
 
@@ -84,8 +85,11 @@ public class GamePanel extends JPanel implements Runnable{
                 update();
                 repaint();
                 delta--;
+                drawCount++;
             }
             if(timer>= 1000000000) {
+//                System.out.println("FPS:" + drawCount);
+                drawCount = 0;
                 timer = 0;
             }
         }

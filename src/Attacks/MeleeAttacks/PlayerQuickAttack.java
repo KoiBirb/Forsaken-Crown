@@ -1,4 +1,4 @@
-package Entitys.MeleeAttacks;
+package Attacks.MeleeAttacks;
 
 import Entitys.Player;
 import Main.Panels.GamePanel;
@@ -37,7 +37,7 @@ public class PlayerQuickAttack extends MeleeAttack{
                 GamePanel.meleeAttacks.remove(this);
                 player.setAttacking(false);
         } else if (frame == 1 || frame == 2) {
-                hitBox = new Rectangle((player.getDirection().equals("right")) ? (int) (player.getPosition().x + 3) : (int) (player.getPosition().x - 105), (int) (player.getPosition().y + 17), 147, 30);
+            hitBox = new Rectangle((player.getDirection().equals("right")) ? (int) (player.getPosition().x + 3) : (int) (player.getPosition().x - 105), (int) (player.getPosition().y + 17), 147, 30);
             TiledMap.cameraShake(2,6);
         } else
             hitBox = null;

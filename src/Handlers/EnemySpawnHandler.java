@@ -1,7 +1,6 @@
 package Handlers;
 
-import Entitys.Enemy;
-import Handlers.Vector2;
+import Entitys.Enemies.Enemy;
 
 import java.awt.Graphics2D;
 import java.util.*;

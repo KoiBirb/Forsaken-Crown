@@ -1,4 +1,4 @@
-package Entitys.MeleeAttacks;
+package Attacks.MeleeAttacks;
 
 import Handlers.Vector2;
 import Main.Panels.GamePanel;

@@ -15,20 +15,19 @@ import java.util.HashMap;
 
 public abstract class Entity {
 
-    boolean isColliding;
+    protected boolean isColliding;
 
-    double speed;
-    final int width;
-    final int height;
-    final int maxHealth;
-    int currentHealth;
-    int solidAreaOffsetX, solidAreaOffsetY;
+    protected double speed;
+    protected final int width, height;
+    protected final int maxHealth;
+    protected int currentHealth;
+    protected int solidAreaOffsetX, solidAreaOffsetY;
 
-    Rectangle solidArea;
-    String direction;
-    HashMap<String, Double> directionToRad;
-    BufferedImage image;
-    Vector2 position, velocity;
+    protected Rectangle solidArea;
+    protected String direction;
+    protected HashMap<String, Double> directionToRad;
+    protected BufferedImage image;
+    protected Vector2 position, velocity;
 
     public Entity(Vector2 position, Vector2 velocity, int width, int height, double speed, Rectangle solidArea, BufferedImage image, int maxHealth) {
         this.position = position;

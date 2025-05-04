@@ -26,19 +26,22 @@ public class Vector2 {
         this.y = length * Math.sin(theta);
     }
 
-    public void add(Vector2 v) {
+    public Vector2 add(Vector2 v) {
         this.x += v.x;
         this.y += v.y;
+        return this;
     }
 
-    public void subtract(Vector2 v) {
+    public Vector2 subtract(Vector2 v) {
         this.x -= v.x;
         this.y -= v.y;
+        return this;
     }
 
-    public void multiplyScalar(double scalar) {
+    public Vector2 multiplyScalar(double scalar) {
         this.x *= scalar;
         this.y *= scalar;
+        return this;
     }
 
     public void normalize() {

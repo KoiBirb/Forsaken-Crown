@@ -51,7 +51,7 @@ public class TiledMap {
     private int oldRoomHeight;
 
     private final double SCALE = GamePanel.scale;
-    private Vector2 cameraPosition;
+    private Vector2 cameraPosition, interpolatedBackgroundPos;
 
     // Room data
     private Vector2 roomScreenPos;
@@ -80,6 +80,7 @@ public class TiledMap {
         this.oldRoomHeight = 0;
 
         this.cameraPosition = new Vector2(0, 0);
+        this.interpolatedBackgroundPos = new Vector2(0, 0);
 
         mapLayers = new ArrayList<>();
         tilesetOffset = new HashMap<>();
@@ -386,29 +387,29 @@ public class TiledMap {
      * @param layers BufferedImage array of background layers
      * @param parallaxFactors double array of parallax factors for each layer
      */
-   private void drawParallaxBackground(Graphics2D g2, BufferedImage[] layers, double[] parallaxFactors) {
+    private void drawParallaxBackground(Graphics2D g2, BufferedImage[] layers, double[] parallaxFactors) {
 
-       int scaledTileSize = (int) (tileSetTileSize * SCALE);
+        int scaledTileSize = (int) (tileSetTileSize * SCALE);
 
-       Vector2 roomScreenPos = getScreenRoomPos();
+        Vector2 roomScreenPos = getScreenRoomPos();
 
-       int playerTileX = (int) player.getPosition().x / scaledTileSize;
-       int playerTileY = (int) player.getPosition().y / scaledTileSize;
+        int playerTileX = (int) player.getPosition().x / scaledTileSize;
+        int playerTileY = (int) player.getPosition().y / scaledTileSize;
 
-       for (int i = 0; i < layers.length; i++) {
-           BufferedImage layer = layers[i];
-           double parallaxFactor = parallaxFactors[i];
+        for (int i = 0; i < layers.length; i++) {
+            BufferedImage layer = layers[i];
+            double parallaxFactor = parallaxFactors[i];
 
-           int playerDistanceX = playerTileX - minX;
-           int playerDistanceY = playerTileY - minY;
+            int playerDistanceX = playerTileX - minX;
+            int playerDistanceY = playerTileY - minY;
 
-           roomScreenPos.x = roomScreenPos.x - 2 * (playerDistanceX * parallaxFactor);
-           roomScreenPos.y = roomScreenPos.y - (playerDistanceY * parallaxFactor);
+            roomScreenPos.x = roomScreenPos.x - 2 * (playerDistanceX * parallaxFactor);
+            roomScreenPos.y = roomScreenPos.y - (playerDistanceY * parallaxFactor);
 
 
-           g2.drawImage(layer, (int) roomScreenPos.x - scaledTileSize - 2, (int) roomScreenPos.y - 2 - scaledTileSize, oldRoomWidth + roomWidth/15 + 2 * scaledTileSize, oldRoomHeight + roomHeight/15 + 2 *scaledTileSize, null);
-       }
-   }
+            g2.drawImage(layer, (int) roomScreenPos.x - scaledTileSize - 2, (int) roomScreenPos.y - 2 - scaledTileSize, oldRoomWidth + roomWidth/15 + 2 * scaledTileSize, oldRoomHeight + roomHeight/15 + 2 *scaledTileSize, null);
+        }
+    }
 
 
    /**
@@ -440,7 +441,7 @@ public class TiledMap {
     public void drawMap(Graphics2D g2) {
         int scaledTileSize = (int) (tileSetTileSize * SCALE);
 
-        drawParallaxBackground(g2, backgrounds.get(0), new double[]{0.1, 0.2, 0.4, 0.6});
+        drawParallaxBackground(g2, backgrounds.get(0), new double[]{0.2, 0.3, 0.5, 0.7});
 
         float alpha = (float) (0.75 + 0.15 * Math.sin(System.currentTimeMillis() * 0.002));
         // Loop through layers
