@@ -27,11 +27,11 @@ public class Player extends Entity {
     final double TERMINALVELOCITY = 4.5;
     final double JUMPSTRENGTH = -4;
 
-    private boolean canMove, attacking, chain, jump, onGround;
+    private boolean canMove, attacking, chain, jump, onGround, healing;
     private int spriteCounter, spriteRow, spriteCol, maxSpriteCol, lastSpriteRow;
 
     // timers
-    private long jumpKeyPressStartTime, lastQuickAttackTime, lastHeavyAttackTime, fallStartTime;
+    private long jumpKeyPressStartTime, lastQuickAttackTime, lastHeavyAttackTime, fallStartTime, healStartTime;
 
     MeleeAttack attack;
 
@@ -87,7 +87,7 @@ public class Player extends Entity {
         boolean continuousJumping;
 
         // Jumping logic
-        if (keyI.wPressed && canMove) {
+        if (keyI.wPressed && canMove && !healing) {
             if (jump && onGround && jumpKeyPressStartTime == 0) {
                 jumpKeyPressStartTime = System.currentTimeMillis();
                 jump = false;
@@ -107,7 +107,7 @@ public class Player extends Entity {
         }
 
         // Jump animation
-        if (keyI.wPressed && continuousJumping) {
+        if (keyI.wPressed && continuousJumping && !keyI.iPressed) {
             velocity.y = JUMPSTRENGTH;
             isColliding = false;
 
@@ -132,7 +132,7 @@ public class Player extends Entity {
         }
 
         // attacking
-        if (keyI.uPressed) {
+        if (keyI.uPressed && !keyI.iPressed) {
             long currentTime = System.currentTimeMillis();
 
             if (!attacking) {
@@ -158,7 +158,7 @@ public class Player extends Entity {
             }
         }
 
-        if (keyI.jPressed && !attacking) {
+        if (keyI.jPressed && !attacking && !keyI.iPressed) {
             long currentTime = System.currentTimeMillis();
             if (currentTime - lastHeavyAttackTime >= PlayerHeavyAttack.getCooldown()) {
                 spriteRow = 9;
@@ -166,9 +166,42 @@ public class Player extends Entity {
                 attack = new PlayerHeavyAttack(this);
                 MusicHandler.heavyAttack();
                 currentHealth--;
-                currentMana--;
                 lastHeavyAttackTime = currentTime;
             }
+        }
+
+        if (keyI.iPressed && onGround && !healing) {
+            if (healStartTime == 0) {
+                healStartTime = System.currentTimeMillis();
+                MusicHandler.healCharge();
+            }
+
+            long elapsedTime = System.currentTimeMillis() - healStartTime;
+
+            TiledMap.cameraShake((int) (1.0 + Math.min(elapsedTime / 1000.0, 2.0)),1);
+        } else {
+            if (healStartTime > 0) {
+
+                spriteRow = 11;
+                maxSpriteCol = 5;
+
+                healing = true;
+
+                int healAmount = (int) ((System.currentTimeMillis() - healStartTime) / 750);
+                healAmount = Math.min(healAmount, currentMana);
+                healAmount = Math.min(healAmount, maxHealth - currentHealth);
+
+
+                currentHealth += healAmount;
+                currentMana -= healAmount;
+
+                TiledMap.cameraShake(healAmount,1);
+
+                MusicHandler.stopHealCharge();
+                MusicHandler.heal();
+            }
+            healStartTime = 0;
+            MusicHandler.stopHealCharge();
         }
 
         CollisionHandler.checkTileCollision(this);
@@ -176,7 +209,7 @@ public class Player extends Entity {
         position.add(velocity);
 
         // movement
-        if ((keyI.aPressed || keyI.dPressed)) {
+        if ((keyI.aPressed || keyI.dPressed) && !(keyI.iPressed && onGround) && !healing) {
             if (onGround && !continuousJumping && !attacking) {
                 maxSpriteCol = 7;
                 spriteRow = 3;
@@ -204,7 +237,7 @@ public class Player extends Entity {
         } else {
             MusicHandler.stopFootsteps();
 
-            if (onGround && !continuousJumping && !attacking) {
+            if (onGround && !continuousJumping && !attacking && !healing) {
                 spriteRow = 1;
                 maxSpriteCol = 8;
             }
@@ -216,6 +249,7 @@ public class Player extends Entity {
             spriteCol++;
             if (spriteCol >= maxSpriteCol) {
                 spriteCol = 0;
+                healing = false;
             }
         }
 

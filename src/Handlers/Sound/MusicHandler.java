@@ -7,58 +7,74 @@ public class MusicHandler {
     public static final Sound music = new Sound();
     public static final Sound attack = new Sound();
     public static final Sound footsteps = new Sound();
+    public static final Sound heal = new Sound();
     public static final Sound effect = new Sound();
     public static final Sound falling = new Sound();
     private static final Random rand = new Random();
 
-    private static boolean footstepsPlaying = false, fallingPlaying = false;
-
-    public static void playBackgroundMusic() {
-        playMusic(0);
-    }
-
-    public static void playMusic(int i) {
-        music.setFile(i);
-        music.play();
-        music.loop();
-    }
+    private static boolean footstepsPlaying, fallingPlaying, healPlaying;
 
     public static void hit() {
-        playSoundEffect(rand.nextInt(4), attack);
+
+        String path = "/Audio/Player/sword_" + (rand.nextInt(4) + 1) + ".wav";
+
+        playSoundEffect(path, attack);
     }
 
     public static void jump() {
-        playSoundEffect(5, effect);
+        playSoundEffect("/Audio/Player/jump.wav", effect);
     }
 
     public static void land() {
-        playSoundEffect(7, effect);
+        playSoundEffect("/Audio/Player/land.wav", effect);
     }
 
     public static void landHard() {
-        playSoundEffect(6, effect);
+        playSoundEffect("/Audio/Player/land_hard.wav", effect);
     }
 
     public static void heavyAttack() {
-        playSoundEffect(4, attack);
+        playSoundEffect("/Audio/Player/heavy_sword.wav", attack);
     }
 
     public static void hitTile() {
-        attack.stop();
-        playSoundEffect(9, attack);
+        playSoundEffect("/Audio/Player/sword_hit_tile.wav", attack);
     }
 
     public static void hitColladable() {
-        playSoundEffect(rand.nextInt(11,13), attack);
+
+        String path = "/Audio/Player/sword_hit_reject_" + (rand.nextInt(2) + 1) + ".wav";
+
+        playSoundEffect(path, attack);
     }
 
     public static void footsteps() {
         if (!footstepsPlaying) {
             footstepsPlaying = true;
-            footsteps.setFile(8);
+            footsteps.setFile("/Audio/Player/footsteps.wav");
             footsteps.play();
             footsteps.loop();
         }
+    }
+
+    public static void healCharge() {
+        if (!healPlaying) {
+            healPlaying = true;
+            heal.setFile("/Audio/Player/heal_charge.wav");
+            heal.play();
+            heal.loop();
+        }
+    }
+
+    public static void stopHealCharge() {
+        if (healPlaying) {
+            healPlaying = false;
+            heal.stop();
+        }
+    }
+
+    public static void heal() {
+        playSoundEffect("/Audio/Player/heal.wav", heal);
     }
 
     public static void stopFootsteps() {
@@ -71,7 +87,7 @@ public class MusicHandler {
     public static void falling() {
         if (!fallingPlaying) {
             fallingPlaying = true;
-            falling.setFile(10);
+            falling.setFile("/Audio/Player/falling.wav");
             falling.play();
             falling.loop();
         }
@@ -84,8 +100,8 @@ public class MusicHandler {
         }
     }
 
-    private static void playSoundEffect(int i, Sound sound) {
-        if (sound.setFile(i)) {
+    private static void playSoundEffect(String path, Sound sound) {
+        if (sound.setFile(path)) {
             sound.play();
         }
     }

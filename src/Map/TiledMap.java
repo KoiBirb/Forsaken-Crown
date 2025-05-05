@@ -51,7 +51,7 @@ public class TiledMap {
     private int oldRoomHeight;
 
     private final double SCALE = GamePanel.scale;
-    private Vector2 cameraPosition, interpolatedBackgroundPos;
+    private Vector2 cameraPosition;
 
     // Room data
     private Vector2 roomScreenPos;
@@ -80,7 +80,6 @@ public class TiledMap {
         this.oldRoomHeight = 0;
 
         this.cameraPosition = new Vector2(0, 0);
-        this.interpolatedBackgroundPos = new Vector2(0, 0);
 
         mapLayers = new ArrayList<>();
         tilesetOffset = new HashMap<>();
@@ -444,7 +443,7 @@ public class TiledMap {
         drawParallaxBackground(g2, backgrounds.get(0), new double[]{0.2, 0.3, 0.5, 0.7});
 
         float alpha = (float) (0.75 + 0.15 * Math.sin(System.currentTimeMillis() * 0.002));
-        // Loop through layers
+        // Loop through layersa
         for (int k = 0; k < 5; k++) {
 
             if (k == 1){
