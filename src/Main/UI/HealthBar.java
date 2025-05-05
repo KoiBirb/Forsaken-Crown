@@ -8,11 +8,11 @@ package Main.UI;
 
     public class HealthBar extends UIElement {
 
-        private final Entity entity;
-        private int[][] segments;
-        private final int scale;
-        private int shakeOffsetX, shakeOffsetY;
-        private long shakeTimer;
+        protected Entity entity;
+        protected int[][] segments;
+        protected int scale;
+        protected int shakeOffsetX, shakeOffsetY;
+        protected long shakeTimer;
 
         public HealthBar(Entity entity, int x, int y, int width, int height) {
             super(x, y, width, height);
@@ -27,24 +27,22 @@ package Main.UI;
             int previousHealth = segments != null ? calculateTotalHealth(segments) : 0;
             segments = calculateHealthSegments(entity.getCurrentHealth());
 
-            // Trigger shake if health decreases
             if (entity.getCurrentHealth() < previousHealth) {
                 triggerShake();
             }
 
-            // Update shake effect
             if (shakeTimer > 0) {
-                shakeTimer -= 16; // Assuming ~60 FPS, reduce timer by ~16ms per frame
+                shakeTimer -= 16;
                 Random random = new Random();
-                shakeOffsetX = random.nextInt(6) - 3; // Random offset between -3 and 3
-                shakeOffsetY = random.nextInt(6) - 3; // Random offset between -3 and 3
+                shakeOffsetX = random.nextInt(6) - 3;
+                shakeOffsetY = random.nextInt(6) - 3;
             } else {
                 shakeOffsetX = 0;
                 shakeOffsetY = 0;
             }
         }
 
-        private void triggerShake() {
+        protected void triggerShake() {
             shakeTimer = 200; // Shake duration in milliseconds
         }
 
@@ -181,7 +179,8 @@ package Main.UI;
 
             g2.drawImage(
                     imageGlow,
-                    x + shakeOffsetX + 23, y + 44, (x + shakeOffsetX + (69 * 3)) + 25, (y + 14 * 3) + 46,
+                    x + shakeOffsetX + 23, y + 44,
+                    (x + shakeOffsetX + (69 * 3)) + 25, (y + 14 * 3) + 46,
                     206, 39, 273, 52, null);
 
             g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));

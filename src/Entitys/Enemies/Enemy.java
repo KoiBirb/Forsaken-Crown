@@ -15,7 +15,7 @@ public class Enemy extends Entitys.Entity {
     private final int detectionRadiusTiles; // how far (horizontally) to spot you
 
     public Enemy(Vector2 position, int speed, int detectionRadiusTiles) {
-        super(position, new Vector2(0,0), 32, 32, speed, new Rectangle(0,0,32,32), null, 3);
+        super(position, new Vector2(0,0), 32, 32, speed, new Rectangle(0,0,32,32), null, 3,4);
         this.spawnPos = position;
         this.detectionRadiusTiles = detectionRadiusTiles;
     }
@@ -65,7 +65,7 @@ public class Enemy extends Entitys.Entity {
     public void draw(Graphics2D g2) {
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        Vector2 cam = GamePanel.tileMap.getCameraPos();
+        Vector2 cam = GamePanel.tileMap.returnCameraPos();
         int sx = (int)(position.x - cam.x);
         int sy = (int)(position.y - cam.y);
 

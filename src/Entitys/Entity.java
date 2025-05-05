@@ -19,8 +19,8 @@ public abstract class Entity {
 
     protected double speed;
     protected final int width, height;
-    protected final int maxHealth;
-    protected int currentHealth;
+    protected final int maxHealth, maxMana;
+    protected int currentHealth, currentMana;
     protected int solidAreaOffsetX, solidAreaOffsetY;
 
     protected Rectangle solidArea;
@@ -29,7 +29,7 @@ public abstract class Entity {
     protected BufferedImage image;
     protected Vector2 position, velocity;
 
-    public Entity(Vector2 position, Vector2 velocity, int width, int height, double speed, Rectangle solidArea, BufferedImage image, int maxHealth) {
+    public Entity(Vector2 position, Vector2 velocity, int width, int height, double speed, Rectangle solidArea, BufferedImage image, int maxHealth, int maxMana) {
         this.position = position;
         this.velocity = velocity;
         this.width = width;
@@ -40,6 +40,8 @@ public abstract class Entity {
         this.image = image;
         this.maxHealth = maxHealth;
         this.currentHealth = maxHealth;
+        this.maxMana = maxHealth;
+        this.currentMana = maxMana;
 
         this.isColliding = false;
         this.direction = "right";
@@ -105,6 +107,10 @@ public abstract class Entity {
 
     public int getCurrentHealth() {
         return currentHealth;
+    }
+
+    public int getCurrentMana() {
+        return currentMana;
     }
 
 }

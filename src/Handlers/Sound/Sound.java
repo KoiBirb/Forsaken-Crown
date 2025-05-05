@@ -25,6 +25,8 @@ public class Sound {
         soundURL.add(getClass().getResource("/Audio/Player/footsteps.wav"));
         soundURL.add(getClass().getResource("/Audio/Player/sword_hit_tile.wav"));
         soundURL.add(getClass().getResource("/Audio/Player/falling.wav"));
+        soundURL.add(getClass().getResource("/Audio/Player/sword_hit_reject_1.wav"));
+        soundURL.add(getClass().getResource("/Audio/Player/sword_hit_reject_2.wav"));
     }
     public boolean setFile(int i){
         try{

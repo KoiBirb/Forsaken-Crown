@@ -1,11 +1,14 @@
 package Attacks.MeleeAttacks;
 
 import Entitys.Player;
+import Handlers.CollisionHandler;
 import Handlers.Sound.MusicHandler;
 import Main.Panels.GamePanel;
 import Map.TiledMap;
 
 import java.awt.*;
+
+import static Handlers.Sound.MusicHandler.hitColladable;
 
 public class PlayerHeavyAttack extends MeleeAttack{
 
@@ -31,8 +34,9 @@ public class PlayerHeavyAttack extends MeleeAttack{
             hitBox = new Rectangle( (player.getDirection().equals("right")) ? (int) player.getPosition().x : (int) player.getPosition().x + 12, (int) (player.getPosition().y), 30, 40);
         } else if (frame == 1 || frame == 2){
             hitBox = new Rectangle((player.getDirection().equals("right")) ? (int) player.getPosition().x + 7: (int) player.getPosition().x - 90, (int) (player.getPosition().y - 10), 128, 63);
-            if (spriteCounter == 2 && frame == 1 && player.isOnGround()) {
+            if (spriteCounter == 2 && frame == 1 && (player.isOnGround() || CollisionHandler.checkAttackTileCollision(hitBox, player))) {
                 MusicHandler.hitTile();
+                MusicHandler.hitColladable();
             }
         } else {
             hitBox = null;

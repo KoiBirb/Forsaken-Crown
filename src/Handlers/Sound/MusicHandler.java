@@ -44,7 +44,12 @@ public class MusicHandler {
     }
 
     public static void hitTile() {
+        attack.stop();
         playSoundEffect(9, attack);
+    }
+
+    public static void hitColladable() {
+        playSoundEffect(rand.nextInt(11,13), attack);
     }
 
     public static void footsteps() {

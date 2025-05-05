@@ -2,6 +2,7 @@ package Handlers;
 
 import Entitys.Entity;
 import Main.Panels.GamePanel;
+import Main.UI.VFX.Hit;
 import Map.TiledMap;
 
 import java.awt.*;
@@ -85,6 +86,50 @@ public class CollisionHandler {
         }
     }
 
+    public static boolean checkAttackTileCollision(Rectangle hitbox, Entity player) {
+        int tileSize = TiledMap.getScaledTileSize();
+
+        int leftCol = hitbox.x / tileSize;
+        int rightCol = (hitbox.x + hitbox.width) / tileSize;
+        int topRow = hitbox.y / tileSize;
+        int bottomRow = (hitbox.y + hitbox.height) / tileSize;
+
+        double closestDistance = Double.MAX_VALUE;
+        int closestTileX = -1;
+        int closestTileY = -1;
+        boolean flip = false;
+
+        for (int row = topRow; row <= bottomRow; row++) {
+            if (row < 0 || row >= collidableTiles.length) continue; // Skip out-of-bounds rows
+
+            for (int col = leftCol; col <= rightCol; col++) {
+                if (col < 0 || col >= collidableTiles[row].length) continue; // Skip out-of-bounds columns
+
+                if (collidableTiles[row][col] != 0) {
+                    int tileX = col * tileSize;
+                    int tileY = row * tileSize;
+
+                    double distance = Math.hypot(player.getPosition().x - tileX, player.getPosition().y - tileY);
+
+                    if (distance < closestDistance) {
+                        closestDistance = distance;
+                        closestTileX = tileX;
+                        closestTileY = tileY;
+
+                        flip = player.getPosition().x > tileX;
+                    }
+                }
+            }
+        }
+
+        if (closestTileX != -1 && closestTileY != -1) {
+            new Hit(closestTileX + (flip ? tileSize : 0), closestTileY + tileSize / 2, flip);
+            return true;
+        }
+
+        return false;
+    }
+
    public static void draw(Graphics2D g2, Entity entity) {
         g2.setColor(Color.GREEN);
 
@@ -105,10 +150,10 @@ public class CollisionHandler {
         int tileSize = TiledMap.getScaledTileSize();
 
         g2.setColor(Color.RED);
-        int entityLeftCol = (int) (x / tileSize);
-        int entityRightCol = (int) ((x + width) / tileSize);
-        int entityTopRow = (int) (y / tileSize);
-        int entityBottomRow = (int) ((y + height) / tileSize);
+        int entityLeftCol = x / tileSize;
+        int entityRightCol = (x + width) / tileSize;
+        int entityTopRow = (y / tileSize);
+        int entityBottomRow = (y + height) / tileSize;
 
         for (int row = entityTopRow; row <= entityBottomRow; row++) {
             for (int col = entityLeftCol; col <= entityRightCol; col++) {
