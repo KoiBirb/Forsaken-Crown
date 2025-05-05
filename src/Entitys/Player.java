@@ -56,14 +56,13 @@ public class Player extends Entity {
 
         onGround = CollisionHandler.onGround(this);
 
-        // falling sound effects
-        // Constants
-        double TERMINALVELOCITY = 4.5;
+        // falling
+
         if (velocity.y > 0) {
             if (fallStartTime == 0)
                 fallStartTime = System.currentTimeMillis();
 
-            if (velocity.y > TERMINALVELOCITY)
+            if (velocity.y > 4.5)
                 MusicHandler.falling();
         } else {
             fallStartTime = 0;
@@ -71,7 +70,7 @@ public class Player extends Entity {
         }
 
 
-        // landing sound effects
+        // landing
         if (onGround) {
             if (fallStartTime > 0 && System.currentTimeMillis() - fallStartTime > 400) {
                 MusicHandler.landHard();
@@ -86,7 +85,7 @@ public class Player extends Entity {
 
         boolean continuousJumping;
 
-        // Jumping logic
+        // Jumping
         if (keyI.wPressed && canMove && !healing) {
             if (jump && onGround && jumpKeyPressStartTime == 0) {
                 jumpKeyPressStartTime = System.currentTimeMillis();
@@ -106,7 +105,6 @@ public class Player extends Entity {
             jump = true;
         }
 
-        // Jump animation
         if (keyI.wPressed && continuousJumping && !keyI.iPressed) {
             velocity.y = -4;
             isColliding = false;
@@ -124,13 +122,14 @@ public class Player extends Entity {
         }
 
         if (!onGround && !continuousJumping) {
-            if (velocity.y < TERMINALVELOCITY) {
+            if (velocity.y < 4.5) {
                 velocity.y += 0.4;
             } else {
                 TiledMap.cameraShake(1,6);
             }
         }
 
+        // Dashing
         if (keyI.kPressed && !dashing && System.currentTimeMillis() - lastDashTime >= 1000 && currentMana > 0) {
             dashing = true;
             dashStartTime = System.currentTimeMillis();
@@ -161,7 +160,7 @@ public class Player extends Entity {
             }
         }
 
-        // attacking
+        // Attacking
         if (keyI.uPressed && !keyI.iPressed) {
             long currentTime = System.currentTimeMillis();
 
@@ -173,17 +172,16 @@ public class Player extends Entity {
                         maxSpriteCol = 4;
                         attack = new PlayerQuickAttack(this, false);
                         MusicHandler.hit();
-                        chain = true; // Enable chain attack
+                        chain = true;
                         lastQuickAttackTime = currentTime;
                         currentMana++;
                     }
                 } else {
-                    // Chain attack
                     spriteRow = 7;
                     maxSpriteCol = 6;
                     attack = new PlayerQuickAttack(this, true);
                     MusicHandler.hit();
-                    chain = false; // Reset chain flag
+                    chain = false;
                     lastQuickAttackTime = currentTime;
                 }
             }
@@ -205,6 +203,7 @@ public class Player extends Entity {
             }
         }
 
+        // Healing
         if (keyI.iPressed && onGround && !healing) {
             if (healStartTime == 0) {
                 healStartTime = System.currentTimeMillis();
@@ -263,7 +262,6 @@ public class Player extends Entity {
                 }
             }
 
-            // Play footsteps when moving
             if (onGround && canMove)
                 MusicHandler.footsteps();
              else
