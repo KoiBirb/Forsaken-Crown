@@ -25,7 +25,11 @@ public class MusicHandler {
         playSoundEffect("/Audio/Player/jump.wav", effect);
     }
 
-    public static void land() {
+    public static void dash() {
+        playSoundEffect("/Audio/Player/dash.wav", effect);
+    }
+
+        public static void land() {
         playSoundEffect("/Audio/Player/land.wav", effect);
     }
 

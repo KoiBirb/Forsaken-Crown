@@ -23,15 +23,12 @@ import static Main.Panels.GamePanel.keyI;
 
 public class Player extends Entity {
 
-    // Constants
-    final double TERMINALVELOCITY = 4.5;
-    final double JUMPSTRENGTH = -4;
-
-    private boolean canMove, attacking, chain, jump, onGround, healing;
+    private boolean canMove, attacking, chain, jump, onGround, healing, dashing;
     private int spriteCounter, spriteRow, spriteCol, maxSpriteCol, lastSpriteRow;
 
     // timers
-    private long jumpKeyPressStartTime, lastQuickAttackTime, lastHeavyAttackTime, fallStartTime, healStartTime;
+    private long jumpKeyPressStartTime, lastQuickAttackTime, lastHeavyAttackTime,
+            fallStartTime, healStartTime, dashStartTime, lastDashTime;
 
     MeleeAttack attack;
 
@@ -54,11 +51,14 @@ public class Player extends Entity {
 
     @Override
     public void update() {
-        velocity.x = 0;
+        if (!dashing)
+            velocity.x = 0;
 
         onGround = CollisionHandler.onGround(this);
 
         // falling sound effects
+        // Constants
+        double TERMINALVELOCITY = 4.5;
         if (velocity.y > 0) {
             if (fallStartTime == 0)
                 fallStartTime = System.currentTimeMillis();
@@ -108,17 +108,17 @@ public class Player extends Entity {
 
         // Jump animation
         if (keyI.wPressed && continuousJumping && !keyI.iPressed) {
-            velocity.y = JUMPSTRENGTH;
+            velocity.y = -4;
             isColliding = false;
 
             if (!attacking) {
                 spriteRow = 13;
                 maxSpriteCol = 2;
             }
-        } else if (!onGround && (System.currentTimeMillis() - jumpKeyPressStartTime <= 80 || spriteCol == maxSpriteCol) && !attacking) {
+        } else if (!onGround && (System.currentTimeMillis() - jumpKeyPressStartTime <= 80 || spriteCol == maxSpriteCol) && !attacking && !dashing) {
             spriteRow = 14;
             maxSpriteCol = 3;
-        } else if (!onGround && velocity.y > 3 && !attacking) {
+        } else if (!onGround && velocity.y > 3 && !attacking && !dashing) {
             spriteRow = 15;
             maxSpriteCol = 2;
         }
@@ -131,11 +131,41 @@ public class Player extends Entity {
             }
         }
 
+        if (keyI.kPressed && !dashing && System.currentTimeMillis() - lastDashTime >= 1000 && currentMana > 0) {
+            dashing = true;
+            dashStartTime = System.currentTimeMillis();
+            lastDashTime = dashStartTime;
+            velocity.x = direction.equals("right") ? 15 : -15;
+
+            MusicHandler.dash();
+            TiledMap.cameraShake(3,1);
+            currentMana--;
+            spriteRow = 12;
+            maxSpriteCol = 5;
+        }
+
+        if (dashing) {
+
+            long elapsedTime = System.currentTimeMillis() - dashStartTime;
+            double deceleration = 0.1;
+            TiledMap.cameraShake(1,6);
+
+            if (elapsedTime <= 300) { // Dash duration
+                velocity.x *= (1 - deceleration);
+                if (Math.abs(velocity.x) < 0.5) {
+                    velocity.x = 0;
+                    dashing = false;
+                }
+            } else {
+                dashing = false;
+            }
+        }
+
         // attacking
         if (keyI.uPressed && !keyI.iPressed) {
             long currentTime = System.currentTimeMillis();
 
-            if (!attacking) {
+            if (!attacking && !dashing) {
                 if (!chain) {
                     // Normal attack
                     if (currentTime - lastQuickAttackTime >= PlayerQuickAttack.getCooldown()) {
@@ -145,6 +175,7 @@ public class Player extends Entity {
                         MusicHandler.hit();
                         chain = true; // Enable chain attack
                         lastQuickAttackTime = currentTime;
+                        currentMana++;
                     }
                 } else {
                     // Chain attack
@@ -159,14 +190,18 @@ public class Player extends Entity {
         }
 
         if (keyI.jPressed && !attacking && !keyI.iPressed) {
-            long currentTime = System.currentTimeMillis();
-            if (currentTime - lastHeavyAttackTime >= PlayerHeavyAttack.getCooldown()) {
-                spriteRow = 9;
-                maxSpriteCol = 4;
-                attack = new PlayerHeavyAttack(this);
-                MusicHandler.heavyAttack();
-                currentHealth--;
-                lastHeavyAttackTime = currentTime;
+            if (!dashing) {
+                long currentTime = System.currentTimeMillis();
+                if (currentTime - lastHeavyAttackTime >= PlayerHeavyAttack.getCooldown()) {
+                    spriteRow = 9;
+                    maxSpriteCol = 4;
+                    attack = new PlayerHeavyAttack(this);
+                    MusicHandler.heavyAttack();
+                    currentHealth--;
+                    lastHeavyAttackTime = currentTime;
+                }
+            } else {
+
             }
         }
 
@@ -209,7 +244,7 @@ public class Player extends Entity {
         position.add(velocity);
 
         // movement
-        if ((keyI.aPressed || keyI.dPressed) && !(keyI.iPressed && onGround) && !healing) {
+        if ((keyI.aPressed || keyI.dPressed) && !(keyI.iPressed && onGround) && !healing && !dashing) {
             if (onGround && !continuousJumping && !attacking) {
                 maxSpriteCol = 7;
                 spriteRow = 3;
@@ -237,7 +272,7 @@ public class Player extends Entity {
         } else {
             MusicHandler.stopFootsteps();
 
-            if (onGround && !continuousJumping && !attacking && !healing) {
+            if (onGround && !continuousJumping && !attacking && !healing && !dashing) {
                 spriteRow = 1;
                 maxSpriteCol = 8;
             }

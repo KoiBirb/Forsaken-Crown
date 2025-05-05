@@ -5,7 +5,7 @@ import java.awt.event.KeyListener;
 
 public class KeyInput implements KeyListener {
 
-    public boolean wPressed, sPressed, aPressed, dPressed, uPressed, jPressed, iPressed;
+    public boolean wPressed, sPressed, aPressed, dPressed, uPressed, jPressed, iPressed, kPressed;
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -37,6 +37,9 @@ public class KeyInput implements KeyListener {
         if(code == KeyEvent.VK_I){
             iPressed = true;
         }
+        if(code == KeyEvent.VK_K){
+            kPressed = true;
+        }
     }
 
     @Override
@@ -59,12 +62,14 @@ public class KeyInput implements KeyListener {
         if(code == KeyEvent.VK_U){
             uPressed = false;
         }
-
         if(code == KeyEvent.VK_J){
             jPressed = false;
         }
         if(code == KeyEvent.VK_I){
             iPressed = false;
+        }
+        if(code == KeyEvent.VK_K){
+            kPressed = false;
         }
     }
 }
