@@ -264,7 +264,7 @@ public class TiledMap {
         int scaledTileSize = (int) (tileSetTileSize * SCALE);
 
         int playerTileX = (int) (player.getPosition().x / scaledTileSize);
-        int playerTileY = (int) (player.getPosition().y / scaledTileSize);
+        int playerTileY = (int) ((player.getPosition().y + scaledTileSize) / scaledTileSize);
 
         int tileId = 1; // room tile number
 
@@ -544,7 +544,7 @@ public class TiledMap {
      * Determines if the given tile is passable
      * @param gridX int value of x-coordinates of the grid
      * @param gridY int value of y-coordinates of the grid
-     * @return
+     * @return boolean value of whether the tile is walkable
      */
     public boolean isWalkable(int gridX, int gridY) {
         // if out of map bounds, false
@@ -552,7 +552,6 @@ public class TiledMap {
             return false;
         }
 
-        // collidablesTiles[y][x] == 0 means empty
         return collidablesTiles[gridY][gridX] == 0;
     }
 

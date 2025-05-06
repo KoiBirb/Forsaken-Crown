@@ -79,8 +79,6 @@ public class Player extends Entity {
             fallStartTime = 0;
         }
 
-        isColliding = false;
-
         boolean continuousJumping;
 
         // Jumping
@@ -244,6 +242,8 @@ public class Player extends Entity {
             healStartTime = 0;
             MusicHandler.stopHealCharge();
         }
+
+        isColliding = false;
 
         CollisionHandler.checkTileCollision(this);
 
