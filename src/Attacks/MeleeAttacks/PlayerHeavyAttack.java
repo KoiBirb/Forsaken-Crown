@@ -13,10 +13,13 @@ import static Handlers.Sound.MusicHandler.hitColladable;
 public class PlayerHeavyAttack extends MeleeAttack{
 
     private final Player player;
-    private static final int cooldown = 1350;
 
+    /**
+     * Constructor for the PlayerHeavyAttack class.
+     * @param player The player object that is performing the attack.
+     */
     public PlayerHeavyAttack(Player player) {
-        super(6);
+        super(6, 1350);
 
         this.player = player;
 
@@ -24,6 +27,9 @@ public class PlayerHeavyAttack extends MeleeAttack{
         GamePanel.meleeAttacks.add(this);
     }
 
+    /**
+     * Updates the attack's hitbox based on the current frame.
+     */
     @Override
     public void update() {
 
@@ -51,9 +57,5 @@ public class PlayerHeavyAttack extends MeleeAttack{
             spriteCounter = 0;
             frame++;
         }
-    }
-
-    public static int getCooldown() {
-        return cooldown;
     }
 }

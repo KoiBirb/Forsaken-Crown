@@ -1,8 +1,8 @@
 /*
  * Entity.java
  * Leo Bogaert
- * May 1, 2025,
- * Abstract entity class, defines basic functionality of entities
+ * May 6, 2025,
+ * Abstract entity class, defines the basic functionality of entities
  */
 
 package Entitys;
@@ -15,7 +15,7 @@ import java.util.HashMap;
 
 public abstract class Entity {
 
-    protected boolean isColliding;
+    protected boolean isColliding, jump, onGround;
 
     protected double speed;
     protected final int width, height;
@@ -29,6 +29,18 @@ public abstract class Entity {
     protected BufferedImage image;
     protected Vector2 position, velocity;
 
+    /**
+     * Constructor for Entity
+     * @param position Position of the entity
+     * @param velocity Velocity of the entity
+     * @param width Width of the entity
+     * @param height Height of the entity
+     * @param speed Speed of the entity
+     * @param solidArea Solid area of the entity
+     * @param image Image of the entity
+     * @param maxHealth Maximum health of the entity
+     * @param maxMana Maximum mana of the entity
+     */
     public Entity(Vector2 position, Vector2 velocity, int width, int height, double speed, Rectangle solidArea, BufferedImage image, int maxHealth, int maxMana) {
         this.position = position;
         this.velocity = velocity;
@@ -59,58 +71,125 @@ public abstract class Entity {
 
         this.solidArea = solidArea;
     }
+
+
+    /**
+     * Update the entity
+     */
     public void update() {
         position.add(velocity);
         solidArea.setLocation((int) position.x + solidAreaOffsetX, (int)position.y + solidAreaOffsetY);
     }
 
+    /**
+     * Draw the entity
+     * @param g2 Graphics object to draw on
+     */
     public void draw(Graphics2D g2) {
         g2.setColor(Color.RED);
         g2.drawRect((int)position.x, (int)position.y, width, height);
     }
 
+    /**
+     * Gets the entity's position vector
+     * @return Vector2 position
+     */
     public Vector2 getPosition(){
         return position;
     }
 
+    /**
+     * Gets the entity's velocity vector
+     * @return Vector2 velocity
+     */
     public Vector2 getVelocity(){
         return velocity;
     }
 
+    /**
+     * Gets the entity's velocity vector
+     * @return Vector2 velocity
+     */
     public Rectangle getSolidArea(){
         return solidArea;
     }
 
+    /**
+     * Gets the entity's direction vector
+     * @return Vector2 direction
+     */
     public String getDirection() {
         return direction;
     }
 
+    /**
+     * Sets entity's collision state
+     */
     public void setColliding(boolean colliding) {
         isColliding = colliding;
     }
 
+    /**
+     * Gets the entity's speed
+     * @return double speed
+     */
     public double getSpeed(){
         return speed;
     }
 
+    /**
+     * Gets the x component of the entity's solid area
+     * @return double x component
+     */
     public double getSolidAreaOffsetX(){
         return solidAreaOffsetX;
     }
 
+    /**
+     * Gets the y component of the entity's solid area
+     * @return double y component
+     */
     public double getSolidAreaOffsetY(){
         return solidAreaOffsetY;
     }
 
+    /**
+     * returns the entity's max health
+     * @return int max health
+     */
     public int getMaxHealth() {
         return maxHealth;
     }
 
+    /**
+     * Gets entity's jumping state
+     * @return true if jumping, false otherwise
+     */
+    public boolean isjumping() {
+        return jump;
+    }
+
+    /**
+     * Gets the entity's current health
+     * @return int currentHealth
+     */
     public int getCurrentHealth() {
         return currentHealth;
     }
 
+    /**
+     * Gets the current mana of the entity
+     * @return int currentMana
+     */
     public int getCurrentMana() {
         return currentMana;
     }
 
+    /**
+     * Gets the entity's ground state
+     * @return true if on ground, false otherwise
+     */
+    public boolean isOnGround() {
+        return onGround;
+    }
 }

@@ -1,7 +1,7 @@
 /*
  * Player.java
  * Leo Bogaert
- * May 2, 2025,
+ * May 6, 2025,
  * Handles all player actions
  */
 package Entitys;
@@ -21,7 +21,7 @@ import static Main.Panels.GamePanel.keyI;
 
 public class Player extends Entity {
 
-    private boolean canMove, attacking, chain, jump, onGround, healing, dashing;
+    private boolean canMove, attacking, chain, healing, dashing;
     private int spriteCounter, spriteRow, spriteCol, maxSpriteCol, lastSpriteRow;
 
     // timers
@@ -38,7 +38,7 @@ public class Player extends Entity {
      */
     public Player(Vector2 position, int width, int height) {
         super(position, new Vector2(0,0), width,
-                height, 3.2, new Rectangle(30,8,18, 47),
+                height, 6.4, new Rectangle(30,8,18, 47),
                 ImageHandler.loadImage("Assets/Images/Hero/SwordMaster/The SwordMaster/Sword Master Sprite Sheet 90x37.png"), 10, 10);
     }
 
@@ -60,7 +60,7 @@ public class Player extends Entity {
             if (fallStartTime == 0)
                 fallStartTime = System.currentTimeMillis();
 
-            if (velocity.y > 4.5)
+            if (velocity.y > 9)
                 MusicHandler.falling();
         } else {
             fallStartTime = 0;
@@ -102,7 +102,7 @@ public class Player extends Entity {
         }
 
         if (keyI.wPressed && continuousJumping && !keyI.iPressed) {
-            velocity.y = -4;
+            velocity.y = -8;
             isColliding = false;
 
             if (!attacking) {
@@ -112,14 +112,14 @@ public class Player extends Entity {
         } else if (!onGround && (System.currentTimeMillis() - jumpKeyPressStartTime <= 80 || spriteCol == maxSpriteCol) && !attacking && !dashing) {
             spriteRow = 14;
             maxSpriteCol = 3;
-        } else if (!onGround && velocity.y > 3 && !attacking && !dashing) {
+        } else if (!onGround && velocity.y > 6 && !attacking && !dashing) {
             spriteRow = 15;
             maxSpriteCol = 2;
         }
 
         if (!onGround && !continuousJumping) {
-            if (velocity.y < 4.5) {
-                velocity.y += 0.4;
+            if (velocity.y < 9) {
+                velocity.y += 0.8;
             } else {
                 TiledMap.cameraShake(1,6);
             }
@@ -130,7 +130,7 @@ public class Player extends Entity {
             dashing = true;
             dashStartTime = System.currentTimeMillis();
             lastDashTime = dashStartTime;
-            velocity.x = direction.equals("right") ? 15 : -15;
+            velocity.x = direction.equals("right") ? 30 : -30;
 
             MusicHandler.dash();
             TiledMap.cameraShake(3,1);
@@ -247,8 +247,6 @@ public class Player extends Entity {
 
         CollisionHandler.checkTileCollision(this);
 
-        position.add(velocity);
-
         // movement
         if ((keyI.aPressed || keyI.dPressed) && !(keyI.iPressed && onGround) && !healing && !dashing) {
             if (onGround && !continuousJumping && !attacking) {
@@ -283,6 +281,7 @@ public class Player extends Entity {
             }
         }
 
+        // update sprite
         spriteCounter++;
         if (spriteCounter > 5) {
             spriteCounter = 0;
@@ -314,12 +313,12 @@ public class Player extends Entity {
         this.canMove = canMove;
     }
 
+    /**
+     * Sets the players attacking status
+     * @param attacking true if attacking, false otherwise
+     */
     public void setAttacking(boolean attacking) {
         this.attacking = attacking;
-    }
-
-    public boolean isOnGround() {
-        return onGround;
     }
 
 
@@ -350,6 +349,7 @@ public class Player extends Entity {
                 spriteCol * 90, spriteRow * 37,
                 (spriteCol + 1) * 90, (spriteRow + 1) * 37, null);
 
+        // debug draw image area
 //        g2.drawRect((int) screenX, (int) screenY, (int) (90 * GamePanel.scale), (int) (37 * GamePanel.scale));
 
         g2.setTransform(originalTransform);

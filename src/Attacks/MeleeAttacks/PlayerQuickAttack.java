@@ -3,7 +3,6 @@ package Attacks.MeleeAttacks;
 import Entitys.Player;
 import Handlers.Sound.MusicHandler;
 import Main.Panels.GamePanel;
-import Main.UI.VFX.Hit;
 import Map.TiledMap;
 
 import java.awt.*;
@@ -14,10 +13,14 @@ public class PlayerQuickAttack extends MeleeAttack{
 
     private final Player player;
     private final boolean chain;
-    private static final int cooldown = 650;
 
+    /**
+     * Constructor for the PlayerQuickAttack class.
+     * @param player The player object that is performing the attack.
+     * @param chain Whether the attack is a chain attack or not.
+     */
     public PlayerQuickAttack(Player player, boolean chain) {
-        super(1);
+        super(1, 650);
 
         this.chain = chain;
         this.player = player;
@@ -26,13 +29,15 @@ public class PlayerQuickAttack extends MeleeAttack{
         GamePanel.meleeAttacks.add(this);
     }
 
+    /**
+     * Updates the attack's hitbox based on the current frame.
+     */
     @Override
     public void update() {
         if (chain) {
             if (frame == 6) {
                 GamePanel.meleeAttacks.remove(this);
                 player.setAttacking(false);
-
             } else if (frame == 1 || frame == 2) {
                 hitBox = new Rectangle((player.getDirection().equals("right")) ? (int) (player.getPosition().x + 3) : (int) (player.getPosition().x - 95) , (int) (player.getPosition().y + 22), 137, 30);
                 if (spriteCounter == 1 && frame == 1 && checkAttackTileCollision(hitBox, player)) {
@@ -64,9 +69,5 @@ public class PlayerQuickAttack extends MeleeAttack{
             spriteCounter = 0;
             frame++;
         }
-    }
-
-    public static int getCooldown() {
-        return cooldown;
     }
 }

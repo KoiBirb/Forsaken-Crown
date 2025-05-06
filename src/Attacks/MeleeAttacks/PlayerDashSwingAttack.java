@@ -14,10 +14,13 @@ import static Handlers.Sound.MusicHandler.hitColladable;
 public class PlayerDashSwingAttack extends MeleeAttack{
 
     private final Player player;
-    private static final int cooldown = 1000;
 
+    /**
+     * Constructor for the Dash Swing Attack
+     * @param player The player object that is performing the attack.
+     */
     public PlayerDashSwingAttack(Player player) {
-        super(6);
+        super(6, 1000);
 
         this.player = player;
 
@@ -25,6 +28,9 @@ public class PlayerDashSwingAttack extends MeleeAttack{
         GamePanel.meleeAttacks.add(this);
     }
 
+    /**
+     * Updates the attack's hitbox based on the current frame.
+     */
     @Override
     public void update() {
 
@@ -48,9 +54,5 @@ public class PlayerDashSwingAttack extends MeleeAttack{
             spriteCounter = 0;
             frame++;
         }
-    }
-
-    public static int getCooldown() {
-        return cooldown;
     }
 }

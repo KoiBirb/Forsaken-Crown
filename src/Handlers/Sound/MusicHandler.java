@@ -1,3 +1,10 @@
+/*
+ * MusicHandler.java
+ * Leo Bogaert
+ * May 6, 2025,
+ * Handles all sound effects and music for the game
+ */
+
 package Handlers.Sound;
 
 import java.util.Random;
@@ -14,6 +21,9 @@ public class MusicHandler {
 
     private static boolean footstepsPlaying, fallingPlaying, healPlaying;
 
+    /**
+     * Plays random hit sound effect
+     */
     public static void hit() {
 
         String path = "/Audio/Player/sword_" + (rand.nextInt(4) + 1) + ".wav";
@@ -21,38 +31,65 @@ public class MusicHandler {
         playSoundEffect(path, attack);
     }
 
+    /**
+     * Plays jump sound effect
+     */
     public static void jump() {
         playSoundEffect("/Audio/Player/jump.wav", effect);
     }
 
+    /**
+     * Plays dash sound effect
+     */
     public static void dash() {
         playSoundEffect("/Audio/Player/dash.wav", effect);
     }
 
-        public static void land() {
+    /**
+     * Plays land sound effect
+     */
+    public static void land() {
         playSoundEffect("/Audio/Player/land.wav", effect);
     }
 
+    /**
+     * Plays land hard sound effect
+     */
     public static void landHard() {
         playSoundEffect("/Audio/Player/land_hard.wav", effect);
     }
 
+    /**
+     * Plays heavy attack sound effect
+     */
     public static void heavyAttack() {
         playSoundEffect("/Audio/Player/heavy_sword.wav", attack);
     }
 
+    /**
+     * Plays swing attack sound effect
+     */
     public static void dashSwingAttack() {
         playSoundEffect("/Audio/Player/sword_wide_swing.wav", attack);
     }
 
+    /**
+     * Plays dash heavy attack sound effect
+     */
     public static void dashHeavyAttack() {
         playSoundEffect("/Audio/Player/sword_dash_heavy.wav", attack);
     }
 
+    /**
+     * Plays tile hit sound effect
+     */
     public static void hitTile() {
         playSoundEffect("/Audio/Player/sword_hit_tile.wav", attack);
     }
 
+    /**
+     * Plays sword reject sound effect
+     */
     public static void hitColladable() {
 
         String path = "/Audio/Player/sword_hit_reject_" + (rand.nextInt(2) + 1) + ".wav";
@@ -60,6 +97,9 @@ public class MusicHandler {
         playSoundEffect(path, attack);
     }
 
+    /**
+     * Plays footsteps
+     */
     public static void footsteps() {
         if (!footstepsPlaying) {
             footstepsPlaying = true;
@@ -69,6 +109,9 @@ public class MusicHandler {
         }
     }
 
+    /**
+     * Plays heal charge effect
+     */
     public static void healCharge() {
         if (!healPlaying) {
             healPlaying = true;
@@ -78,6 +121,9 @@ public class MusicHandler {
         }
     }
 
+    /**
+     * Stops heal charge effect
+     */
     public static void stopHealCharge() {
         if (healPlaying) {
             healPlaying = false;
@@ -85,10 +131,16 @@ public class MusicHandler {
         }
     }
 
+    /**
+     * Plays heal effect
+     */
     public static void heal() {
         playSoundEffect("/Audio/Player/heal.wav", heal);
     }
 
+    /**
+     * Stops footsteps
+     */
     public static void stopFootsteps() {
         if (footstepsPlaying) {
             footstepsPlaying = false;
@@ -96,6 +148,9 @@ public class MusicHandler {
         }
     }
 
+    /**
+     * Plays falling sound effect
+     */
     public static void falling() {
         if (!fallingPlaying) {
             fallingPlaying = true;
@@ -105,6 +160,9 @@ public class MusicHandler {
         }
     }
 
+    /**
+     * Stops falling sound effect
+     */
     public static void stopFalling() {
         if (fallingPlaying) {
             fallingPlaying = false;
@@ -112,6 +170,11 @@ public class MusicHandler {
         }
     }
 
+    /**
+     * Plays a given sound effect on a sound object
+     * @param sound Sound object used to play effect
+     * @param path String file path from Assets
+     */
     private static void playSoundEffect(String path, Sound sound) {
         if (sound.setFile(path)) {
             sound.play();

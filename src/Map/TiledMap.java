@@ -85,12 +85,13 @@ public class TiledMap {
         tilesetOffset = new HashMap<>();
 
         // Add each tileset image to the list
+        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Castle of Bones Tileset.png"));
         tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Glow.png"));
         tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/pixil-frame-0.png"));
         tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/DARK Edition Tileset No background.png"));
-        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Castle of Bones Tileset.png"));
         tileSets.add(tileSets.get(3));
-
+        tileSets.add(tileSets.getFirst());
+        tileSets.add(tileSets.getFirst());
 
         loadMap();
         loadBackgrounds();
@@ -120,11 +121,13 @@ public class TiledMap {
     private void loadMap() {
         try (FileReader reader = new FileReader(mapPath)) {
 
-            tilesetOffset.put (tileSets.get(0), 774);
-            tilesetOffset.put(tileSets.get(1), 0);
-            tilesetOffset.put(tileSets.get(2), 306);
-            tilesetOffset.put(tileSets.get(3), 810);
-            tilesetOffset.put(tileSets.get(4), 810);
+            tilesetOffset.put(tileSets.get(0), 810);
+            tilesetOffset.put (tileSets.get(1), 774);
+            tilesetOffset.put(tileSets.get(2), 0);
+            tilesetOffset.put(tileSets.get(3), 306);
+            tilesetOffset.put(tileSets.get(4), 306);
+            tilesetOffset.put(tileSets.get(0), 810);
+            tilesetOffset.put(tileSets.get(0), 810);
 
             JSONObject mapData = (JSONObject) parser.parse(reader);
             mapWidth = ((Long) mapData.get("width")).intValue();
@@ -133,7 +136,7 @@ public class TiledMap {
 
             JSONArray layers = (JSONArray) mapData.get("layers");
 
-            // door glow layer
+            // castle bones background
             JSONObject layer = (JSONObject) layers.get(0);
             JSONArray data = (JSONArray) layer.get("data");
 
@@ -144,7 +147,7 @@ public class TiledMap {
                 }
             }
 
-            // base tile layer
+            // door glow layer
             layer = (JSONObject) layers.get(1);
             data = (JSONArray) layer.get("data");
 
@@ -155,7 +158,7 @@ public class TiledMap {
                 }
             }
 
-            // dark edition tile layer
+            // base tile layer
             layer = (JSONObject) layers.get(2);
             data = (JSONArray) layer.get("data");
 
@@ -166,7 +169,7 @@ public class TiledMap {
                 }
             }
 
-            // bones 1
+            // dark edition tile layer
             layer = (JSONObject) layers.get(3);
             data = (JSONArray) layer.get("data");
 
@@ -177,7 +180,7 @@ public class TiledMap {
                 }
             }
 
-            // bones 2
+            // dark edition tile layer
             layer = (JSONObject) layers.get(4);
             data = (JSONArray) layer.get("data");
 
@@ -188,8 +191,30 @@ public class TiledMap {
                 }
             }
 
+            // bones 1
+            layer = (JSONObject) layers.get(5);
+            data = (JSONArray) layer.get("data");
+
+            mapLayers.add(new int[mapHeight][mapWidth]);
+            for (int i = 0; i < mapHeight; i++) {
+                for (int j = 0; j < mapWidth; j++) {
+                    mapLayers.get(5)[i][j] = ((Long) data.get(i * mapWidth + j)).intValue();
+                }
+            }
+
+            // bones 2
+            layer = (JSONObject) layers.get(6);
+            data = (JSONArray) layer.get("data");
+
+            mapLayers.add(new int[mapHeight][mapWidth]);
+            for (int i = 0; i < mapHeight; i++) {
+                for (int j = 0; j < mapWidth; j++) {
+                    mapLayers.get(6)[i][j] = ((Long) data.get(i * mapWidth + j)).intValue();
+                }
+            }
+
             // Room positions
-            JSONObject roomLayer = (JSONObject) layers.get(5);
+            JSONObject roomLayer = (JSONObject) layers.get(7);
             roomData = (JSONArray) roomLayer.get("data");
 
             minX = mapWidth; minY = mapHeight;
@@ -208,7 +233,7 @@ public class TiledMap {
                 }
             }
 
-            JSONObject collidables = (JSONObject) layers.get(6);
+            JSONObject collidables = (JSONObject) layers.get(8);
             JSONArray collidablesData = (JSONArray) collidables.get("data");
 
             collidablesTiles = new int[mapHeight][mapWidth];
@@ -443,10 +468,10 @@ public class TiledMap {
         drawParallaxBackground(g2, backgrounds.get(0), new double[]{0.2, 0.3, 0.5, 0.7});
 
         float alpha = (float) (0.75 + 0.15 * Math.sin(System.currentTimeMillis() * 0.002));
-        // Loop through layersa
-        for (int k = 0; k < 5; k++) {
+        // Loop through layers
+        for (int k = 0; k < 7; k++) {
 
-            if (k == 1){
+            if (k == 2){
                 continue;
             }
 
@@ -503,7 +528,7 @@ public class TiledMap {
                     int tileRow = ((tileId & 0x1FFFFFFF) - 1 - tilesetOffset.get(tileSetImage)) / (tileSetImage.getWidth() / tileSetTileSize);
 
                     // Door flashing effect
-                    if (k == 0) {
+                    if (k == 1) {
                         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
                     }
 
@@ -514,15 +539,18 @@ public class TiledMap {
                             (tileCol + 1) * tileSetTileSize, (tileRow + 1) * tileSetTileSize, null);
 
 
-                        // Draw tile ID for debugging
-//                        String tileIdText = (flipHorizontally ? 1 : 0) + " " + (flipVertically ? 1 : 0) + " " + (flipDiagonally ? 1 : 0);
-//                        g2.setColor(Color.GREEN); // Set text color
-//                        g2.setFont(new Font("Arial", Font.BOLD, 12)); // Set font
-//                        g2.drawString(tileIdText, -scaledTileSize / 4, scaledTileSize / 4);
+
+                    // debug draws a string on tiles
+//                    System.out.println(tilesetOffset.get(tileSetImage));
+//
+//                    String tileIdText = String.valueOf((tileId & 0x1FFFFFFF - 1) - tilesetOffset.get(tileSetImage)) ;
+//                    g2.setColor(Color.GREEN); // Set text color
+//                    g2.setFont(new Font("Arial", Font.BOLD, 12)); // Set font
+//                    g2.drawString(tileIdText, -scaledTileSize / 4, scaledTileSize / 4);
 
 
                     // Reset alpha composite for other layers
-                    if (k == 0) {
+                    if (k == 1) {
                         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
                     }
 

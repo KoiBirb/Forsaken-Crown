@@ -1,3 +1,9 @@
+/*
+ * CollisionHandler.java
+ * Leo Bogaert
+ * May 6, 2025,
+ * Handles all collisions
+ */
 package Handlers;
 
 import Entitys.Entity;
@@ -11,6 +17,10 @@ public class CollisionHandler {
 
     private static int[][] collidableTiles;
 
+    /**
+     * Checks for a tile collision with the given entity.
+     * @param entity The entity to check for collision.
+     */
     public static void checkTileCollision(Entity entity) {
         double entityTopWorldY = entity.getPosition().y + (entity.getSolidArea().y - entity.getPosition().y) / 2;
         double entityBottomWorldY = entityTopWorldY + entity.getSolidArea().height;
@@ -41,7 +51,7 @@ public class CollisionHandler {
             tileNum1 = collidableTiles[entityBottomRow][entityLeftCol];
             tileNum2 = collidableTiles[entityBottomRow][entityRightCol];
 
-            if (tileNum1 != 0 || tileNum2 != 0) {
+            if ((tileNum1 == 1 || tileNum1 == 4) || (tileNum2 == 1 || tileNum2 == 4)) {
                 entity.setColliding(true);
                 entity.getPosition().y = entityBottomRow * TiledMap.getScaledTileSize() - entity.getSolidArea().height - ((entity.getSolidArea().y - entity.getPosition().y) / 2) - 2;
                 entity.getSolidArea().setLocation(entity.getSolidArea().x, (int) (entity.getPosition().y + entity.getSolidAreaOffsetY()));
@@ -80,12 +90,20 @@ public class CollisionHandler {
 
         } catch (ArrayIndexOutOfBoundsException e) {
             System.out.println("Player out of bounds: " + e.getMessage());
+
+            // reset the player back to spawn
             entity.getPosition().x = 100;
             entity.getPosition().y = 100;
             entity.setColliding(true);
         }
     }
 
+    /**
+     * Checks for an attack collision with a tile
+     * @param hitbox The hitbox of the attack
+     * @param player
+     * @return
+     */
     public static boolean checkAttackTileCollision(Rectangle hitbox, Entity player) {
         int tileSize = TiledMap.getScaledTileSize();
 
@@ -100,10 +118,10 @@ public class CollisionHandler {
         boolean flip = false;
 
         for (int row = topRow; row <= bottomRow; row++) {
-            if (row < 0 || row >= collidableTiles.length) continue; // Skip out-of-bounds rows
+            if (row < 0 || row >= collidableTiles.length) continue;
 
             for (int col = leftCol; col <= rightCol; col++) {
-                if (col < 0 || col >= collidableTiles[row].length) continue; // Skip out-of-bounds columns
+                if (col < 0 || col >= collidableTiles[row].length) continue;
 
                 if (collidableTiles[row][col] != 0) {
                     int tileX = col * tileSize;
@@ -192,7 +210,7 @@ public class CollisionHandler {
             int tileNum1 = collidableTiles[entityBottomRow][entityLeftCol];
             int tileNum2 = collidableTiles[entityBottomRow][entityRightCol];
 
-            return tileNum1 != 0 || tileNum2 != 0;
+            return  ((tileNum1 == 1 || tileNum1 == 4) || (tileNum2 == 1 || tileNum2 == 4));
         } catch (ArrayIndexOutOfBoundsException e) {
             System.out.println("Player out of bounds: " + e.getMessage());
             entity.getPosition().x = 100;
