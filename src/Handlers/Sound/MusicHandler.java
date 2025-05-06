@@ -41,6 +41,14 @@ public class MusicHandler {
         playSoundEffect("/Audio/Player/heavy_sword.wav", attack);
     }
 
+    public static void dashSwingAttack() {
+        playSoundEffect("/Audio/Player/sword_wide_swing.wav", attack);
+    }
+
+    public static void dashHeavyAttack() {
+        playSoundEffect("/Audio/Player/sword_dash_heavy.wav", attack);
+    }
+
     public static void hitTile() {
         playSoundEffect("/Audio/Player/sword_hit_tile.wav", attack);
     }

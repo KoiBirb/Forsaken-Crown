@@ -6,9 +6,7 @@
  */
 package Entitys;
 
-import Attacks.MeleeAttacks.MeleeAttack;
-import Attacks.MeleeAttacks.PlayerHeavyAttack;
-import Attacks.MeleeAttacks.PlayerQuickAttack;
+import Attacks.MeleeAttacks.*;
 import Handlers.CollisionHandler;
 import Handlers.ImageHandler;
 import Handlers.Sound.MusicHandler;
@@ -153,53 +151,62 @@ public class Player extends Entity {
                 velocity.x *= (1 - deceleration);
                 if (Math.abs(velocity.x) < 0.5) {
                     velocity.x = 0;
-                    dashing = false;
                 }
-            } else {
-                dashing = false;
             }
         }
 
         // Attacking
         if (keyI.uPressed && !keyI.iPressed) {
             long currentTime = System.currentTimeMillis();
-
-            if (!attacking && !dashing) {
-                if (!chain) {
-                    // Normal attack
-                    if (currentTime - lastQuickAttackTime >= PlayerQuickAttack.getCooldown()) {
-                        spriteRow = 8;
-                        maxSpriteCol = 4;
-                        attack = new PlayerQuickAttack(this, false);
+            if (!attacking) {
+                if (!dashing) {
+                    if (!chain) {
+                        // Normal attack
+                        if (currentTime - lastQuickAttackTime >= PlayerQuickAttack.getCooldown()) {
+                            spriteRow = 8;
+                            maxSpriteCol = 4;
+                            attack = new PlayerQuickAttack(this, false);
+                            MusicHandler.hit();
+                            chain = true;
+                            lastQuickAttackTime = currentTime;
+                            currentMana++;
+                        }
+                    } else {
+                        spriteRow = 7;
+                        maxSpriteCol = 6;
+                        attack = new PlayerQuickAttack(this, true);
                         MusicHandler.hit();
-                        chain = true;
+                        chain = false;
                         lastQuickAttackTime = currentTime;
-                        currentMana++;
                     }
                 } else {
-                    spriteRow = 7;
-                    maxSpriteCol = 6;
-                    attack = new PlayerQuickAttack(this, true);
-                    MusicHandler.hit();
-                    chain = false;
+                    spriteRow = 10;
+                    maxSpriteCol = 5;
+                    dashing = false;
+                    attack = new PlayerDashSwingAttack(this);
+                    MusicHandler.dashSwingAttack();
                     lastQuickAttackTime = currentTime;
                 }
             }
         }
 
         if (keyI.jPressed && !attacking && !keyI.iPressed) {
-            if (!dashing) {
-                long currentTime = System.currentTimeMillis();
-                if (currentTime - lastHeavyAttackTime >= PlayerHeavyAttack.getCooldown()) {
-                    spriteRow = 9;
-                    maxSpriteCol = 4;
+            long currentTime = System.currentTimeMillis();
+            if (currentTime - lastHeavyAttackTime >= PlayerHeavyAttack.getCooldown()) {
+                if (dashing) {
+                    attack = new PlayerDashHeavyAttack(this);
+                    MusicHandler.dashHeavyAttack();
+                    dashing = false;
+                    spriteRow = 6;
+                    maxSpriteCol = 6;
+                } else {
                     attack = new PlayerHeavyAttack(this);
                     MusicHandler.heavyAttack();
-                    currentHealth--;
-                    lastHeavyAttackTime = currentTime;
+                    spriteRow = 9;
+                    maxSpriteCol = 4;
                 }
-            } else {
-
+                currentHealth--;
+                lastHeavyAttackTime = currentTime;
             }
         }
 
@@ -277,12 +284,15 @@ public class Player extends Entity {
         }
 
         spriteCounter++;
-        if (spriteCounter > 4) {
+        if (spriteCounter > 5) {
             spriteCounter = 0;
             spriteCol++;
             if (spriteCol >= maxSpriteCol) {
-                spriteCol = 0;
+                if (spriteRow == 1 || spriteCol == 7) {
+                    spriteCol = 0;
+                }
                 healing = false;
+                dashing = false;
             }
         }
 

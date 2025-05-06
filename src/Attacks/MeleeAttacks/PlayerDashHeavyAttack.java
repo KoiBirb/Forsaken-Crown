@@ -8,15 +8,13 @@ import Map.TiledMap;
 
 import java.awt.*;
 
-import static Handlers.Sound.MusicHandler.hitColladable;
-
-public class PlayerHeavyAttack extends MeleeAttack{
+public class PlayerDashHeavyAttack extends MeleeAttack{
 
     private final Player player;
-    private static final int cooldown = 1350;
+    private static final int cooldown = 300;
 
-    public PlayerHeavyAttack(Player player) {
-        super(6);
+    public PlayerDashHeavyAttack(Player player) {
+        super(5);
 
         this.player = player;
 
@@ -27,13 +25,13 @@ public class PlayerHeavyAttack extends MeleeAttack{
     @Override
     public void update() {
 
-        if (frame == 4) {
+        if (frame == 5) {
             GamePanel.meleeAttacks.remove(this);
             player.setAttacking(false);
         } else if (frame == 0) {
-            hitBox = new Rectangle( (player.getDirection().equals("right")) ? (int) player.getPosition().x : (int) player.getPosition().x + 12, (int) (player.getPosition().y), 30, 40);
+            hitBox = new Rectangle( (player.getDirection().equals("right")) ? (int) player.getPosition().x + 7 : (int) player.getPosition().x + 18, (int) (player.getPosition().y + 20), 20, 35);
         } else if (frame == 1 || frame == 2){
-            hitBox = new Rectangle((player.getDirection().equals("right")) ? (int) player.getPosition().x + 7: (int) player.getPosition().x - 90, (int) (player.getPosition().y - 10), 128, 63);
+            hitBox = new Rectangle((player.getDirection().equals("right")) ? (int) player.getPosition().x + 20: (int) player.getPosition().x - 50, (int) (player.getPosition().y), 80, 52);
             if (spriteCounter == 2 && frame == 1 && (player.isOnGround() || CollisionHandler.checkAttackTileCollision(hitBox, player))) {
                 MusicHandler.hitTile();
                 MusicHandler.hitColladable();
