@@ -1,13 +1,19 @@
 package Main.Panels;
 
+import Attacks.MeleeAttacks.MeleeAttack;
+import Entitys.Enemies.Enemy;
 import Entitys.Player;
 import Handlers.CollisionHandler;
 import Handlers.Vector2;
+import Handlers.EnemySpawnHandler;
 import Main.KeyInput;
+import Main.UI.UIManager;
+import Main.UI.VFX.Effect;
 import Map.TiledMap;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class GamePanel extends JPanel implements Runnable{
 
@@ -17,9 +23,11 @@ public class GamePanel extends JPanel implements Runnable{
 
     public static TiledMap tileMap;
     public static KeyInput keyI = new KeyInput();
-    public static final Player player = new Player(new Vector2(200,150), 90,37);
+    public static final Player player = new Player(new Vector2(100,150), 90,37);
+    public static UIManager ui = new UIManager();
 
-    private final int FPS = 60;
+    public static ArrayList<MeleeAttack> meleeAttacks = new ArrayList<>();
+    public static ArrayList<Effect> effects = new ArrayList<>();
 
     private static boolean fading = false;
     private static double fadeAlpha = 0.0;
@@ -49,6 +57,7 @@ public class GamePanel extends JPanel implements Runnable{
     }
 
     public void setupGame() {
+        EnemySpawnHandler.setup();
     }
 
     public void startThread() {
@@ -58,12 +67,14 @@ public class GamePanel extends JPanel implements Runnable{
 
     @Override
     public void run() {
+
         // Delta method FPS clock
-        double drawInterval = 1000000000.0/FPS;
+        double drawInterval = 1000000000.0/60; // 60 FPS
         double delta = 0;
         long lastTime = System.nanoTime();
         long currentTime;
         long timer = 0;
+        int drawCount = 0;
 
         while (gameThread != null) {
 
@@ -77,8 +88,11 @@ public class GamePanel extends JPanel implements Runnable{
                 update();
                 repaint();
                 delta--;
+                drawCount++;
             }
             if(timer>= 1000000000) {
+//                System.out.println("FPS:" + drawCount);
+                drawCount = 0;
                 timer = 0;
             }
         }
@@ -88,6 +102,18 @@ public class GamePanel extends JPanel implements Runnable{
         // Update player and tile map regardless of fading
         player.update();
         tileMap.update();
+        EnemySpawnHandler.updateAll();
+        ui.update();
+
+        for (int i = 0; i < meleeAttacks.size(); i++) {
+            meleeAttacks.get(i).update();
+        }
+
+        for (int i = 0; i < effects.size(); i++) {
+            effects.get(i).update();
+        }
+
+
 
         // Handle fade logic
         if (fading) {
@@ -121,12 +147,23 @@ public class GamePanel extends JPanel implements Runnable{
 
         tileMap.drawMap(g2);
         player.draw(g2);
+        EnemySpawnHandler.drawAll(g2);
 
-        //CollisionHandler.draw(g2, player);
+        for (int i = 0; i < effects.size(); i++) {
+            effects.get(i).draw(g2);
+        }
+
+        // Draw player hit box and colidable tiles
+//        CollisionHandler.draw(g2, player);
+//
+//        for (int i = 0; i < meleeAttacks.size(); i++) {
+//            meleeAttacks.get(i).draw(g2);
+//        }
 
         tileMap.coverScreen(g2);
 
-        // Draw fade effect
+        ui.draw(g2);
+
         if (fading) {
             g2.setColor(new Color(0, 0, 0, (float) fadeAlpha));
             g2.fillRect(0, 0, (int) screenWidth, (int) screenHeight);

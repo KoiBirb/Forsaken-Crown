@@ -1,3 +1,10 @@
+/*
+ * Entity.java
+ * Leo Bogaert
+ * May 1, 2025,
+ * Abstract entity class, defines basic functionality of entities
+ */
+
 package Entitys;
 
 import Handlers.Vector2;
@@ -8,18 +15,21 @@ import java.util.HashMap;
 
 public abstract class Entity {
 
-    Vector2 position;
-    boolean isColliding;
-    Vector2 velocity;
-    double speed;
-    final int width,height;
-    int solidAreaOffsetX, solidAreaOffsetY;
-    Rectangle solidArea;
-    String direction;
-    HashMap<String, Double> directionToRad;
-    BufferedImage image;
+    protected boolean isColliding;
 
-    public Entity(Vector2 position, Vector2 velocity, int width, int height, int speed, Rectangle solidArea, BufferedImage image) {
+    protected double speed;
+    protected final int width, height;
+    protected final int maxHealth, maxMana;
+    protected int currentHealth, currentMana;
+    protected int solidAreaOffsetX, solidAreaOffsetY;
+
+    protected Rectangle solidArea;
+    protected String direction;
+    protected HashMap<String, Double> directionToRad;
+    protected BufferedImage image;
+    protected Vector2 position, velocity;
+
+    public Entity(Vector2 position, Vector2 velocity, int width, int height, double speed, Rectangle solidArea, BufferedImage image, int maxHealth, int maxMana) {
         this.position = position;
         this.velocity = velocity;
         this.width = width;
@@ -28,6 +38,10 @@ public abstract class Entity {
         this.solidAreaOffsetY = solidArea.y;
         this.speed = speed;
         this.image = image;
+        this.maxHealth = maxHealth;
+        this.currentHealth = maxHealth;
+        this.maxMana = maxHealth;
+        this.currentMana = maxMana;
 
         this.isColliding = false;
         this.direction = "right";
@@ -59,6 +73,10 @@ public abstract class Entity {
         return position;
     }
 
+    public Vector2 getVelocity(){
+        return velocity;
+    }
+
     public Rectangle getSolidArea(){
         return solidArea;
     }
@@ -73,6 +91,26 @@ public abstract class Entity {
 
     public double getSpeed(){
         return speed;
+    }
+
+    public double getSolidAreaOffsetX(){
+        return solidAreaOffsetX;
+    }
+
+    public double getSolidAreaOffsetY(){
+        return solidAreaOffsetY;
+    }
+
+    public int getMaxHealth() {
+        return maxHealth;
+    }
+
+    public int getCurrentHealth() {
+        return currentHealth;
+    }
+
+    public int getCurrentMana() {
+        return currentMana;
     }
 
 }
