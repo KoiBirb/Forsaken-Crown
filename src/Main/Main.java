@@ -1,3 +1,10 @@
+/*
+ * Main.java
+ * Leo Bogaert
+ * May 7, 2025,
+ * Runnable class for Game
+ */
+
 package Main;
 
 import Main.Panels.GamePanel;
@@ -5,7 +12,13 @@ import Main.Panels.GamePanel;
 import javax.swing.*;
 
 public class Main {
+
+    /**
+     * Main method
+     * @param args the command line arguments
+     */
     public static void main(String[] args) {
+
         // Creates a java window
         JFrame window = new JFrame();
         // Change window settings

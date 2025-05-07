@@ -1,3 +1,9 @@
+/*
+ * KeyInput.java
+ * Leo Bogaert
+ * May 7, 2025,
+ * Detects key input
+ */
 package Main;
 
 import java.awt.event.KeyEvent;
@@ -7,10 +13,17 @@ public class KeyInput implements KeyListener {
 
     public boolean wPressed, sPressed, aPressed, dPressed, uPressed, jPressed, iPressed, kPressed;
 
+    /**
+     * Find keys typed
+     * @param e the event to be processed
+     */
     @Override
     public void keyTyped(KeyEvent e) {
     }
-
+    /**
+     * Find keys pressed
+     * @param e the event to be processed
+     */
     @Override
     public void keyPressed(KeyEvent e) {
 
@@ -42,6 +55,10 @@ public class KeyInput implements KeyListener {
         }
     }
 
+    /**
+     * Find keys released
+     * @param e the event to be processed
+     */
     @Override
     public void keyReleased(KeyEvent e) {
 

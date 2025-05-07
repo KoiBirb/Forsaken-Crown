@@ -101,8 +101,8 @@ public class CollisionHandler {
     /**
      * Checks for an attack collision with a tile
      * @param hitbox The hitbox of the attack
-     * @param player
-     * @return
+     * @param player The player object that is performing the attack
+     * @return True if a collision is detected, false otherwise
      */
     public static boolean checkAttackTileCollision(Rectangle hitbox, Entity player) {
         int tileSize = TiledMap.getScaledTileSize();
@@ -148,7 +148,12 @@ public class CollisionHandler {
         return false;
     }
 
-   public static void draw(Graphics2D g2, Entity entity) {
+    /**
+     * Draws the collision boxes for debugging purposes.
+     * @param g2 The Graphics2D object used for drawing.
+     * @param entity The entity whose collision box is being drawn.
+     */
+    public static void draw(Graphics2D g2, Entity entity) {
         g2.setColor(Color.GREEN);
 
         int x = (int) (entity.getPosition().x + (entity.getSolidArea().x - entity.getPosition().x) / 2);
@@ -196,6 +201,11 @@ public class CollisionHandler {
         }
     }
 
+    /**
+     * Checks if the entity is on the ground.
+     * @param entity The entity to check.
+     * @return True if the entity is on the ground, false otherwise.
+     */
     public static boolean onGround(Entity entity) {
         try {
             double entityTopWorldY = entity.getPosition().y + (entity.getSolidArea().y - entity.getPosition().y) / 2;
@@ -219,6 +229,10 @@ public class CollisionHandler {
         }
     }
 
+    /**
+     * Sets the collidable tiles for the collision handler.
+     * @param collidableTiles The 2D array of collidable tiles.
+     */
     public static void setCollidableTiles(int[][] collidableTiles) {
         CollisionHandler.collidableTiles = collidableTiles;
     }

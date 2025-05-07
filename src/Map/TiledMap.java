@@ -1,7 +1,7 @@
 /*
  * TiledMap.java
  * Leo Bogaert
- * May 1, 2025,
+ * May 7, 2025,
  * This class reads map data from a jar file and calculates
  * the correct camera position to display the map and backgrounds.
  */
@@ -116,7 +116,7 @@ public class TiledMap {
 
 
     /**
-     * Reads data from JSON file and stores it in JSON arrays
+     * Reads data from a JSON file and stores it in JSON arrays
      */
     private void loadMap() {
         try (FileReader reader = new FileReader(mapPath)) {
@@ -275,7 +275,7 @@ public class TiledMap {
 
 
     /**
-     * Finds room dimensions, and updates cameras target position
+     * Finds room dimensions, and updates camera target position
      */
     public void update() {
 
@@ -584,6 +584,10 @@ public class TiledMap {
         return collidablesTiles[gridY][gridX] == 0;
     }
 
+    /**
+     * Returns the camera position
+     * @return Vector2 camera position
+     */
     public Vector2 returnCameraPos() {
         return cameraPosition;
     }

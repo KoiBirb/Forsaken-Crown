@@ -1,3 +1,10 @@
+/*
+ * GamePanel.java
+ * Leo Bogaert
+ * May 7, 2025,
+ * Main game loop
+ */
+
 package Main.Panels;
 
 import Attacks.MeleeAttacks.MeleeAttack;
@@ -17,10 +24,12 @@ import java.util.ArrayList;
 
 public class GamePanel extends JPanel implements Runnable{
 
+    // Screen settings
     public final static double screenWidth = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
     public final static double screenHeight = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
     public final static double scale = 2;
 
+    // initialize classes
     public static TiledMap tileMap;
     public static KeyInput keyI = new KeyInput();
     public static final Player player = new Player(new Vector2(100,150), 90,37);
@@ -29,15 +38,18 @@ public class GamePanel extends JPanel implements Runnable{
     public static ArrayList<MeleeAttack> meleeAttacks = new ArrayList<>();
     public static ArrayList<Effect> effects = new ArrayList<>();
 
+    // Room change effect
     private static boolean fading = false;
     private static double fadeAlpha = 0.0;
     private static boolean fadeIn = true;
     private int fadeDelay = 20;
     private int fadeDelayCounter = 0;
 
-
     Thread gameThread;
 
+    /**
+     * Constructor for the GamePanel class.
+     */
     public GamePanel(){
         this.setPreferredSize(Toolkit.getDefaultToolkit().getScreenSize());
         this.setBackground(Color.BLACK);
@@ -50,25 +62,35 @@ public class GamePanel extends JPanel implements Runnable{
         tileMap = new TiledMap();
     }
 
+    /**
+     * Set up the game.
+     */
+    public void setupGame() {
+        EnemySpawnHandler.setup();
+    }
+
+    /**
+     * Start room change animation.
+     */
     public static void roomTransition() {
         fading = true;
         fadeAlpha = 0.0;
         fadeIn = true;
     }
 
-    public void setupGame() {
-        EnemySpawnHandler.setup();
-    }
-
+    /**
+     * Starts game thread
+     */
     public void startThread() {
         gameThread = new Thread(this);
         gameThread.start();
     }
 
+    /**
+     * Delta FPS clock to call update and repaint
+     */
     @Override
     public void run() {
-
-        // Delta method FPS clock
         double drawInterval = 1000000000.0/60; // 60 FPS
         double delta = 0;
         long lastTime = System.nanoTime();
@@ -90,7 +112,9 @@ public class GamePanel extends JPanel implements Runnable{
                 delta--;
                 drawCount++;
             }
+
             if(timer>= 1000000000) {
+                // FPS counter
 //                System.out.println("FPS:" + drawCount);
                 drawCount = 0;
                 timer = 0;
@@ -98,8 +122,10 @@ public class GamePanel extends JPanel implements Runnable{
         }
     }
 
+    /**
+     * Update game objects
+     */
     public void update() {
-        // Update player and tile map regardless of fading
         player.update();
         tileMap.update();
         EnemySpawnHandler.updateAll();
@@ -113,9 +139,7 @@ public class GamePanel extends JPanel implements Runnable{
             effects.get(i).update();
         }
 
-
-
-        // Handle fade logic
+        // Fading
         if (fading) {
             player.setCanMove(false);
             if (fadeIn) {
@@ -126,7 +150,7 @@ public class GamePanel extends JPanel implements Runnable{
                     fadeDelayCounter = fadeDelay;
                 }
             } else if (fadeDelayCounter > 0) {
-                fadeDelayCounter--; // Stay on pure black
+                fadeDelayCounter--;
             } else {
                 fadeAlpha -= 0.07;
                 if (fadeAlpha <= 0.0) {
@@ -140,6 +164,10 @@ public class GamePanel extends JPanel implements Runnable{
     }
 
 
+    /**
+     * Draw game objects
+     * @param g Graphics object
+     */
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 

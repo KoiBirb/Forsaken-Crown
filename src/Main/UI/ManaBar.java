@@ -1,3 +1,10 @@
+/*
+ * ManaBar.java
+ * Leo Bogaert
+ * May 7, 2025,
+ * Manages and renders the mana bar for an entity
+ */
+
 package Main.UI;
 
 import Entitys.Entity;
@@ -8,6 +15,14 @@ import java.util.Random;
 
 public class ManaBar extends HealthBar {
 
+    /**
+     * Constructor for ManaBar
+     * @param entity Entity to which the mana bar belongs to
+     * @param x int x position of the mana bar
+     * @param y int y position of the mana bar
+     * @param width int width of the mana bar
+     * @param height int height of the mana bar
+     */
     public ManaBar(Entity entity, int x, int y, int width, int height) {
         super(entity, x, y, width, height);
         this.entity = entity;
@@ -17,6 +32,9 @@ public class ManaBar extends HealthBar {
         this.shakeTimer = 0;
     }
 
+    /**
+     * Update the mana bar
+     */
     public void update() {
         int previousMana = segments != null ? calculateTotalMana(segments) : 0;
         segments = calculateManaSegments(entity.getCurrentMana());
@@ -36,33 +54,43 @@ public class ManaBar extends HealthBar {
         }
     }
 
+    /**
+     * Calculate the total mana based on the segments
+     * @param segments int[][] segments of mana
+     * @return int total mana
+     */
     private int calculateTotalMana (int[][] segments) {
-        int totalHealth = 0;
-        if (segments[0][0] == 10) totalHealth += 1; // Left edge
-        if (segments[3][0] == 10) totalHealth += 1; // Right edge
-        if (segments[1][0] == 11) totalHealth += 4 - (segments[1][1] - 8); // Body 1
-        if (segments[2][0] == 11) totalHealth += 4 - (segments[2][1] - 8); // Body 2
-        return totalHealth;
+        int totalMana = 0;
+        if (segments[0][0] == 10) totalMana += 1; // Left edge
+        if (segments[3][0] == 10) totalMana += 1; // Right edge
+        if (segments[1][0] == 11) totalMana += 4 - (segments[1][1] - 8); // Body 1
+        if (segments[2][0] == 11) totalMana += 4 - (segments[2][1] - 8); // Body 2
+        return totalMana;
     }
 
-    public static int[][] calculateManaSegments(int health) {
+    /**
+     * Calculate the segments of the mana bar based on the current mana
+     * @param mana int health of the entity
+     * @return int[][] segments of the mana bar
+     */
+    public static int[][] calculateManaSegments(int mana) {
         int[][] segments = new int[4][2]; // [leftEdge, body1, body2, rightEdge]
 
         // Left edge
-        if (health > 0) {
+        if (mana > 0) {
             segments[0][0] = 10;
             segments[0][1] = 8;
-            health -= 1;
+            mana -= 1;
         } else {
             segments[0][0] = 13;
             segments[0][1] = 8;
         }
 
         // Body segments
-        if (health > 0) {
-            int remainingHealth = Math.min(4, health);
+        if (mana > 0) {
+            int remainingMana = Math.min(4, mana);
 
-            switch (remainingHealth) {
+            switch (remainingMana) {
                 case 4 -> {
                     segments[1][0] = 11;
                     segments[1][1] = 8;
@@ -81,16 +109,16 @@ public class ManaBar extends HealthBar {
                 }
             }
 
-            health -= remainingHealth;
+            mana -= remainingMana;
         } else {
             segments[1][0] = 12;
             segments[1][1] = 8;
         }
 
-        if (health > 0) {
-            int remainingHealth = Math.min(4, health);
+        if (mana > 0) {
+            int remainingMana = Math.min(4, mana);
 
-            switch (remainingHealth) {
+            switch (remainingMana) {
                 case 4 -> {
                     segments[2][0] = 11;
                     segments[2][1] = 8;
@@ -108,14 +136,14 @@ public class ManaBar extends HealthBar {
                     segments[2][1] = 11;
                 }
             }
-            health -= remainingHealth;
+            mana -= remainingMana;
         } else {
             segments[2][0] = 12;
             segments[2][1] = 8;
         }
 
         // Right edge
-        if (health > 0) {
+        if (mana > 0) {
             segments[3][0] = 10;
         } else {
             segments[3][0] = 13;
@@ -125,10 +153,14 @@ public class ManaBar extends HealthBar {
         return segments;
     }
 
+    /**
+     * Draws the mana bar on the screen
+     * @param g2 Graphics2D object to draw on
+     */
     public void draw(Graphics2D g2) {
         int col, row;
 
-        // health bar
+        // mana bar
         for (int i = 0; i < 4; i++) {
             col = segments[i][0];
             row = segments[i][1];
