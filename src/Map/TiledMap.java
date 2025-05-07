@@ -417,21 +417,22 @@ public class TiledMap {
 
         Vector2 roomScreenPos = getScreenRoomPos();
 
-        int playerTileX = (int) player.getPosition().x / scaledTileSize;
-        int playerTileY = (int) player.getPosition().y / scaledTileSize;
+        double playerTileX = player.getPosition().x / scaledTileSize;
+        double playerTileY = player.getPosition().y / scaledTileSize;
 
         for (int i = 0; i < layers.length; i++) {
             BufferedImage layer = layers[i];
             double parallaxFactor = parallaxFactors[i];
 
-            int playerDistanceX = playerTileX - minX;
-            int playerDistanceY = playerTileY - minY;
+            double playerDistanceX = playerTileX - minX;
+            double playerDistanceY = playerTileY - minY;
 
             roomScreenPos.x = roomScreenPos.x - 2 * (playerDistanceX * parallaxFactor);
             roomScreenPos.y = roomScreenPos.y - (playerDistanceY * parallaxFactor);
 
 
-            g2.drawImage(layer, (int) roomScreenPos.x - scaledTileSize - 2, (int) roomScreenPos.y - 2 - scaledTileSize, oldRoomWidth + roomWidth/15 + 2 * scaledTileSize, oldRoomHeight + roomHeight/15 + 2 *scaledTileSize, null);
+            g2.drawImage(layer, (int) roomScreenPos.x - scaledTileSize - 2, (int) roomScreenPos.y - 2 - scaledTileSize,
+                    oldRoomWidth + roomWidth/15 + 2 * scaledTileSize, oldRoomHeight + roomHeight/15 + 2 *scaledTileSize, null);
         }
     }
 
@@ -468,17 +469,26 @@ public class TiledMap {
         drawParallaxBackground(g2, backgrounds.get(0), new double[]{0.2, 0.3, 0.5, 0.7});
 
         float alpha = (float) (0.75 + 0.15 * Math.sin(System.currentTimeMillis() * 0.002));
-        // Loop through layers
+
         for (int k = 0; k < 7; k++) {
 
+            // glowing effect
+            if (k == 1)
+                g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
+
             if (k == 2){
+                g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
                 continue;
             }
 
-            // Only draw tiles in room boundaries
-            for (int i = minY - 1; i <= maxY + 1; i++) {
-                for (int j = minX - 1; j <= maxX + 1; j++) {
+            // Tiles on screen
+            int startX = Math.max(minX - 1, (int) (cameraPosition.x / scaledTileSize) - 1);
+            int endX = Math.min(maxX + 1, (int) ((cameraPosition.x + screenWidth) / scaledTileSize) + 1);
+            int startY = Math.max(minY - 1, (int) (cameraPosition.y / scaledTileSize) - 1);
+            int endY = Math.min(maxY + 1, (int) ((cameraPosition.y + screenHeight) / scaledTileSize) + 1);
 
+            for (int i = startY; i <= endY; i++) {
+                for (int j = startX; j <= endX; j++) {
                     if (i < 0 || i >= mapHeight || j < 0 || j >= mapWidth)
                         continue;
 
@@ -527,10 +537,6 @@ public class TiledMap {
                     int tileCol = ((tileId & 0x1FFFFFFF) - 1 - tilesetOffset.get(tileSetImage)) % (tileSetImage.getWidth() / tileSetTileSize);
                     int tileRow = ((tileId & 0x1FFFFFFF) - 1 - tilesetOffset.get(tileSetImage)) / (tileSetImage.getWidth() / tileSetTileSize);
 
-                    // Door flashing effect
-                    if (k == 1) {
-                        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
-                    }
 
                     g2.drawImage(tileSetImage,
                             -scaledTileSize / 2, -scaledTileSize / 2,
@@ -549,11 +555,6 @@ public class TiledMap {
 //                    g2.drawString(tileIdText, -scaledTileSize / 4, scaledTileSize / 4);
 
 
-                    // Reset alpha composite for other layers
-                    if (k == 1) {
-                        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
-                    }
-
                     g2.setTransform(originalTransform);
                 }
             }
@@ -562,7 +563,7 @@ public class TiledMap {
 
     /**
      * Determines the size of one tile
-     * @return int value of the size of one tile in pixels
+     * @return int value, size of one tile in pixels
      */
     public static int getScaledTileSize() {
         return (int) (tileSetTileSize * scale);
@@ -570,8 +571,8 @@ public class TiledMap {
 
     /**
      * Determines if the given tile is passable
-     * @param gridX int value of x-coordinates of the grid
-     * @param gridY int value of y-coordinates of the grid
+     * @param gridX int value, x-coordinates of the grid
+     * @param gridY int value, y-coordinates of the grid
      * @return boolean value of whether the tile is walkable
      */
     public boolean isWalkable(int gridX, int gridY) {
