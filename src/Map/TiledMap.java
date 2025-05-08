@@ -92,6 +92,7 @@ public class TiledMap {
         tileSets.add(tileSets.get(3));
         tileSets.add(tileSets.getFirst());
         tileSets.add(tileSets.getFirst());
+        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Blood Temple Tileset.png"));
 
         loadMap();
         loadBackgrounds();
@@ -128,6 +129,7 @@ public class TiledMap {
             tilesetOffset.put(tileSets.get(4), 306);
             tilesetOffset.put(tileSets.get(0), 810);
             tilesetOffset.put(tileSets.get(0), 810);
+            tilesetOffset.put(tileSets.get(7), 1930);
 
             JSONObject mapData = (JSONObject) parser.parse(reader);
             mapWidth = ((Long) mapData.get("width")).intValue();
@@ -213,8 +215,19 @@ public class TiledMap {
                 }
             }
 
+            // blood temple
+            layer = (JSONObject) layers.get(7);
+            data = (JSONArray) layer.get("data");
+
+            mapLayers.add(new int[mapHeight][mapWidth]);
+            for (int i = 0; i < mapHeight; i++) {
+                for (int j = 0; j < mapWidth; j++) {
+                    mapLayers.get(7)[i][j] = ((Long) data.get(i * mapWidth + j)).intValue();
+                }
+            }
+
             // Room positions
-            JSONObject roomLayer = (JSONObject) layers.get(7);
+            JSONObject roomLayer = (JSONObject) layers.get(8);
             roomData = (JSONArray) roomLayer.get("data");
 
             minX = mapWidth; minY = mapHeight;
@@ -233,7 +246,7 @@ public class TiledMap {
                 }
             }
 
-            JSONObject collidables = (JSONObject) layers.get(8);
+            JSONObject collidables = (JSONObject) layers.get(9);
             JSONArray collidablesData = (JSONArray) collidables.get("data");
 
             collidablesTiles = new int[mapHeight][mapWidth];
@@ -470,7 +483,7 @@ public class TiledMap {
 
         float alpha = (float) (0.75 + 0.15 * Math.sin(System.currentTimeMillis() * 0.002));
 
-        for (int k = 0; k < 7; k++) {
+        for (int k = 0; k < 8; k++) {
 
             // glowing effect
             if (k == 1)
