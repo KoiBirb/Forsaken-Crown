@@ -21,7 +21,7 @@ import static Main.Panels.GamePanel.keyI;
 
 public class Player extends Entity {
 
-    private boolean canMove, attacking, chain, healing, dashing, spawning, death, damaged;
+    private boolean attacking, chain, healing, dashing, spawning, death, damaged;
     private int spriteCounter, spriteRow, spriteCol, maxSpriteCol, lastSpriteRow;
 
     // timers
@@ -100,7 +100,7 @@ public class Player extends Entity {
                 boolean continuousJumping;
 
                 // Jumping
-                if (keyI.wPressed && canMove && !healing && !damaged) {
+                if (keyI.wPressed && !healing && !damaged) {
                     if (jump && onGround && jumpKeyPressStartTime == 0) {
                         jumpKeyPressStartTime = System.currentTimeMillis();
                         jump = false;
@@ -123,11 +123,11 @@ public class Player extends Entity {
                     velocity.y = -8;
                     isColliding = false;
 
-                    if (!attacking) {
+                    if (!attacking && !dashing) {
                         spriteRow = 13;
                         maxSpriteCol = 2;
                     }
-                } else if (!onGround && (System.currentTimeMillis() - jumpKeyPressStartTime <= 80 || spriteCol == maxSpriteCol) && !attacking && !dashing && !damaged) {
+                } else if (!onGround && spriteCol == maxSpriteCol && !attacking && !dashing && !damaged && velocity.y < 6) {
                     spriteRow = 14;
                     maxSpriteCol = 3;
                 } else if (!onGround && velocity.y > 6 && !attacking && !dashing && !damaged) {
@@ -273,18 +273,16 @@ public class Player extends Entity {
 
                     speed = (attacking) ? 2.8 : 3;
 
-                    if (canMove) {
-                        if (keyI.aPressed) {
-                            direction = "left";
-                            velocity.x = -speed;
-                        }
-                        if (keyI.dPressed) {
-                            direction = "right";
-                            velocity.x = speed;
-                        }
+                    if (keyI.aPressed) {
+                        direction = "left";
+                        velocity.x = -speed;
+                    }
+                    if (keyI.dPressed) {
+                        direction = "right";
+                        velocity.x = speed;
                     }
 
-                    if (onGround && canMove)
+                    if (onGround)
                         MusicHandler.footsteps();
                     else
                         MusicHandler.stopFootsteps();
@@ -317,6 +315,7 @@ public class Player extends Entity {
             velocity.setLength(0);
         }
 
+
         // update sprite
         if (!GamePanel.fading || !spawning) {
 
@@ -325,7 +324,7 @@ public class Player extends Entity {
                 spriteCounter = 0;
                 spriteCol++;
                 if (spriteCol > maxSpriteCol) {
-                    if (spriteRow == 1 || spriteRow == 3) {
+                    if (spriteRow == 1 || spriteRow == 3 || spriteRow == 15) {
                         spriteCol = 0;
                     }
 
@@ -378,14 +377,6 @@ public class Player extends Entity {
         death = false;
 
         spawning = true;
-    }
-
-    /**
-     * Sets the player ability to move
-     * @param canMove true to let player move
-     */
-    public void setCanMove(boolean canMove) {
-        this.canMove = canMove;
     }
 
     /**

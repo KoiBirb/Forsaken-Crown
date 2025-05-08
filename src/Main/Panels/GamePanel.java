@@ -42,7 +42,7 @@ public class GamePanel extends JPanel implements Runnable{
     public static boolean fading = false;
     private static double fadeAlpha = 0.0;
     private static boolean fadeIn = true;
-    private int fadeDelay = 20;
+    private int fadeDelay = 10;
     private int fadeDelayCounter = 0;
 
     public static Thread gameThread;
@@ -141,9 +141,8 @@ public class GamePanel extends JPanel implements Runnable{
 
         // Fading
         if (fading) {
-            player.setCanMove(false);
             if (fadeIn) {
-                fadeAlpha += 0.07;
+                fadeAlpha += 0.09;
                 if (fadeAlpha >= 1.0) {
                     fadeAlpha = 1.0;
                     fadeIn = false;
@@ -152,11 +151,10 @@ public class GamePanel extends JPanel implements Runnable{
             } else if (fadeDelayCounter > 0) {
                 fadeDelayCounter--;
             } else {
-                fadeAlpha -= 0.07;
+                fadeAlpha -= 0.09;
                 if (fadeAlpha <= 0.0) {
                     fadeAlpha = 0.0;
                     fading = false;
-                    player.setCanMove(true);
 
                 }
             }
