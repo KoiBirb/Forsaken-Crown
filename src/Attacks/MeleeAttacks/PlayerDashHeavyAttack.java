@@ -1,3 +1,9 @@
+/*
+ * PlayerDashHeavyAttack.java
+ * Leo Bogaert
+ * May 6, 2025,
+ * Extends MeleeAttack, used for the player dash heavy attack
+ */
 package Attacks.MeleeAttacks;
 
 import Entitys.Player;
@@ -11,10 +17,13 @@ import java.awt.*;
 public class PlayerDashHeavyAttack extends MeleeAttack{
 
     private final Player player;
-    private static final int cooldown = 300;
 
+    /**
+     * Constructor for the PlayerDashHeavyAttack class.
+     * @param player The player object that is performing the attack.
+     */
     public PlayerDashHeavyAttack(Player player) {
-        super(5);
+        super(5, 300);
 
         this.player = player;
 
@@ -22,6 +31,9 @@ public class PlayerDashHeavyAttack extends MeleeAttack{
         GamePanel.meleeAttacks.add(this);
     }
 
+    /**
+     * Updates the attack's hitbox based on the current frame.
+     */
     @Override
     public void update() {
 
@@ -49,9 +61,5 @@ public class PlayerDashHeavyAttack extends MeleeAttack{
             spriteCounter = 0;
             frame++;
         }
-    }
-
-    public static int getCooldown() {
-        return cooldown;
     }
 }

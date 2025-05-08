@@ -1,7 +1,7 @@
 /*
  * TiledMap.java
  * Leo Bogaert
- * May 1, 2025,
+ * May 7, 2025,
  * This class reads map data from a jar file and calculates
  * the correct camera position to display the map and backgrounds.
  */
@@ -85,12 +85,13 @@ public class TiledMap {
         tilesetOffset = new HashMap<>();
 
         // Add each tileset image to the list
+        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Castle of Bones Tileset.png"));
         tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Glow.png"));
         tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/pixil-frame-0.png"));
         tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/DARK Edition Tileset No background.png"));
-        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Castle of Bones Tileset.png"));
         tileSets.add(tileSets.get(3));
-
+        tileSets.add(tileSets.getFirst());
+        tileSets.add(tileSets.getFirst());
 
         loadMap();
         loadBackgrounds();
@@ -115,16 +116,18 @@ public class TiledMap {
 
 
     /**
-     * Reads data from JSON file and stores it in JSON arrays
+     * Reads data from a JSON file and stores it in JSON arrays
      */
     private void loadMap() {
         try (FileReader reader = new FileReader(mapPath)) {
 
-            tilesetOffset.put (tileSets.get(0), 774);
-            tilesetOffset.put(tileSets.get(1), 0);
-            tilesetOffset.put(tileSets.get(2), 306);
-            tilesetOffset.put(tileSets.get(3), 810);
-            tilesetOffset.put(tileSets.get(4), 810);
+            tilesetOffset.put(tileSets.get(0), 810);
+            tilesetOffset.put (tileSets.get(1), 774);
+            tilesetOffset.put(tileSets.get(2), 0);
+            tilesetOffset.put(tileSets.get(3), 306);
+            tilesetOffset.put(tileSets.get(4), 306);
+            tilesetOffset.put(tileSets.get(0), 810);
+            tilesetOffset.put(tileSets.get(0), 810);
 
             JSONObject mapData = (JSONObject) parser.parse(reader);
             mapWidth = ((Long) mapData.get("width")).intValue();
@@ -133,7 +136,7 @@ public class TiledMap {
 
             JSONArray layers = (JSONArray) mapData.get("layers");
 
-            // door glow layer
+            // castle bones background
             JSONObject layer = (JSONObject) layers.get(0);
             JSONArray data = (JSONArray) layer.get("data");
 
@@ -144,7 +147,7 @@ public class TiledMap {
                 }
             }
 
-            // base tile layer
+            // door glow layer
             layer = (JSONObject) layers.get(1);
             data = (JSONArray) layer.get("data");
 
@@ -155,7 +158,7 @@ public class TiledMap {
                 }
             }
 
-            // dark edition tile layer
+            // base tile layer
             layer = (JSONObject) layers.get(2);
             data = (JSONArray) layer.get("data");
 
@@ -166,7 +169,7 @@ public class TiledMap {
                 }
             }
 
-            // bones 1
+            // dark edition tile layer
             layer = (JSONObject) layers.get(3);
             data = (JSONArray) layer.get("data");
 
@@ -177,7 +180,7 @@ public class TiledMap {
                 }
             }
 
-            // bones 2
+            // dark edition tile layer
             layer = (JSONObject) layers.get(4);
             data = (JSONArray) layer.get("data");
 
@@ -188,8 +191,30 @@ public class TiledMap {
                 }
             }
 
+            // bones 1
+            layer = (JSONObject) layers.get(5);
+            data = (JSONArray) layer.get("data");
+
+            mapLayers.add(new int[mapHeight][mapWidth]);
+            for (int i = 0; i < mapHeight; i++) {
+                for (int j = 0; j < mapWidth; j++) {
+                    mapLayers.get(5)[i][j] = ((Long) data.get(i * mapWidth + j)).intValue();
+                }
+            }
+
+            // bones 2
+            layer = (JSONObject) layers.get(6);
+            data = (JSONArray) layer.get("data");
+
+            mapLayers.add(new int[mapHeight][mapWidth]);
+            for (int i = 0; i < mapHeight; i++) {
+                for (int j = 0; j < mapWidth; j++) {
+                    mapLayers.get(6)[i][j] = ((Long) data.get(i * mapWidth + j)).intValue();
+                }
+            }
+
             // Room positions
-            JSONObject roomLayer = (JSONObject) layers.get(5);
+            JSONObject roomLayer = (JSONObject) layers.get(7);
             roomData = (JSONArray) roomLayer.get("data");
 
             minX = mapWidth; minY = mapHeight;
@@ -208,7 +233,7 @@ public class TiledMap {
                 }
             }
 
-            JSONObject collidables = (JSONObject) layers.get(6);
+            JSONObject collidables = (JSONObject) layers.get(8);
             JSONArray collidablesData = (JSONArray) collidables.get("data");
 
             collidablesTiles = new int[mapHeight][mapWidth];
@@ -250,7 +275,7 @@ public class TiledMap {
 
 
     /**
-     * Finds room dimensions, and updates cameras target position
+     * Finds room dimensions, and updates camera target position
      */
     public void update() {
 
@@ -392,21 +417,22 @@ public class TiledMap {
 
         Vector2 roomScreenPos = getScreenRoomPos();
 
-        int playerTileX = (int) player.getPosition().x / scaledTileSize;
-        int playerTileY = (int) player.getPosition().y / scaledTileSize;
+        double playerTileX = player.getPosition().x / scaledTileSize;
+        double playerTileY = player.getPosition().y / scaledTileSize;
 
         for (int i = 0; i < layers.length; i++) {
             BufferedImage layer = layers[i];
             double parallaxFactor = parallaxFactors[i];
 
-            int playerDistanceX = playerTileX - minX;
-            int playerDistanceY = playerTileY - minY;
+            double playerDistanceX = playerTileX - minX;
+            double playerDistanceY = playerTileY - minY;
 
             roomScreenPos.x = roomScreenPos.x - 2 * (playerDistanceX * parallaxFactor);
             roomScreenPos.y = roomScreenPos.y - (playerDistanceY * parallaxFactor);
 
 
-            g2.drawImage(layer, (int) roomScreenPos.x - scaledTileSize - 2, (int) roomScreenPos.y - 2 - scaledTileSize, oldRoomWidth + roomWidth/15 + 2 * scaledTileSize, oldRoomHeight + roomHeight/15 + 2 *scaledTileSize, null);
+            g2.drawImage(layer, (int) roomScreenPos.x - scaledTileSize - 2, (int) roomScreenPos.y - 2 - scaledTileSize,
+                    oldRoomWidth + roomWidth/15 + 2 * scaledTileSize, oldRoomHeight + roomHeight/15 + 2 *scaledTileSize, null);
         }
     }
 
@@ -443,17 +469,26 @@ public class TiledMap {
         drawParallaxBackground(g2, backgrounds.get(0), new double[]{0.2, 0.3, 0.5, 0.7});
 
         float alpha = (float) (0.75 + 0.15 * Math.sin(System.currentTimeMillis() * 0.002));
-        // Loop through layersa
-        for (int k = 0; k < 5; k++) {
 
-            if (k == 1){
+        for (int k = 0; k < 7; k++) {
+
+            // glowing effect
+            if (k == 1)
+                g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
+
+            if (k == 2){
+                g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
                 continue;
             }
 
-            // Only draw tiles in room boundaries
-            for (int i = minY - 1; i <= maxY + 1; i++) {
-                for (int j = minX - 1; j <= maxX + 1; j++) {
+            // Tiles on screen
+            int startX = Math.max(minX - 1, (int) (cameraPosition.x / scaledTileSize) - 1);
+            int endX = Math.min(maxX + 1, (int) ((cameraPosition.x + screenWidth) / scaledTileSize) + 1);
+            int startY = Math.max(minY - 1, (int) (cameraPosition.y / scaledTileSize) - 1);
+            int endY = Math.min(maxY + 1, (int) ((cameraPosition.y + screenHeight) / scaledTileSize) + 1);
 
+            for (int i = startY; i <= endY; i++) {
+                for (int j = startX; j <= endX; j++) {
                     if (i < 0 || i >= mapHeight || j < 0 || j >= mapWidth)
                         continue;
 
@@ -502,10 +537,6 @@ public class TiledMap {
                     int tileCol = ((tileId & 0x1FFFFFFF) - 1 - tilesetOffset.get(tileSetImage)) % (tileSetImage.getWidth() / tileSetTileSize);
                     int tileRow = ((tileId & 0x1FFFFFFF) - 1 - tilesetOffset.get(tileSetImage)) / (tileSetImage.getWidth() / tileSetTileSize);
 
-                    // Door flashing effect
-                    if (k == 0) {
-                        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
-                    }
 
                     g2.drawImage(tileSetImage,
                             -scaledTileSize / 2, -scaledTileSize / 2,
@@ -514,17 +545,15 @@ public class TiledMap {
                             (tileCol + 1) * tileSetTileSize, (tileRow + 1) * tileSetTileSize, null);
 
 
-                        // Draw tile ID for debugging
-//                        String tileIdText = (flipHorizontally ? 1 : 0) + " " + (flipVertically ? 1 : 0) + " " + (flipDiagonally ? 1 : 0);
-//                        g2.setColor(Color.GREEN); // Set text color
-//                        g2.setFont(new Font("Arial", Font.BOLD, 12)); // Set font
-//                        g2.drawString(tileIdText, -scaledTileSize / 4, scaledTileSize / 4);
 
+                    // debug draws a string on tiles
+//                    System.out.println(tilesetOffset.get(tileSetImage));
+//
+//                    String tileIdText = String.valueOf((tileId & 0x1FFFFFFF - 1) - tilesetOffset.get(tileSetImage)) ;
+//                    g2.setColor(Color.GREEN); // Set text color
+//                    g2.setFont(new Font("Arial", Font.BOLD, 12)); // Set font
+//                    g2.drawString(tileIdText, -scaledTileSize / 4, scaledTileSize / 4);
 
-                    // Reset alpha composite for other layers
-                    if (k == 0) {
-                        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
-                    }
 
                     g2.setTransform(originalTransform);
                 }
@@ -534,7 +563,7 @@ public class TiledMap {
 
     /**
      * Determines the size of one tile
-     * @return int value of the size of one tile in pixels
+     * @return int value, size of one tile in pixels
      */
     public static int getScaledTileSize() {
         return (int) (tileSetTileSize * scale);
@@ -542,8 +571,8 @@ public class TiledMap {
 
     /**
      * Determines if the given tile is passable
-     * @param gridX int value of x-coordinates of the grid
-     * @param gridY int value of y-coordinates of the grid
+     * @param gridX int value, x-coordinates of the grid
+     * @param gridY int value, y-coordinates of the grid
      * @return boolean value of whether the tile is walkable
      */
     public boolean isWalkable(int gridX, int gridY) {
@@ -555,6 +584,10 @@ public class TiledMap {
         return collidablesTiles[gridY][gridX] == 0;
     }
 
+    /**
+     * Returns the camera position
+     * @return Vector2 camera position
+     */
     public Vector2 returnCameraPos() {
         return cameraPosition;
     }

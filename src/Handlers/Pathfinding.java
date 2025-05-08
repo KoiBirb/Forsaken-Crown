@@ -1,121 +1,78 @@
 package Handlers;
 
-import Main.Panels.GamePanel;
 import Map.TiledMap;
 import java.util.*;
+
 public class Pathfinding {
 
     private static class Node {
-        int x, y;
-        int gCost, hCost;
+        Vector2 pos;
+        double g, h;
         Node parent;
-        Node(int x, int y) {
-            this.x = x;
-            this.y = y;
-        }
-        int fCost() {
-            return gCost + hCost;
-        }
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (!(o instanceof Node)) return false;
-            Node oN = (Node)o;
-            return x == oN.x && y == oN.y;
+
+        Node(Vector2 pos, double g, double h, Node parent) {
+            this.pos = pos;
+            this.g = g;
+            this.h = h;
+            this.parent = parent;
         }
 
-        @Override
-        public int hashCode() {
-            return Objects.hash(x, y);
+        double f() {
+            return g + h;
         }
     }
 
-    /**
-     * Finds a path from startPos to targetPos
-     * @param startPos pixel coordinates of start
-     * @param targetPos pixel coordinates of goal
-     * @return list of Vector2 waypoints, or null if no path exists
-     */
-    public static List<Vector2> findPath(Vector2 startPos, Vector2 targetPos) {
-        TiledMap map = GamePanel.tileMap;
-        int tileSize = map.getScaledTileSize();
+    public static List<Vector2> aStarPath(TiledMap map, Vector2 start, Vector2 goal) {
+        int ts = TiledMap.getScaledTileSize();
+        int sx = (int)(start.x / ts);
+        int sy = (int)(start.y / ts);
+        int gx = (int)(goal.x / ts);
+        int gy = (int)(goal.y / ts);
 
-        // Convert pixel coordinates to grid coordinates
-        Node start = new Node((int)(startPos.x / tileSize), (int)(startPos.y / tileSize));
-        Node goal = new Node((int)(targetPos.x / tileSize), (int)(targetPos.y / tileSize));
+        HashSet<String> visited = new HashSet<>();
+        PriorityQueue<Node> open = new PriorityQueue<>(Comparator.comparingDouble(Node::f));
+        open.add(new Node(new Vector2(sx, sy), 0, heuristic(sx, sy, gx, gy), null));
 
-        PriorityQueue<Node> openSet = new PriorityQueue<>(Comparator.comparingInt(Node::fCost));
-        Set<Node> closedSet = new HashSet<>();
+        while (!open.isEmpty()) {
+            Node current = open.poll();
+            int cx = (int) current.pos.x;
+            int cy = (int) current.pos.y;
 
-        start.gCost = 0;
-        start.hCost = heuristic(start, goal);
-        openSet.add(start);
-
-        while(!openSet.isEmpty()) {
-            Node current = openSet.poll();
-            if (current.equals(goal)) {
-                return buildPath(current, tileSize);
+            if (cx == gx && cy == gy) {
+                return reconstruct(current, ts);
             }
-            closedSet.add(current);
 
-            for (Node neighbour : getNeighbours(current, map)) {
-                if (closedSet.contains(neighbour)) continue;
-                int tempG = current.gCost + 1; // cost between adjacent nodes = 1
+            String key = cx + "," + cy;
+            if (visited.contains(key)) continue;
+            visited.add(key);
 
-                boolean inOpen = openSet.contains(neighbour);
-                if (!inOpen || tempG < neighbour.gCost) {
-                    neighbour.parent = current;
-                    neighbour.gCost = tempG;
-                    neighbour.hCost = heuristic(neighbour, goal);
-                    if(!inOpen) openSet.add(neighbour);
-                }
+            for (int[] d : new int[][]{{1,0},{-1,0},{0,1},{0,-1}}) {
+                int nx = cx + d[0];
+                int ny = cy + d[1];
+                if (!map.isWalkable(nx, ny)) continue;
+                String neighborKey = nx + "," + ny;
+                if (visited.contains(neighborKey)) continue;
+
+                double newG = current.g + 1;
+                double h = heuristic(nx, ny, gx, gy);
+                Node neighbor = new Node(new Vector2(nx, ny), newG, h, current);
+                open.add(neighbor);
             }
         }
 
-        // no path found
-        return null;
+        return new ArrayList<>();
     }
 
-    /**
-     * Determines Manhattan distance through heuristic estimate
-     * @param a the starting node
-     * @param b the goal node
-     * @return the estimated cost (Manhattan distance) from node a to node b
-     */
-    private static int heuristic(Node a, Node b) {
-        return Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
-    }
-
-    /**
-     * Retrieves adjacent, walkable neighbours (up, down, left, right)
-     * @param n   the current node whose neighbours are being retrieved
-     * @param map the TiledMap used to check which grid cells are walkable
-     * @return a List of Node objects representing each walkable neighbour in grid coordinates adjacent to the given node
-     */
-    private static List<Node> getNeighbours(Node n, TiledMap map) {
-        int[][] dirs = {{1,0}, {-1, 0}, {0, 1}, {0, -1}};
-        List<Node> list = new ArrayList<>(4);
-
-        for (int[] d : dirs) {
-            int nx = n.x + d[0], ny = n.y + d[1];
-            if (map.isWalkable(nx, ny)) {
-                list.add(new Node(nx, ny));
-            }
-        }
-        return list;
-    }
-
-    /**
-     * Reconstructs the path by following parent links from goal to start and converts grid coordinates back to pixel-space Vector2 waypoints
-     * @param goalNode the end node of the path
-     * @param tileSize the size of one tile in pixels
-     * @return a list of Vector2 waypoints (in pixel coordinates), ordered from the start position to the goal position
-     */
-    private static List<Vector2> buildPath(Node goalNode, int tileSize) {
-        LinkedList<Vector2> path = new LinkedList<>();
-        for (Node cur = goalNode; cur != null; cur = cur.parent) {
-            path.addFirst(new Vector2(cur.x * tileSize, cur.y * tileSize));
+    private static List<Vector2> reconstruct(Node node, int ts) {
+        List<Vector2> path = new ArrayList<>();
+        while (node != null) {
+            path.add(0, new Vector2(node.pos.x * ts + ts / 2.0, node.pos.y * ts + ts / 2.0));
+            node = node.parent;
         }
         return path;
+    }
+
+    private static double heuristic(int x1, int y1, int x2, int y2) {
+        return Math.abs(x1 - x2) + Math.abs(y1 - y2);
     }
 }

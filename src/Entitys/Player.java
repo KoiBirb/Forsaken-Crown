@@ -1,7 +1,7 @@
 /*
  * Player.java
  * Leo Bogaert
- * May 2, 2025,
+ * May 6, 2025,
  * Handles all player actions
  */
 package Entitys;
@@ -21,25 +21,26 @@ import static Main.Panels.GamePanel.keyI;
 
 public class Player extends Entity {
 
-    private boolean canMove, attacking, chain, jump, onGround, healing, dashing;
+    private boolean canMove, attacking, chain, healing, dashing, spawning, death, damaged;
     private int spriteCounter, spriteRow, spriteCol, maxSpriteCol, lastSpriteRow;
 
     // timers
     private long jumpKeyPressStartTime, lastQuickAttackTime, lastHeavyAttackTime,
-            fallStartTime, healStartTime, dashStartTime, lastDashTime;
+            fallStartTime, healStartTime, dashStartTime, lastDashTime, deathTime;
 
-    MeleeAttack attack;
+    private Vector2 spawnPosition;
 
     /**
      * Constructor for the player
      * @param position Initial coordinates of the player
-     * @param width width of player
-     * @param height height of player
      */
-    public Player(Vector2 position, int width, int height) {
-        super(position, new Vector2(0,0), width,
-                height, 3.2, new Rectangle(30,8,18, 47),
+    public Player(Vector2 position) {
+        super(position, new Vector2(0,0), 90,37,
+                6.4, new Rectangle(30,8,18, 47),
                 ImageHandler.loadImage("Assets/Images/Hero/SwordMaster/The SwordMaster/Sword Master Sprite Sheet 90x37.png"), 10, 10);
+
+        spawnPosition = new Vector2(position.x, position.y);
+        spawning = true;
     }
 
     /**
@@ -49,252 +50,310 @@ public class Player extends Entity {
 
     @Override
     public void update() {
-        if (!dashing)
-            velocity.x = 0;
 
-        onGround = CollisionHandler.onGround(this);
+        if (currentHealth > 0) {
+            // spawning
+            if (spawning) {
+                velocity.x = 0;
+                velocity.y = 0;
 
-        // falling
+                spriteRow = 17;
+                maxSpriteCol = 3;
 
-        if (velocity.y > 0) {
-            if (fallStartTime == 0)
-                fallStartTime = System.currentTimeMillis();
-
-            if (velocity.y > 4.5)
-                MusicHandler.falling();
-        } else {
-            fallStartTime = 0;
-            MusicHandler.stopFalling();
-        }
-
-
-        // landing
-        if (onGround) {
-            if (fallStartTime > 0 && System.currentTimeMillis() - fallStartTime > 400) {
-                MusicHandler.landHard();
-            } else if (fallStartTime > 0) {
-                MusicHandler.land();
-            }
-            velocity.y = 0;
-            fallStartTime = 0;
-        }
-
-        boolean continuousJumping;
-
-        // Jumping
-        if (keyI.wPressed && canMove && !healing) {
-            if (jump && onGround && jumpKeyPressStartTime == 0) {
-                jumpKeyPressStartTime = System.currentTimeMillis();
-                jump = false;
-                MusicHandler.jump();
-            }
-
-            if (System.currentTimeMillis() - jumpKeyPressStartTime <= 200) {
-                continuousJumping = true;
+                MusicHandler.spawn();
             } else {
-                jumpKeyPressStartTime = 0;
-                continuousJumping = false;
-            }
-        } else {
-            jumpKeyPressStartTime = 0;
-            continuousJumping = false;
-            jump = true;
-        }
 
-        if (keyI.wPressed && continuousJumping && !keyI.iPressed) {
-            velocity.y = -4;
-            isColliding = false;
-
-            if (!attacking) {
-                spriteRow = 13;
-                maxSpriteCol = 2;
-            }
-        } else if (!onGround && (System.currentTimeMillis() - jumpKeyPressStartTime <= 80 || spriteCol == maxSpriteCol) && !attacking && !dashing) {
-            spriteRow = 14;
-            maxSpriteCol = 3;
-        } else if (!onGround && velocity.y > 3 && !attacking && !dashing) {
-            spriteRow = 15;
-            maxSpriteCol = 2;
-        }
-
-        if (!onGround && !continuousJumping) {
-            if (velocity.y < 4.5) {
-                velocity.y += 0.4;
-            } else {
-                TiledMap.cameraShake(1,6);
-            }
-        }
-
-        // Dashing
-        if (keyI.kPressed && !dashing && System.currentTimeMillis() - lastDashTime >= 1000 && currentMana > 0) {
-            dashing = true;
-            dashStartTime = System.currentTimeMillis();
-            lastDashTime = dashStartTime;
-            velocity.x = direction.equals("right") ? 15 : -15;
-
-            MusicHandler.dash();
-            TiledMap.cameraShake(3,1);
-            currentMana--;
-            spriteRow = 12;
-            maxSpriteCol = 5;
-        }
-
-        if (dashing) {
-
-            long elapsedTime = System.currentTimeMillis() - dashStartTime;
-            double deceleration = 0.1;
-            TiledMap.cameraShake(1,6);
-
-            if (elapsedTime <= 300) { // Dash duration
-                velocity.x *= (1 - deceleration);
-                if (Math.abs(velocity.x) < 0.5) {
-                    velocity.x = 0;
+                if (keyI.oPressed) {
+                    hit(1);
                 }
-            }
-        }
 
-        // Attacking
-        if (keyI.uPressed && !keyI.iPressed) {
-            long currentTime = System.currentTimeMillis();
-            if (!attacking) {
-                if (!dashing) {
-                    if (!chain) {
-                        // Normal attack
-                        if (currentTime - lastQuickAttackTime >= PlayerQuickAttack.getCooldown()) {
-                            spriteRow = 8;
-                            maxSpriteCol = 4;
-                            attack = new PlayerQuickAttack(this, false);
-                            MusicHandler.hit();
-                            chain = true;
-                            lastQuickAttackTime = currentTime;
-                            currentMana++;
-                        }
+                if (!dashing)
+                    velocity.x = 0;
+
+                onGround = CollisionHandler.onGround(this);
+
+                // falling
+
+                if (velocity.y > 0) {
+                    if (fallStartTime == 0)
+                        fallStartTime = System.currentTimeMillis();
+
+                    if (velocity.y > 9)
+                        MusicHandler.falling();
+                } else {
+                    fallStartTime = 0;
+                    MusicHandler.stopFalling();
+                }
+
+
+                // landing
+                if (onGround) {
+                    if (fallStartTime > 0 && System.currentTimeMillis() - fallStartTime > 400) {
+                        MusicHandler.landHard();
+                    } else if (fallStartTime > 0) {
+                        MusicHandler.land();
+                    }
+                    velocity.y = 0;
+                    fallStartTime = 0;
+                }
+
+                boolean continuousJumping;
+
+                // Jumping
+                if (keyI.wPressed && canMove && !healing && !damaged) {
+                    if (jump && onGround && jumpKeyPressStartTime == 0) {
+                        jumpKeyPressStartTime = System.currentTimeMillis();
+                        jump = false;
+                        MusicHandler.jump();
+                    }
+
+                    if (System.currentTimeMillis() - jumpKeyPressStartTime <= 200) {
+                        continuousJumping = true;
                     } else {
-                        spriteRow = 7;
-                        maxSpriteCol = 6;
-                        attack = new PlayerQuickAttack(this, true);
-                        MusicHandler.hit();
-                        chain = false;
-                        lastQuickAttackTime = currentTime;
+                        jumpKeyPressStartTime = 0;
+                        continuousJumping = false;
                     }
                 } else {
-                    spriteRow = 10;
+                    jumpKeyPressStartTime = 0;
+                    continuousJumping = false;
+                    jump = true;
+                }
+
+                if (keyI.wPressed && continuousJumping && !keyI.iPressed && !damaged) {
+                    velocity.y = -8;
+                    isColliding = false;
+
+                    if (!attacking) {
+                        spriteRow = 13;
+                        maxSpriteCol = 2;
+                    }
+                } else if (!onGround && (System.currentTimeMillis() - jumpKeyPressStartTime <= 80 || spriteCol == maxSpriteCol) && !attacking && !dashing && !damaged) {
+                    spriteRow = 14;
+                    maxSpriteCol = 3;
+                } else if (!onGround && velocity.y > 6 && !attacking && !dashing && !damaged) {
+                    spriteRow = 15;
+                    maxSpriteCol = 2;
+                }
+
+                if (!onGround && !continuousJumping && !spawning) {
+                    if (velocity.y < 9) {
+                        velocity.y += 0.8;
+                    } else {
+                        TiledMap.cameraShake(1, 6);
+                    }
+                }
+
+                // Dashing
+                if (keyI.kPressed && !dashing && System.currentTimeMillis() - lastDashTime >= 1000 && currentMana > 0 && !damaged && !spawning) {
+                    dashing = true;
+                    dashStartTime = System.currentTimeMillis();
+                    lastDashTime = dashStartTime;
+                    velocity.x = direction.equals("right") ? 30 : -30;
+
+                    MusicHandler.dash();
+                    TiledMap.cameraShake(3, 1);
+                    currentMana--;
+                    spriteRow = 12;
                     maxSpriteCol = 5;
-                    dashing = false;
-                    attack = new PlayerDashSwingAttack(this);
-                    MusicHandler.dashSwingAttack();
-                    lastQuickAttackTime = currentTime;
                 }
-            }
-        }
 
-        if (keyI.jPressed && !attacking && !keyI.iPressed) {
-            long currentTime = System.currentTimeMillis();
-            if (currentTime - lastHeavyAttackTime >= PlayerHeavyAttack.getCooldown()) {
                 if (dashing) {
-                    attack = new PlayerDashHeavyAttack(this);
-                    MusicHandler.dashHeavyAttack();
-                    dashing = false;
-                    spriteRow = 6;
-                    maxSpriteCol = 6;
+
+                    long elapsedTime = System.currentTimeMillis() - dashStartTime;
+                    double deceleration = 0.1;
+                    TiledMap.cameraShake(1, 6);
+
+                    if (elapsedTime <= 300) { // Dash duration
+                        velocity.x *= (1 - deceleration);
+                        if (Math.abs(velocity.x) < 0.5) {
+                            velocity.x = 0;
+                        }
+                    }
+                }
+
+                // Attacking
+                if (keyI.uPressed && !keyI.iPressed && !damaged) {
+                    long currentTime = System.currentTimeMillis();
+                    if (!attacking) {
+                        if (!dashing) {
+                            if (!chain) {
+                                // Normal attack
+                                if (currentTime - lastQuickAttackTime >= PlayerQuickAttack.getCooldown()) {
+                                    spriteRow = 8;
+                                    maxSpriteCol = 4;
+                                    new PlayerQuickAttack(this, false);
+                                    MusicHandler.hit();
+                                    chain = true;
+                                    lastQuickAttackTime = currentTime;
+                                    currentMana += 2;
+                                }
+                            } else {
+                                spriteRow = 7;
+                                maxSpriteCol = 6;
+                                new PlayerQuickAttack(this, true);
+                                MusicHandler.hit();
+                                chain = false;
+                                lastQuickAttackTime = currentTime;
+                            }
+                        } else {
+                            spriteRow = 10;
+                            maxSpriteCol = 5;
+                            dashing = false;
+                            new PlayerDashSwingAttack(this);
+                            MusicHandler.dashSwingAttack();
+                            lastQuickAttackTime = currentTime;
+                        }
+                    }
+                }
+
+                if (keyI.jPressed && !attacking && !keyI.iPressed && !damaged) {
+                    long currentTime = System.currentTimeMillis();
+                    if (currentTime - lastHeavyAttackTime >= PlayerHeavyAttack.getCooldown()) {
+                        if (dashing) {
+                            new PlayerDashHeavyAttack(this);
+                            MusicHandler.dashHeavyAttack();
+                            dashing = false;
+                            spriteRow = 6;
+                            maxSpriteCol = 6;
+                        } else {
+                            new PlayerHeavyAttack(this);
+                            MusicHandler.heavyAttack();
+                            spriteRow = 9;
+                            maxSpriteCol = 4;
+                        }
+                        lastHeavyAttackTime = currentTime;
+                    }
+                }
+
+                // Healing
+                if (keyI.iPressed && onGround && !healing && !damaged) {
+                    if (healStartTime == 0) {
+                        healStartTime = System.currentTimeMillis();
+                        MusicHandler.healCharge();
+                    }
+
+                    long elapsedTime = System.currentTimeMillis() - healStartTime;
+
+                    TiledMap.cameraShake((int) (1.0 + Math.min(elapsedTime / 1000.0, 2.0)), 1);
                 } else {
-                    attack = new PlayerHeavyAttack(this);
-                    MusicHandler.heavyAttack();
-                    spriteRow = 9;
-                    maxSpriteCol = 4;
+                    if (healStartTime > 0) {
+
+                        spriteRow = 11;
+                        maxSpriteCol = 5;
+
+                        healing = true;
+
+                        int healAmount = (int) ((System.currentTimeMillis() - healStartTime) / 750);
+                        healAmount = Math.min(healAmount, currentMana);
+                        healAmount = Math.min(healAmount, maxHealth - currentHealth);
+
+
+                        currentHealth += healAmount;
+                        currentMana -= healAmount;
+
+                        TiledMap.cameraShake(healAmount, 1);
+
+                        MusicHandler.stopHealCharge();
+                        MusicHandler.heal();
+                    }
+                    healStartTime = 0;
+                    MusicHandler.stopHealCharge();
                 }
-                currentHealth--;
-                lastHeavyAttackTime = currentTime;
-            }
-        }
 
-        // Healing
-        if (keyI.iPressed && onGround && !healing) {
-            if (healStartTime == 0) {
-                healStartTime = System.currentTimeMillis();
-                MusicHandler.healCharge();
-            }
+                isColliding = false;
 
-            long elapsedTime = System.currentTimeMillis() - healStartTime;
+                CollisionHandler.checkTileCollision(this);
 
-            TiledMap.cameraShake((int) (1.0 + Math.min(elapsedTime / 1000.0, 2.0)),1);
-        } else {
-            if (healStartTime > 0) {
+                // movement
+                if ((keyI.aPressed || keyI.dPressed) && !(keyI.iPressed && onGround) && !healing && !dashing && !damaged) {
+                    if (onGround && !continuousJumping && !attacking) {
+                        maxSpriteCol = 7;
+                        spriteRow = 3;
+                    }
 
-                spriteRow = 11;
-                maxSpriteCol = 5;
+                    speed = (attacking) ? 2.8 : 3;
 
-                healing = true;
+                    if (canMove) {
+                        if (keyI.aPressed) {
+                            direction = "left";
+                            velocity.x = -speed;
+                        }
+                        if (keyI.dPressed) {
+                            direction = "right";
+                            velocity.x = speed;
+                        }
+                    }
 
-                int healAmount = (int) ((System.currentTimeMillis() - healStartTime) / 750);
-                healAmount = Math.min(healAmount, currentMana);
-                healAmount = Math.min(healAmount, maxHealth - currentHealth);
+                    if (onGround && canMove)
+                        MusicHandler.footsteps();
+                    else
+                        MusicHandler.stopFootsteps();
 
+                } else {
+                    MusicHandler.stopFootsteps();
 
-                currentHealth += healAmount;
-                currentMana -= healAmount;
-
-                TiledMap.cameraShake(healAmount,1);
-
-                MusicHandler.stopHealCharge();
-                MusicHandler.heal();
-            }
-            healStartTime = 0;
-            MusicHandler.stopHealCharge();
-        }
-
-        isColliding = false;
-
-        CollisionHandler.checkTileCollision(this);
-
-        position.add(velocity);
-
-        // movement
-        if ((keyI.aPressed || keyI.dPressed) && !(keyI.iPressed && onGround) && !healing && !dashing) {
-            if (onGround && !continuousJumping && !attacking) {
-                maxSpriteCol = 7;
-                spriteRow = 3;
-            }
-
-            speed = (attacking) ? 2.8 : 3;
-
-            if (canMove) {
-                if (keyI.aPressed) {
-                    direction = "left";
-                    velocity.x = -speed;
-                }
-                if (keyI.dPressed) {
-                    direction = "right";
-                    velocity.x = speed;
+                    if (onGround && !continuousJumping && !attacking && !healing && !dashing && !spawning && !damaged) {
+                        spriteRow = 1;
+                        maxSpriteCol = 8;
+                    }
                 }
             }
 
-            if (onGround && canMove)
-                MusicHandler.footsteps();
-             else
-                MusicHandler.stopFootsteps();
+        } else if (!death) {
 
-        } else {
+            death = true;
+
+            deathTime = System.currentTimeMillis();
+
+            MusicHandler.playerDeath();
+
             MusicHandler.stopFootsteps();
+            MusicHandler.stopFalling();
+            MusicHandler.stopHealCharge();
 
-            if (onGround && !continuousJumping && !attacking && !healing && !dashing) {
-                spriteRow = 1;
-                maxSpriteCol = 8;
-            }
+            spriteRow = 26;
+            maxSpriteCol = 5;
+
+            velocity.setLength(0);
         }
 
-        spriteCounter++;
-        if (spriteCounter > 5) {
-            spriteCounter = 0;
-            spriteCol++;
-            if (spriteCol >= maxSpriteCol) {
-                if (spriteRow == 1 || spriteCol == 7) {
-                    spriteCol = 0;
+        // update sprite
+        if (!GamePanel.fading || !spawning) {
+
+            spriteCounter++;
+            if (spriteCounter > 5) {
+                spriteCounter = 0;
+                spriteCol++;
+                if (spriteCol > maxSpriteCol) {
+                    if (spriteRow == 1 || spriteRow == 3) {
+                        spriteCol = 0;
+                    }
+
+                    healing = false;
+                    if (dashing){
+                        dashing = false;
+                        spriteCol = maxSpriteCol;
+                    }
+
+                    if (damaged) {
+                        damaged = false;
+                        spriteCol = 0;
+                    }
+
+                    if (spawning) {
+                        MusicHandler.setSpawnPlaying(false);
+                        spawning = false;
+                    }
+
+                    if (death){
+                        spriteCol = 5;
+                    }
                 }
-                healing = false;
-                dashing = false;
             }
         }
+
+        if (death && System.currentTimeMillis() - deathTime >= 5000)
+            resetPlayer();
 
         super.update();
 
@@ -307,19 +366,49 @@ public class Player extends Entity {
     }
 
     /**
-     * Sets the players ability to move
+     * Resets the player to its initial state
+     */
+    private void resetPlayer() {
+        MusicHandler.setDeathPlaying(true);
+        direction = "right";
+        currentHealth = maxHealth;
+        currentMana = maxMana;
+        velocity.setLength(0);
+        position.set(spawnPosition);
+        death = false;
+
+        spawning = true;
+    }
+
+    /**
+     * Sets the player ability to move
      * @param canMove true to let player move
      */
     public void setCanMove(boolean canMove) {
         this.canMove = canMove;
     }
 
+    /**
+     * Sets the players attacking status
+     * @param attacking true if attacking, false otherwise
+     */
     public void setAttacking(boolean attacking) {
         this.attacking = attacking;
     }
 
-    public boolean isOnGround() {
-        return onGround;
+    /**
+     * Activates a player damaged state
+     */
+    public void hit(int damage){
+        if (currentHealth > 0 && !damaged) {
+            spriteRow = 25;
+            maxSpriteCol = 1;
+            currentHealth -= damage;
+
+            damaged = true;
+
+            MusicHandler.playerDamaged();
+        }
     }
 
 
@@ -350,6 +439,7 @@ public class Player extends Entity {
                 spriteCol * 90, spriteRow * 37,
                 (spriteCol + 1) * 90, (spriteRow + 1) * 37, null);
 
+        // debug draw image area
 //        g2.drawRect((int) screenX, (int) screenY, (int) (90 * GamePanel.scale), (int) (37 * GamePanel.scale));
 
         g2.setTransform(originalTransform);

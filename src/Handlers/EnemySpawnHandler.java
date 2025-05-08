@@ -1,36 +1,31 @@
 package Handlers;
 
 import Entitys.Enemies.Enemy;
+import Main.Panels.GamePanel;
 
-import java.awt.Graphics2D;
-import java.util.*;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+
 public class EnemySpawnHandler {
-    private static final List<Enemy> enemies = new ArrayList<Enemy>();
+    private static final List<Enemy> enemies = new ArrayList<>();
 
-    // Place enemies
     public static void setup() {
-        Vector2 p = Main.Panels.GamePanel.player.getPosition();
-        double spawnX = p.x + 150;
-        double spawnY = p.y - 22;
-        enemies.add(new Enemy(new Vector2(spawnX, spawnY), 5, 40));
+        Vector2 p = GamePanel.player.getPosition();
+        int ts = GamePanel.tileMap.getScaledTileSize();
+
+        double spawnX = p.x + 16 * ts;
+        double spawnY = ((int)((p.y + ts + 120) / ts)) * ts - Enemy.HEIGHT;
+
+        enemies.clear();
+        enemies.add(new Enemy(new Vector2(spawnX, spawnY), 2.5, 8));
     }
 
-    /** Call every enemy object to update */
     public static void updateAll() {
-        for (Enemy e : enemies) {
-            e.update();
-        }
+        for (Enemy e : enemies) e.update();
     }
 
-    /** Call every enemy object to draw */
     public static void drawAll(Graphics2D g2) {
-        for (Enemy e : enemies) {
-            e.draw(g2);
-        }
-    }
-
-    /** Access to the list */
-    public static List<Enemy> getAll() {
-        return enemies;
+        for (Enemy e : enemies) e.draw(g2);
     }
 }
