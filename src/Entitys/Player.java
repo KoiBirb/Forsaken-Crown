@@ -369,7 +369,7 @@ public class Player extends Entity {
      * Resets the player to its initial state
      */
     private void resetPlayer() {
-        MusicHandler.setDeathPlaying(true);
+        MusicHandler.setDeathPlaying(false);
         direction = "right";
         currentHealth = maxHealth;
         currentMana = maxMana;
