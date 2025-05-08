@@ -36,6 +36,8 @@ public class HealthBar extends UIElement {
         this.shakeOffsetX = 0;
         this.shakeOffsetY = 0;
         this.shakeTimer = 0;
+
+        segments = calculateHealthSegments(entity.getCurrentHealth());
     }
 
     /**

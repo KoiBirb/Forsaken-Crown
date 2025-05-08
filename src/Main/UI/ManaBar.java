@@ -30,6 +30,8 @@ public class ManaBar extends HealthBar {
         this.shakeOffsetX = 0;
         this.shakeOffsetY = 0;
         this.shakeTimer = 0;
+
+        segments = calculateManaSegments(entity.getCurrentMana());
     }
 
     /**

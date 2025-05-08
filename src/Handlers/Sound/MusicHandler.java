@@ -19,7 +19,7 @@ public class MusicHandler {
     public static final Sound falling = new Sound();
     private static final Random rand = new Random();
 
-    private static boolean footstepsPlaying, fallingPlaying, healPlaying;
+    private static boolean footstepsPlaying, fallingPlaying, healPlaying, spawnPlaying, deathPlaying;
 
     /**
      * Plays random hit sound effect
@@ -85,6 +85,16 @@ public class MusicHandler {
      */
     public static void hitTile() {
         playSoundEffect("/Audio/Player/sword_hit_tile.wav", attack);
+    }
+
+    /**
+     * Plays spawn sound effect
+     */
+    public static void spawn(){
+        if (!spawnPlaying) {
+            playSoundEffect("/Audio/Player/spawn.wav", effect);
+            spawnPlaying = true;
+        }
     }
 
     /**
@@ -171,6 +181,23 @@ public class MusicHandler {
     }
 
     /**
+     * Plays player damaged sound effect
+     */
+    public static void playerDamaged(){
+        playSoundEffect("/Audio/Player/damage.wav", effect);
+    }
+
+    /**
+     * Plays player death sound effect
+     */
+    public static void playerDeath(){
+        if (!deathPlaying) {
+            playSoundEffect("/Audio/Player/death.wav", effect);
+            deathPlaying = true;
+        }
+    }
+
+    /**
      * Plays a given sound effect on a sound object
      * @param sound Sound object used to play effect
      * @param path String file path from Assets
@@ -179,5 +206,21 @@ public class MusicHandler {
         if (sound.setFile(path)) {
             sound.play();
         }
+    }
+
+    /**
+     * Sets the spawn-playing state
+     * @param spawnPlaying boolean is spawn playing
+     */
+    public static void setSpawnPlaying (boolean spawnPlaying) {
+        MusicHandler.spawnPlaying = spawnPlaying;
+    }
+
+    /**
+     * Sets the death-playing state
+     * @param deathPlaying boolean is death playing
+     */
+    public static void setDeathPlaying (boolean deathPlaying) {
+        MusicHandler.deathPlaying = deathPlaying;
     }
 }

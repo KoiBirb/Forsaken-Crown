@@ -32,20 +32,20 @@ public class GamePanel extends JPanel implements Runnable{
     // initialize classes
     public static TiledMap tileMap;
     public static KeyInput keyI = new KeyInput();
-    public static final Player player = new Player(new Vector2(100,150), 90,37);
+    public static final Player player = new Player(new Vector2(100,150));
     public static UIManager ui = new UIManager();
 
     public static ArrayList<MeleeAttack> meleeAttacks = new ArrayList<>();
     public static ArrayList<Effect> effects = new ArrayList<>();
 
     // Room change effect
-    private static boolean fading = false;
+    public static boolean fading = false;
     private static double fadeAlpha = 0.0;
     private static boolean fadeIn = true;
     private int fadeDelay = 20;
     private int fadeDelayCounter = 0;
 
-    Thread gameThread;
+    public static Thread gameThread;
 
     /**
      * Constructor for the GamePanel class.

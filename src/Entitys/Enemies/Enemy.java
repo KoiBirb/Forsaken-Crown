@@ -79,6 +79,8 @@ public class Enemy extends Entitys.Entity {
         position.x += velocity.x;
     }
 
+    public void hit(int damage){}
+
     @Override
     public void draw(Graphics2D g2) {
         Vector2 cam = GamePanel.tileMap.returnCameraPos();

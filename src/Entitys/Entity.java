@@ -90,6 +90,12 @@ public abstract class Entity {
         g2.drawRect((int)position.x, (int)position.y, width, height);
     }
 
+
+    /**
+     * Abstract method to handle damage taken by the entity
+     */
+    public abstract void hit(int damage);
+
     /**
      * Gets the entity's position vector
      * @return Vector2 position

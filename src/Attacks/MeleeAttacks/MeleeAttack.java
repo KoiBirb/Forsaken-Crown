@@ -27,7 +27,7 @@ public abstract class MeleeAttack {
      */
     public MeleeAttack(int damage, int cooldown) {
         this.damage = damage;
-        this.cooldown = cooldown;
+        MeleeAttack.cooldown = cooldown;
 
         frame = 0;
         spriteCounter = 0;
@@ -37,7 +37,9 @@ public abstract class MeleeAttack {
     /**
      * abstract method to update the attack based on the frame
      */
-    public abstract void update();
+    public void update(){
+
+    }
 
     /**
      * Debug draw method, shows hitbox of attack

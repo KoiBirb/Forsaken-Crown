@@ -113,6 +113,31 @@ public class Vector2 {
     }
 
     /**
+     * Sets this vector to another vector
+     * @param v Vector2 vector to set to
+     * @return self
+     */
+    public Vector2 set(Vector2 v) {
+        this.x = v.x;
+        this.y = v.y;
+        return this;
+    }
+
+    /**
+     * Sets this vector to a new x and y
+     * @param x double x component
+     * @param y double y component
+     * @return self
+     */
+    public Vector2 set(double x, double y) {
+        this.x = x;
+        this.y = y;
+        return this;
+    }
+
+
+
+    /**
      * Sets the length of this vector
      * @param length double length to set
      */
