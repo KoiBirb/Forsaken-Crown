@@ -44,19 +44,16 @@ public class TiledMap {
     private final HashMap<BufferedImage, Integer> tilesetOffset;
 
     // Camera room switching
-    private final int CAMERADELAY = 15;
-    private int cameraDelayCounter;
+    private final int CAMERADELAY = 10;
+    private int cameraDelayCounter,oldRoomWidth,oldRoomHeight;
     private boolean roomChanged;
-    private int oldRoomWidth;
-    private int oldRoomHeight;
 
     private final double SCALE = GamePanel.scale;
     private Vector2 cameraPosition;
 
     // Room data
     private Vector2 roomScreenPos;
-    private int roomWidth;
-    private int roomHeight;
+    private int roomWidth,roomHeight;
     private int minX, maxX, minY, maxY;
 
     public int[][] collidablesTiles;
@@ -291,7 +288,6 @@ public class TiledMap {
      * Finds room dimensions, and updates camera target position
      */
     public void update() {
-
         // Update camera shake effect
         if (shakeDuration > 0) {
             shakeDuration--;
@@ -306,7 +302,7 @@ public class TiledMap {
 
         int tileId = 1; // room tile number
 
-        // check if inside a wall or out of bounds
+        // Check if inside a wall or out of bounds
         if (playerTileX < 0 || playerTileX >= mapWidth || playerTileY < 0 || playerTileY >= mapHeight ||
                 ((Long) roomData.get(playerTileY * mapWidth + playerTileX)).intValue() == tileId) {
             return;
@@ -330,9 +326,10 @@ public class TiledMap {
             newMaxY++;
         }
 
-        // Check if the room has changed
-        if (roomWidth != (newMaxX - newMinX + 1) * scaledTileSize ||
-                roomHeight != (newMaxY - newMinY + 1) * scaledTileSize) {
+        // Check if the room has changed and the player is on the ground
+        if (player.isOnGround() &&
+            (roomWidth != (newMaxX - newMinX + 1) * scaledTileSize ||
+             roomHeight != (newMaxY - newMinY + 1) * scaledTileSize)) {
 
             roomWidth = (newMaxX - newMinX + 1) * scaledTileSize;
             roomHeight = (newMaxY - newMinY + 1) * scaledTileSize;

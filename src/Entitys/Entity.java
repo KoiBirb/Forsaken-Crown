@@ -90,6 +90,14 @@ public abstract class Entity {
         g2.drawRect((int)position.x, (int)position.y, width, height);
     }
 
+    /**
+     * Sets the players on ground status
+     * @param onGround true if on ground, false otherwise
+     */
+    public void setOnGround(boolean onGround) {
+        this.onGround = onGround;
+    }
+
 
     /**
      * Abstract method to handle damage taken by the entity

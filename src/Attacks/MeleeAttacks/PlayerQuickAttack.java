@@ -39,7 +39,7 @@ public class PlayerQuickAttack extends MeleeAttack{
                 GamePanel.meleeAttacks.remove(this);
                 player.setAttacking(false);
             } else if (frame == 1 || frame == 2) {
-                hitBox = new Rectangle((player.getDirection().equals("right")) ? (int) (player.getPosition().x + 3) : (int) (player.getPosition().x - 95) , (int) (player.getPosition().y + 22), 137, 30);
+                hitBox = new Rectangle((player.getDirection().contains("right")) ? (int) (player.getPosition().x + 3) : (int) (player.getPosition().x - 95) , (int) (player.getPosition().y + 22), 137, 30);
                 if (spriteCounter == 1 && frame == 1 && checkAttackTileCollision(hitBox, player)) {
                     TiledMap.cameraShake(4,6);
                     MusicHandler.hitColladable();
@@ -52,7 +52,7 @@ public class PlayerQuickAttack extends MeleeAttack{
                 GamePanel.meleeAttacks.remove(this);
                 player.setAttacking(false);
         } else if (frame == 1 || frame == 2) {
-            hitBox = new Rectangle((player.getDirection().equals("right")) ? (int) (player.getPosition().x + 3) : (int) (player.getPosition().x - 105), (int) (player.getPosition().y + 17), 147, 30);
+            hitBox = new Rectangle((player.getDirection().contains("right")) ? (int) (player.getPosition().x + 3) : (int) (player.getPosition().x - 105), (int) (player.getPosition().y + 17), 147, 30);
             if (spriteCounter == 1 && frame == 1 && checkAttackTileCollision(hitBox, player)) {
                 TiledMap.cameraShake(4,6);
                 MusicHandler.hitColladable();

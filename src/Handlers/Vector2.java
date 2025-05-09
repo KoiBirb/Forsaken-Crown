@@ -49,6 +49,18 @@ public class Vector2 {
     }
 
     /**
+     * Adds to this vector
+     * @param x double to be added
+     * @param y double to be added
+     * @return self
+     */
+    public Vector2 add(double x, double y) {
+        this.x += x;
+        this.y += y;
+        return this;
+    }
+
+    /**
      * Subtracts a vector to this vector
      * @param v Vector2 vector to be subtracted
      * @return self

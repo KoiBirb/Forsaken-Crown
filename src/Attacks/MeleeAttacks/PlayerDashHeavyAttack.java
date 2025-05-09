@@ -41,9 +41,9 @@ public class PlayerDashHeavyAttack extends MeleeAttack{
             GamePanel.meleeAttacks.remove(this);
             player.setAttacking(false);
         } else if (frame == 0) {
-            hitBox = new Rectangle( (player.getDirection().equals("right")) ? (int) player.getPosition().x + 7 : (int) player.getPosition().x + 18, (int) (player.getPosition().y + 20), 20, 35);
+            hitBox = new Rectangle( (player.getDirection().contains("right")) ? (int) player.getPosition().x + 7 : (int) player.getPosition().x + 18, (int) (player.getPosition().y + 20), 20, 35);
         } else if (frame == 1 || frame == 2){
-            hitBox = new Rectangle((player.getDirection().equals("right")) ? (int) player.getPosition().x + 20: (int) player.getPosition().x - 50, (int) (player.getPosition().y), 80, 52);
+            hitBox = new Rectangle((player.getDirection().contains("right")) ? (int) player.getPosition().x + 20: (int) player.getPosition().x - 50, (int) (player.getPosition().y), 80, 52);
             if (spriteCounter == 2 && frame == 1 && (player.isOnGround() || CollisionHandler.checkAttackTileCollision(hitBox, player))) {
                 MusicHandler.hitTile();
                 MusicHandler.hitColladable();

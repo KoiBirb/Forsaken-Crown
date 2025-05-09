@@ -37,9 +37,9 @@ public class PlayerHeavyAttack extends MeleeAttack{
             GamePanel.meleeAttacks.remove(this);
             player.setAttacking(false);
         } else if (frame == 0) {
-            hitBox = new Rectangle( (player.getDirection().equals("right")) ? (int) player.getPosition().x : (int) player.getPosition().x + 12, (int) (player.getPosition().y), 30, 40);
+            hitBox = new Rectangle( (player.getDirection().contains("right")) ? (int) player.getPosition().x : (int) player.getPosition().x + 12, (int) (player.getPosition().y), 30, 40);
         } else if (frame == 1 || frame == 2){
-            hitBox = new Rectangle((player.getDirection().equals("right")) ? (int) player.getPosition().x + 7: (int) player.getPosition().x - 90, (int) (player.getPosition().y - 10), 128, 63);
+            hitBox = new Rectangle((player.getDirection().contains("right")) ? (int) player.getPosition().x + 7: (int) player.getPosition().x - 90, (int) (player.getPosition().y - 10), 128, 63);
             if (spriteCounter == 2 && frame == 1 && (player.isOnGround() || CollisionHandler.checkAttackTileCollision(hitBox, player))) {
                 MusicHandler.hitTile();
                 MusicHandler.hitColladable();

@@ -35,15 +35,17 @@ public class CollisionHandler {
         int tileNum1, tileNum2;
 
         try {
-            // Check top collision
-            entityTopRow = (int) ((entityTopWorldY - entity.getSpeed()) / TiledMap.getScaledTileSize());
-            tileNum1 = collidableTiles[entityTopRow][entityLeftCol];
-            tileNum2 = collidableTiles[entityTopRow][entityRightCol];
+            if (entity.getDirection().contains("up")) {
+                // Check top collision
+                entityTopRow = (int) ((entityTopWorldY - entity.getSpeed()) / TiledMap.getScaledTileSize());
+                tileNum1 = collidableTiles[entityTopRow][entityLeftCol];
+                tileNum2 = collidableTiles[entityTopRow][entityRightCol];
 
-            if (tileNum1 == 1 || tileNum2 == 1) {
-                entity.setColliding(true);
-                entity.getPosition().y = (entityTopRow + 1) * TiledMap.getScaledTileSize() - (((entity.getSolidArea().y - entity.getPosition().y) / 2) - 2);
-                entity.getSolidArea().setLocation(entity.getSolidArea().x, (int) (entity.getPosition().y + entity.getSolidAreaOffsetY()));
+                if (tileNum1 == 1 || tileNum2 == 1) {
+                    entity.setColliding(true);
+                    entity.getPosition().y = (entityTopRow + 1) * TiledMap.getScaledTileSize() - (((entity.getSolidArea().y - entity.getPosition().y) / 2) - 2);
+                    entity.getSolidArea().setLocation(entity.getSolidArea().x, (int) (entity.getPosition().y + entity.getSolidAreaOffsetY()));
+                }
             }
 
             // Check bottom collision
@@ -51,11 +53,14 @@ public class CollisionHandler {
             tileNum1 = collidableTiles[entityBottomRow][entityLeftCol];
             tileNum2 = collidableTiles[entityBottomRow][entityRightCol];
 
+
             if ((tileNum1 == 1 || tileNum1 == 4) || (tileNum2 == 1 || tileNum2 == 4)) {
+                entity.setOnGround(true);
                 entity.setColliding(true);
                 entity.getPosition().y = entityBottomRow * TiledMap.getScaledTileSize() - entity.getSolidArea().height - ((entity.getSolidArea().y - entity.getPosition().y) / 2) - 2;
                 entity.getSolidArea().setLocation(entity.getSolidArea().x, (int) (entity.getPosition().y + entity.getSolidAreaOffsetY()));
-            }
+            } else
+                entity.setOnGround(false);
 
             // Recalculate positions for horizontal collision
             entityTopWorldY = entity.getPosition().y + (entity.getSolidArea().y - entity.getPosition().y) / 2;
@@ -123,7 +128,7 @@ public class CollisionHandler {
             for (int col = leftCol; col <= rightCol; col++) {
                 if (col < 0 || col >= collidableTiles[row].length) continue;
 
-                if (collidableTiles[row][col] != 0) {
+                if (collidableTiles[row][col] != 0 && collidableTiles[row][col] != 6) {
                     int tileX = col * tileSize;
                     int tileY = row * tileSize;
 

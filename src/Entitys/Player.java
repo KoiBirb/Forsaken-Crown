@@ -21,7 +21,7 @@ import static Main.Panels.GamePanel.keyI;
 
 public class Player extends Entity {
 
-    private boolean attacking, chain, healing, dashing, spawning, death, damaged;
+    private boolean attacking, chain, healing, dashing, spawning, death, damaged, knockedBack, continuousJumping;
     private int spriteCounter, spriteRow, spriteCol, maxSpriteCol, lastSpriteRow;
 
     // timers
@@ -52,6 +52,7 @@ public class Player extends Entity {
     public void update() {
 
         if (currentHealth > 0) {
+
             // spawning
             if (spawning) {
                 velocity.x = 0;
@@ -63,14 +64,8 @@ public class Player extends Entity {
                 MusicHandler.spawn();
             } else {
 
-                if (keyI.oPressed) {
-                    hit(1);
-                }
-
                 if (!dashing)
                     velocity.x = 0;
-
-                onGround = CollisionHandler.onGround(this);
 
                 // falling
 
@@ -96,8 +91,6 @@ public class Player extends Entity {
                     velocity.y = 0;
                     fallStartTime = 0;
                 }
-
-                boolean continuousJumping;
 
                 // Jumping
                 if (keyI.wPressed && !healing && !damaged) {
@@ -135,20 +128,12 @@ public class Player extends Entity {
                     maxSpriteCol = 2;
                 }
 
-                if (!onGround && !continuousJumping && !spawning) {
-                    if (velocity.y < 9) {
-                        velocity.y += 0.8;
-                    } else {
-                        TiledMap.cameraShake(1, 6);
-                    }
-                }
-
                 // Dashing
                 if (keyI.kPressed && !dashing && System.currentTimeMillis() - lastDashTime >= 1000 && currentMana > 0 && !damaged && !spawning) {
                     dashing = true;
                     dashStartTime = System.currentTimeMillis();
                     lastDashTime = dashStartTime;
-                    velocity.x = direction.equals("right") ? 30 : -30;
+                    velocity.x = direction.contains("right") ? 30 : -30;
 
                     MusicHandler.dash();
                     TiledMap.cameraShake(3, 1);
@@ -260,10 +245,6 @@ public class Player extends Entity {
                     MusicHandler.stopHealCharge();
                 }
 
-                isColliding = false;
-
-                CollisionHandler.checkTileCollision(this);
-
                 // movement
                 if ((keyI.aPressed || keyI.dPressed) && !(keyI.iPressed && onGround) && !healing && !dashing && !damaged) {
                     if (onGround && !continuousJumping && !attacking) {
@@ -274,11 +255,9 @@ public class Player extends Entity {
                     speed = (attacking) ? 2.8 : 3;
 
                     if (keyI.aPressed) {
-                        direction = "left";
                         velocity.x = -speed;
                     }
                     if (keyI.dPressed) {
-                        direction = "right";
                         velocity.x = speed;
                     }
 
@@ -297,6 +276,10 @@ public class Player extends Entity {
                 }
             }
 
+            if (keyI.oPressed) {
+                hit(1);
+            }
+
         } else if (!death) {
 
             death = true;
@@ -312,9 +295,21 @@ public class Player extends Entity {
             spriteRow = 26;
             maxSpriteCol = 5;
 
-            velocity.setLength(0);
+           velocity.setLength(0);
         }
 
+        determineDirection();
+
+        isColliding = false;
+        CollisionHandler.checkTileCollision(this);
+
+        if (!onGround && !continuousJumping && !spawning) {
+            if (velocity.y < 9) {
+                velocity.y += 0.8;
+            } else {
+                TiledMap.cameraShake(1, 6);
+            }
+        }
 
         // update sprite
         if (!GamePanel.fading || !spawning) {
@@ -328,7 +323,11 @@ public class Player extends Entity {
                         spriteCol = 0;
                     }
 
-                    healing = false;
+                    if (healing) {
+                        healing = false;
+                        spriteCol = maxSpriteCol;
+                    }
+
                     if (dashing){
                         dashing = false;
                         spriteCol = maxSpriteCol;
@@ -336,6 +335,8 @@ public class Player extends Entity {
 
                     if (damaged) {
                         damaged = false;
+                        direction = (direction.contains("left")) ? "right" : "left";
+                        knockedBack = false;
                         spriteCol = 0;
                     }
 
@@ -362,6 +363,44 @@ public class Player extends Entity {
         }
 
         lastSpriteRow = spriteRow;
+    }
+
+    private void determineDirection(){
+        if (velocity.x != 0) {
+            if (velocity.x > 0) {
+                if (velocity.y < 0) {
+                    direction = "up-right";
+                } else if (velocity.y > 0) {
+                    direction = "down-right";
+                } else {
+                    direction = "right";
+                }
+            } else {
+                if (velocity.y < 0) {
+                    direction = "up-left";
+                } else if (velocity.y > 0) {
+                    direction = "down-left";
+                } else {
+                    direction = "left";
+                }
+            }
+        } else if (velocity.y < 0) {
+            if (direction.contains("left")) {
+                direction = "up-left";
+            } else if (direction.contains("right")) {
+                direction = "up-right";
+            } else {
+                direction = "up";
+            }
+        } else if (velocity.y > 0) {
+            if (direction.contains("left")) {
+                direction = "down-left";
+            } else if (direction.contains("right")) {
+                direction = "down-right";
+            } else {
+                direction = "down";
+            }
+        }
     }
 
     /**
@@ -396,10 +435,29 @@ public class Player extends Entity {
             maxSpriteCol = 1;
             currentHealth -= damage;
 
+            velocity.set((direction.contains("left") ? 10 : -10),-5);
+            knockedBack = true;
+
             damaged = true;
 
             MusicHandler.playerDamaged();
         }
+    }
+
+    /**
+     * Sets the players knockback status
+     * @param knockback true if knockback, false otherwise
+     */
+    public void setKnockback(boolean knockback) {
+        this.knockedBack = knockback;
+    }
+
+    /**
+     * gets the players knockback status
+     * @return boolean, true if knockedback
+     */
+    public boolean getKnockback() {
+        return knockedBack;
     }
 
 
@@ -418,7 +476,8 @@ public class Player extends Entity {
         AffineTransform originalTransform = g2.getTransform();
 
         // flip image
-        if (direction.contains("left")) {
+        if (direction.contains("left") && !knockedBack ||
+                (knockedBack && direction.contains("right"))) {
             g2.scale(-1, 1);
             screenX = -screenX - solidArea.width * GamePanel.scale - 10; // Adjust for flipped coordinates
         }

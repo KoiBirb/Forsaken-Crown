@@ -39,11 +39,6 @@ public class Effect {
         double screenY = position.y - cameraPos.y;
 
         g2.drawRect((int) screenX, (int) screenY, 82, 65);
-        g2.drawImage(
-                image,
-                (int) screenX, (int) screenY,
-                (int) (screenX + 82), (int) (screenY + 65),
-                spriteCol * 82, spriteRow * 65, spriteCol * 82 + 82, spriteRow * 65 + 65, null);
     }
 
 

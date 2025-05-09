@@ -28,6 +28,9 @@ public class Hit extends Effect{
     }
 
     public void draw(Graphics2D g2) {
+        // hitbox
+//        super.draw(g2);
+
         Vector2 cameraPos = GamePanel.tileMap.returnCameraPos();
 
         double screenX = position.x - 41 - cameraPos.x;
