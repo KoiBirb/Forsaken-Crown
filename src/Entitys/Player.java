@@ -254,10 +254,10 @@ public class Player extends Entity {
 
                     speed = (attacking) ? 2.8 : 3;
 
-                    if (keyI.aPressed) {
+                    if (keyI.aPressed && !knockedBack) {
                         velocity.x = -speed;
                     }
-                    if (keyI.dPressed) {
+                    if (keyI.dPressed && !knockedBack) {
                         velocity.x = speed;
                     }
 
@@ -323,6 +323,8 @@ public class Player extends Entity {
                         spriteCol = 0;
                     }
 
+                    knockedBack = false;
+
                     if (healing) {
                         healing = false;
                         spriteCol = maxSpriteCol;
@@ -336,7 +338,6 @@ public class Player extends Entity {
                     if (damaged) {
                         damaged = false;
                         direction = (direction.contains("left")) ? "right" : "left";
-                        knockedBack = false;
                         spriteCol = 0;
                     }
 
@@ -435,7 +436,7 @@ public class Player extends Entity {
             maxSpriteCol = 1;
             currentHealth -= damage;
 
-            velocity.set((direction.contains("left") ? 10 : -10),-5);
+            velocity.set((direction.contains("left") ? 7 : -7),-7);
             knockedBack = true;
 
             damaged = true;
@@ -450,6 +451,10 @@ public class Player extends Entity {
      */
     public void setKnockback(boolean knockback) {
         this.knockedBack = knockback;
+    }
+
+    public void setVelocity(double x, double y) {
+        velocity.set(x, y);
     }
 
     /**

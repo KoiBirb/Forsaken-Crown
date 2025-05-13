@@ -41,10 +41,12 @@ public class PlayerQuickAttack extends MeleeAttack{
             } else if (frame == 1 || frame == 2) {
                 hitBox = new Rectangle((player.getDirection().contains("right")) ? (int) (player.getPosition().x + 3) : (int) (player.getPosition().x - 95) , (int) (player.getPosition().y + 22), 137, 30);
                 if (spriteCounter == 1 && frame == 1 && checkAttackTileCollision(hitBox, player)) {
-                    TiledMap.cameraShake(4,6);
+                    TiledMap.cameraShake(4, 6);
                     MusicHandler.hitColladable();
-
+                    player.setKnockback(true);
+                    player.setVelocity((player.getDirection().contains("right")) ? 5 : -5, -2);
                 } else {
+                    player.setKnockback(false);
                     TiledMap.cameraShake(2,6);
                 }
             }
@@ -56,7 +58,6 @@ public class PlayerQuickAttack extends MeleeAttack{
             if (spriteCounter == 1 && frame == 1 && checkAttackTileCollision(hitBox, player)) {
                 TiledMap.cameraShake(4,6);
                 MusicHandler.hitColladable();
-
             } else {
                 TiledMap.cameraShake(2,6);
             }
