@@ -13,6 +13,8 @@ import Map.TiledMap;
 
 import java.awt.*;
 
+import static Main.Panels.GamePanel.keyI;
+
 public class CollisionHandler {
 
     private static int[][] collidableTiles;
@@ -27,8 +29,8 @@ public class CollisionHandler {
         double entityLeftWorldX = entity.getPosition().x + (entity.getSolidArea().x - entity.getPosition().x) / 2;
         double entityRightWorldX = entityLeftWorldX + entity.getSolidArea().width;
 
-        int entityTopRow;
         int entityBottomRow;
+        int entityTopRow = (int) (entityTopWorldY / TiledMap.getScaledTileSize());;
         int entityLeftCol = (int) (entityLeftWorldX / TiledMap.getScaledTileSize());
         int entityRightCol = (int) (entityRightWorldX / TiledMap.getScaledTileSize());
 
@@ -45,6 +47,14 @@ public class CollisionHandler {
                     entity.setColliding(true);
                     entity.getPosition().y = (entityTopRow + 1) * TiledMap.getScaledTileSize() - (((entity.getSolidArea().y - entity.getPosition().y) / 2) - 2);
                     entity.getSolidArea().setLocation(entity.getSolidArea().x, (int) (entity.getPosition().y + entity.getSolidAreaOffsetY()));
+
+                } else if ((tileNum1 == 6 || tileNum2 == 6)) {
+                    Point trapLocation = new Point(entityLeftCol, entityTopRow);
+
+                    if (!trapLocation.equals(entity.getCurrentTrap())) {
+                        entity.hit(1, 0, 0);
+                        entity.setCurrentTrap(trapLocation);
+                    }
                 }
             }
 
@@ -54,13 +64,23 @@ public class CollisionHandler {
             tileNum2 = collidableTiles[entityBottomRow][entityRightCol];
 
 
-            if ((tileNum1 == 1 || tileNum1 == 4) || (tileNum2 == 1 || tileNum2 == 4)) {
+            if ((tileNum1 == 1 || (tileNum1 == 4 && !keyI.sPressed) || (tileNum2 == 1 || (tileNum2 == 4 && !keyI.sPressed)))) {
                 entity.setOnGround(true);
                 entity.setColliding(true);
                 entity.getPosition().y = entityBottomRow * TiledMap.getScaledTileSize() - entity.getSolidArea().height - ((entity.getSolidArea().y - entity.getPosition().y) / 2) - 2;
                 entity.getSolidArea().setLocation(entity.getSolidArea().x, (int) (entity.getPosition().y + entity.getSolidAreaOffsetY()));
-            } else
+
+            } else if ((tileNum1 == 6 || tileNum2 == 6)) {
+                Point trapLocation = new Point(entityLeftCol, entityTopRow);
+
+                if (!trapLocation.equals(entity.getCurrentTrap()) && entity.getFalling()) {
+                    entity.hit(1, 0, 10);
+                    entity.setCurrentTrap(trapLocation);
+                }
                 entity.setOnGround(false);
+            } else {
+                entity.setOnGround(false);
+            }
 
             // Recalculate positions for horizontal collision
             entityTopWorldY = entity.getPosition().y + (entity.getSolidArea().y - entity.getPosition().y) / 2;
@@ -78,8 +98,15 @@ public class CollisionHandler {
                 tileNum2 = collidableTiles[entityBottomRow][entityLeftCol];
 
                 if (tileNum1 == 1 || tileNum2 == 1) {
-                    entity.setColliding(true);
                     entity.getPosition().x = (entityLeftCol + 1) * TiledMap.getScaledTileSize() - ((entity.getSolidArea().x - entity.getPosition().x) / 2) + 5;
+
+                } else if ((tileNum1 == 6 || tileNum2 == 6)) {
+                    Point trapLocation = new Point(entityLeftCol, entityTopRow);
+
+                    if (!trapLocation.equals(entity.getCurrentTrap()) && !entity.getContinuousJump()) {
+                        entity.hit(1, 0, 0);
+                        entity.setCurrentTrap(trapLocation);
+                    }
                 }
             }
             // Check right collision
@@ -88,8 +115,15 @@ public class CollisionHandler {
                 tileNum1 = collidableTiles[entityTopRow][entityRightCol];
                 tileNum2 = collidableTiles[entityBottomRow][entityRightCol];
                 if (tileNum1 == 1 || tileNum2 == 1) {
-                    entity.setColliding(true);
                     entity.getPosition().x = entityRightCol * TiledMap.getScaledTileSize() - entity.getSolidArea().width - ((entity.getSolidArea().x - entity.getPosition().x) / 2) - 5;
+
+                } else if ((tileNum1 == 6 || tileNum2 == 6)) {
+                    Point trapLocation = new Point(entityLeftCol, entityTopRow);
+
+                    if (!trapLocation.equals(entity.getCurrentTrap()) && !entity.getContinuousJump()) {
+                        entity.hit(1, 0, 0);
+                        entity.setCurrentTrap(trapLocation);
+                    }
                 }
             }
 
@@ -225,7 +259,8 @@ public class CollisionHandler {
             int tileNum1 = collidableTiles[entityBottomRow][entityLeftCol];
             int tileNum2 = collidableTiles[entityBottomRow][entityRightCol];
 
-            return  ((tileNum1 == 1 || tileNum1 == 4) || (tileNum2 == 1 || tileNum2 == 4));
+            return ((tileNum1 == 1 || tileNum1 == 4) || (tileNum2 == 1 || tileNum2 == 4))
+                    && tileNum1 != 6 && tileNum2 != 6;
         } catch (ArrayIndexOutOfBoundsException e) {
             System.out.println("Player out of bounds: " + e.getMessage());
             entity.getPosition().x = 100;

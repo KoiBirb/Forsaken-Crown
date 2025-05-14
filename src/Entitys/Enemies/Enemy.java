@@ -73,7 +73,7 @@ public class Enemy extends Entitys.Entity {
                 jumpedOut = false; // Reset jump state once clear
             }
         } else {
-            velocity.x = 0; // Stop if close enough to target
+            velocity.x = 0; // Stop if close enough to the target
         }
 
         // Apply gravity when in air
@@ -89,7 +89,7 @@ public class Enemy extends Entitys.Entity {
         position.x += velocity.x;
     }
 
-    public void hit(int damage){}
+    public void hit(int damage, int knockbackX, int knockbackY){}
 
     @Override
     public void draw(Graphics2D g2) {

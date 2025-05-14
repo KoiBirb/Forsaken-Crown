@@ -43,10 +43,7 @@ public class PlayerQuickAttack extends MeleeAttack{
                 if (spriteCounter == 1 && frame == 1 && checkAttackTileCollision(hitBox, player)) {
                     TiledMap.cameraShake(4, 6);
                     MusicHandler.hitColladable();
-                    player.setKnockback(true);
-                    player.setVelocity((player.getDirection().contains("right")) ? 5 : -5, -2);
                 } else {
-                    player.setKnockback(false);
                     TiledMap.cameraShake(2,6);
                 }
             }

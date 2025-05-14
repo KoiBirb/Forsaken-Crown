@@ -12,17 +12,22 @@ import Handlers.Vector2;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 public abstract class Entity {
 
-    protected boolean isColliding, jump, onGround;
+    protected boolean isColliding, jump, onGround, continuousJump;
 
     protected double speed;
     protected final int width, height;
     protected final int maxHealth, maxMana;
     protected int currentHealth, currentMana;
     protected int solidAreaOffsetX, solidAreaOffsetY;
+    protected boolean knockedBack;
 
+    private Set<Point> activeTraps = new HashSet<>();
+    private Point currentTrap;
     protected Rectangle solidArea;
     protected String direction;
     protected HashMap<String, Double> directionToRad;
@@ -81,6 +86,18 @@ public abstract class Entity {
         solidArea.setLocation((int) position.x + solidAreaOffsetX, (int)position.y + solidAreaOffsetY);
     }
 
+    public boolean getFalling(){
+        return velocity.y > 2;
+    }
+
+    public Point getCurrentTrap() {
+        return currentTrap;
+    }
+
+    public void setCurrentTrap(Point currentTrap) {
+        this.currentTrap = currentTrap;
+    }
+
     /**
      * Draw the entity
      * @param g2 Graphics object to draw on
@@ -102,7 +119,7 @@ public abstract class Entity {
     /**
      * Abstract method to handle damage taken by the entity
      */
-    public abstract void hit(int damage);
+    public abstract void hit(int damage, int knockbackX, int knockbackY);
 
     /**
      * Gets the entity's position vector
@@ -110,6 +127,14 @@ public abstract class Entity {
      */
     public Vector2 getPosition(){
         return position;
+    }
+
+    /**
+     * Sets the players knockback status
+     * @param knockback true if knockback, false otherwise
+     */
+    public void setKnockback(boolean knockback) {
+        this.knockedBack = knockback;
     }
 
     /**
@@ -149,6 +174,14 @@ public abstract class Entity {
      */
     public double getSpeed(){
         return speed;
+    }
+
+    /**
+     * gets the state of player jumping
+     * @return true if jumping, false otherwise
+     */
+    public boolean getContinuousJump() {
+        return continuousJump;
     }
 
     /**

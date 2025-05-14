@@ -21,7 +21,7 @@ import static Main.Panels.GamePanel.keyI;
 
 public class Player extends Entity {
 
-    private boolean attacking, chain, healing, dashing, spawning, death, damaged, knockedBack, continuousJumping;
+    private boolean attacking, chain, healing, dashing, spawning, death, damaged, flip;
     private int spriteCounter, spriteRow, spriteCol, maxSpriteCol, lastSpriteRow;
 
     // timers
@@ -32,11 +32,12 @@ public class Player extends Entity {
 
     /**
      * Constructor for the player
+     *
      * @param position Initial coordinates of the player
      */
     public Player(Vector2 position) {
-        super(position, new Vector2(0,0), 90,37,
-                6.4, new Rectangle(30,8,18, 47),
+        super(position, new Vector2(0, 0), 90, 37,
+                6.4, new Rectangle(30, 8, 18, 47),
                 ImageHandler.loadImage("Assets/Images/Hero/SwordMaster/The SwordMaster/Sword Master Sprite Sheet 90x37.png"), 10, 10);
 
         spawnPosition = new Vector2(position.x, position.y);
@@ -101,18 +102,18 @@ public class Player extends Entity {
                     }
 
                     if (System.currentTimeMillis() - jumpKeyPressStartTime <= 200) {
-                        continuousJumping = true;
+                        continuousJump = true;
                     } else {
                         jumpKeyPressStartTime = 0;
-                        continuousJumping = false;
+                        continuousJump = false;
                     }
                 } else {
                     jumpKeyPressStartTime = 0;
-                    continuousJumping = false;
+                    continuousJump = false;
                     jump = true;
                 }
 
-                if (keyI.wPressed && continuousJumping && !keyI.iPressed && !damaged) {
+                if (keyI.wPressed && continuousJump && !keyI.iPressed && !damaged) {
                     velocity.y = -8;
                     isColliding = false;
 
@@ -247,7 +248,7 @@ public class Player extends Entity {
 
                 // movement
                 if ((keyI.aPressed || keyI.dPressed) && !(keyI.iPressed && onGround) && !healing && !dashing && !damaged) {
-                    if (onGround && !continuousJumping && !attacking) {
+                    if (onGround && !continuousJump && !attacking) {
                         maxSpriteCol = 7;
                         spriteRow = 3;
                     }
@@ -269,7 +270,7 @@ public class Player extends Entity {
                 } else {
                     MusicHandler.stopFootsteps();
 
-                    if (onGround && !continuousJumping && !attacking && !healing && !dashing && !spawning && !damaged) {
+                    if (onGround && !continuousJump && !attacking && !healing && !dashing && !spawning && !damaged) {
                         spriteRow = 1;
                         maxSpriteCol = 8;
                     }
@@ -277,7 +278,7 @@ public class Player extends Entity {
             }
 
             if (keyI.oPressed) {
-                hit(1);
+                hit(1, 7, 10);
             }
 
         } else if (!death) {
@@ -295,7 +296,7 @@ public class Player extends Entity {
             spriteRow = 26;
             maxSpriteCol = 5;
 
-           velocity.setLength(0);
+            velocity.setLength(0);
         }
 
         determineDirection();
@@ -303,7 +304,7 @@ public class Player extends Entity {
         isColliding = false;
         CollisionHandler.checkTileCollision(this);
 
-        if (!onGround && !continuousJumping && !spawning) {
+        if (!onGround && !continuousJump && !spawning) {
             if (velocity.y < 9) {
                 velocity.y += 0.8;
             } else {
@@ -323,21 +324,28 @@ public class Player extends Entity {
                         spriteCol = 0;
                     }
 
-                    knockedBack = false;
-
                     if (healing) {
                         healing = false;
                         spriteCol = maxSpriteCol;
                     }
 
-                    if (dashing){
+                    if (dashing) {
                         dashing = false;
                         spriteCol = maxSpriteCol;
                     }
 
+                    if (knockedBack) {
+                        knockedBack = false;
+
+                        if (flip) {
+                            direction = (direction.contains("left")) ? "right" : "left";
+                        }
+
+                        flip = false;
+                    }
+
                     if (damaged) {
                         damaged = false;
-                        direction = (direction.contains("left")) ? "right" : "left";
                         spriteCol = 0;
                     }
 
@@ -346,7 +354,7 @@ public class Player extends Entity {
                         spawning = false;
                     }
 
-                    if (death){
+                    if (death) {
                         spriteCol = 5;
                     }
                 }
@@ -366,7 +374,7 @@ public class Player extends Entity {
         lastSpriteRow = spriteRow;
     }
 
-    private void determineDirection(){
+    private void determineDirection() {
         if (velocity.x != 0) {
             if (velocity.x > 0) {
                 if (velocity.y < 0) {
@@ -421,6 +429,7 @@ public class Player extends Entity {
 
     /**
      * Sets the players attacking status
+     *
      * @param attacking true if attacking, false otherwise
      */
     public void setAttacking(boolean attacking) {
@@ -430,39 +439,22 @@ public class Player extends Entity {
     /**
      * Activates a player damaged state
      */
-    public void hit(int damage){
+    public void hit(int damage, int knockbackX, int knockbackY) {
         if (currentHealth > 0 && !damaged) {
             spriteRow = 25;
             maxSpriteCol = 1;
             currentHealth -= damage;
 
-            velocity.set((direction.contains("left") ? 7 : -7),-7);
+            velocity.set((direction.contains("left") ? knockbackX : -knockbackX), -knockbackY);
+
             knockedBack = true;
+
+            flip = knockbackX > 0;
 
             damaged = true;
 
             MusicHandler.playerDamaged();
         }
-    }
-
-    /**
-     * Sets the players knockback status
-     * @param knockback true if knockback, false otherwise
-     */
-    public void setKnockback(boolean knockback) {
-        this.knockedBack = knockback;
-    }
-
-    public void setVelocity(double x, double y) {
-        velocity.set(x, y);
-    }
-
-    /**
-     * gets the players knockback status
-     * @return boolean, true if knockedback
-     */
-    public boolean getKnockback() {
-        return knockedBack;
     }
 
 
@@ -480,11 +472,10 @@ public class Player extends Entity {
 
         AffineTransform originalTransform = g2.getTransform();
 
-        // flip image
-        if (direction.contains("left") && !knockedBack ||
-                (knockedBack && direction.contains("right"))) {
-            g2.scale(-1, 1);
-            screenX = -screenX - solidArea.width * GamePanel.scale - 10; // Adjust for flipped coordinates
+        if (direction.contains("left") && !flip ||
+            direction.contains("right") && flip) {
+                g2.scale(-1, 1);
+                screenX = -screenX - solidArea.width * GamePanel.scale - 10;
         }
 
         g2.setColor(Color.red);
@@ -493,9 +484,6 @@ public class Player extends Entity {
                 (int) (screenX - 30 + 90 * GamePanel.scale), (int) (screenY - 17 + 37 * GamePanel.scale),
                 spriteCol * 90, spriteRow * 37,
                 (spriteCol + 1) * 90, (spriteRow + 1) * 37, null);
-
-        // debug draw image area
-//        g2.drawRect((int) screenX, (int) screenY, (int) (90 * GamePanel.scale), (int) (37 * GamePanel.scale));
 
         g2.setTransform(originalTransform);
     }
