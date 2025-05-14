@@ -22,11 +22,11 @@ import static Main.Panels.GamePanel.keyI;
 public class Player extends Entity {
 
     private boolean attacking, chain, healing, dashing, spawning, death, damaged, flip;
-    private int spriteCounter, spriteRow, spriteCol, maxSpriteCol, lastSpriteRow;
+    private int spriteCounter, spriteRow, spriteCol, maxSpriteCol, lastSpriteRow, coyoteTime;
 
     // timers
     private long jumpKeyPressStartTime, lastQuickAttackTime, lastHeavyAttackTime,
-            fallStartTime, healStartTime, dashStartTime, lastDashTime, deathTime;
+            fallStartTime, healStartTime, dashStartTime, lastDashTime, deathTime, lastGroundedTime;
 
     private Vector2 spawnPosition;
 
@@ -42,6 +42,7 @@ public class Player extends Entity {
 
         spawnPosition = new Vector2(position.x, position.y);
         spawning = true;
+        coyoteTime = 150;
     }
 
     /**
@@ -64,6 +65,10 @@ public class Player extends Entity {
 
                 MusicHandler.spawn();
             } else {
+
+                if (onGround) {
+                    lastGroundedTime = System.currentTimeMillis(); // Update when on the ground
+                }
 
                 if (!dashing)
                     velocity.x = 0;
@@ -95,7 +100,7 @@ public class Player extends Entity {
 
                 // Jumping
                 if (keyI.wPressed && !healing && !damaged) {
-                    if (jump && onGround && jumpKeyPressStartTime == 0) {
+                    if (jump && (onGround || System.currentTimeMillis() - lastGroundedTime <= coyoteTime) && jumpKeyPressStartTime == 0) {
                         jumpKeyPressStartTime = System.currentTimeMillis();
                         jump = false;
                         MusicHandler.jump();
