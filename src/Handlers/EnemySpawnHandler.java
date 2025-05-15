@@ -12,7 +12,7 @@ public class EnemySpawnHandler {
     private static final List<Enemy> enemies = new ArrayList<>();
 
     /**
-     * Spawans enemies at game start
+     * Spawns enemies at game start
      */
     public static void setup() {
         Vector2 p = GamePanel.player.getPosition();

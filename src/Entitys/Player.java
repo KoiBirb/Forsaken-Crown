@@ -22,7 +22,9 @@ import static Main.Panels.GamePanel.keyI;
 public class Player extends Entity {
 
     private boolean attacking, chain, healing, dashing, spawning, death, damaged, flip;
-    private int spriteCounter, spriteRow, spriteCol, maxSpriteCol, lastSpriteRow, coyoteTime;
+    private int spriteCounter, spriteRow, spriteCol, maxSpriteCol, lastSpriteRow;
+
+    private final int coyoteTime;
 
     // timers
     private long jumpKeyPressStartTime, lastQuickAttackTime, lastHeavyAttackTime,
@@ -234,7 +236,7 @@ public class Player extends Entity {
 
                         healing = true;
 
-                        int healAmount = (int) ((System.currentTimeMillis() - healStartTime) / 750);
+                        int healAmount = (int) ((System.currentTimeMillis() - healStartTime) / 650);
                         healAmount = Math.min(healAmount, currentMana);
                         healAmount = Math.min(healAmount, maxHealth - currentHealth);
 
