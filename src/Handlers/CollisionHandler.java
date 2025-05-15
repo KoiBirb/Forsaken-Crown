@@ -82,7 +82,6 @@ public class CollisionHandler {
                 entity.setOnGround(false);
             }
 
-            // Recalculate positions for horizontal collision
             entityTopWorldY = entity.getPosition().y + (entity.getSolidArea().y - entity.getPosition().y) / 2;
             entityBottomWorldY = entityTopWorldY + entity.getSolidArea().height;
             entityLeftWorldX = entity.getPosition().x + (entity.getSolidArea().x - entity.getPosition().x) / 2;

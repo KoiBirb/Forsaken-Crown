@@ -44,7 +44,7 @@ public class Player extends Entity {
 
         spawnPosition = new Vector2(position.x, position.y);
         spawning = true;
-        coyoteTime = 150;
+        coyoteTime = 100;
     }
 
     /**

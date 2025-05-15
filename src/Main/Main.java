@@ -8,6 +8,7 @@
 package Main;
 
 import Main.Panels.GamePanel;
+import Main.Panels.MenuPanel;
 
 import javax.swing.*;
 
@@ -28,6 +29,7 @@ public class Main {
         window.setUndecorated(true);
 
         GamePanel gamePanel = new GamePanel();
+        MenuPanel menuPanel = new MenuPanel();
 
         // place objects
         gamePanel.setupGame();
