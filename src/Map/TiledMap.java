@@ -83,13 +83,18 @@ public class TiledMap {
 
         // Add each tileset image to the list
         tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Castle of Bones Tileset.png"));
+        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Blood Temple Tileset.png"));
+        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Blood Temple Tileset.png"));
         tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Glow.png"));
         tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/pixil-frame-0.png"));
         tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/DARK Edition Tileset No background.png"));
-        tileSets.add(tileSets.get(3));
-        tileSets.add(tileSets.getFirst());
-        tileSets.add(tileSets.getFirst());
+        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/DARK Edition Tileset No background.png"));
         tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Blood Temple Tileset.png"));
+        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Castle of Bones Tileset.png"));
+        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Castle of Bones Tileset.png"));
+        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Castle of Bones Tileset.png"));
+        tileSets.add(ImageHandler.loadImage("Assets/Images/Traps/Spikes 48x16.png"));
+        tileSets.add(ImageHandler.loadImage("Assets/Images/Traps/Spikes 48x16.png"));
 
         loadMap();
         loadBackgrounds();
@@ -120,13 +125,18 @@ public class TiledMap {
         try (FileReader reader = new FileReader(mapPath)) {
 
             tilesetOffset.put(tileSets.get(0), 810);
-            tilesetOffset.put (tileSets.get(1), 774);
-            tilesetOffset.put(tileSets.get(2), 0);
-            tilesetOffset.put(tileSets.get(3), 306);
-            tilesetOffset.put(tileSets.get(4), 306);
-            tilesetOffset.put(tileSets.get(0), 810);
-            tilesetOffset.put(tileSets.get(0), 810);
+            tilesetOffset.put (tileSets.get(1), 1930);
+            tilesetOffset.put(tileSets.get(2), 1930);
+            tilesetOffset.put(tileSets.get(3), 774);
+            tilesetOffset.put(tileSets.get(4), 0);
+            tilesetOffset.put(tileSets.get(5), 306);
+            tilesetOffset.put(tileSets.get(6), 306);
             tilesetOffset.put(tileSets.get(7), 1930);
+            tilesetOffset.put(tileSets.get(8), 810);
+            tilesetOffset.put(tileSets.get(9), 810);
+            tilesetOffset.put(tileSets.get(10), 810);
+            tilesetOffset.put(tileSets.get(11), 2186);
+            tilesetOffset.put(tileSets.get(12), 2186);
 
             JSONObject mapData = (JSONObject) parser.parse(reader);
             mapWidth = ((Long) mapData.get("width")).intValue();
@@ -136,17 +146,17 @@ public class TiledMap {
             JSONArray layers = (JSONArray) mapData.get("layers");
 
             // castle bones background
-            JSONObject layer = (JSONObject) layers.get(0);
+            JSONObject layer = (JSONObject) layers.getFirst();
             JSONArray data = (JSONArray) layer.get("data");
 
             mapLayers.add(new int[mapHeight][mapWidth]);
             for (int i = 0; i < mapHeight; i++) {
                 for (int j = 0; j < mapWidth; j++) {
-                    mapLayers.get(0)[i][j] = ((Long) data.get(i * mapWidth + j)).intValue();
+                    mapLayers.getFirst()[i][j] = ((Long) data.get(i * mapWidth + j)).intValue();
                 }
             }
 
-            // door glow layer
+            // blood temp background
             layer = (JSONObject) layers.get(1);
             data = (JSONArray) layer.get("data");
 
@@ -157,7 +167,7 @@ public class TiledMap {
                 }
             }
 
-            // base tile layer
+            // blood temple background
             layer = (JSONObject) layers.get(2);
             data = (JSONArray) layer.get("data");
 
@@ -168,7 +178,7 @@ public class TiledMap {
                 }
             }
 
-            // dark edition tile layer
+            // door glow layer
             layer = (JSONObject) layers.get(3);
             data = (JSONArray) layer.get("data");
 
@@ -179,7 +189,7 @@ public class TiledMap {
                 }
             }
 
-            // dark edition tile layer
+            // base tile layer
             layer = (JSONObject) layers.get(4);
             data = (JSONArray) layer.get("data");
 
@@ -190,7 +200,7 @@ public class TiledMap {
                 }
             }
 
-            // bones 1
+            // dark edition tile layer
             layer = (JSONObject) layers.get(5);
             data = (JSONArray) layer.get("data");
 
@@ -201,7 +211,7 @@ public class TiledMap {
                 }
             }
 
-            // bones 2
+            // dark edition tile layer
             layer = (JSONObject) layers.get(6);
             data = (JSONArray) layer.get("data");
 
@@ -212,7 +222,7 @@ public class TiledMap {
                 }
             }
 
-            // blood temple
+            // blood
             layer = (JSONObject) layers.get(7);
             data = (JSONArray) layer.get("data");
 
@@ -223,8 +233,63 @@ public class TiledMap {
                 }
             }
 
+            // bones 1
+            layer = (JSONObject) layers.get(8);
+            data = (JSONArray) layer.get("data");
+
+            mapLayers.add(new int[mapHeight][mapWidth]);
+            for (int i = 0; i < mapHeight; i++) {
+                for (int j = 0; j < mapWidth; j++) {
+                    mapLayers.get(8)[i][j] = ((Long) data.get(i * mapWidth + j)).intValue();
+                }
+            }
+
+            // bones 2
+            layer = (JSONObject) layers.get(9);
+            data = (JSONArray) layer.get("data");
+
+            mapLayers.add(new int[mapHeight][mapWidth]);
+            for (int i = 0; i < mapHeight; i++) {
+                for (int j = 0; j < mapWidth; j++) {
+                    mapLayers.get(9)[i][j] = ((Long) data.get(i * mapWidth + j)).intValue();
+                }
+            }
+
+            // bones
+            layer = (JSONObject) layers.get(10);
+            data = (JSONArray) layer.get("data");
+
+            mapLayers.add(new int[mapHeight][mapWidth]);
+            for (int i = 0; i < mapHeight; i++) {
+                for (int j = 0; j < mapWidth; j++) {
+                    mapLayers.get(10)[i][j] = ((Long) data.get(i * mapWidth + j)).intValue();
+                }
+            }
+
+            //trap
+            layer = (JSONObject) layers.get(11);
+            data = (JSONArray) layer.get("data");
+
+            mapLayers.add(new int[mapHeight][mapWidth]);
+            for (int i = 0; i < mapHeight; i++) {
+                for (int j = 0; j < mapWidth; j++) {
+                    mapLayers.get(11)[i][j] = ((Long) data.get(i * mapWidth + j)).intValue();
+                }
+            }
+
+            //trap
+            layer = (JSONObject) layers.get(12);
+            data = (JSONArray) layer.get("data");
+
+            mapLayers.add(new int[mapHeight][mapWidth]);
+            for (int i = 0; i < mapHeight; i++) {
+                for (int j = 0; j < mapWidth; j++) {
+                    mapLayers.get(12)[i][j] = ((Long) data.get(i * mapWidth + j)).intValue();
+                }
+            }
+
             // Room positions
-            JSONObject roomLayer = (JSONObject) layers.get(8);
+            JSONObject roomLayer = (JSONObject) layers.get(13);
             roomData = (JSONArray) roomLayer.get("data");
 
             minX = mapWidth; minY = mapHeight;
@@ -243,7 +308,7 @@ public class TiledMap {
                 }
             }
 
-            JSONObject collidables = (JSONObject) layers.get(9);
+            JSONObject collidables = (JSONObject) layers.get(14);
             JSONArray collidablesData = (JSONArray) collidables.get("data");
 
             collidablesTiles = new int[mapHeight][mapWidth];
@@ -480,13 +545,13 @@ public class TiledMap {
 
         float alpha = (float) (0.75 + 0.15 * Math.sin(System.currentTimeMillis() * 0.002));
 
-        for (int k = 0; k < 8; k++) {
+        for (int k = 0; k < 13; k++) {
 
             // glowing effect
-            if (k == 1)
+            if (k == 3)
                 g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
 
-            if (k == 2){
+            if (k == 4){
                 g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
                 continue;
             }
