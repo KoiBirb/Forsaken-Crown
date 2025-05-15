@@ -64,15 +64,15 @@ public class CollisionHandler {
             tileNum2 = collidableTiles[entityBottomRow][entityRightCol];
 
 
-            if ((tileNum1 == 1 || (tileNum1 == 4 && !keyI.sPressed) || (tileNum2 == 1 || (tileNum2 == 4 && !keyI.sPressed)))) {
-                entity.setOnGround(true);
-                entity.setColliding(true);
-                entity.getPosition().y = entityBottomRow * TiledMap.getScaledTileSize() - entity.getSolidArea().height - ((entity.getSolidArea().y - entity.getPosition().y) / 2) - 2;
-                entity.getSolidArea().setLocation(entity.getSolidArea().x, (int) (entity.getPosition().y + entity.getSolidAreaOffsetY()));
-
-            } else if ((tileNum1 == 6 || tileNum2 == 6)) {
+            if ((tileNum1 == 1 || tileNum2 == 1) ||
+                ((tileNum1 == 4 || tileNum2 == 4) &&
+                 !keyI.sPressed && entity.getVelocity().y >= 0)) {
+                    entity.setOnGround(true);
+                    entity.setColliding(true);
+                    entity.getPosition().y = entityBottomRow * TiledMap.getScaledTileSize() - entity.getSolidArea().height - ((entity.getSolidArea().y - entity.getPosition().y) / 2)-1;
+                    entity.getSolidArea().setLocation(entity.getSolidArea().x, (int) (entity.getPosition().y + entity.getSolidAreaOffsetY()));
+           } else if ((tileNum1 == 6 || tileNum2 == 6)) {
                 Point trapLocation = new Point(entityLeftCol, entityTopRow);
-
                 if (!trapLocation.equals(entity.getCurrentTrap()) && entity.getFalling()) {
                     entity.hit(1, 0, 10);
                     entity.setCurrentTrap(trapLocation);
