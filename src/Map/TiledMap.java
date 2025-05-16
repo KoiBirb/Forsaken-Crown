@@ -130,8 +130,8 @@ public class TiledMap {
 
             tilesetOffset.put(tileSets.get(0), 810);
             tilesetOffset.put (tileSets.get(1), 1930);
-            tilesetOffset.put(tileSets.get(2), 2213);
-            tilesetOffset.put(tileSets.get(3), 2213);
+            tilesetOffset.put(tileSets.get(2), 2249);
+            tilesetOffset.put(tileSets.get(3), 2249);
             tilesetOffset.put(tileSets.get(4), 0);
             tilesetOffset.put(tileSets.get(5), 306);
             tilesetOffset.put(tileSets.get(6), 306);
