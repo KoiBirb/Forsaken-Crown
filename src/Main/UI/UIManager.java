@@ -16,9 +16,11 @@ import static Main.Main.gameState;
 
 public class UIManager {
 
-    HealthBar healthBar;
-    ManaBar manaBar;
-    ButtonManager buttonManager;
+    private final HealthBar healthBar;
+    private final ManaBar manaBar;
+    private final ButtonManager buttonManager;
+
+    private int selectedButton;
 
     /**
      * Constructor for UIManager
@@ -28,6 +30,7 @@ public class UIManager {
         healthBar = new HealthBar(GamePanel.player, 55, 160, 400, 100);
         manaBar = new ManaBar(GamePanel.player, 55, 110, 400, 100);
         buttonManager = new ButtonManager();
+        selectedButton = 0;
     }
 
     /**
@@ -39,7 +42,16 @@ public class UIManager {
             manaBar.update();
         } else if (gameState == GameState.MENU) {
             buttonManager.update();
+            selectedButton = buttonManager.getSelectedIndex();
         }
+    }
+
+    /**
+     * Get the selected button
+     * @return int index of the selected button
+     */
+    public int getSelectedButton() {
+        return selectedButton;
     }
 
     /**

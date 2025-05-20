@@ -2,7 +2,6 @@
 package Main.UI.Buttons;
 
 import Main.Panels.GamePanel;
-import Main.Panels.MenuPanel;
 
 import java.awt.*;
 
@@ -19,17 +18,18 @@ public class ButtonManager {
     private float[] scales;
     private float[] shifts;
     private int[] initialX;
-    private int selectedIndex = 0; // Start with the middle button
+    private int selectedIndex = 1;
 
     public ButtonManager() {
         buttons = new Button[]{
-                new Button((int) (GamePanel.screenWidth/2) - 169, (int) (GamePanel.screenHeight * (4.0/6.2)), 120,
-                        "Assets/Images/UI/UI - Words/Words With BG/UI - Words5.png"),
-                new Button((int) (GamePanel.screenWidth/5) - 169, (int) (GamePanel.screenHeight * (4.0/6.2)), 120,
+                new Button((int) (GamePanel.screenWidth/5) - 169, (int) (GamePanel.screenHeight * (4.6/6.2)), 120,
                         "Assets/Images/UI/UI - Words/Words With BG/UI - Words3.png"),
-                new Button((int) (GamePanel.screenWidth * (4.0/5) - 169), (int) (GamePanel.screenHeight * (4.0/6.2)), 120,
+                new Button((int) (GamePanel.screenWidth/2) - 169, (int) (GamePanel.screenHeight * (4.6/6.2)), 120,
+                        "Assets/Images/UI/UI - Words/Words With BG/UI - Words5.png"),
+                new Button((int) (GamePanel.screenWidth * (4.0/5) - 169), (int) (GamePanel.screenHeight * (4.6/6.2)), 120,
                         "Assets/Images/UI/UI - Words/Words With BG/UI - Words16.png")
         };
+
         int n = buttons.length;
         scales = new float[n];
         shifts = new float[n];
@@ -43,11 +43,11 @@ public class ButtonManager {
 
     public void update() {
         if (keyI.aPressed) {
-            selectRight();
+            selectLeft();
             keyI.aPressed = false;
         }
         if (keyI.dPressed) {
-            selectLeft();
+            selectRight();
             keyI.dPressed = false;
         }
 
@@ -64,10 +64,10 @@ public class ButtonManager {
         if (keyI.uPressed) {
             switch(selectedIndex) {
                 case 0:
-                    Main.Main.switchToGame();
+                    System.exit(0);
                     break;
                 case 1:
-                    System.exit(0);
+                    Main.Main.switchToGame();
                     break;
                 case 2:
                     System.out.println("Controls");
@@ -82,6 +82,10 @@ public class ButtonManager {
 
     private void selectRight() {
         selectedIndex = (selectedIndex + 1) % buttons.length;
+    }
+
+    public int getSelectedIndex() {
+        return selectedIndex;
     }
 
     public void draw(Graphics2D g2) {
