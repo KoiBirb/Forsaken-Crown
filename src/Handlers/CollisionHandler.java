@@ -13,7 +13,7 @@ import Map.TiledMap;
 
 import java.awt.*;
 
-import static Main.Panels.GamePanel.keyI;
+import static Main.Main.keyI;
 
 public class CollisionHandler {
 

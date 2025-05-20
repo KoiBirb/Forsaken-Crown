@@ -22,6 +22,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
+import static Main.Main.keyI;
+
 public class GamePanel extends JPanel implements Runnable{
 
     // Screen settings
@@ -31,7 +33,6 @@ public class GamePanel extends JPanel implements Runnable{
 
     // initialize classes
     public static TiledMap tileMap;
-    public static KeyInput keyI = new KeyInput();
     public static final Player player = new Player(new Vector2(100,150));
     public static UIManager ui = new UIManager();
 
@@ -54,8 +55,9 @@ public class GamePanel extends JPanel implements Runnable{
         this.setPreferredSize(Toolkit.getDefaultToolkit().getScreenSize());
         this.setBackground(Color.BLACK);
         this.setDoubleBuffered(true);
-        this.addKeyListener(keyI);
         this.setFocusable(true);
+
+        this.addKeyListener(keyI);
 
         // initialize classes
 
@@ -66,7 +68,9 @@ public class GamePanel extends JPanel implements Runnable{
      * Set up the game.
      */
     public void setupGame() {
+        this.requestFocusInWindow();
         EnemySpawnHandler.setup();
+        startThread();
     }
 
     /**

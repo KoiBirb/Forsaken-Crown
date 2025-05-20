@@ -11,8 +11,20 @@ import Main.Panels.GamePanel;
 import Main.Panels.MenuPanel;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class Main {
+
+    public static GameState gameState = GameState.MENU;
+    private static CardLayout cardLayout = new CardLayout();
+    private static JPanel mainPanel = new JPanel(cardLayout);
+
+    public static KeyInput keyI = new KeyInput();
+
+    public static GamePanel gamePanel = new GamePanel();
+    public static MenuPanel menuPanel = new MenuPanel();
+
+    public static JFrame window = new JFrame();
 
     /**
      * Main method
@@ -20,26 +32,32 @@ public class Main {
      */
     public static void main(String[] args) {
 
-        // Creates a java window
-        JFrame window = new JFrame();
         // Change window settings
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setResizable(false);
         window.setTitle("Forsaken Crown");
         window.setUndecorated(true);
 
-        GamePanel gamePanel = new GamePanel();
-        MenuPanel menuPanel = new MenuPanel();
+        mainPanel.add(menuPanel, "MENU");
+        mainPanel.add(gamePanel, "GAME");
 
-        // place objects
-        gamePanel.setupGame();
-
-        window.add(gamePanel);
+        window.add(mainPanel);
         window.pack();
         window.setLocationRelativeTo(null);
         window.setVisible(true);
 
-        // start game
-        gamePanel.startThread();
+        switchToMenu();
+    }
+
+    public static void switchToMenu() {
+        gameState = GameState.MENU;
+        cardLayout.show(mainPanel, "MENU");
+        menuPanel.setupGame();
+    }
+
+    public static void switchToGame() {
+        gameState = GameState.GAME;
+        cardLayout.show(mainPanel, "GAME");
+        gamePanel.setupGame();
     }
 }

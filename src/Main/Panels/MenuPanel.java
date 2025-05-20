@@ -13,6 +13,8 @@ import Main.UI.UIManager;
 import javax.swing.*;
 import java.awt.*;
 
+import static Main.Main.keyI;
+
 public class MenuPanel extends JPanel implements Runnable{
 
     // Screen settings
@@ -20,7 +22,6 @@ public class MenuPanel extends JPanel implements Runnable{
     public final static double screenHeight = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
 
     public static UIManager ui = new UIManager();
-    public static KeyInput keyI = new KeyInput();
 
     public static Thread menuThread;
 
@@ -30,8 +31,8 @@ public class MenuPanel extends JPanel implements Runnable{
     public MenuPanel(){
         this.setPreferredSize(Toolkit.getDefaultToolkit().getScreenSize());
         this.setBackground(Color.BLACK);
-        this.setDoubleBuffered(true);
         this.addKeyListener(keyI);
+        this.setDoubleBuffered(true);
         this.setFocusable(true);
     }
 
@@ -39,6 +40,7 @@ public class MenuPanel extends JPanel implements Runnable{
      * Set up the game.
      */
     public void setupGame() {
+        this.requestFocusInWindow();
         startThread();
     }
 
