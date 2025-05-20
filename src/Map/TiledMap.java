@@ -89,6 +89,9 @@ public class TiledMap {
         tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/pixil-frame-0.png"));
         tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/DARK Edition Tileset No background.png"));
         tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/DARK Edition Tileset No background.png"));
+        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/DARK Edition Tileset No background.png"));
+        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/DARK Edition Tileset No background.png"));
+        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/DARK Edition Tileset No background.png"));
         tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Blood Temple Tileset.png"));
         tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Castle of Bones Tileset.png"));
         tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Castle of Bones Tileset.png"));
@@ -98,7 +101,6 @@ public class TiledMap {
         tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Blood Temple Tileset.png"));
         tileSets.add(ImageHandler.loadImage("Assets/Images/Traps/Spikes 48x16.png"));
         tileSets.add(ImageHandler.loadImage("Assets/Images/Traps/Spikes 48x16.png"));
-
 
         loadMap();
         loadBackgrounds();
@@ -112,10 +114,10 @@ public class TiledMap {
 
         // The columns
         BufferedImage[] backgroundLayers = new BufferedImage[4];
-        backgroundLayers[0] = ImageHandler.loadImage("Assets/Images/Backgrounds/The Columns/Horizontal/layer 1.png");
-        backgroundLayers[1] = ImageHandler.loadImage("Assets/Images/Backgrounds/The Columns/Horizontal/layer 2.png");
-        backgroundLayers[2] = ImageHandler.loadImage("Assets/Images/Backgrounds/The Columns/Horizontal/layer 3.png");
-        backgroundLayers[3] = ImageHandler.loadImage("Assets/Images/Backgrounds/The Columns/Horizontal/layer 4.png");
+        backgroundLayers[0] = ImageHandler.loadImage("Assets/Images/Backgrounds/Beneath Parallax/background.png");
+        backgroundLayers[1] = ImageHandler.loadImage("Assets/Images/Backgrounds/Beneath Parallax/bridge.png");
+        backgroundLayers[2] = ImageHandler.loadImage("Assets/Images/Backgrounds/Beneath Parallax/cages.png");
+        backgroundLayers[3] = ImageHandler.loadImage("Assets/Images/Backgrounds/Beneath Parallax/fogin front.png");
         backgrounds.add(backgroundLayers);
 
     }
@@ -135,15 +137,18 @@ public class TiledMap {
             tilesetOffset.put(tileSets.get(4), 0);
             tilesetOffset.put(tileSets.get(5), 306);
             tilesetOffset.put(tileSets.get(6), 306);
-            tilesetOffset.put(tileSets.get(7), 1930);
-            tilesetOffset.put(tileSets.get(8), 810);
-            tilesetOffset.put(tileSets.get(9), 810);
-            tilesetOffset.put(tileSets.get(10), 810);
-            tilesetOffset.put (tileSets.get(11), 1930);
-            tilesetOffset.put (tileSets.get(12), 1930);
-            tilesetOffset.put (tileSets.get(13), 1930);
-            tilesetOffset.put(tileSets.get(14), 2186);
-            tilesetOffset.put(tileSets.get(15), 2186);
+            tilesetOffset.put(tileSets.get(7), 306);
+            tilesetOffset.put(tileSets.get(8), 306);
+            tilesetOffset.put(tileSets.get(9), 306);
+            tilesetOffset.put(tileSets.get(10), 1930);
+            tilesetOffset.put(tileSets.get(11), 810);
+            tilesetOffset.put(tileSets.get(12), 810);
+            tilesetOffset.put(tileSets.get(13), 810);
+            tilesetOffset.put (tileSets.get(14), 1930);
+            tilesetOffset.put (tileSets.get(15), 1930);
+            tilesetOffset.put (tileSets.get(16), 1930);
+            tilesetOffset.put(tileSets.get(17), 2186);
+            tilesetOffset.put(tileSets.get(18), 2186);
 
             JSONObject mapData = (JSONObject) parser.parse(reader);
             mapWidth = ((Long) mapData.get("width")).intValue();
@@ -229,7 +234,7 @@ public class TiledMap {
                 }
             }
 
-            // blood
+            // dark edition tile layer
             layer = (JSONObject) layers.get(7);
             data = (JSONArray) layer.get("data");
 
@@ -240,7 +245,7 @@ public class TiledMap {
                 }
             }
 
-            // bones 1
+            // dark edition tile layer
             layer = (JSONObject) layers.get(8);
             data = (JSONArray) layer.get("data");
 
@@ -251,7 +256,7 @@ public class TiledMap {
                 }
             }
 
-            // bones 2
+            // dark edition tile layer
             layer = (JSONObject) layers.get(9);
             data = (JSONArray) layer.get("data");
 
@@ -262,7 +267,7 @@ public class TiledMap {
                 }
             }
 
-            // bones
+            // blood
             layer = (JSONObject) layers.get(10);
             data = (JSONArray) layer.get("data");
 
@@ -273,6 +278,7 @@ public class TiledMap {
                 }
             }
 
+            // bones 1
             layer = (JSONObject) layers.get(11);
             data = (JSONArray) layer.get("data");
 
@@ -283,6 +289,7 @@ public class TiledMap {
                 }
             }
 
+            // bones 2
             layer = (JSONObject) layers.get(12);
             data = (JSONArray) layer.get("data");
 
@@ -293,6 +300,7 @@ public class TiledMap {
                 }
             }
 
+            // bones
             layer = (JSONObject) layers.get(13);
             data = (JSONArray) layer.get("data");
 
@@ -303,7 +311,6 @@ public class TiledMap {
                 }
             }
 
-            //trap
             layer = (JSONObject) layers.get(14);
             data = (JSONArray) layer.get("data");
 
@@ -314,7 +321,6 @@ public class TiledMap {
                 }
             }
 
-            //trap
             layer = (JSONObject) layers.get(15);
             data = (JSONArray) layer.get("data");
 
@@ -325,8 +331,40 @@ public class TiledMap {
                 }
             }
 
+            layer = (JSONObject) layers.get(16);
+            data = (JSONArray) layer.get("data");
+
+            mapLayers.add(new int[mapHeight][mapWidth]);
+            for (int i = 0; i < mapHeight; i++) {
+                for (int j = 0; j < mapWidth; j++) {
+                    mapLayers.get(16)[i][j] = ((Long) data.get(i * mapWidth + j)).intValue();
+                }
+            }
+
+            //trap
+            layer = (JSONObject) layers.get(17);
+            data = (JSONArray) layer.get("data");
+
+            mapLayers.add(new int[mapHeight][mapWidth]);
+            for (int i = 0; i < mapHeight; i++) {
+                for (int j = 0; j < mapWidth; j++) {
+                    mapLayers.get(17)[i][j] = ((Long) data.get(i * mapWidth + j)).intValue();
+                }
+            }
+
+            //trap
+            layer = (JSONObject) layers.get(18);
+            data = (JSONArray) layer.get("data");
+
+            mapLayers.add(new int[mapHeight][mapWidth]);
+            for (int i = 0; i < mapHeight; i++) {
+                for (int j = 0; j < mapWidth; j++) {
+                    mapLayers.get(18)[i][j] = ((Long) data.get(i * mapWidth + j)).intValue();
+                }
+            }
+
             // Room positions
-            JSONObject roomLayer = (JSONObject) layers.get(16);
+            JSONObject roomLayer = (JSONObject) layers.get(19);
             roomData = (JSONArray) roomLayer.get("data");
 
             minX = mapWidth; minY = mapHeight;
@@ -345,7 +383,7 @@ public class TiledMap {
                 }
             }
 
-            JSONObject collidables = (JSONObject) layers.get(17);
+            JSONObject collidables = (JSONObject) layers.get(20);
             JSONArray collidablesData = (JSONArray) collidables.get("data");
 
             collidablesTiles = new int[mapHeight][mapWidth];
@@ -578,7 +616,7 @@ public class TiledMap {
     public void drawMap(Graphics2D g2) {
         int scaledTileSize = (int) (tileSetTileSize * SCALE);
 
-        drawParallaxBackground(g2, backgrounds.get(0), new double[]{0.2, 0.3, 0.5, 0.7});
+        drawParallaxBackground(g2, backgrounds.get(0), new double[]{0.3, 0.4, 0.6, 0.7});
 
         float alpha = (float) (0.75 + 0.15 * Math.sin(System.currentTimeMillis() * 0.002));
         Composite originalComposite = g2.getComposite();
@@ -588,7 +626,7 @@ public class TiledMap {
         int startY = Math.max(minY - 1, (int) (cameraPosition.y / scaledTileSize) - 1);
         int endY = Math.min(maxY + 1, (int) ((cameraPosition.y + screenHeight) / scaledTileSize) + 1);
 
-        for (int k = 0; k < 16; k++) {
+        for (int k = 0; k < 19; k++) {
             // Set alpha only for layer 2
             if (k == 2) {
                 g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
