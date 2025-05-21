@@ -1,6 +1,7 @@
 
 package Main.UI.Buttons;
 
+import Handlers.Sound.MusicHandler;
 import Main.Panels.GamePanel;
 
 import java.awt.*;
@@ -44,10 +45,12 @@ public class ButtonManager {
     public void update() {
         if (keyI.aPressed) {
             selectLeft();
+            MusicHandler.UIHover();
             keyI.aPressed = false;
         }
         if (keyI.dPressed) {
             selectRight();
+            MusicHandler.UIHover();
             keyI.dPressed = false;
         }
 
@@ -73,6 +76,7 @@ public class ButtonManager {
                     System.out.println("Controls");
                     break;
             }
+            MusicHandler.UIConfirm();
         };
     }
 
