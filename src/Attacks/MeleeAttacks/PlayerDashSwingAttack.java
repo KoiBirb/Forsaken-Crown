@@ -38,7 +38,7 @@ public class PlayerDashSwingAttack extends MeleeAttack{
             GamePanel.meleeAttacks.remove(this);
             player.setAttacking(false);
         } else if (frame == 0 || frame == 1){
-            hitBox = new Rectangle((player.getDirection().contains("right")) ? (int) (player.getPosition().x - 36) : (int) (player.getPosition().x - 105) , (int) (player.getPosition().y + 21), 187, 31);
+            hitBox = new Rectangle((player.getDirection().contains("right")) ? (int) (player.getPosition().x - 36) : (int) (player.getPosition().x - 105) , (int) (player.getPosition().y + 20), 187, 31);
             if (spriteCounter == 1 && frame == 1 && checkAttackTileCollision(hitBox, player)) {
                 TiledMap.cameraShake(5, 6);
                 MusicHandler.hitColladable();

@@ -6,14 +6,21 @@
  */
 package Main.UI;
 
+import Main.GameState;
 import Main.Panels.GamePanel;
+import Main.UI.Buttons.ButtonManager;
 
 import java.awt.*;
 
+import static Main.Main.gameState;
+
 public class UIManager {
 
-    HealthBar healthBar;
-    ManaBar manaBar;
+    private final HealthBar healthBar;
+    private final ManaBar manaBar;
+    private final ButtonManager buttonManager;
+
+    private int selectedButton;
 
     /**
      * Constructor for UIManager
@@ -22,14 +29,29 @@ public class UIManager {
     public UIManager() {
         healthBar = new HealthBar(GamePanel.player, 55, 160, 400, 100);
         manaBar = new ManaBar(GamePanel.player, 55, 110, 400, 100);
+        buttonManager = new ButtonManager();
+        selectedButton = 0;
     }
 
     /**
      * Update the UI elements
      */
     public void update() {
-        healthBar.update();
-        manaBar.update();
+        if (gameState == GameState.GAME) {
+            healthBar.update();
+            manaBar.update();
+        } else if (gameState == GameState.MENU) {
+            buttonManager.update();
+            selectedButton = buttonManager.getSelectedIndex();
+        }
+    }
+
+    /**
+     * Get the selected button
+     * @return int index of the selected button
+     */
+    public int getSelectedButton() {
+        return selectedButton;
     }
 
     /**
@@ -37,7 +59,11 @@ public class UIManager {
      * @param g2 Graphics2D object to draw on
      */
     public void draw(Graphics2D g2) {
-        healthBar.draw(g2);
-        manaBar.draw(g2);
+        if (gameState == GameState.GAME) {
+            healthBar.draw(g2);
+            manaBar.draw(g2);
+        } else if (gameState == GameState.MENU) {
+            buttonManager.draw(g2);
+        }
     }
 }

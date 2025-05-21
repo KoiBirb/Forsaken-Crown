@@ -67,6 +67,10 @@ public abstract class MeleeAttack {
     }
 
 
+    /**
+     * Gets cooldown of the attack
+     * @return int cooldown
+     */
     public static int getCooldown() {
         return cooldown;
     }

@@ -39,6 +39,18 @@ public class MusicHandler {
     }
 
     /**
+     * Plays UI confirm sound effect
+     */
+    public static void UIConfirm() {
+        playSoundEffect("/Audio/UI/ui_button_confirm.wav", effect);
+    }
+
+    /**
+     * Plays UI hover sound effect
+     */
+    public static void UIHover() {playSoundEffect("/Audio/UI/ui_change_selection.wav", effect);}
+
+    /**
      * Plays dash sound effect
      */
     public static void dash() {

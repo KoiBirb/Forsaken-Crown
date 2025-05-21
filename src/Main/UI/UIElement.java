@@ -15,7 +15,7 @@ import java.awt.image.BufferedImage;
 public abstract class UIElement {
 
     protected int x, y, width, height;
-    BufferedImage imageGlow, image;
+    protected BufferedImage imageGlow, image;
 
     /**
      * Constructor for UIElement
@@ -39,4 +39,20 @@ public abstract class UIElement {
      * @param g2 Graphics2D object to draw on
      */
     public abstract void draw(Graphics2D g2);
+
+    /**
+     * Returns the width of an element
+     * @return double the width of the element
+     */
+    public double getWidth(){
+        return width;
+    }
+
+    /**
+     * Returns the height of an element
+     * @return double the height of the element
+     */
+    public double getHeight(){
+        return height;
+    }
 }
