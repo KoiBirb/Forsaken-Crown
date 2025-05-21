@@ -1,8 +1,8 @@
 /*
- * GamePanel.java
+ * MenuPanel.java
  * Leo Bogaert
- * May 7, 2025,
- * Main game loop
+ * May 20, 2025,
+ * Main menu
  */
 
 package Main.Panels;
@@ -60,6 +60,9 @@ public class MenuPanel extends JPanel implements Runnable{
         startThread();
     }
 
+    /**
+     * Load background images
+     */
     private void loadBackground(){
         background = new BufferedImage[4];
 
@@ -170,6 +173,10 @@ public class MenuPanel extends JPanel implements Runnable{
         g2.dispose();
     }
 
+    /**
+     * Draws the parallax background
+     * @param g2 Graphics2D object to draw on
+     */
     private void drawParallaxBackground(Graphics2D g2) {
         int screenW = (int) screenWidth;
         int screenH = (int) screenHeight;

@@ -49,12 +49,18 @@ public class Main {
         switchToMenu();
     }
 
+    /**
+     * Switch to the menu
+     */
     public static void switchToMenu() {
         gameState = GameState.MENU;
         cardLayout.show(mainPanel, "MENU");
         menuPanel.setupGame();
     }
 
+    /**
+     * Switch to the game
+     */
     public static void switchToGame() {
         gameState = GameState.GAME;
         cardLayout.show(mainPanel, "GAME");

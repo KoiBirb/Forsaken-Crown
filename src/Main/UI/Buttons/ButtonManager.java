@@ -1,3 +1,9 @@
+/*
+ * ButtonManager.java
+ * Leo Bogaert
+ * May 20, 2025,
+ * Handles menu buttons
+ */
 
 package Main.UI.Buttons;
 

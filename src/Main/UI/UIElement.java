@@ -40,10 +40,18 @@ public abstract class UIElement {
      */
     public abstract void draw(Graphics2D g2);
 
+    /**
+     * Returns the width of an element
+     * @return double the width of the element
+     */
     public double getWidth(){
         return width;
     }
 
+    /**
+     * Returns the height of an element
+     * @return double the height of the element
+     */
     public double getHeight(){
         return height;
     }
