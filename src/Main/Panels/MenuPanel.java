@@ -26,6 +26,11 @@ public class MenuPanel extends JPanel implements Runnable{
     public final static double screenWidth = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
     public final static double screenHeight = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
 
+    private float helpAlpha = 0f;
+    private float titleAlpha = 1f;
+    private static final float HELP_LERP_SPEED = 0.15f;
+    private static final float TITLE_LERP_SPEED = 0.15f;
+    public static boolean help = false;
     private float parallaxSelected = 1.0f;
     private static final float PARALLAX_LERP_SPEED = 0.15f;
 
@@ -34,8 +39,7 @@ public class MenuPanel extends JPanel implements Runnable{
     public static Thread menuThread;
 
     private BufferedImage[] background;
-    private BufferedImage redCircleBackground;
-    private BufferedImage title;
+    private BufferedImage redCircleBackground, title, helpImage;
 
     private int row, col, count;
 
@@ -73,6 +77,7 @@ public class MenuPanel extends JPanel implements Runnable{
 
         redCircleBackground = ImageHandler.loadImage("Assets/Images/Backgrounds/The Circle Underground/Red Circle/The Circle 35x37.png");
         title = ImageHandler.loadImage("Assets/Images/UI/UI - Words/Title.png");
+        helpImage = ImageHandler.loadImage("Assets/Images/UI/UI - Words/help.png");
     }
 
     /**
@@ -128,6 +133,14 @@ public class MenuPanel extends JPanel implements Runnable{
 
         parallaxSelected += (target - parallaxSelected) * PARALLAX_LERP_SPEED;
 
+        // Animate help alpha
+        float targetHelpAlpha = help ? 1f : 0f;
+        helpAlpha += (targetHelpAlpha - helpAlpha) * HELP_LERP_SPEED;
+
+        // Animate title alpha (fade in when helpAlpha is near 0)
+        float targetTitleAlpha = 1f - helpAlpha;
+        titleAlpha += (targetTitleAlpha - titleAlpha) * TITLE_LERP_SPEED;
+
         count++;
         if (count > 3) {
             count = 0;
@@ -163,10 +176,24 @@ public class MenuPanel extends JPanel implements Runnable{
                 col * 35, row * 37,
                 (col + 1) * 35, (row + 1) * 37, null);
 
-        g2.drawImage(title, (int)(screenWidth/2 - title.getWidth()*0.9),
-                150, (int)(screenWidth/2 + title.getWidth()*0.9),
-                150 + (int)(title.getHeight()*1.8), 0, 0,
-                title.getWidth(), title.getHeight(), null);
+        if (helpAlpha > 0.01f) {
+            Composite old = g2.getComposite();
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, helpAlpha));
+            g2.drawImage(helpImage, (int) (screenWidth / 2 - helpImage.getWidth() * 1.5),
+                    150, (int) (screenWidth / 2 + helpImage.getWidth() * 1.5),
+                    150 + (helpImage.getHeight() * 3), 0, 0,
+                    helpImage.getWidth(), helpImage.getHeight(), null);
+            g2.setComposite(old);
+        }
+        if (titleAlpha > 0.01f) {
+            Composite old = g2.getComposite();
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, titleAlpha));
+            g2.drawImage(title, (int) (screenWidth / 2 - title.getWidth() * 0.9),
+                    150, (int) (screenWidth / 2 + title.getWidth() * 0.9),
+                    150 + (int) (title.getHeight() * 1.8), 0, 0,
+                    title.getWidth(), title.getHeight(), null);
+            g2.setComposite(old);
+        }
 
         ui.draw(g2);
 

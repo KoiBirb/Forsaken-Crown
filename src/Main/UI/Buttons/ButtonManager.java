@@ -9,10 +9,12 @@ package Main.UI.Buttons;
 
 import Handlers.Sound.MusicHandler;
 import Main.Panels.GamePanel;
+import Main.Panels.MenuPanel;
 
 import java.awt.*;
 
 import static Main.Main.keyI;
+import static Main.Main.menuPanel;
 
 public class ButtonManager {
 
@@ -53,11 +55,13 @@ public class ButtonManager {
             selectLeft();
             MusicHandler.UIHover();
             keyI.aPressed = false;
+            MenuPanel.help = false;
         }
         if (keyI.dPressed) {
             selectRight();
             MusicHandler.UIHover();
             keyI.dPressed = false;
+            MenuPanel.help = false;
         }
 
         for (int i = 0; i < buttons.length; i++) {
@@ -79,10 +83,11 @@ public class ButtonManager {
                     Main.Main.switchToGame();
                     break;
                 case 2:
-                    System.out.println("Controls");
+                    MenuPanel.help = !MenuPanel.help;
                     break;
             }
             MusicHandler.UIConfirm();
+            keyI.uPressed = false;
         };
     }
 
