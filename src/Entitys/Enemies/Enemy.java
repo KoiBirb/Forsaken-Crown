@@ -9,6 +9,7 @@ import Map.TiledMap;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.awt.image.VolatileImage;
 
 public class Enemy extends Entitys.Entity {
     public static final int WIDTH = 62 * 2;
@@ -29,7 +30,7 @@ public class Enemy extends Entitys.Entity {
     private int spriteCol = 0;
     private int spriteRow = 0;
     private int maxSpriteCol = 7;
-    private BufferedImage spriteSheet;
+    private VolatileImage spriteSheet;
 
     private enum State { IDLE, WALK }
     private State currentState = State.IDLE;
@@ -116,14 +117,24 @@ public class Enemy extends Entitys.Entity {
 
         int sx = (int) (position.x - cam.x);
         int sy = (int) (position.y - cam.y - (spriteHeight * 2 - HEIGHT));
-
-        BufferedImage frame = spriteSheet.getSubimage(spriteCol * spriteWidth, spriteRow * spriteHeight, spriteWidth, spriteHeight);
         int drawWidth = spriteWidth * 2;
 
         if ("left".equals(direction)) {
-            g2.drawImage(frame, sx + drawWidth, sy, -drawWidth, spriteHeight * 2, null);
+            g2.drawImage(
+                    spriteSheet,
+                    sx + drawWidth, sy, sx, sy + spriteHeight * 2,
+                    spriteCol * spriteWidth, spriteRow * spriteHeight,
+                    (spriteCol + 1) * spriteWidth, (spriteRow + 1) * spriteHeight,
+                    null
+            );
         } else {
-            g2.drawImage(frame, sx, sy, drawWidth, spriteHeight * 2, null);
+            g2.drawImage(
+                    spriteSheet,
+                    sx, sy, sx + drawWidth, sy + spriteHeight * 2,
+                    spriteCol * spriteWidth, spriteRow * spriteHeight,
+                    (spriteCol + 1) * spriteWidth, (spriteRow + 1) * spriteHeight,
+                    null
+            );
         }
     }
 
