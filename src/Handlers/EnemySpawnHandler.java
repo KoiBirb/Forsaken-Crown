@@ -23,7 +23,7 @@ public class EnemySpawnHandler {
         double spawnY = ((int)((p.y + ts + 120) / ts)) * ts - Enemy.HEIGHT;
 
         enemies.clear(); // Remove existing enemies
-        enemies.add(new Enemy(new Vector2(spawnX, spawnY), 2.5, 8)); // Add new one
+        enemies.add(new Enemy(new Vector2(spawnX, spawnY), 1, 8)); // Add new one
     }
 
     /**

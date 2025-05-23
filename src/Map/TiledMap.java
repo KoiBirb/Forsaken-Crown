@@ -768,4 +768,17 @@ public class TiledMap {
     public Vector2 returnCameraPos() {
         return cameraPosition;
     }
+
+    /**
+     * Returns the tile value from the trap layer for the specified grid coordinates.
+     * Layer 19 is assumed to be the trap layer (spikes).
+     * @param col Column index
+     * @param row Row index
+     * @return Tile ID at the given position or -1 if out of bounds
+     */
+    public int getMapValue(int col, int row) {
+        if (row < 0 || row >= mapHeight || col < 0 || col >= mapWidth) return -1;
+        if (mapLayers.size() <= 19) return -1; // trap layer must exist
+        return mapLayers.get(19)[row][col];
+    }
 }

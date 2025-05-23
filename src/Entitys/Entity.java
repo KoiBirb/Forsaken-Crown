@@ -20,7 +20,8 @@ public abstract class Entity {
     protected boolean isColliding, jump, onGround, continuousJump;
 
     protected double speed;
-    protected final int width, height;
+    public final int width;
+    public final int height;
     protected final int maxHealth, maxMana;
     protected int currentHealth, currentMana;
     protected int solidAreaOffsetX, solidAreaOffsetY;
