@@ -11,6 +11,7 @@ package Map;
     import java.awt.*;
     import java.awt.geom.AffineTransform;
     import java.awt.image.BufferedImage;
+    import java.awt.image.VolatileImage;
     import java.io.FileNotFoundException;
     import java.io.FileReader;
     import java.io.IOException;
@@ -32,7 +33,7 @@ package Map;
 public class TiledMap {
 
     // File reading
-    private final ArrayList<BufferedImage> tileSets;
+    private final ArrayList<VolatileImage> tileSets;
     private final String mapPath;
     private final JSONParser parser;
     private final ArrayList<int[][]> mapLayers;
@@ -41,7 +42,7 @@ public class TiledMap {
     private static int tileSetTileSize;
     private JSONArray roomData;
     private ArrayList<BufferedImage[]> backgrounds;
-    private final HashMap<BufferedImage, Integer> tilesetOffset;
+    private final HashMap<VolatileImage, Integer> tilesetOffset;
 
     // Camera room switching
     private final int CAMERADELAY = 10;
@@ -82,29 +83,29 @@ public class TiledMap {
         tilesetOffset = new HashMap<>();
 
         // Add each tileset image to the list
-        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Castle of Bones Tileset.png"));
-        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Castle of Bones Tileset.png"));
-        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/DARK Edition Tileset No background.png"));
-        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/DARK Edition Tileset No background.png"));
-        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Blood Temple Tileset.png"));
-        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/pixil-frame-0 (2).png"));
-        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/pixil-frame-0 (2).png"));
-        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/pixil-frame-0.png"));
-        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/DARK Edition Tileset No background.png"));
-        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/DARK Edition Tileset No background.png"));
-        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/DARK Edition Tileset No background.png"));
-        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/DARK Edition Tileset No background.png"));
-        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/DARK Edition Tileset No background.png"));
-        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Blood Temple Tileset.png"));
-        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Castle of Bones Tileset.png"));
-        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Castle of Bones Tileset.png"));
-        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Castle of Bones Tileset.png"));
-        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Castle of Bones Tileset.png"));
-        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Blood Temple Tileset.png"));
-        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Blood Temple Tileset.png"));
-        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Blood Temple Tileset.png"));
-        tileSets.add(ImageHandler.loadImage("Assets/Images/Traps/Spikes 48x16.png"));
-        tileSets.add(ImageHandler.loadImage("Assets/Images/Traps/Spikes 48x16.png"));
+        tileSets.add(ImageHandler.createVolatileImage(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Castle of Bones Tileset.png")));
+        tileSets.add(ImageHandler.createVolatileImage(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Castle of Bones Tileset.png")));
+        tileSets.add(ImageHandler.createVolatileImage(ImageHandler.loadImage("Assets/Images/Tilesets/Map/DARK Edition Tileset No background.png")));
+        tileSets.add(ImageHandler.createVolatileImage(ImageHandler.loadImage("Assets/Images/Tilesets/Map/DARK Edition Tileset No background.png")));
+        tileSets.add(ImageHandler.createVolatileImage(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Blood Temple Tileset.png")));
+        tileSets.add(ImageHandler.createVolatileImage(ImageHandler.loadImage("Assets/Images/Tilesets/Map/pixil-frame-0 (2).png")));
+        tileSets.add(ImageHandler.createVolatileImage(ImageHandler.loadImage("Assets/Images/Tilesets/Map/pixil-frame-0 (2).png")));
+        tileSets.add(ImageHandler.createVolatileImage(ImageHandler.loadImage("Assets/Images/Tilesets/Map/pixil-frame-0.png")));
+        tileSets.add(ImageHandler.createVolatileImage(ImageHandler.loadImage("Assets/Images/Tilesets/Map/DARK Edition Tileset No background.png")));
+        tileSets.add(ImageHandler.createVolatileImage(ImageHandler.loadImage("Assets/Images/Tilesets/Map/DARK Edition Tileset No background.png")));
+        tileSets.add(ImageHandler.createVolatileImage(ImageHandler.loadImage("Assets/Images/Tilesets/Map/DARK Edition Tileset No background.png")));
+        tileSets.add(ImageHandler.createVolatileImage(ImageHandler.loadImage("Assets/Images/Tilesets/Map/DARK Edition Tileset No background.png")));
+        tileSets.add(ImageHandler.createVolatileImage(ImageHandler.loadImage("Assets/Images/Tilesets/Map/DARK Edition Tileset No background.png")));
+        tileSets.add(ImageHandler.createVolatileImage(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Blood Temple Tileset.png")));
+        tileSets.add(ImageHandler.createVolatileImage(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Castle of Bones Tileset.png")));
+        tileSets.add(ImageHandler.createVolatileImage(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Castle of Bones Tileset.png")));
+        tileSets.add(ImageHandler.createVolatileImage(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Castle of Bones Tileset.png")));
+        tileSets.add(ImageHandler.createVolatileImage(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Castle of Bones Tileset.png")));
+        tileSets.add(ImageHandler.createVolatileImage(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Blood Temple Tileset.png")));
+        tileSets.add(ImageHandler.createVolatileImage(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Blood Temple Tileset.png")));
+        tileSets.add(ImageHandler.createVolatileImage(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Blood Temple Tileset.png")));
+        tileSets.add(ImageHandler.createVolatileImage(ImageHandler.loadImage("Assets/Images/Traps/Spikes 48x16.png")));
+        tileSets.add(ImageHandler.createVolatileImage(ImageHandler.loadImage("Assets/Images/Traps/Spikes 48x16.png")));
 
         loadMap();
         loadBackgrounds();
@@ -478,63 +479,41 @@ public class TiledMap {
      * Finds room dimensions, and updates camera target position
      */
     public void update() {
-        // Update camera shake effect
         if (shakeDuration > 0) {
             shakeDuration--;
         } else {
             cameraShakeOffset = new Vector2(0, 0);
         }
 
-        int scaledTileSize = (int) (tileSetTileSize * SCALE);
+        int scaledTileSize = getScaledTileSize();
+        double playerX = player.getPosition().x;
+        double playerY = player.getPosition().y + scaledTileSize;
+        int playerTileX = (int) (playerX / scaledTileSize);
+        int playerTileY = (int) (playerY / scaledTileSize);
 
-        int playerTileX = (int) (player.getPosition().x / scaledTileSize);
-        int playerTileY = (int) ((player.getPosition().y + scaledTileSize) / scaledTileSize);
-
-        int tileId = 1; // room tile number
-
-        // Check if inside a wall or out of bounds
+        // Out of bounds or not in a room
         if (playerTileX < 0 || playerTileX >= mapWidth || playerTileY < 0 || playerTileY >= mapHeight ||
-                ((Long) roomData.get(playerTileY * mapWidth + playerTileX)).intValue() == tileId) {
+            ((Long) roomData.get(playerTileY * mapWidth + playerTileX)).intValue() == 1) {
             return;
         }
 
-        int newMinX = playerTileX, newMaxX = playerTileX;
-        int newMinY = playerTileY, newMaxY = playerTileY;
+        // Find new room boundaries
+        int[] roomBounds = findRoomBounds(playerTileX, playerTileY);
+        int newMinX = roomBounds[0], newMaxX = roomBounds[1], newMinY = roomBounds[2], newMaxY = roomBounds[3];
+        int newRoomWidth = (newMaxX - newMinX + 1) * scaledTileSize;
+        int newRoomHeight = (newMaxY - newMinY + 1) * scaledTileSize;
 
-        // Find room dimensions
-        while (newMinX >= 0 && ((Long) roomData.get(playerTileY * mapWidth + (newMinX - 1))).intValue() != tileId) {
-            newMinX--;
-        }
-        while (newMaxX < mapWidth - 1 && ((Long) roomData.get(playerTileY * mapWidth + (newMaxX + 1))).intValue() != tileId) {
-            newMaxX++;
-        }
-
-        while (newMinY >= 0 && ((Long) roomData.get((newMinY - 1) * mapWidth + playerTileX)).intValue() != tileId) {
-            newMinY--;
-        }
-        while (newMaxY < mapHeight - 1 && ((Long) roomData.get((newMaxY + 1) * mapWidth + playerTileX)).intValue() != tileId) {
-            newMaxY++;
-        }
-
-        // Check if the room has changed and the player is on the ground
-        if (player.isOnGround() &&
-            (roomWidth != (newMaxX - newMinX + 1) * scaledTileSize ||
-             roomHeight != (newMaxY - newMinY + 1) * scaledTileSize)) {
-
-            roomWidth = (newMaxX - newMinX + 1) * scaledTileSize;
-            roomHeight = (newMaxY - newMinY + 1) * scaledTileSize;
-
+        if (player.isOnGround() && (roomWidth != newRoomWidth || roomHeight != newRoomHeight)) {
+            roomWidth = newRoomWidth;
+            roomHeight = newRoomHeight;
             GamePanel.roomTransition();
             roomChanged = true;
             cameraDelayCounter = CAMERADELAY;
         }
 
-        Vector2 targetRoomPosition = new Vector2(
-                (newMinX * scaledTileSize) - (GamePanel.screenWidth / 2 - (double) roomWidth / 2),
-                (newMinY * scaledTileSize) - (GamePanel.screenHeight / 2 - (double) roomHeight / 2)
-        );
+        double targetRoomX = (newMinX * scaledTileSize) - (GamePanel.screenWidth / 2.0 - roomWidth / 2.0);
+        double targetRoomY = (newMinY * scaledTileSize) - (GamePanel.screenHeight / 2.0 - roomHeight / 2.0);
 
-        // Delay camera movement
         if (cameraDelayCounter > 0) {
             cameraDelayCounter--;
         } else if (roomChanged) {
@@ -547,17 +526,28 @@ public class TiledMap {
             oldRoomWidth = roomWidth;
 
             double movementFactor = 0.08;
-            roomScreenPos.x = roomScreenPos.x * (1 - movementFactor) + targetRoomPosition.x * movementFactor;
-            roomScreenPos.y = roomScreenPos.y * (1 - movementFactor) + targetRoomPosition.y * movementFactor;
+            roomScreenPos.x = roomScreenPos.x * (1 - movementFactor) + targetRoomX * movementFactor;
+            roomScreenPos.y = roomScreenPos.y * (1 - movementFactor) + targetRoomY * movementFactor;
 
-            if (Math.abs(roomScreenPos.x - targetRoomPosition.x) < 1 &&
-                    Math.abs(roomScreenPos.y - targetRoomPosition.y) < 1) {
+            if (Math.abs(roomScreenPos.x - targetRoomX) < 1 && Math.abs(roomScreenPos.y - targetRoomY) < 1) {
                 roomChanged = false;
             }
         }
 
         cameraPosition = getCameraPos();
         cameraPosition.add(cameraShakeOffset);
+    }
+
+    /**
+     * Helper to find room boundaries for a given tile position.
+     */
+    private int[] findRoomBounds(int tileX, int tileY) {
+        int newMinX = tileX, newMaxX = tileX, newMinY = tileY, newMaxY = tileY;
+        while (newMinX > 0 && ((Long) roomData.get(tileY * mapWidth + (newMinX - 1))).intValue() != 1) newMinX--;
+        while (newMaxX < mapWidth - 1 && ((Long) roomData.get(tileY * mapWidth + (newMaxX + 1))).intValue() != 1) newMaxX++;
+        while (newMinY > 0 && ((Long) roomData.get((newMinY - 1) * mapWidth + tileX)).intValue() != 1) newMinY--;
+        while (newMaxY < mapHeight - 1 && ((Long) roomData.get((newMaxY + 1) * mapWidth + tileX)).intValue() != 1) newMaxY++;
+        return new int[]{newMinX, newMaxX, newMinY, newMaxY};
     }
 
     /**
@@ -612,27 +602,24 @@ public class TiledMap {
      * @param parallaxFactors double array of parallax factors for each layer
      */
     private void drawParallaxBackground(Graphics2D g2, BufferedImage[] layers, double[] parallaxFactors) {
-
-        int scaledTileSize = (int) (tileSetTileSize * SCALE);
-
+        final int scaledTileSize = getScaledTileSize();
         Vector2 roomScreenPos = getScreenRoomPos();
 
-        double playerTileX = player.getPosition().x / scaledTileSize;
-        double playerTileY = player.getPosition().y / scaledTileSize;
+        final double playerTileX = player.getPosition().x / scaledTileSize;
+        final double playerTileY = player.getPosition().y / scaledTileSize;
+        final double playerDistanceX = playerTileX - minX;
+        final double playerDistanceY = playerTileY - minY;
 
         for (int i = 0; i < layers.length; i++) {
             BufferedImage layer = layers[i];
             double parallaxFactor = parallaxFactors[i];
 
-            double playerDistanceX = playerTileX - minX;
-            double playerDistanceY = playerTileY - minY;
+            double offsetX = roomScreenPos.x - 2 * (playerDistanceX * parallaxFactor);
+            double offsetY = roomScreenPos.y - (playerDistanceY * parallaxFactor);
 
-            roomScreenPos.x = roomScreenPos.x - 2 * (playerDistanceX * parallaxFactor);
-            roomScreenPos.y = roomScreenPos.y - (playerDistanceY * parallaxFactor);
-
-
-            g2.drawImage(layer, (int) roomScreenPos.x - scaledTileSize - 2, (int) roomScreenPos.y - 2 - scaledTileSize,
-                    oldRoomWidth + roomWidth/15 + 2 * scaledTileSize, oldRoomHeight + roomHeight/15 + 2 *scaledTileSize, null);
+            g2.drawImage(layer, (int) offsetX - scaledTileSize - 2, (int) offsetY - 2 - scaledTileSize,
+                         oldRoomWidth + roomWidth / 15 + 2 * scaledTileSize,
+                         oldRoomHeight + roomHeight / 15 + 2 * scaledTileSize, null);
         }
     }
 
@@ -677,26 +664,26 @@ public class TiledMap {
         int endY = Math.min(maxY + 1, (int) ((cameraPosition.y + screenHeight) / scaledTileSize) + 1);
 
         for (int k = 0; k < 23; k++) {
-            // Set alpha only for layer 2
-            if (k == 5) {
-                g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
-            } else if (k == 7) {
-                g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
-                continue;
-            }
+            // Skip unused/transparent layers early
+            if (k == 7) k++;
 
-            BufferedImage tileSetImage = tileSets.get(k);
+            // Set alpha only for layer 5
+            g2.setComposite(k == 5
+                    ? AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha)
+                    : originalComposite);
+
+            VolatileImage tileSetImage = tileSets.get(k);
             int tilesPerRow = tileSetImage.getWidth() / tileSetTileSize;
             int offset = tilesetOffset.get(tileSetImage);
-
             int[][] layer = mapLayers.get(k);
 
             for (int i = startY; i <= endY; i++) {
                 if (i < 0 || i >= mapHeight) continue;
+                int[] row = layer[i];
                 for (int j = startX; j <= endX; j++) {
                     if (j < 0 || j >= mapWidth) continue;
 
-                    int tileId = layer[i][j];
+                    int tileId = row[j];
                     if (tileId == 0) continue;
 
                     boolean flipHorizontally = (tileId & 0x80000000) != 0;
@@ -704,7 +691,7 @@ public class TiledMap {
                     boolean flipDiagonally = (tileId & 0x20000000) != 0;
 
                     int tileIndex = (tileId & 0x1FFFFFFF) - 1 - offset;
-                    if (tileIndex < 0) continue; // skip invalid
+                    if (tileIndex < 0) continue;
 
                     int tileCol = tileIndex % tilesPerRow;
                     int tileRow = tileIndex / tilesPerRow;
@@ -716,7 +703,7 @@ public class TiledMap {
                     g2.translate(tileWorldX - cameraPosition.x + scaledTileSize / 2.0,
                                  tileWorldY - cameraPosition.y + scaledTileSize / 2.0);
 
-                    // Handle flips
+                    // Flipping/rotation logic unchanged
                     if (flipDiagonally) {
                         g2.rotate(Math.PI / 2);
                         if (flipHorizontally && flipVertically) {
