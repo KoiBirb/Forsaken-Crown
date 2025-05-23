@@ -20,13 +20,10 @@ public class Enemy extends Entitys.Entity {
 
     private final Vector2 spawnPos;
     private final int detectionRadiusTiles;
+    private boolean jumpedOut = false;
     private boolean hasStartedChasing = false;
     private long lastJumpTime = 0;
-    private long jumpKeyPressStartTime = 0;
     private static final long JUMP_COOLDOWN_MS = 1000;
-    private static final long MAX_JUMP_DURATION_MS = 200;
-    private static final long COYOTE_TIME = 100;
-    private long lastGroundedTime = 0;
 
     private int spriteCounter = 0;
     private int spriteCol = 0;
@@ -43,6 +40,7 @@ public class Enemy extends Entitys.Entity {
 
         this.spawnPos = new Vector2(pos.x, pos.y);
         this.detectionRadiusTiles = detectionRadiusTiles;
+
         this.spriteSheet = ImageHandler.loadImage("Assets/Images/Enemies/Ghoul/Ghoul Sprite Sheet 62 x 33.png");
         this.image = spriteSheet;
     }
@@ -62,9 +60,6 @@ public class Enemy extends Entitys.Entity {
 
         CollisionHandler.checkTileCollision(this);
         boolean onGround = isOnGround();
-        if (onGround) lastGroundedTime = System.currentTimeMillis();
-
-        long now = System.currentTimeMillis();
 
         if (!closeX && hasStartedChasing && inRadius) {
             velocity.x = Math.signum(dx) * getSpeed();
@@ -73,21 +68,17 @@ public class Enemy extends Entitys.Entity {
             spriteRow = 1;
             maxSpriteCol = 7;
 
-            boolean wantsToJump = SpikeDetectionHandler.isFacingSpike(this) &&
-                    SpikeDetectionHandler.canLandAfterSpike(this);
+            long now = System.currentTimeMillis();
 
-            if (wantsToJump && (onGround || now - lastGroundedTime <= COYOTE_TIME)) {
-                if (jumpKeyPressStartTime == 0 && now - lastJumpTime >= JUMP_COOLDOWN_MS) {
-                    jumpKeyPressStartTime = now;
-                    lastJumpTime = now;
-                }
+            boolean facingSpike = SpikeDetectionHandler.isFacingSpike(position.x, position.y, velocity.x, WIDTH, HEIGHT);
+            boolean canLand = SpikeDetectionHandler.canLandAfterSpike(position.x, position.y, velocity.x, WIDTH, HEIGHT);
 
-                if (jumpKeyPressStartTime > 0 && now - jumpKeyPressStartTime <= MAX_JUMP_DURATION_MS) {
-                    velocity.y = JUMP_FORCE;
-                } else {
-                    jumpKeyPressStartTime = 0;
-                }
+            if (facingSpike && canLand && onGround && !jumpedOut && now - lastJumpTime >= JUMP_COOLDOWN_MS) {
+                velocity.y = JUMP_FORCE;
+                jumpedOut = true;
+                lastJumpTime = now;
             }
+
         } else {
             velocity.x = 0;
             currentState = State.IDLE;
@@ -100,6 +91,7 @@ public class Enemy extends Entitys.Entity {
             velocity.y = Math.min(velocity.y + GRAVITY, TERMINAL_VELOCITY);
         } else {
             velocity.y = 0;
+            jumpedOut = false;
         }
 
         if (currentState == State.WALK) {
