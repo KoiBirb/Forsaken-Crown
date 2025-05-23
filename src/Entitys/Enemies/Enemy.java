@@ -1,105 +1,134 @@
 package Entitys.Enemies;
 
 import Handlers.CollisionHandler;
+import Handlers.ImageHandler;
 import Handlers.Vector2;
+import Handlers.SpikeDetectionHandler;
 import Main.Panels.GamePanel;
 import Map.TiledMap;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public class Enemy extends Entitys.Entity {
-    // Size of the enemy hitbox
-    public static final int WIDTH = 32;
-    public static final int HEIGHT = 32;
+    public static final int WIDTH = 62 * 2;
+    public static final int HEIGHT = 66;
 
-    // Physics constants for jumping and gravity
-    private static final double JUMP_FORCE = -8;
     private static final double GRAVITY = 0.8;
     private static final double TERMINAL_VELOCITY = 12;
+    private static final double JUMP_FORCE = -8;
 
-    private final Vector2 spawnPos; // Original spawn position
-    private final int detectionRadiusTiles; // Range for detecting the player
-    private boolean jumpedOut = false; // Prevent double jumping from same wall
-    private boolean hasStartedChasing = false; // Remember if enemy has ever detected the player
+    private final Vector2 spawnPos;
+    private final int detectionRadiusTiles;
+    private boolean jumpedOut = false;
+    private boolean hasStartedChasing = false;
+    private long lastJumpTime = 0;
+    private static final long JUMP_COOLDOWN_MS = 1000;
 
-    // Constructor
+    private int spriteCounter = 0;
+    private int spriteCol = 0;
+    private int spriteRow = 0;
+    private int maxSpriteCol = 7;
+    private BufferedImage spriteSheet;
+
+    private enum State { IDLE, WALK }
+    private State currentState = State.IDLE;
+
     public Enemy(Vector2 pos, double speed, int detectionRadiusTiles) {
         super(pos, new Vector2(0, 0), WIDTH, HEIGHT, speed,
                 new Rectangle(0, 0, WIDTH, HEIGHT), null, 3, 0);
+
         this.spawnPos = new Vector2(pos.x, pos.y);
         this.detectionRadiusTiles = detectionRadiusTiles;
+
+        this.spriteSheet = ImageHandler.loadImage("Assets/Images/Enemies/Ghoul/Ghoul Sprite Sheet 62 x 33.png");
+        this.image = spriteSheet;
     }
 
     @Override
     public void update() {
         int ts = TiledMap.getScaledTileSize();
-
-        // Determine player's position and distance
         Vector2 playerPos = GamePanel.player.getPosition();
         double distanceX = Math.abs(playerPos.x - spawnPos.x);
         boolean inRadius = distanceX <= detectionRadiusTiles * ts;
 
-        // Begin chasing if the player enters detection range
         if (inRadius) hasStartedChasing = true;
 
-        // Choose target: player if still in range, otherwise return home
         Vector2 target = hasStartedChasing && inRadius ? playerPos : spawnPos;
         double dx = target.x - position.x;
         boolean closeX = Math.abs(dx) <= ts;
 
-        // Check if standing on solid ground
-        boolean onGround = CollisionHandler.onGround(this);
+        CollisionHandler.checkTileCollision(this);
+        boolean onGround = isOnGround();
 
-        // Horizontal movement toward target if not close
-        if (!closeX) {
+        if (!closeX && hasStartedChasing && inRadius) {
             velocity.x = Math.signum(dx) * getSpeed();
             direction = velocity.x < 0 ? "left" : "right";
+            currentState = State.WALK;
+            spriteRow = 1;
+            maxSpriteCol = 7;
 
-            // Check for horizontal obstacles (wall)
-            int checkCol = (int) ((position.x + (velocity.x > 0 ? WIDTH : 0) + velocity.x) / ts);
-            int checkRow = (int) (position.y / ts);
-            boolean blocked = !GamePanel.tileMap.isWalkable(checkCol, checkRow);
+            long now = System.currentTimeMillis();
 
-            if (blocked) {
-                velocity.x = 0;
+            boolean facingSpike = SpikeDetectionHandler.isFacingSpike(position.x, position.y, velocity.x, WIDTH, HEIGHT);
+            boolean canLand = SpikeDetectionHandler.canLandAfterSpike(position.x, position.y, velocity.x, WIDTH, HEIGHT);
 
-                // Jump only if grounded, not already jumped, and space above is clear
-                int aboveRow = (int)((position.y - ts) / ts);
-                if (onGround && !jumpedOut && aboveRow >= 0 && GamePanel.tileMap.isWalkable(checkCol, aboveRow)) {
-                    velocity.y = JUMP_FORCE;
-                    jumpedOut = true;
-                }
-            } else {
-                jumpedOut = false; // Reset jump state once clear
+            if (facingSpike && canLand && onGround && !jumpedOut && now - lastJumpTime >= JUMP_COOLDOWN_MS) {
+                velocity.y = JUMP_FORCE;
+                jumpedOut = true;
+                lastJumpTime = now;
             }
+
         } else {
-            velocity.x = 0; // Stop if close enough to the target
+            velocity.x = 0;
+            currentState = State.IDLE;
+            spriteRow = 0;
+            maxSpriteCol = 0;
+            spriteCol = 0;
         }
 
-        // Apply gravity when in air
         if (!onGround) {
             velocity.y = Math.min(velocity.y + GRAVITY, TERMINAL_VELOCITY);
         } else {
-            if (velocity.y > 0) velocity.y = 0;
+            velocity.y = 0;
+            jumpedOut = false;
         }
-        super.update();
 
-        // Apply movement to position
-        position.y += velocity.y;
+        if (currentState == State.WALK) {
+            spriteCounter++;
+            if (spriteCounter >= 12) {
+                spriteCounter = 0;
+                spriteCol = (spriteCol + 1) % (maxSpriteCol + 1);
+            }
+        }
+
         position.x += velocity.x;
-    }
+        position.y += velocity.y;
 
-    public void hit(int damage, int knockbackX, int knockbackY){}
+        super.update();
+    }
 
     @Override
     public void draw(Graphics2D g2) {
-        // Get camera position and calculate screen coordinates
         Vector2 cam = GamePanel.tileMap.returnCameraPos();
-        int sx = (int) (position.x - cam.x);
-        int sy = (int) (position.y - cam.y);
+        int spriteWidth = 62;
+        int spriteHeight = 33;
 
-        // Draw red rectangle to represent the enemy
-        g2.setColor(Color.RED);
-        g2.fillRect(sx, sy, WIDTH, HEIGHT);
+        int sx = (int) (position.x - cam.x);
+        int sy = (int) (position.y - cam.y - (spriteHeight * 2 - HEIGHT));
+
+        BufferedImage frame = spriteSheet.getSubimage(spriteCol * spriteWidth, spriteRow * spriteHeight, spriteWidth, spriteHeight);
+        int drawWidth = spriteWidth * 2;
+
+        if ("left".equals(direction)) {
+            g2.drawImage(frame, sx + drawWidth, sy, -drawWidth, spriteHeight * 2, null);
+        } else {
+            g2.drawImage(frame, sx, sy, drawWidth, spriteHeight * 2, null);
+        }
+    }
+
+    @Override
+    public void hit(int damage, int knockbackX, int knockbackY) {
+        // Optional: damage logic
     }
 }
