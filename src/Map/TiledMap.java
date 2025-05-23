@@ -83,6 +83,7 @@ public class TiledMap {
 
         // Add each tileset image to the list
         tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Castle of Bones Tileset.png"));
+        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Castle of Bones Tileset.png"));
         tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/DARK Edition Tileset No background.png"));
         tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/DARK Edition Tileset No background.png"));
         tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Blood Temple Tileset.png"));
@@ -95,6 +96,7 @@ public class TiledMap {
         tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/DARK Edition Tileset No background.png"));
         tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/DARK Edition Tileset No background.png"));
         tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Blood Temple Tileset.png"));
+        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Castle of Bones Tileset.png"));
         tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Castle of Bones Tileset.png"));
         tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Castle of Bones Tileset.png"));
         tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Castle of Bones Tileset.png"));
@@ -133,26 +135,28 @@ public class TiledMap {
         try (FileReader reader = new FileReader(mapPath)) {
 
             tilesetOffset.put(tileSets.get(0), 810);
-            tilesetOffset.put(tileSets.get(1), 306);
+            tilesetOffset.put(tileSets.get(1), 810);
             tilesetOffset.put(tileSets.get(2), 306);
-            tilesetOffset.put (tileSets.get(3), 1930);
-            tilesetOffset.put(tileSets.get(4), 2249);
+            tilesetOffset.put(tileSets.get(3), 306);
+            tilesetOffset.put (tileSets.get(4), 1930);
             tilesetOffset.put(tileSets.get(5), 2249);
-            tilesetOffset.put(tileSets.get(6), 0);
-            tilesetOffset.put(tileSets.get(7), 306);
+            tilesetOffset.put(tileSets.get(6), 2249);
+            tilesetOffset.put(tileSets.get(7), 0);
             tilesetOffset.put(tileSets.get(8), 306);
             tilesetOffset.put(tileSets.get(9), 306);
             tilesetOffset.put(tileSets.get(10), 306);
             tilesetOffset.put(tileSets.get(11), 306);
-            tilesetOffset.put(tileSets.get(12), 1930);
-            tilesetOffset.put(tileSets.get(13), 810);
+            tilesetOffset.put(tileSets.get(12), 306);
+            tilesetOffset.put(tileSets.get(13), 1930);
             tilesetOffset.put(tileSets.get(14), 810);
             tilesetOffset.put(tileSets.get(15), 810);
-            tilesetOffset.put (tileSets.get(16), 1930);
-            tilesetOffset.put (tileSets.get(17), 1930);
+            tilesetOffset.put(tileSets.get(16), 810);
+            tilesetOffset.put(tileSets.get(17), 810);
             tilesetOffset.put (tileSets.get(18), 1930);
-            tilesetOffset.put(tileSets.get(19), 2186);
-            tilesetOffset.put(tileSets.get(20), 2186);
+            tilesetOffset.put (tileSets.get(19), 1930);
+            tilesetOffset.put (tileSets.get(20), 1930);
+            tilesetOffset.put(tileSets.get(21), 2186);
+            tilesetOffset.put(tileSets.get(22), 2186);
 
             JSONObject mapData = (JSONObject) parser.parse(reader);
             mapWidth = ((Long) mapData.get("width")).intValue();
@@ -389,8 +393,28 @@ public class TiledMap {
                 }
             }
 
+            layer = (JSONObject) layers.get(21);
+            data = (JSONArray) layer.get("data");
+
+            mapLayers.add(new int[mapHeight][mapWidth]);
+            for (int i = 0; i < mapHeight; i++) {
+                for (int j = 0; j < mapWidth; j++) {
+                    mapLayers.get(21)[i][j] = ((Long) data.get(i * mapWidth + j)).intValue();
+                }
+            }
+
+            layer = (JSONObject) layers.get(22);
+            data = (JSONArray) layer.get("data");
+
+            mapLayers.add(new int[mapHeight][mapWidth]);
+            for (int i = 0; i < mapHeight; i++) {
+                for (int j = 0; j < mapWidth; j++) {
+                    mapLayers.get(22)[i][j] = ((Long) data.get(i * mapWidth + j)).intValue();
+                }
+            }
+
             // Room positions
-            JSONObject roomLayer = (JSONObject) layers.get(21);
+            JSONObject roomLayer = (JSONObject) layers.get(23);
             roomData = (JSONArray) roomLayer.get("data");
 
             minX = mapWidth; minY = mapHeight;
@@ -409,7 +433,7 @@ public class TiledMap {
                 }
             }
 
-            JSONObject collidables = (JSONObject) layers.get(22);
+            JSONObject collidables = (JSONObject) layers.get(24);
             JSONArray collidablesData = (JSONArray) collidables.get("data");
 
             collidablesTiles = new int[mapHeight][mapWidth];
@@ -652,11 +676,11 @@ public class TiledMap {
         int startY = Math.max(minY - 1, (int) (cameraPosition.y / scaledTileSize) - 1);
         int endY = Math.min(maxY + 1, (int) ((cameraPosition.y + screenHeight) / scaledTileSize) + 1);
 
-        for (int k = 0; k < 21; k++) {
+        for (int k = 0; k < 23; k++) {
             // Set alpha only for layer 2
-            if (k == 4) {
+            if (k == 5) {
                 g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
-            } else if (k == 6) {
+            } else if (k == 7) {
                 g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
                 continue;
             }
