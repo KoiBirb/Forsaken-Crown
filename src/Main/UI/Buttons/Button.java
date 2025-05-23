@@ -12,6 +12,7 @@ import Main.UI.UIElement;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.awt.image.VolatileImage;
 
 public class Button extends UIElement {
 
@@ -57,7 +58,7 @@ public class Button extends UIElement {
      * Returns the image of the button
      * @return BufferedImage of the button
      */
-    public BufferedImage getImage() {
+    public VolatileImage getImage() {
         return image;
     }
 

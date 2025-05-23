@@ -11,11 +11,12 @@ import Handlers.ImageHandler;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.awt.image.VolatileImage;
 
 public abstract class UIElement {
 
     protected int x, y, width, height;
-    protected BufferedImage imageGlow, image;
+    protected VolatileImage imageGlow, image;
 
     /**
      * Constructor for UIElement

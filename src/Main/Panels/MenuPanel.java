@@ -16,6 +16,7 @@ import Map.TiledMap;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.awt.image.VolatileImage;
 
 import static Main.Main.keyI;
 import static Main.Panels.GamePanel.player;
@@ -38,8 +39,8 @@ public class MenuPanel extends JPanel implements Runnable{
 
     public static Thread menuThread;
 
-    private BufferedImage[] background;
-    private BufferedImage redCircleBackground, title, helpImage;
+    private VolatileImage[] background;
+    private VolatileImage redCircleBackground, title, helpImage;
 
     private int row, col, count;
 
@@ -68,7 +69,7 @@ public class MenuPanel extends JPanel implements Runnable{
      * Load background images
      */
     private void loadBackground(){
-        background = new BufferedImage[4];
+        background = new VolatileImage[4];
 
         background[0] = ImageHandler.loadImage("Assets/Images/Backgrounds/The Circle Underground/layer 1.png");
         background[1] = ImageHandler.loadImage("Assets/Images/Backgrounds/The Circle Underground/layer 2.png");
@@ -216,7 +217,7 @@ public class MenuPanel extends JPanel implements Runnable{
         float[] parallaxFactors = {1.0f, 0.7f, 0.4f, 0.2f};
 
         for (int i = 0; i < background.length; i++) {
-            BufferedImage bg = background[i];
+            VolatileImage bg = background[i];
             float factor = (i < parallaxFactors.length) ? parallaxFactors[i] : 1.0f;
             int offset = Math.round(baseOffset * factor);
 

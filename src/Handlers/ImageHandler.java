@@ -20,9 +20,9 @@ public class ImageHandler {
      * @param path Path to the image
      * @return BufferedImage of the loaded image
      */
-    public static BufferedImage loadImage(String path) {
+    public static VolatileImage loadImage(String path) {
         try {
-            return toCompatibleImage(ImageIO.read(Objects.requireNonNull(ImageHandler.class.getClassLoader().getResourceAsStream(path))));
+            return createVolatileImage(toCompatibleImage(ImageIO.read(Objects.requireNonNull(ImageHandler.class.getClassLoader().getResourceAsStream(path)))));
         } catch (IOException | NullPointerException e) {
             e.printStackTrace();
             return null;

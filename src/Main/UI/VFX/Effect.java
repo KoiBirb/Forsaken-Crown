@@ -6,10 +6,11 @@ import Main.Panels.GamePanel;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.awt.image.VolatileImage;
 
 public class Effect {
 
-    protected final BufferedImage image;
+    protected final VolatileImage image;
     protected Vector2 position;
 
     protected int spriteCounter, spriteCol, spriteRow, maxSpriteCol;

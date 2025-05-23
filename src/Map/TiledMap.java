@@ -41,7 +41,7 @@ public class TiledMap {
     private int mapHeight;
     private static int tileSetTileSize;
     private JSONArray roomData;
-    private ArrayList<BufferedImage[]> backgrounds;
+    private ArrayList<VolatileImage[]> backgrounds;
     private final HashMap<VolatileImage, Integer> tilesetOffset;
 
     // Camera room switching
@@ -83,29 +83,29 @@ public class TiledMap {
         tilesetOffset = new HashMap<>();
 
         // Add each tileset image to the list
-        tileSets.add(ImageHandler.createVolatileImage(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Castle of Bones Tileset.png")));
-        tileSets.add(ImageHandler.createVolatileImage(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Castle of Bones Tileset.png")));
-        tileSets.add(ImageHandler.createVolatileImage(ImageHandler.loadImage("Assets/Images/Tilesets/Map/DARK Edition Tileset No background.png")));
-        tileSets.add(ImageHandler.createVolatileImage(ImageHandler.loadImage("Assets/Images/Tilesets/Map/DARK Edition Tileset No background.png")));
-        tileSets.add(ImageHandler.createVolatileImage(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Blood Temple Tileset.png")));
-        tileSets.add(ImageHandler.createVolatileImage(ImageHandler.loadImage("Assets/Images/Tilesets/Map/pixil-frame-0 (2).png")));
-        tileSets.add(ImageHandler.createVolatileImage(ImageHandler.loadImage("Assets/Images/Tilesets/Map/pixil-frame-0 (2).png")));
-        tileSets.add(ImageHandler.createVolatileImage(ImageHandler.loadImage("Assets/Images/Tilesets/Map/pixil-frame-0.png")));
-        tileSets.add(ImageHandler.createVolatileImage(ImageHandler.loadImage("Assets/Images/Tilesets/Map/DARK Edition Tileset No background.png")));
-        tileSets.add(ImageHandler.createVolatileImage(ImageHandler.loadImage("Assets/Images/Tilesets/Map/DARK Edition Tileset No background.png")));
-        tileSets.add(ImageHandler.createVolatileImage(ImageHandler.loadImage("Assets/Images/Tilesets/Map/DARK Edition Tileset No background.png")));
-        tileSets.add(ImageHandler.createVolatileImage(ImageHandler.loadImage("Assets/Images/Tilesets/Map/DARK Edition Tileset No background.png")));
-        tileSets.add(ImageHandler.createVolatileImage(ImageHandler.loadImage("Assets/Images/Tilesets/Map/DARK Edition Tileset No background.png")));
-        tileSets.add(ImageHandler.createVolatileImage(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Blood Temple Tileset.png")));
-        tileSets.add(ImageHandler.createVolatileImage(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Castle of Bones Tileset.png")));
-        tileSets.add(ImageHandler.createVolatileImage(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Castle of Bones Tileset.png")));
-        tileSets.add(ImageHandler.createVolatileImage(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Castle of Bones Tileset.png")));
-        tileSets.add(ImageHandler.createVolatileImage(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Castle of Bones Tileset.png")));
-        tileSets.add(ImageHandler.createVolatileImage(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Blood Temple Tileset.png")));
-        tileSets.add(ImageHandler.createVolatileImage(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Blood Temple Tileset.png")));
-        tileSets.add(ImageHandler.createVolatileImage(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Blood Temple Tileset.png")));
-        tileSets.add(ImageHandler.createVolatileImage(ImageHandler.loadImage("Assets/Images/Traps/Spikes 48x16.png")));
-        tileSets.add(ImageHandler.createVolatileImage(ImageHandler.loadImage("Assets/Images/Traps/Spikes 48x16.png")));
+        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Castle of Bones Tileset.png"));
+        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Castle of Bones Tileset.png"));
+        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/DARK Edition Tileset No background.png"));
+        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/DARK Edition Tileset No background.png"));
+        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Blood Temple Tileset.png"));
+        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/pixil-frame-0 (2).png"));
+        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/pixil-frame-0 (2).png"));
+        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/pixil-frame-0.png"));
+        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/DARK Edition Tileset No background.png"));
+        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/DARK Edition Tileset No background.png"));
+        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/DARK Edition Tileset No background.png"));
+        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/DARK Edition Tileset No background.png"));
+        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/DARK Edition Tileset No background.png"));
+        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Blood Temple Tileset.png"));
+        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Castle of Bones Tileset.png"));
+        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Castle of Bones Tileset.png"));
+        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Castle of Bones Tileset.png"));
+        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Castle of Bones Tileset.png"));
+        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Blood Temple Tileset.png"));
+        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Blood Temple Tileset.png"));
+        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Blood Temple Tileset.png"));
+        tileSets.add(ImageHandler.loadImage("Assets/Images/Traps/Spikes 48x16.png"));
+        tileSets.add(ImageHandler.loadImage("Assets/Images/Traps/Spikes 48x16.png"));
 
         loadMap();
         loadBackgrounds();
@@ -118,7 +118,7 @@ public class TiledMap {
         backgrounds = new ArrayList<>();
 
         // The columns
-        BufferedImage[] backgroundLayers = new BufferedImage[4];
+        VolatileImage[] backgroundLayers = new VolatileImage[4];
         backgroundLayers[0] = ImageHandler.loadImage("Assets/Images/Backgrounds/Beneath Parallax/background.png");
         backgroundLayers[1] = ImageHandler.loadImage("Assets/Images/Backgrounds/Beneath Parallax/bridge.png");
         backgroundLayers[2] = ImageHandler.loadImage("Assets/Images/Backgrounds/Beneath Parallax/cages.png");
@@ -601,7 +601,7 @@ public class TiledMap {
      * @param layers BufferedImage array of background layers
      * @param parallaxFactors double array of parallax factors for each layer
      */
-    private void drawParallaxBackground(Graphics2D g2, BufferedImage[] layers, double[] parallaxFactors) {
+    private void drawParallaxBackground(Graphics2D g2, VolatileImage[] layers, double[] parallaxFactors) {
         final int scaledTileSize = getScaledTileSize();
         Vector2 roomScreenPos = getScreenRoomPos();
 
@@ -611,7 +611,7 @@ public class TiledMap {
         final double playerDistanceY = playerTileY - minY;
 
         for (int i = 0; i < layers.length; i++) {
-            BufferedImage layer = layers[i];
+            VolatileImage layer = layers[i];
             double parallaxFactor = parallaxFactors[i];
 
             double offsetX = roomScreenPos.x - 2 * (playerDistanceX * parallaxFactor);

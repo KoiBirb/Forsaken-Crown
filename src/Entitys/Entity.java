@@ -11,6 +11,7 @@ import Handlers.Vector2;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.awt.image.VolatileImage;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -31,7 +32,7 @@ public abstract class Entity {
     protected Rectangle solidArea;
     protected String direction;
     protected HashMap<String, Double> directionToRad;
-    protected BufferedImage image;
+    protected VolatileImage image;
     protected Vector2 position, velocity;
 
     /**
@@ -46,7 +47,7 @@ public abstract class Entity {
      * @param maxHealth Maximum health of the entity
      * @param maxMana Maximum mana of the entity
      */
-    public Entity(Vector2 position, Vector2 velocity, int width, int height, double speed, Rectangle solidArea, BufferedImage image, int maxHealth, int maxMana) {
+    public Entity(Vector2 position, Vector2 velocity, int width, int height, double speed, Rectangle solidArea, VolatileImage image, int maxHealth, int maxMana) {
         this.position = position;
         this.velocity = velocity;
         this.width = width;
