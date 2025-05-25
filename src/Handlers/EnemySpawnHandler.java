@@ -1,7 +1,7 @@
 package Handlers;
 
 import Entitys.Enemies.Enemy;
-import Main.Panels.GamePanel;
+import Entitys.Enemies.Ghoul;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -15,15 +15,13 @@ public class EnemySpawnHandler {
      * Spawns enemies at game start
      */
     public static void setup() {
-        Vector2 p = GamePanel.player.getPosition();
-        int ts = GamePanel.tileMap.getScaledTileSize();
 
         // Spawn enemy 16 tiles to the right of the player, placed on the same Y-level
-        double spawnX = p.x + 16 * ts;
-        double spawnY = ((int)((p.y + ts + 120) / ts)) * ts - Enemy.HEIGHT;
+        double spawnX = 400;
+        double spawnY = 100;
 
         enemies.clear(); // Remove existing enemies
-        enemies.add(new Enemy(new Vector2(spawnX, spawnY), 1, 8)); // Add new one
+        enemies.add(new Ghoul(new Vector2(spawnX, spawnY), 1, 8)); // Add new one
     }
 
     /**
