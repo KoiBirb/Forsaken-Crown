@@ -1,5 +1,6 @@
 package Entitys.Enemies;
 
+import Attacks.MeleeAttacks.MeleeAttack;
 import Handlers.Vector2;
 import Main.Panels.GamePanel;
 import Map.TiledMap;
@@ -26,9 +27,6 @@ public abstract class Enemy extends Entitys.Entity {
     protected int spriteCol = 0;
     protected int spriteRow = 0;
     protected int maxSpriteCol = 7;
-
-    protected enum State { IDLE, WALK }
-    protected State currentState = State.IDLE;
 
     public Enemy(Vector2 pos, double speed, int detectionRadiusTiles, int width, int height, int health, Rectangle solidArea) {
         super(pos, new Vector2(0, 0), width, height, speed,
@@ -76,9 +74,6 @@ public abstract class Enemy extends Entitys.Entity {
 
     @Override
     public abstract void draw(Graphics2D g2);
-
-    @Override
-    public abstract void hit(int damage, int knockbackX, int knockbackY);
 
     public void death(){
         GamePanel.enemies.remove(this);

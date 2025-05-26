@@ -7,14 +7,12 @@
 
 package Entitys;
 
+import Attacks.MeleeAttacks.MeleeAttack;
 import Handlers.Vector2;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.awt.image.VolatileImage;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
 
 public abstract class Entity {
 
@@ -28,7 +26,7 @@ public abstract class Entity {
     protected int solidAreaOffsetX, solidAreaOffsetY;
     protected boolean knockedBack;
 
-    protected boolean invincible;
+    protected boolean hit;
     private Point currentTrap;
     protected Rectangle solidArea;
     protected String direction;
@@ -163,6 +161,14 @@ public abstract class Entity {
         return direction;
     }
 
+    public Vector2 getSolidAreaCenter() {
+        Rectangle solid = getSolidArea();
+        return new Vector2(
+                solid.x + solid.width / 2.0,
+                solid.y + solid.height / 2.0
+        );
+    }
+
     /**
      * Sets entity's collision state
      */
@@ -242,8 +248,8 @@ public abstract class Entity {
         return onGround;
     }
 
-    public boolean isInvincible() {
-        return invincible;
+    public boolean isHit() {
+        return hit;
     }
 
     public boolean isDead() {

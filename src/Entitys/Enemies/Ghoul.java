@@ -1,5 +1,6 @@
 package Entitys.Enemies;
 
+import Attacks.MeleeAttacks.MeleeAttack;
 import Handlers.CollisionHandler;
 import Handlers.ImageHandler;
 import Handlers.Vector2;
@@ -13,40 +14,42 @@ import java.awt.image.VolatileImage;
 
 public class Ghoul extends Enemy {
 
+    protected enum State { IDLE, WALK, DAMAGED}
+    protected State currentState = State.IDLE;
     private double visionRadius = 200;
 
-    public Ghoul(Vector2 pos, int detectionRadiusTiles) {
-        super(pos, 1, detectionRadiusTiles, 62, 33, 3,  new Rectangle(0, (int) 0, 20, 40));
+    public Ghoul(Vector2 pos) {
+        super(pos, 1, 8, 62, 33, 100,  new Rectangle(0, 0, 20, 40));
 
         this.image = ImageHandler.loadImage("Assets/Images/Enemies/Ghoul/Ghoul Sprite Sheet 62 x 33.png");
     }
 
     public void update() {
         int ts = TiledMap.getScaledTileSize();
-        Vector2 playerPos = GamePanel.player.getPosition();
+        Vector2 playerPos = GamePanel.player.getSolidAreaCenter();
+        Vector2 currentPos = getSolidAreaCenter();
 
-        // 1. Room check
-        int myRoom = TiledMap.getRoomId(position.x, position.y);
+        //room check
+        int myRoom = TiledMap.getRoomId(currentPos.x, currentPos.y);
         int playerRoom = TiledMap.getPlayerRoomId();
         boolean inSameRoom = myRoom == playerRoom;
 
-        // 2. Circular vision range
-        double dist = position.distanceTo(playerPos);
+        // los
+        double dist = currentPos.distanceTo(playerPos);
         boolean inVision = dist <= visionRadius;
 
-        // 3. Line of sight
-        boolean canSeePlayer = inSameRoom && inVision && hasLineOfSight(position, playerPos);
+        boolean canSeePlayer = inSameRoom && inVision && hasLineOfSight(currentPos, playerPos);
 
         if (canSeePlayer) hasStartedChasing = true;
 
         Vector2 target = hasStartedChasing && canSeePlayer ? playerPos : spawnPos;
-        double dx = target.x - position.x;
+        double dx = target.x - currentPos.x;
         boolean closeX = Math.abs(dx) <= ts;
 
         CollisionHandler.checkTileCollision(this);
         boolean onGround = isOnGround();
 
-        if (!closeX && hasStartedChasing && canSeePlayer) {
+        if (!closeX && hasStartedChasing && canSeePlayer && !hit) {
             velocity.x = Math.signum(dx) * getSpeed();
             direction = velocity.x < 0 ? "left" : "right";
             currentState = State.WALK;
@@ -55,8 +58,8 @@ public class Ghoul extends Enemy {
 
             long now = System.currentTimeMillis();
 
-            boolean facingSpike = SpikeDetectionHandler.isFacingSpike(position.x, position.y, velocity.x, WIDTH, HEIGHT);
-            boolean canLand = SpikeDetectionHandler.canLandAfterSpike(position.x, position.y, velocity.x, WIDTH, HEIGHT);
+            boolean facingSpike = SpikeDetectionHandler.isFacingSpike(currentPos.x, currentPos.y, velocity.x, WIDTH, HEIGHT);
+            boolean canLand = SpikeDetectionHandler.canLandAfterSpike(currentPos.x, currentPos.y, velocity.x, WIDTH, HEIGHT);
 
             if (facingSpike && canLand && onGround && !jumpedOut && now - lastJumpTime >= JUMP_COOLDOWN_MS) {
                 velocity.y = JUMP_FORCE;
@@ -64,7 +67,7 @@ public class Ghoul extends Enemy {
                 lastJumpTime = now;
             }
 
-        } else {
+        } else if (!hit) {
             velocity.x = 0;
             currentState = State.IDLE;
             spriteRow = 0;
@@ -79,16 +82,20 @@ public class Ghoul extends Enemy {
             jumpedOut = false;
         }
 
-        if (currentState == State.WALK) {
+        if (currentState != State.IDLE) {
             spriteCounter++;
-            if (spriteCounter >= 12) {
+            if (spriteCounter >= 10) {
                 spriteCounter = 0;
-                spriteCol = (spriteCol + 1) % (maxSpriteCol + 1);
+                spriteCol++;
+            } if (spriteCol >= maxSpriteCol) {
+                if (!hit)
+                    spriteCol = 0;
+                else {
+                    spriteCol = 3;
+                    hit = false;
+                }
             }
         }
-
-        position.x += velocity.x;
-        position.y += velocity.y;
 
         super.update();
     }
@@ -126,20 +133,21 @@ public class Ghoul extends Enemy {
         // Draw vision radius
         g2.setColor(new Color(0, 0, 255, 64));
         int r = (int) visionRadius;
-        g2.drawOval((int) (position.x - r - cam.x), (int) (position.y - r - cam.y), r * 2, r * 2);
+        Vector2 center = getSolidAreaCenter();
+        g2.drawOval((int) (center.x - r - cam.x), (int) (center.y - r - cam.y), r * 2, r * 2);
 
-        // Draw line to player if in same room
-        Vector2 playerPos = GamePanel.player.getPosition();
-        int myRoom = TiledMap.getRoomId(position.x, position.y);
+        // Draw line to player using solid area centers
+        Vector2 playerCenter = GamePanel.player.getSolidAreaCenter();
+        int myRoom = TiledMap.getRoomId(center.x, center.y);
         int playerRoom = TiledMap.getPlayerRoomId();
         boolean inSameRoom = myRoom == playerRoom;
-        boolean inVision = position.distanceTo(playerPos) <= visionRadius;
-        boolean canSee = inSameRoom && inVision && hasLineOfSight(position, playerPos);
+        boolean inVision = center.distanceTo(playerCenter) <= visionRadius;
+        boolean canSee = inSameRoom && inVision && hasLineOfSight(center, playerCenter);
 
         g2.setColor(canSee ? Color.GREEN : Color.RED);
         g2.drawLine(
-            (int) (position.x - cam.x), (int) (position.y - cam.y),
-            (int) (playerPos.x - cam.x), (int) (playerPos.y - cam.y)
+                (int) (center.x - cam.x), (int) (center.y - cam.y),
+                (int) (playerCenter.x - cam.x), (int) (playerCenter.y - cam.y)
         );
 
         // Optionally: draw bounding box
@@ -148,21 +156,40 @@ public class Ghoul extends Enemy {
         g2.drawRect((int) (solid.x - cam.x), (int) (solid.y - cam.y), solid.width, solid.height);
     }
 
-    @Override
     public void hit(int damage, int knockbackX, int knockbackY) {
-        currentHealth -= damage;
-        if (currentHealth <= 0) {
-            death();
-        } else {
+        if (!hit){
+            currentHealth -= damage;
+
+            Vector2 ghoulCenter = getSolidAreaCenter();
+            Vector2 playerCenter = GamePanel.player.getSolidAreaCenter();
+
+            if (ghoulCenter.x > playerCenter.x) {
+                knockbackX = -Math.abs(knockbackX);
+            } else {
+                knockbackX = Math.abs(knockbackX);
+            }
+
             velocity.x += knockbackX;
             velocity.y += knockbackY;
             position.x += knockbackX;
             position.y += knockbackY;
+
             if (velocity.x > 0) {
                 direction = "right";
             } else if (velocity.x < 0) {
                 direction = "left";
             }
+
+            spriteRow = 3;
+            spriteCol = 0;
+            maxSpriteCol = 3;
+
+            currentState = State.DAMAGED;
+            hit = true;
+        }
+
+        if (currentHealth <= 0) {
+            death();
         }
     }
 }

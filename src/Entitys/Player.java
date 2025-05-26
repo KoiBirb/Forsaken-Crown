@@ -21,7 +21,7 @@ import static Main.Main.keyI;
 
 public class Player extends Entity {
 
-    private boolean attacking, chain, healing, dashing, spawning, death, damaged, flip;
+    private boolean attacking, chain, healing, dashing, spawning, death, flip;
     private int spriteCounter, spriteRow, spriteCol, maxSpriteCol, lastSpriteRow;
 
     private final int coyoteTime;
@@ -101,7 +101,7 @@ public class Player extends Entity {
                 }
 
                 // Jumping
-                if (keyI.wPressed && !healing && !damaged) {
+                if (keyI.wPressed && !healing && !hit) {
                     if (jump && (onGround || System.currentTimeMillis() - lastGroundedTime <= coyoteTime) && jumpKeyPressStartTime == 0) {
                         jumpKeyPressStartTime = System.currentTimeMillis();
                         jump = false;
@@ -120,7 +120,7 @@ public class Player extends Entity {
                     jump = true;
                 }
 
-                if (keyI.wPressed && continuousJump && !keyI.iPressed && !damaged) {
+                if (keyI.wPressed && continuousJump && !keyI.iPressed && !hit) {
                     velocity.y = -8;
                     isColliding = false;
 
@@ -128,16 +128,16 @@ public class Player extends Entity {
                         spriteRow = 13;
                         maxSpriteCol = 2;
                     }
-                } else if (!onGround && spriteCol == maxSpriteCol && !attacking && !dashing && !damaged && velocity.y < 6) {
+                } else if (!onGround && spriteCol == maxSpriteCol && !attacking && !dashing && !hit && velocity.y < 6) {
                     spriteRow = 14;
                     maxSpriteCol = 3;
-                } else if (!onGround && velocity.y > 6 && !attacking && !dashing && !damaged) {
+                } else if (!onGround && velocity.y > 6 && !attacking && !dashing && !hit) {
                     spriteRow = 15;
                     maxSpriteCol = 2;
                 }
 
                 // Dashing
-                if (keyI.kPressed && !dashing && System.currentTimeMillis() - lastDashTime >= 1000 && currentMana > 0 && !damaged && !spawning) {
+                if (keyI.kPressed && !dashing && System.currentTimeMillis() - lastDashTime >= 1000 && currentMana > 0 && !hit && !spawning) {
                     dashing = true;
                     dashStartTime = System.currentTimeMillis();
                     lastDashTime = dashStartTime;
@@ -165,7 +165,7 @@ public class Player extends Entity {
                 }
 
                 // Attacking
-                if (keyI.uPressed && !keyI.iPressed && !damaged) {
+                if (keyI.uPressed && !keyI.iPressed && !hit) {
                     long currentTime = System.currentTimeMillis();
                     if (!attacking) {
                         if (!dashing) {
@@ -199,7 +199,7 @@ public class Player extends Entity {
                     }
                 }
 
-                if (keyI.jPressed && !attacking && !keyI.iPressed && !damaged) {
+                if (keyI.jPressed && !attacking && !keyI.iPressed && !hit) {
                     long currentTime = System.currentTimeMillis();
                     if (currentTime - lastHeavyAttackTime >= PlayerHeavyAttack.getCooldown()) {
                         if (dashing) {
@@ -219,7 +219,7 @@ public class Player extends Entity {
                 }
 
                 // Healing
-                if (keyI.iPressed && onGround && !healing && !damaged) {
+                if (keyI.iPressed && onGround && !healing && !hit) {
                     if (healStartTime == 0) {
                         healStartTime = System.currentTimeMillis();
                         MusicHandler.healCharge();
@@ -254,7 +254,7 @@ public class Player extends Entity {
                 }
 
                 // movement
-                if ((keyI.aPressed || keyI.dPressed) && !(keyI.iPressed && onGround) && !healing && !dashing && !damaged) {
+                if ((keyI.aPressed || keyI.dPressed) && !(keyI.iPressed && onGround) && !healing && !dashing && !hit) {
                     if (onGround && !continuousJump && !attacking) {
                         maxSpriteCol = 7;
                         spriteRow = 3;
@@ -277,7 +277,7 @@ public class Player extends Entity {
                 } else {
                     MusicHandler.stopFootsteps();
 
-                    if (onGround && !continuousJump && !attacking && !healing && !dashing && !spawning && !damaged) {
+                    if (onGround && !continuousJump && !attacking && !healing && !dashing && !spawning && !hit) {
                         spriteRow = 1;
                         maxSpriteCol = 8;
                     }
@@ -351,8 +351,8 @@ public class Player extends Entity {
                         flip = false;
                     }
 
-                    if (damaged) {
-                        damaged = false;
+                    if (hit) {
+                        hit = false;
                         spriteCol = 0;
                     }
 
@@ -447,7 +447,7 @@ public class Player extends Entity {
      * Activates a player damaged state
      */
     public void hit(int damage, int knockbackX, int knockbackY) {
-        if (currentHealth > 0 && !damaged) {
+        if (currentHealth > 0 && !hit) {
             spriteRow = 25;
             maxSpriteCol = 1;
             currentHealth -= damage;
@@ -458,7 +458,7 @@ public class Player extends Entity {
 
             flip = knockbackX > 0;
 
-            damaged = true;
+            hit = true;
 
             MusicHandler.playerDamaged();
         }

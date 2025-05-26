@@ -241,7 +241,7 @@ public class CollisionHandler {
     }
 
     public static boolean attackCollision (MeleeAttack m, Entity e) {
-        return m.getHitBox() != null && m.getHitBox().intersects(e.getSolidArea()) && !e.isInvincible() && !e.isDead();
+        return m.getHitBox() != null && m.getHitBox().intersects(e.getSolidArea()) && !e.isHit() && !e.isDead();
     }
 
     /**

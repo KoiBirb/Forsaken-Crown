@@ -18,7 +18,7 @@ public class EnemySpawnHandler {
         double spawnY = 100;
 
         GamePanel.enemies.clear(); // Remove existing enemies
-        GamePanel.enemies.add(new Ghoul(new Vector2(spawnX, spawnY), 8)); // Add new one
+        GamePanel.enemies.add(new Ghoul(new Vector2(spawnX, spawnY)));
     }
 
     /**
