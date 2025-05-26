@@ -6,6 +6,7 @@
  */
 package Handlers;
 
+import Attacks.MeleeAttacks.MeleeAttack;
 import Entitys.Entity;
 import Main.Panels.GamePanel;
 import Main.UI.VFX.Hit;
@@ -17,7 +18,7 @@ import static Main.Main.keyI;
 
 public class CollisionHandler {
 
-    private static int[][] collidableTiles;
+    public static int[][] collidableTiles;
 
     /**
      * Checks for a tile collision with the given entity.
@@ -239,33 +240,8 @@ public class CollisionHandler {
         }
     }
 
-    /**
-     * Checks if the entity is on the ground.
-     * @param entity The entity to check.
-     * @return True if the entity is on the ground, false otherwise.
-     */
-    public static boolean onGround(Entity entity) {
-        try {
-            double entityTopWorldY = entity.getPosition().y + (entity.getSolidArea().y - entity.getPosition().y) / 2;
-            double entityBottomWorldY = entityTopWorldY + entity.getSolidArea().height;
-            double entityLeftWorldX = entity.getPosition().x + (entity.getSolidArea().x - entity.getPosition().x) / 2;
-            double entityRightWorldX = entityLeftWorldX + entity.getSolidArea().width;
-
-            int entityLeftCol = (int) (entityLeftWorldX / TiledMap.getScaledTileSize());
-            int entityRightCol = (int) (entityRightWorldX / TiledMap.getScaledTileSize());
-
-            int entityBottomRow = (int) ((entityBottomWorldY + entity.getSpeed()) / TiledMap.getScaledTileSize());
-            int tileNum1 = collidableTiles[entityBottomRow][entityLeftCol];
-            int tileNum2 = collidableTiles[entityBottomRow][entityRightCol];
-
-            return ((tileNum1 == 1 || tileNum1 == 4) || (tileNum2 == 1 || tileNum2 == 4))
-                    && tileNum1 != 6 && tileNum2 != 6;
-        } catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println("Player out of bounds: " + e.getMessage());
-            entity.getPosition().x = 100;
-            entity.getPosition().y = 100;
-            return true;
-        }
+    public static boolean attackCollision (MeleeAttack m, Entity e) {
+        return m.getHitBox() != null && m.getHitBox().intersects(e.getSolidArea()) && !e.isInvincible() && !e.isDead();
     }
 
     /**

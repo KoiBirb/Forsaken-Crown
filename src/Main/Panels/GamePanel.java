@@ -37,6 +37,7 @@ public class GamePanel extends JPanel implements Runnable{
     public static UIManager ui = new UIManager();
 
     public static ArrayList<MeleeAttack> meleeAttacks = new ArrayList<>();
+    public static ArrayList<Enemy> enemies = new ArrayList<>();
     public static ArrayList<Effect> effects = new ArrayList<>();
 
     // Room change effect
@@ -143,6 +144,14 @@ public class GamePanel extends JPanel implements Runnable{
             effects.get(i).update();
         }
 
+        for (int i = 0; i < enemies.size(); i++) {
+            for (int j = 0; j < meleeAttacks.size(); j++) {
+                if (CollisionHandler.attackCollision(meleeAttacks.get(j), enemies.get(i))) {
+                    enemies.get(i).hit(meleeAttacks.get(j).getDamage(), 5, 5);
+                }
+            }
+        }
+
         // Fading
         if (fading) {
             if (fadeIn) {
@@ -151,6 +160,7 @@ public class GamePanel extends JPanel implements Runnable{
                     fadeAlpha = 1.0;
                     fadeIn = false;
                     fadeDelayCounter = fadeDelay;
+                    tileMap.updatePlayerRoom();
                 }
             } else if (fadeDelayCounter > 0) {
                 fadeDelayCounter--;

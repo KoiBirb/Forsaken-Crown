@@ -74,6 +74,14 @@ public abstract class MeleeAttack {
     public static int getCooldown() {
         return cooldown;
     }
+
+    public Rectangle getHitBox() {
+        return hitBox;
+    }
+
+    public int getDamage() {
+        return damage;
+    }
 }
 
 

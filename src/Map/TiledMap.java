@@ -10,7 +10,6 @@ package Map;
 
     import java.awt.*;
     import java.awt.geom.AffineTransform;
-    import java.awt.image.BufferedImage;
     import java.awt.image.VolatileImage;
     import java.io.FileNotFoundException;
     import java.io.FileReader;
@@ -43,6 +42,9 @@ public class TiledMap {
     private JSONArray roomData;
     private ArrayList<VolatileImage[]> backgrounds;
     private final HashMap<VolatileImage, Integer> tilesetOffset;
+    private int[][] roomIds;
+    private int nextRoomId = 1;
+    private int activeRoomId = -1;
 
     // Camera room switching
     private final int CAMERADELAY = 10;
@@ -111,6 +113,43 @@ public class TiledMap {
         loadBackgrounds();
     }
 
+    private void assignRoomIds() {
+        roomIds = new int[mapHeight][mapWidth];
+        boolean[][] visited = new boolean[mapHeight][mapWidth];
+
+        for (int y = 0; y < mapHeight; y++) {
+            for (int x = 0; x < mapWidth; x++) {
+                int tile = ((Long) roomData.get(y * mapWidth + x)).intValue();
+                if (tile == 0 && !visited[y][x]) {
+                    floodFillRoom(x, y, nextRoomId++, visited);
+                }
+            }
+        }
+    }
+
+    private void floodFillRoom(int startX, int startY, int roomId, boolean[][] visited) {
+        int[] dx = {0, 1, 0, -1};
+        int[] dy = {-1, 0, 1, 0};
+        java.util.Queue<int[]> queue = new java.util.LinkedList<>();
+        queue.add(new int[]{startX, startY});
+        visited[startY][startX] = true;
+        roomIds[startY][startX] = roomId;
+
+        while (!queue.isEmpty()) {
+            int[] pos = queue.poll();
+            int x = pos[0], y = pos[1];
+            for (int d = 0; d < 4; d++) {
+                int nx = x + dx[d], ny = y + dy[d];
+                if (nx >= 0 && nx < mapWidth && ny >= 0 && ny < mapHeight &&
+                        !visited[ny][nx] && ((Long) roomData.get(ny * mapWidth + nx)).intValue() == 0) {
+                    visited[ny][nx] = true;
+                    roomIds[ny][nx] = roomId;
+                    queue.add(new int[]{nx, ny});
+                }
+            }
+        }
+    }
+
     /**
      * Loads the background images for the map.
      */
@@ -165,252 +204,18 @@ public class TiledMap {
             tileSetTileSize = ((Long) mapData.get("tilewidth")).intValue();
 
             JSONArray layers = (JSONArray) mapData.get("layers");
+            JSONObject layer;
+            JSONArray data;
 
-            // castle bones background
-            JSONObject layer = (JSONObject) layers.getFirst();
-            JSONArray data = (JSONArray) layer.get("data");
+            for (int x = 0; x < 23; x++) {
+                layer = (JSONObject) layers.get(x);
+                data = (JSONArray) layer.get("data");
 
-            mapLayers.add(new int[mapHeight][mapWidth]);
-            for (int i = 0; i < mapHeight; i++) {
-                for (int j = 0; j < mapWidth; j++) {
-                    mapLayers.getFirst()[i][j] = ((Long) data.get(i * mapWidth + j)).intValue();
-                }
-            }
-
-            // dark background
-            layer = (JSONObject) layers.get(1);
-            data = (JSONArray) layer.get("data");
-
-            mapLayers.add(new int[mapHeight][mapWidth]);
-            for (int i = 0; i < mapHeight; i++) {
-                for (int j = 0; j < mapWidth; j++) {
-                    mapLayers.get(1)[i][j] = ((Long) data.get(i * mapWidth + j)).intValue();
-                }
-            }
-
-            // dark background
-            layer = (JSONObject) layers.get(2);
-            data = (JSONArray) layer.get("data");
-
-            mapLayers.add(new int[mapHeight][mapWidth]);
-            for (int i = 0; i < mapHeight; i++) {
-                for (int j = 0; j < mapWidth; j++) {
-                    mapLayers.get(2)[i][j] = ((Long) data.get(i * mapWidth + j)).intValue();
-                }
-            }
-
-            // blood temp background
-            layer = (JSONObject) layers.get(3);
-            data = (JSONArray) layer.get("data");
-
-            mapLayers.add(new int[mapHeight][mapWidth]);
-            for (int i = 0; i < mapHeight; i++) {
-                for (int j = 0; j < mapWidth; j++) {
-                    mapLayers.get(3)[i][j] = ((Long) data.get(i * mapWidth + j)).intValue();
-                }
-            }
-
-            // glow
-            layer = (JSONObject) layers.get(4);
-            data = (JSONArray) layer.get("data");
-
-            mapLayers.add(new int[mapHeight][mapWidth]);
-            for (int i = 0; i < mapHeight; i++) {
-                for (int j = 0; j < mapWidth; j++) {
-                    mapLayers.get(4)[i][j] = ((Long) data.get(i * mapWidth + j)).intValue();
-                }
-            }
-
-            // door glow layer
-            layer = (JSONObject) layers.get(5);
-            data = (JSONArray) layer.get("data");
-
-            mapLayers.add(new int[mapHeight][mapWidth]);
-            for (int i = 0; i < mapHeight; i++) {
-                for (int j = 0; j < mapWidth; j++) {
-                    mapLayers.get(5)[i][j] = ((Long) data.get(i * mapWidth + j)).intValue();
-                }
-            }
-
-            // base tile layer
-            layer = (JSONObject) layers.get(6);
-            data = (JSONArray) layer.get("data");
-
-            mapLayers.add(new int[mapHeight][mapWidth]);
-            for (int i = 0; i < mapHeight; i++) {
-                for (int j = 0; j < mapWidth; j++) {
-                    mapLayers.get(6)[i][j] = ((Long) data.get(i * mapWidth + j)).intValue();
-                }
-            }
-
-            // dark edition tile layer
-            layer = (JSONObject) layers.get(7);
-            data = (JSONArray) layer.get("data");
-
-            mapLayers.add(new int[mapHeight][mapWidth]);
-            for (int i = 0; i < mapHeight; i++) {
-                for (int j = 0; j < mapWidth; j++) {
-                    mapLayers.get(7)[i][j] = ((Long) data.get(i * mapWidth + j)).intValue();
-                }
-            }
-
-            // dark edition tile layer
-            layer = (JSONObject) layers.get(8);
-            data = (JSONArray) layer.get("data");
-
-            mapLayers.add(new int[mapHeight][mapWidth]);
-            for (int i = 0; i < mapHeight; i++) {
-                for (int j = 0; j < mapWidth; j++) {
-                    mapLayers.get(8)[i][j] = ((Long) data.get(i * mapWidth + j)).intValue();
-                }
-            }
-
-            // dark edition tile layer
-            layer = (JSONObject) layers.get(9);
-            data = (JSONArray) layer.get("data");
-
-            mapLayers.add(new int[mapHeight][mapWidth]);
-            for (int i = 0; i < mapHeight; i++) {
-                for (int j = 0; j < mapWidth; j++) {
-                    mapLayers.get(9)[i][j] = ((Long) data.get(i * mapWidth + j)).intValue();
-                }
-            }
-
-            // dark edition tile layer
-            layer = (JSONObject) layers.get(10);
-            data = (JSONArray) layer.get("data");
-
-            mapLayers.add(new int[mapHeight][mapWidth]);
-            for (int i = 0; i < mapHeight; i++) {
-                for (int j = 0; j < mapWidth; j++) {
-                    mapLayers.get(10)[i][j] = ((Long) data.get(i * mapWidth + j)).intValue();
-                }
-            }
-
-            // dark edition tile layer
-            layer = (JSONObject) layers.get(11);
-            data = (JSONArray) layer.get("data");
-
-            mapLayers.add(new int[mapHeight][mapWidth]);
-            for (int i = 0; i < mapHeight; i++) {
-                for (int j = 0; j < mapWidth; j++) {
-                    mapLayers.get(11)[i][j] = ((Long) data.get(i * mapWidth + j)).intValue();
-                }
-            }
-
-            // blood
-            layer = (JSONObject) layers.get(12);
-            data = (JSONArray) layer.get("data");
-
-            mapLayers.add(new int[mapHeight][mapWidth]);
-            for (int i = 0; i < mapHeight; i++) {
-                for (int j = 0; j < mapWidth; j++) {
-                    mapLayers.get(12)[i][j] = ((Long) data.get(i * mapWidth + j)).intValue();
-                }
-            }
-
-            // bones 1
-            layer = (JSONObject) layers.get(13);
-            data = (JSONArray) layer.get("data");
-
-            mapLayers.add(new int[mapHeight][mapWidth]);
-            for (int i = 0; i < mapHeight; i++) {
-                for (int j = 0; j < mapWidth; j++) {
-                    mapLayers.get(13)[i][j] = ((Long) data.get(i * mapWidth + j)).intValue();
-                }
-            }
-
-            // bones 2
-            layer = (JSONObject) layers.get(14);
-            data = (JSONArray) layer.get("data");
-
-            mapLayers.add(new int[mapHeight][mapWidth]);
-            for (int i = 0; i < mapHeight; i++) {
-                for (int j = 0; j < mapWidth; j++) {
-                    mapLayers.get(14)[i][j] = ((Long) data.get(i * mapWidth + j)).intValue();
-                }
-            }
-
-            // bones
-            layer = (JSONObject) layers.get(15);
-            data = (JSONArray) layer.get("data");
-
-            mapLayers.add(new int[mapHeight][mapWidth]);
-            for (int i = 0; i < mapHeight; i++) {
-                for (int j = 0; j < mapWidth; j++) {
-                    mapLayers.get(15)[i][j] = ((Long) data.get(i * mapWidth + j)).intValue();
-                }
-            }
-
-            layer = (JSONObject) layers.get(16);
-            data = (JSONArray) layer.get("data");
-
-            mapLayers.add(new int[mapHeight][mapWidth]);
-            for (int i = 0; i < mapHeight; i++) {
-                for (int j = 0; j < mapWidth; j++) {
-                    mapLayers.get(16)[i][j] = ((Long) data.get(i * mapWidth + j)).intValue();
-                }
-            }
-
-            layer = (JSONObject) layers.get(17);
-            data = (JSONArray) layer.get("data");
-
-            mapLayers.add(new int[mapHeight][mapWidth]);
-            for (int i = 0; i < mapHeight; i++) {
-                for (int j = 0; j < mapWidth; j++) {
-                    mapLayers.get(17)[i][j] = ((Long) data.get(i * mapWidth + j)).intValue();
-                }
-            }
-
-            layer = (JSONObject) layers.get(18);
-            data = (JSONArray) layer.get("data");
-
-            mapLayers.add(new int[mapHeight][mapWidth]);
-            for (int i = 0; i < mapHeight; i++) {
-                for (int j = 0; j < mapWidth; j++) {
-                    mapLayers.get(18)[i][j] = ((Long) data.get(i * mapWidth + j)).intValue();
-                }
-            }
-
-            //trap
-            layer = (JSONObject) layers.get(19);
-            data = (JSONArray) layer.get("data");
-
-            mapLayers.add(new int[mapHeight][mapWidth]);
-            for (int i = 0; i < mapHeight; i++) {
-                for (int j = 0; j < mapWidth; j++) {
-                    mapLayers.get(19)[i][j] = ((Long) data.get(i * mapWidth + j)).intValue();
-                }
-            }
-
-            //trap
-            layer = (JSONObject) layers.get(20);
-            data = (JSONArray) layer.get("data");
-
-            mapLayers.add(new int[mapHeight][mapWidth]);
-            for (int i = 0; i < mapHeight; i++) {
-                for (int j = 0; j < mapWidth; j++) {
-                    mapLayers.get(20)[i][j] = ((Long) data.get(i * mapWidth + j)).intValue();
-                }
-            }
-
-            layer = (JSONObject) layers.get(21);
-            data = (JSONArray) layer.get("data");
-
-            mapLayers.add(new int[mapHeight][mapWidth]);
-            for (int i = 0; i < mapHeight; i++) {
-                for (int j = 0; j < mapWidth; j++) {
-                    mapLayers.get(21)[i][j] = ((Long) data.get(i * mapWidth + j)).intValue();
-                }
-            }
-
-            layer = (JSONObject) layers.get(22);
-            data = (JSONArray) layer.get("data");
-
-            mapLayers.add(new int[mapHeight][mapWidth]);
-            for (int i = 0; i < mapHeight; i++) {
-                for (int j = 0; j < mapWidth; j++) {
-                    mapLayers.get(22)[i][j] = ((Long) data.get(i * mapWidth + j)).intValue();
+                mapLayers.add(new int[mapHeight][mapWidth]);
+                for (int i = 0; i < mapHeight; i++) {
+                    for (int j = 0; j < mapWidth; j++) {
+                        mapLayers.get(x)[i][j] = ((Long) data.get(i * mapWidth + j)).intValue();
+                    }
                 }
             }
 
@@ -449,6 +254,8 @@ public class TiledMap {
             roomScreenPos = new Vector2(minX * tileSetTileSize, minY * tileSetTileSize);
             roomWidth = (maxX - minX + 1) * tileSetTileSize;
             roomHeight = (maxY - minY + 1) * tileSetTileSize;
+
+            assignRoomIds();
 
         } catch (FileNotFoundException e) {
             System.out.println("Error finding map file: " + e.getMessage());
@@ -736,6 +543,37 @@ public class TiledMap {
             }
         }
         g2.setComposite(originalComposite);
+    }
+
+    public void updatePlayerRoom() {
+        int scaledTileSize = getScaledTileSize();
+        double playerX = player.getPosition().x;
+        double playerY = player.getPosition().y + scaledTileSize;
+        int playerTileX = (int) (playerX / scaledTileSize);
+        int playerTileY = (int) (playerY / scaledTileSize);
+
+        if (playerTileX < 0 || playerTileX >= mapWidth || playerTileY < 0 || playerTileY >= mapHeight) return;
+        if (roomIds == null) return;
+
+        activeRoomId = roomIds[playerTileY][playerTileX];
+    }
+
+    public static int getPlayerRoomId(){
+        TiledMap map = GamePanel.tileMap;
+        return map.activeRoomId;
+    }
+
+    public static int getRoomId(double x, double y) {
+        int scaledTileSize = getScaledTileSize();
+        int tileX = (int) (x / scaledTileSize);
+        int tileY = (int) (y / scaledTileSize);
+
+        TiledMap map = GamePanel.tileMap;
+
+        if (tileX < 0 || tileX >= map.mapWidth || tileY < 0 || tileY >= map.mapHeight) return -1;
+        if (map.roomIds == null) return -1;
+
+        return map.roomIds[tileY][tileX];
     }
 
     /**

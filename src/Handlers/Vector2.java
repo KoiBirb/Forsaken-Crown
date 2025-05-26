@@ -165,4 +165,8 @@ public class Vector2 {
     public String toString() {
         return"X: " + x + " Y: " + y;
     }
+
+    public double distanceTo(Vector2 playerPos) {
+        return Math.sqrt(Math.pow(playerPos.x - this.x, 2) + Math.pow(playerPos.y - this.y, 2));
+    }
 }

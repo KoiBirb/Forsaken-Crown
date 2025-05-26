@@ -28,7 +28,7 @@ public abstract class Entity {
     protected int solidAreaOffsetX, solidAreaOffsetY;
     protected boolean knockedBack;
 
-    private Set<Point> activeTraps = new HashSet<>();
+    protected boolean invincible;
     private Point currentTrap;
     protected Rectangle solidArea;
     protected String direction;
@@ -240,5 +240,13 @@ public abstract class Entity {
      */
     public boolean isOnGround() {
         return onGround;
+    }
+
+    public boolean isInvincible() {
+        return invincible;
+    }
+
+    public boolean isDead() {
+        return currentHealth <= 0;
     }
 }
