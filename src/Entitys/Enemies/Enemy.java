@@ -1,5 +1,6 @@
 package Entitys.Enemies;
 
+import Handlers.CollisionHandler;
 import Handlers.Vector2;
 import Main.Panels.GamePanel;
 import Map.TiledMap;
@@ -64,6 +65,13 @@ public abstract class Enemy extends Entitys.Entity {
             if (tile == 1) return false; // 1 = wall
         }
         return true;
+    }
+
+    public boolean isGroundAhead(double x, double y, double direction) {
+        // Check a point just ahead of the Ghoul's feet in the direction of movement
+        int checkX = (int) (x + direction * ((double) WIDTH/2.0));
+        int checkY = (int) (y + (double) HEIGHT + 2);
+        return CollisionHandler.isSolidTileAt(checkX, checkY);
     }
 
     @Override

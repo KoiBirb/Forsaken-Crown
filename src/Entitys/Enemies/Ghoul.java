@@ -74,12 +74,21 @@ public class Ghoul extends Enemy {
                     }
 
                 } else if (!closeX) {
-                    velocity.x = Math.signum(dx) * getSpeed();
-                    direction = velocity.x < 0 ? "left" : "right";
-                    if (currentState != State.ATTACKING) {
-                        currentState = State.WALK;
-                        spriteRow = 1;
-                        maxSpriteCol = 7;
+                    double moveDir = Math.signum(dx);
+                    if (isGroundAhead(currentPos.x, currentPos.y, moveDir)) {
+                        velocity.x = moveDir * getSpeed();
+                        direction = velocity.x < 0 ? "left" : "right";
+                        if (currentState != State.ATTACKING) {
+                            currentState = State.WALK;
+                            spriteRow = 1;
+                            maxSpriteCol = 7;
+                        }
+                    } else {
+                        velocity.x = 0;
+                        currentState = State.IDLE;
+                        spriteRow = 0;
+                        maxSpriteCol = 3;
+                        if (spriteCol > maxSpriteCol) spriteCol = 0;
                     }
 
                     boolean facingSpike = SpikeDetectionHandler.isFacingSpike(currentPos.x, currentPos.y, velocity.x, WIDTH, HEIGHT);
@@ -162,7 +171,7 @@ public class Ghoul extends Enemy {
 
     @Override
     public void draw(Graphics2D g2) {
-//        debugDraw(g2);
+        debugDraw(g2);
         Vector2 cam = GamePanel.tileMap.returnCameraPos();
 
         int sx = (int) (position.x - cam.x);
@@ -229,6 +238,13 @@ public class Ghoul extends Enemy {
         g2.setColor(Color.MAGENTA);
         Rectangle solid = getSolidArea();
         g2.drawRect((int) (solid.x - cam.x), (int) (solid.y - cam.y), solid.width, solid.height);
+
+        double moveDir = (velocity.x < 0) ? -1 : 1;
+        int checkX = (int) (center.x + moveDir * (WIDTH /2.0));
+        int checkY = (int) (center.y + HEIGHT + 2);
+
+        g2.setColor(Color.MAGENTA);
+        g2.fillRect(checkX - (int) cam.x - 2, checkY - (int) cam.y - 2, 4, 4);
     }
 
     public void hit(int damage, int knockbackX, int knockbackY) {

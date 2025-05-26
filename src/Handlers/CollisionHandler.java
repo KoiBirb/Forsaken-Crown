@@ -15,6 +15,7 @@ import Map.TiledMap;
 import java.awt.*;
 
 import static Main.Main.keyI;
+import static Map.TiledMap.getScaledTileSize;
 
 public class CollisionHandler {
 
@@ -31,22 +32,22 @@ public class CollisionHandler {
         double entityRightWorldX = entityLeftWorldX + entity.getSolidArea().width;
 
         int entityBottomRow;
-        int entityTopRow = (int) (entityTopWorldY / TiledMap.getScaledTileSize());;
-        int entityLeftCol = (int) (entityLeftWorldX / TiledMap.getScaledTileSize());
-        int entityRightCol = (int) (entityRightWorldX / TiledMap.getScaledTileSize());
+        int entityTopRow = (int) (entityTopWorldY / getScaledTileSize());;
+        int entityLeftCol = (int) (entityLeftWorldX / getScaledTileSize());
+        int entityRightCol = (int) (entityRightWorldX / getScaledTileSize());
 
         int tileNum1, tileNum2;
 
         try {
             if (entity.getDirection().contains("up")) {
                 // Check top collision
-                entityTopRow = (int) ((entityTopWorldY - entity.getSpeed()) / TiledMap.getScaledTileSize());
+                entityTopRow = (int) ((entityTopWorldY - entity.getSpeed()) / getScaledTileSize());
                 tileNum1 = collidableTiles[entityTopRow][entityLeftCol];
                 tileNum2 = collidableTiles[entityTopRow][entityRightCol];
 
                 if (tileNum1 == 1 || tileNum2 == 1) {
                     entity.setColliding(true);
-                    entity.getPosition().y = (entityTopRow + 1) * TiledMap.getScaledTileSize() - (((entity.getSolidArea().y - entity.getPosition().y) / 2) - 2);
+                    entity.getPosition().y = (entityTopRow + 1) * getScaledTileSize() - (((entity.getSolidArea().y - entity.getPosition().y) / 2) - 2);
                     entity.getSolidArea().setLocation(entity.getSolidArea().x, (int) (entity.getPosition().y + entity.getSolidAreaOffsetY()));
 
                 } else if ((tileNum1 == 6 || tileNum2 == 6)) {
@@ -60,7 +61,7 @@ public class CollisionHandler {
             }
 
             // Check bottom collision
-            entityBottomRow = (int) ((entityBottomWorldY + entity.getSpeed()) / TiledMap.getScaledTileSize());
+            entityBottomRow = (int) ((entityBottomWorldY + entity.getSpeed()) / getScaledTileSize());
             tileNum1 = collidableTiles[entityBottomRow][entityLeftCol];
             tileNum2 = collidableTiles[entityBottomRow][entityRightCol];
 
@@ -70,7 +71,7 @@ public class CollisionHandler {
                  !keyI.sPressed && entity.getVelocity().y >= 0)) {
                     entity.setOnGround(true);
                     entity.setColliding(true);
-                    entity.getPosition().y = entityBottomRow * TiledMap.getScaledTileSize() - entity.getSolidArea().height - ((entity.getSolidArea().y - entity.getPosition().y) / 2)-1;
+                    entity.getPosition().y = entityBottomRow * getScaledTileSize() - entity.getSolidArea().height - ((entity.getSolidArea().y - entity.getPosition().y) / 2)-1;
                     entity.getSolidArea().setLocation(entity.getSolidArea().x, (int) (entity.getPosition().y + entity.getSolidAreaOffsetY()));
            } else if ((tileNum1 == 6 || tileNum2 == 6)) {
                 Point trapLocation = new Point(entityLeftCol, entityTopRow);
@@ -88,17 +89,17 @@ public class CollisionHandler {
             entityLeftWorldX = entity.getPosition().x + (entity.getSolidArea().x - entity.getPosition().x) / 2;
             entityRightWorldX = entityLeftWorldX + entity.getSolidArea().width;
 
-            entityTopRow = (int) (entityTopWorldY / TiledMap.getScaledTileSize());
-            entityBottomRow = (int) (entityBottomWorldY / TiledMap.getScaledTileSize());
+            entityTopRow = (int) (entityTopWorldY / getScaledTileSize());
+            entityBottomRow = (int) (entityBottomWorldY / getScaledTileSize());
 
             // Check left collision
             if (entity.getDirection().contains("left")) {
-                entityLeftCol = (int) ((entityLeftWorldX - entity.getSpeed()) / TiledMap.getScaledTileSize());
+                entityLeftCol = (int) ((entityLeftWorldX - entity.getSpeed()) / getScaledTileSize());
                 tileNum1 = collidableTiles[entityTopRow][entityLeftCol];
                 tileNum2 = collidableTiles[entityBottomRow][entityLeftCol];
 
                 if (tileNum1 == 1 || tileNum2 == 1) {
-                    entity.getPosition().x = (entityLeftCol + 1) * TiledMap.getScaledTileSize() - ((entity.getSolidArea().x - entity.getPosition().x) / 2) + 5;
+                    entity.getPosition().x = (entityLeftCol + 1) * getScaledTileSize() - ((entity.getSolidArea().x - entity.getPosition().x) / 2) + 5;
                     entity.getVelocity().x = 0;
                 } else if ((tileNum1 == 6 || tileNum2 == 6)) {
                     Point trapLocation = new Point(entityLeftCol, entityTopRow);
@@ -111,11 +112,11 @@ public class CollisionHandler {
             }
             // Check right collision
             else if (entity.getDirection().contains("right")) {
-                entityRightCol = (int) ((entityRightWorldX + entity.getSpeed()) / TiledMap.getScaledTileSize());
+                entityRightCol = (int) ((entityRightWorldX + entity.getSpeed()) / getScaledTileSize());
                 tileNum1 = collidableTiles[entityTopRow][entityRightCol];
                 tileNum2 = collidableTiles[entityBottomRow][entityRightCol];
                 if (tileNum1 == 1 || tileNum2 == 1) {
-                    entity.getPosition().x = entityRightCol * TiledMap.getScaledTileSize() - entity.getSolidArea().width - ((entity.getSolidArea().x - entity.getPosition().x) / 2) - 5;
+                    entity.getPosition().x = entityRightCol * getScaledTileSize() - entity.getSolidArea().width - ((entity.getSolidArea().x - entity.getPosition().x) / 2) - 5;
                     entity.getVelocity().x = 0;
                 } else if ((tileNum1 == 6 || tileNum2 == 6)) {
                     Point trapLocation = new Point(entityLeftCol, entityTopRow);
@@ -144,7 +145,7 @@ public class CollisionHandler {
      * @return True if a collision is detected, false otherwise
      */
     public static boolean checkAttackTileCollision(Rectangle hitbox, Entity player) {
-        int tileSize = TiledMap.getScaledTileSize();
+        int tileSize = getScaledTileSize();
 
         int leftCol = hitbox.x / tileSize;
         int rightCol = (hitbox.x + hitbox.width) / tileSize;
@@ -187,6 +188,18 @@ public class CollisionHandler {
         return false;
     }
 
+    public static boolean isSolidTileAt(int x, int y) {
+        int tileSize = TiledMap.getScaledTileSize();
+        int col = x / tileSize;
+        int row = y / tileSize;
+        int[][] collidableTiles = Handlers.CollisionHandler.collidableTiles;
+        if (collidableTiles == null) return false;
+        if (row < 0 || row >= collidableTiles.length || col < 0 || col >= collidableTiles[0].length)
+            return false;
+
+        return collidableTiles[row][col] == 1;
+    }
+
     /**
      * Draws the collision boxes for debugging purposes.
      * @param g2 The Graphics2D object used for drawing.
@@ -209,7 +222,7 @@ public class CollisionHandler {
 
         if (collidableTiles == null) return;
 
-        int tileSize = TiledMap.getScaledTileSize();
+        int tileSize = getScaledTileSize();
 
         g2.setColor(Color.RED);
         int entityLeftCol = x / tileSize;
