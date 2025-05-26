@@ -19,7 +19,7 @@ public class Ghoul extends Enemy {
     private double visionRadius = 200;
 
     public Ghoul(Vector2 pos) {
-        super(pos, 1, 8, 62, 33, 100,  new Rectangle(0, 0, 20, 40));
+        super(pos, 1, 8, 62, 33, 3,  new Rectangle(0, 0, 20, 40));
 
         this.image = ImageHandler.loadImage("Assets/Images/Enemies/Ghoul/Ghoul Sprite Sheet 62 x 33.png");
     }

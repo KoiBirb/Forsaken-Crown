@@ -147,7 +147,7 @@ public class GamePanel extends JPanel implements Runnable{
         for (int i = 0; i < enemies.size(); i++) {
             for (int j = 0; j < meleeAttacks.size(); j++) {
                 if (CollisionHandler.attackCollision(meleeAttacks.get(j), enemies.get(i))) {
-                    enemies.get(i).hit(meleeAttacks.get(j).getDamage(), 3, 0);
+                    enemies.get(i).hit(meleeAttacks.get(j).getDamage(), 3, 3);
                 }
             }
         }
