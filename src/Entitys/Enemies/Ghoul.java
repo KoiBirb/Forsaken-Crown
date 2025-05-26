@@ -3,6 +3,7 @@ package Entitys.Enemies;
 import Attacks.MeleeAttacks.GhoulAttack;
 import Handlers.CollisionHandler;
 import Handlers.ImageHandler;
+import Handlers.Sound.MusicHandler;
 import Handlers.Vector2;
 import Handlers.SpikeDetectionHandler;
 import Main.Panels.GamePanel;
@@ -64,6 +65,7 @@ public class Ghoul extends Enemy {
                         spriteCounter = 0;
                         velocity.x = 0;
                         new Attacks.MeleeAttacks.GhoulAttack(this);
+                        MusicHandler.ghoulAttack();
                         lastAttackTime = now;
                     } else {
                         velocity.x = 0;
@@ -107,6 +109,12 @@ public class Ghoul extends Enemy {
                 spriteRow = 0;
                 maxSpriteCol = 3;
                 if (spriteCol > maxSpriteCol) spriteCol = 0;
+            }
+
+            if (currentState == State.WALK && onGround) {
+                MusicHandler.ghoulFootsteps();
+            } else {
+                MusicHandler.stopGhoulFootsteps();
             }
 
             if (!onGround) {
@@ -171,7 +179,7 @@ public class Ghoul extends Enemy {
 
     @Override
     public void draw(Graphics2D g2) {
-        debugDraw(g2);
+//        debugDraw(g2);
         Vector2 cam = GamePanel.tileMap.returnCameraPos();
 
         int sx = (int) (position.x - cam.x);
@@ -275,6 +283,14 @@ public class Ghoul extends Enemy {
             maxSpriteCol = 3;
 
             currentState = State.DAMAGED;
+
+            MusicHandler.stopGhoulAttack();
+
+            if (currentHealth > 0)
+                MusicHandler.ghoulHit();
+             else
+                MusicHandler.ghoulDeath();
+
             hit = true;
         }
 
@@ -291,6 +307,7 @@ public class Ghoul extends Enemy {
             maxSpriteCol = 6;
             velocity.x = 0;
             velocity.y = 0;
+            MusicHandler.stopGhoulAttack();
         }
     }
 

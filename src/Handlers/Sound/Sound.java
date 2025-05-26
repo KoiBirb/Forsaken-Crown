@@ -13,7 +13,7 @@ import java.util.Objects;
 
 public class Sound {
 
-    private Clip clip;
+    Clip clip;
 
     /**
      * Sets the current clip to the given path
@@ -27,7 +27,7 @@ public class Sound {
             clip.open(ais);
             return true;
         } catch (Exception e){
-            System.out.println("Error with sound file.");
+            System.out.println("Error with sound file. " + path);
             return false;
         }
     }
