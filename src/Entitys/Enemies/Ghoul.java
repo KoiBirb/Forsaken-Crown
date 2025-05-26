@@ -234,7 +234,6 @@ public class Ghoul extends Enemy {
                 (int) (playerCenter.x - cam.x), (int) (playerCenter.y - cam.y)
         );
 
-        // Optionally: draw bounding box
         g2.setColor(Color.MAGENTA);
         Rectangle solid = getSolidArea();
         g2.drawRect((int) (solid.x - cam.x), (int) (solid.y - cam.y), solid.width, solid.height);
