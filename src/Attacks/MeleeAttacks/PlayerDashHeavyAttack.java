@@ -16,6 +16,7 @@ import java.awt.*;
 
 public class PlayerDashHeavyAttack extends MeleeAttack{
 
+    public static final int COOLDOWN = 1000;
     private final Player player;
 
     /**
@@ -23,12 +24,12 @@ public class PlayerDashHeavyAttack extends MeleeAttack{
      * @param player The player object that is performing the attack.
      */
     public PlayerDashHeavyAttack(Player player) {
-        super(5, 300);
+        super(4);
 
         this.player = player;
 
         player.setAttacking(true);
-        GamePanel.meleeAttacks.add(this);
+        GamePanel.playerAttacks.add(this);
     }
 
     /**
@@ -38,8 +39,7 @@ public class PlayerDashHeavyAttack extends MeleeAttack{
     public void update() {
 
         if (frame == 5) {
-            GamePanel.meleeAttacks.remove(this);
-            player.setAttacking(false);
+            GamePanel.playerAttacks.remove(this);
         } else if (frame == 0) {
             hitBox = new Rectangle( (player.getDirection().contains("right")) ? (int) player.getPosition().x + 7 : (int) player.getPosition().x + 18, (int) (player.getPosition().y + 20), 20, 35);
         } else if (frame == 1 || frame == 2){

@@ -8,10 +8,9 @@ import Map.TiledMap;
 
 import java.awt.*;
 
-import static Handlers.Sound.MusicHandler.hitColladable;
-
 public class PlayerHeavyAttack extends MeleeAttack{
 
+    public static final int COOLDOWN = 1350;
     private final Player player;
 
     /**
@@ -19,12 +18,12 @@ public class PlayerHeavyAttack extends MeleeAttack{
      * @param player The player object that is performing the attack.
      */
     public PlayerHeavyAttack(Player player) {
-        super(6, 1350);
+        super(6);
 
         this.player = player;
 
         player.setAttacking(true);
-        GamePanel.meleeAttacks.add(this);
+        GamePanel.playerAttacks.add(this);
     }
 
     /**
@@ -34,8 +33,7 @@ public class PlayerHeavyAttack extends MeleeAttack{
     public void update() {
 
         if (frame == 4) {
-            GamePanel.meleeAttacks.remove(this);
-            player.setAttacking(false);
+            GamePanel.playerAttacks.remove(this);
         } else if (frame == 0) {
             hitBox = new Rectangle( (player.getDirection().contains("right")) ? (int) player.getPosition().x : (int) player.getPosition().x + 12, (int) (player.getPosition().y), 30, 40);
         } else if (frame == 1 || frame == 2){

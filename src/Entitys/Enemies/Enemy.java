@@ -1,6 +1,5 @@
 package Entitys.Enemies;
 
-import Attacks.MeleeAttacks.MeleeAttack;
 import Handlers.Vector2;
 import Main.Panels.GamePanel;
 import Map.TiledMap;
@@ -76,6 +75,6 @@ public abstract class Enemy extends Entitys.Entity {
     public abstract void draw(Graphics2D g2);
 
     public void death(){
-        GamePanel.enemies.remove(this);
+        GamePanel.player.increaseMana(2);
     }
 }

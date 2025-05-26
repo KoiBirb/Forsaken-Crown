@@ -11,6 +11,7 @@ import static Handlers.CollisionHandler.checkAttackTileCollision;
 
 public class PlayerQuickAttack extends MeleeAttack{
 
+    public static final int COOLDOWN = 650;
     private final Player player;
     private final boolean chain;
 
@@ -20,13 +21,13 @@ public class PlayerQuickAttack extends MeleeAttack{
      * @param chain Whether the attack is a chain attack or not.
      */
     public PlayerQuickAttack(Player player, boolean chain) {
-        super(1, 650);
+        super(1);
 
         this.chain = chain;
         this.player = player;
 
         player.setAttacking(true);
-        GamePanel.meleeAttacks.add(this);
+        GamePanel.playerAttacks.add(this);
     }
 
     /**
@@ -36,8 +37,7 @@ public class PlayerQuickAttack extends MeleeAttack{
     public void update() {
         if (chain) {
             if (frame == 6) {
-                GamePanel.meleeAttacks.remove(this);
-                player.setAttacking(false);
+                GamePanel.playerAttacks.remove(this);
             } else if (frame == 1 || frame == 2) {
                 hitBox = new Rectangle((player.getDirection().contains("right")) ? (int) (player.getPosition().x + 3) : (int) (player.getPosition().x - 95) , (int) (player.getPosition().y + 21), 137, 30);
                 if (spriteCounter == 1 && frame == 1 && checkAttackTileCollision(hitBox, player)) {
@@ -48,7 +48,7 @@ public class PlayerQuickAttack extends MeleeAttack{
                 }
             }
         } else if (frame == 4) {
-                GamePanel.meleeAttacks.remove(this);
+                GamePanel.playerAttacks.remove(this);
                 player.setAttacking(false);
         } else if (frame == 1 || frame == 2) {
             hitBox = new Rectangle((player.getDirection().contains("right")) ? (int) (player.getPosition().x + 3) : (int) (player.getPosition().x - 105), (int) (player.getPosition().y + 17), 147, 30);

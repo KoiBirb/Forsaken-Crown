@@ -17,7 +17,6 @@ public abstract class MeleeAttack {
     protected int damage;
     protected int spriteCounter;
     protected int frame;
-    protected static int cooldown;
     protected boolean chain;
 
     protected Rectangle hitBox;
@@ -25,9 +24,8 @@ public abstract class MeleeAttack {
     /**
      * Constructor for MeleeAttack
      */
-    public MeleeAttack(int damage, int cooldown) {
+    public MeleeAttack(int damage) {
         this.damage = damage;
-        MeleeAttack.cooldown = cooldown;
 
         frame = 0;
         spriteCounter = 0;
@@ -64,15 +62,6 @@ public abstract class MeleeAttack {
      */
     public boolean getChain() {
         return chain;
-    }
-
-
-    /**
-     * Gets cooldown of the attack
-     * @return int cooldown
-     */
-    public static int getCooldown() {
-        return cooldown;
     }
 
     public Rectangle getHitBox() {

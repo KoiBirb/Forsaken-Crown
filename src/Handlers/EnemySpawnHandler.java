@@ -12,13 +12,8 @@ public class EnemySpawnHandler {
      * Spawns enemies at game start
      */
     public static void setup() {
-
-        // Spawn enemy 16 tiles to the right of the player, placed on the same Y-level
-        double spawnX = 400;
-        double spawnY = 100;
-
         GamePanel.enemies.clear(); // Remove existing enemies
-        GamePanel.enemies.add(new Ghoul(new Vector2(spawnX, spawnY)));
+        GamePanel.enemies.add(new Ghoul(new Vector2(600, 100)));
     }
 
     /**

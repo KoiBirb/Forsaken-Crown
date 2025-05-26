@@ -162,10 +162,9 @@ public abstract class Entity {
     }
 
     public Vector2 getSolidAreaCenter() {
-        Rectangle solid = getSolidArea();
         return new Vector2(
-                solid.x + solid.width / 2.0,
-                solid.y + solid.height / 2.0
+                solidArea.x + solidArea.width / 2.0,
+                solidArea.y + solidArea.height / 2.0
         );
     }
 

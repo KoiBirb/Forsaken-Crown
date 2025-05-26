@@ -1,7 +1,6 @@
 package Attacks.MeleeAttacks;
 
 import Entitys.Player;
-import Handlers.CollisionHandler;
 import Handlers.Sound.MusicHandler;
 import Main.Panels.GamePanel;
 import Map.TiledMap;
@@ -9,10 +8,10 @@ import Map.TiledMap;
 import java.awt.*;
 
 import static Handlers.CollisionHandler.checkAttackTileCollision;
-import static Handlers.Sound.MusicHandler.hitColladable;
 
 public class PlayerDashSwingAttack extends MeleeAttack{
 
+    public static final int COOLDOWN = 1000;
     private final Player player;
 
     /**
@@ -20,12 +19,12 @@ public class PlayerDashSwingAttack extends MeleeAttack{
      * @param player The player object that is performing the attack.
      */
     public PlayerDashSwingAttack(Player player) {
-        super(6, 1000);
+        super(3);
 
         this.player = player;
 
         player.setAttacking(true);
-        GamePanel.meleeAttacks.add(this);
+        GamePanel.playerAttacks.add(this);
     }
 
     /**
@@ -35,8 +34,7 @@ public class PlayerDashSwingAttack extends MeleeAttack{
     public void update() {
 
         if (frame == 5) {
-            GamePanel.meleeAttacks.remove(this);
-            player.setAttacking(false);
+            GamePanel.playerAttacks.remove(this);
         } else if (frame == 0 || frame == 1){
             hitBox = new Rectangle((player.getDirection().contains("right")) ? (int) (player.getPosition().x - 36) : (int) (player.getPosition().x - 105) , (int) (player.getPosition().y + 20), 187, 31);
             if (spriteCounter == 1 && frame == 1 && checkAttackTileCollision(hitBox, player)) {

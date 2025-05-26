@@ -6,7 +6,7 @@
  */
 package Main.UI;
 
-import Main.GameState;
+import Main.Main;
 import Main.Panels.GamePanel;
 import Main.UI.Buttons.ButtonManager;
 
@@ -37,10 +37,10 @@ public class UIManager {
      * Update the UI elements
      */
     public void update() {
-        if (gameState == GameState.GAME) {
+        if (gameState == Main.GameState.GAME) {
             healthBar.update();
             manaBar.update();
-        } else if (gameState == GameState.MENU) {
+        } else if (gameState == Main.GameState.MENU) {
             buttonManager.update();
             selectedButton = buttonManager.getSelectedIndex();
         }
@@ -59,10 +59,10 @@ public class UIManager {
      * @param g2 Graphics2D object to draw on
      */
     public void draw(Graphics2D g2) {
-        if (gameState == GameState.GAME) {
+        if (gameState == Main.GameState.GAME) {
             healthBar.draw(g2);
             manaBar.draw(g2);
-        } else if (gameState == GameState.MENU) {
+        } else if (gameState == Main.GameState.MENU) {
             buttonManager.draw(g2);
         }
     }

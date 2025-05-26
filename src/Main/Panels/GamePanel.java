@@ -13,7 +13,6 @@ import Entitys.Player;
 import Handlers.CollisionHandler;
 import Handlers.Vector2;
 import Handlers.EnemySpawnHandler;
-import Main.KeyInput;
 import Main.UI.UIManager;
 import Main.UI.VFX.Effect;
 import Map.TiledMap;
@@ -36,7 +35,8 @@ public class GamePanel extends JPanel implements Runnable{
     public static final Player player = new Player(new Vector2(100,150));
     public static UIManager ui = new UIManager();
 
-    public static ArrayList<MeleeAttack> meleeAttacks = new ArrayList<>();
+    public static ArrayList<MeleeAttack> playerAttacks = new ArrayList<>();
+    public static ArrayList<MeleeAttack> enemyAttacks = new ArrayList<>();
     public static ArrayList<Enemy> enemies = new ArrayList<>();
     public static ArrayList<Effect> effects = new ArrayList<>();
 
@@ -136,8 +136,12 @@ public class GamePanel extends JPanel implements Runnable{
         EnemySpawnHandler.updateAll();
         ui.update();
 
-        for (int i = 0; i < meleeAttacks.size(); i++) {
-            meleeAttacks.get(i).update();
+        for (int i = 0; i < playerAttacks.size(); i++) {
+            playerAttacks.get(i).update();
+        }
+
+        for (int i = 0; i < enemyAttacks.size(); i++) {
+            enemyAttacks.get(i).update();
         }
 
         for (int i = 0; i < effects.size(); i++) {
@@ -145,10 +149,17 @@ public class GamePanel extends JPanel implements Runnable{
         }
 
         for (int i = 0; i < enemies.size(); i++) {
-            for (int j = 0; j < meleeAttacks.size(); j++) {
-                if (CollisionHandler.attackCollision(meleeAttacks.get(j), enemies.get(i))) {
-                    enemies.get(i).hit(meleeAttacks.get(j).getDamage(), 3, 3);
+            for (int j = 0; j < playerAttacks.size(); j++) {
+                if (CollisionHandler.attackCollision(playerAttacks.get(j), enemies.get(i))) {
+                    enemies.get(i).hit(playerAttacks.get(j).getDamage(), 3, 3);
+                    player.increaseMana(1);
                 }
+            }
+        }
+
+        for (int j = 0; j < enemyAttacks.size(); j++) {
+            if (CollisionHandler.attackCollision(enemyAttacks.get(j), player)) {
+                player.hit(enemyAttacks.get(j).getDamage(), 0, 0);
             }
         }
 
@@ -199,8 +210,12 @@ public class GamePanel extends JPanel implements Runnable{
         // Draw player hit box and colidable tiles
 //        CollisionHandler.draw(g2, player);
 //
-//        for (int i = 0; i < meleeAttacks.size(); i++) {
-//            meleeAttacks.get(i).draw(g2);
+//        for (int i = 0; i < playerAttacks.size(); i++) {
+//            playerAttacks.get(i).draw(g2);
+//        }
+
+//        for (int i = 0; i < enemyAttacks.size(); i++) {
+//            enemyAttacks.get(i).draw(g2);
 //        }
 
         tileMap.coverScreen(g2);

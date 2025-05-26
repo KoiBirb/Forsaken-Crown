@@ -15,6 +15,7 @@ import java.awt.*;
 
 public class Main {
 
+    public enum GameState {MENU, GAME}
     public static GameState gameState = GameState.MENU;
     private static CardLayout cardLayout = new CardLayout();
     private static JPanel mainPanel = new JPanel(cardLayout);
