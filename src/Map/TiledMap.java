@@ -157,19 +157,33 @@ public class TiledMap {
         backgrounds = new ArrayList<>();
 
         // The columns
-        VolatileImage[] backgroundLayers = new VolatileImage[4];
+        VolatileImage[] backgroundLayers = new VolatileImage[6];
         backgroundLayers[0] = ImageHandler.loadImage("Assets/Images/Backgrounds/Beneath Parallax/background.png");
-        backgroundLayers[1] = ImageHandler.loadImage("Assets/Images/Backgrounds/Beneath Parallax/bridge.png");
-        backgroundLayers[2] = ImageHandler.loadImage("Assets/Images/Backgrounds/Beneath Parallax/cages.png");
-        backgroundLayers[3] = ImageHandler.loadImage("Assets/Images/Backgrounds/Beneath Parallax/fogin front.png");
+        backgroundLayers[1] = ImageHandler.loadImage("Assets/Images/Backgrounds/Beneath Parallax/pillars.png");
+        backgroundLayers[2] = ImageHandler.loadImage("Assets/Images/Backgrounds/Beneath Parallax/bridge.png");
+        backgroundLayers[3] = ImageHandler.loadImage("Assets/Images/Backgrounds/Beneath Parallax/cages.png");
+        backgroundLayers[4] = ImageHandler.loadImage("Assets/Images/Backgrounds/Beneath Parallax/fog.png");
+        backgroundLayers[5] = ImageHandler.loadImage("Assets/Images/Backgrounds/Beneath Parallax/fogin front.png");
         backgrounds.add(backgroundLayers);
 
         backgroundLayers = new VolatileImage[3];
         backgroundLayers[0] = ImageHandler.loadImage("Assets/Images/Backgrounds/Beneath Parallax/background.png");
-        backgroundLayers[1] = ImageHandler.loadImage("Assets/Images/Backgrounds/Caves/Small Cave 1 Layers/layer 5.png");
+        backgroundLayers[1] = ImageHandler.loadImage("Assets/Images/Backgrounds/Caves/Small Cave 1 Layers/layer 6.png");
         backgroundLayers[2] = ImageHandler.loadImage("Assets/Images/Backgrounds/Caves/Small Cave 1 Layers/layer 7.png");
         backgrounds.add(backgroundLayers);
 
+        backgroundLayers = new VolatileImage[4];
+        backgroundLayers[0] = ImageHandler.loadImage("Assets/Images/Backgrounds/The Columns/Vertical/layer 1.png");
+        backgroundLayers[1] = ImageHandler.loadImage("Assets/Images/Backgrounds/The Columns/Vertical/layer 2.png");
+        backgroundLayers[2] = ImageHandler.loadImage("Assets/Images/Backgrounds/The Columns/Vertical/layer 3.png");
+        backgroundLayers[3] = ImageHandler.loadImage("Assets/Images/Backgrounds/The Columns/Vertical/layer 4.png");
+        backgrounds.add(backgroundLayers);
+
+        backgroundLayers = new VolatileImage[3];
+        backgroundLayers[0] = ImageHandler.loadImage("Assets/Images/Backgrounds/The Columns/background.png");
+        backgroundLayers[1] = ImageHandler.loadImage("Assets/Images/Backgrounds/The Columns/Horizontal/layer 3.png");
+        backgroundLayers[2] = ImageHandler.loadImage("Assets/Images/Backgrounds/The Columns/Horizontal/layer 4.png");
+        backgrounds.add(backgroundLayers);
     }
 
 
@@ -466,10 +480,15 @@ public class TiledMap {
     public void drawMap(Graphics2D g2) {
         int scaledTileSize = (int) (tileSetTileSize * SCALE);
 
-        if (activeRoomId == 5)
-            drawParallaxBackground(g2, backgrounds.get(1), new double[]{0.2, 0.4, 0.5});
-        else
-            drawParallaxBackground(g2, backgrounds.get(0), new double[]{0.3, 0.4, 0.6, 0.7});
+        if (activeRoomId == 4 )
+            drawParallaxBackground(g2, backgrounds.get(1), new double[]{0.1, 0.4, 0.6});
+        else if (activeRoomId == 1 || activeRoomId == 2 || activeRoomId == 3)
+            drawParallaxBackground(g2, backgrounds.get(0), new double[]{0.2, 0.3, 0.4, 0.5, 0.6, 0.7});
+         else if (activeRoomId == 6){
+            drawParallaxBackground(g2, backgrounds.get(2), new double[]{0.3, 0.4, 0.6, 0.7});
+        } else if (activeRoomId == 5){
+            drawParallaxBackground(g2, backgrounds.get(3), new double[]{0.3, 0.5, 0.6});
+        }
 
         float alpha = (float) (0.75 + 0.15 * Math.sin(System.currentTimeMillis() * 0.002));
         Composite originalComposite = g2.getComposite();
