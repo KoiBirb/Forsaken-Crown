@@ -164,6 +164,12 @@ public class TiledMap {
         backgroundLayers[3] = ImageHandler.loadImage("Assets/Images/Backgrounds/Beneath Parallax/fogin front.png");
         backgrounds.add(backgroundLayers);
 
+        backgroundLayers = new VolatileImage[3];
+        backgroundLayers[0] = ImageHandler.loadImage("Assets/Images/Backgrounds/Beneath Parallax/background.png");
+        backgroundLayers[1] = ImageHandler.loadImage("Assets/Images/Backgrounds/Caves/Small Cave 1 Layers/layer 5.png");
+        backgroundLayers[2] = ImageHandler.loadImage("Assets/Images/Backgrounds/Caves/Small Cave 1 Layers/layer 7.png");
+        backgrounds.add(backgroundLayers);
+
     }
 
 
@@ -425,8 +431,8 @@ public class TiledMap {
             double offsetY = roomScreenPos.y - (playerDistanceY * parallaxFactor);
 
             g2.drawImage(layer, (int) offsetX - scaledTileSize - 2, (int) offsetY - 2 - scaledTileSize,
-                         oldRoomWidth + roomWidth / 15 + 2 * scaledTileSize,
-                         oldRoomHeight + roomHeight / 15 + 2 * scaledTileSize, null);
+                         oldRoomWidth + roomWidth / 16 + scaledTileSize,
+                         oldRoomHeight + roomHeight / 16 + scaledTileSize, null);
         }
     }
 
@@ -460,7 +466,10 @@ public class TiledMap {
     public void drawMap(Graphics2D g2) {
         int scaledTileSize = (int) (tileSetTileSize * SCALE);
 
-        drawParallaxBackground(g2, backgrounds.get(0), new double[]{0.3, 0.4, 0.6, 0.7});
+        if (activeRoomId == 5)
+            drawParallaxBackground(g2, backgrounds.get(1), new double[]{0.2, 0.4, 0.5});
+        else
+            drawParallaxBackground(g2, backgrounds.get(0), new double[]{0.3, 0.4, 0.6, 0.7});
 
         float alpha = (float) (0.75 + 0.15 * Math.sin(System.currentTimeMillis() * 0.002));
         Composite originalComposite = g2.getComposite();
