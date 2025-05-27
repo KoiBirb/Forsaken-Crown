@@ -8,8 +8,6 @@ import Map.TiledMap;
 import java.awt.*;
 
 public abstract class Enemy extends Entitys.Entity {
-    protected static int WIDTH;
-    protected static int HEIGHT;
 
     protected static final double GRAVITY = 0.8;
     protected static final double TERMINAL_VELOCITY = 12;
@@ -31,9 +29,6 @@ public abstract class Enemy extends Entitys.Entity {
     public Enemy(Vector2 pos, double speed, int detectionRadiusTiles, int width, int height, int health, Rectangle solidArea) {
         super(pos, new Vector2(0, 0), width, height, speed,
                 solidArea, null, health, 0);
-
-        WIDTH = width;
-        HEIGHT = height;
 
         this.spawnPos = new Vector2(pos.x, pos.y);
         this.detectionRadiusTiles = detectionRadiusTiles;
@@ -65,13 +60,6 @@ public abstract class Enemy extends Entitys.Entity {
             if (tile == 1) return false; // 1 = wall
         }
         return true;
-    }
-
-    public boolean isGroundAhead(double x, double y, double direction) {
-        // Check a point just ahead of the Ghoul's feet in the direction of movement
-        int checkX = (int) (x + direction * ((double) WIDTH/2.0));
-        int checkY = (int) (y + (double) HEIGHT + 2);
-        return CollisionHandler.isSolidTileAt(checkX, checkY);
     }
 
     @Override

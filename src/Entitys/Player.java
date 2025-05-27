@@ -285,7 +285,7 @@ public class Player extends Entity {
                     new PlayerDashHeavyAttack(this);
                     MusicHandler.dashHeavyAttack();
                     spriteRow = 6;
-                    maxSpriteCol = 6;
+                    maxSpriteCol = 5;
                 } else {
                     new PlayerHeavyAttack(this);
                     MusicHandler.heavyAttack();
