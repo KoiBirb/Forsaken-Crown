@@ -14,7 +14,6 @@ public class MusicHandler {
     public static final Sound music = new Sound();
     public static final Sound attack = new Sound();
     public static final Sound footsteps = new Sound();
-    public static final Sound ghoulSteps = new Sound();
     public static final Sound ghoulEffect = new Sound();
     public static final Sound heal = new Sound();
     public static final Sound effect = new Sound();
@@ -31,42 +30,6 @@ public class MusicHandler {
         String path = "/Audio/Player/sword_" + (rand.nextInt(4) + 1) + ".wav";
 
         playSoundEffect(path, attack);
-    }
-
-    public static void ghoulDeath() {
-        playSoundEffect("/Audio/Enemy/Ghoul/Ghoul_Death.wav", ghoulEffect);
-    }
-
-    public static void ghoulAttack() {
-        playSoundEffect("/Audio/Enemy/Ghoul/Ghoul_Attack.wav", ghoulEffect);
-    }
-
-    public static void stopGhoulAttack() {
-        if (ghoulEffect.clip != null) {
-            ghoulEffect.stop();
-        }
-    }
-
-    public static void ghoulFootsteps() {
-        if (!ghoulFootstepsPlaying) {
-            ghoulFootstepsPlaying = true;
-            ghoulSteps.setFile("/Audio/Enemy/Ghoul/Ghoul_Footsteps.wav");
-            ghoulSteps.play();
-            ghoulSteps.loop();
-        }
-    }
-
-    public static void stopGhoulFootsteps() {
-        if (ghoulFootstepsPlaying) {
-            ghoulFootstepsPlaying = false;
-            if (ghoulSteps.clip != null) {
-                ghoulSteps.stop();
-            }
-        }
-    }
-
-    public static void ghoulHit() {
-        playSoundEffect("/Audio/Enemy/Ghoul/Ghoul_Hit.wav", ghoulEffect);
     }
 
     /**
