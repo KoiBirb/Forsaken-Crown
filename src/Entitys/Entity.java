@@ -7,7 +7,6 @@
 
 package Entitys;
 
-import Attacks.MeleeAttacks.MeleeAttack;
 import Handlers.Vector2;
 
 import java.awt.*;
@@ -187,8 +186,8 @@ public abstract class Entity {
      * gets the state of player jumping
      * @return true if jumping, false otherwise
      */
-    public boolean getContinuousJump() {
-        return continuousJump;
+    public boolean isJumping() {
+        return !(jump || continuousJump);
     }
 
     /**

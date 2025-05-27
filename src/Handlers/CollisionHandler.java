@@ -75,7 +75,7 @@ public class CollisionHandler {
                     entity.getSolidArea().setLocation(entity.getSolidArea().x, (int) (entity.getPosition().y + entity.getSolidAreaOffsetY()));
            } else if ((tileNum1 == 6 || tileNum2 == 6)) {
                 Point trapLocation = new Point(entityLeftCol, entityTopRow);
-                if (!trapLocation.equals(entity.getCurrentTrap()) && entity.getFalling()) {
+                if (!trapLocation.equals(entity.getCurrentTrap()) && entity.getFalling() && !entity.isJumping()) {
                     entity.hit(1, 0, 10);
                     entity.setCurrentTrap(trapLocation);
                 }
@@ -104,7 +104,7 @@ public class CollisionHandler {
                 } else if ((tileNum1 == 6 || tileNum2 == 6)) {
                     Point trapLocation = new Point(entityLeftCol, entityTopRow);
 
-                    if (!trapLocation.equals(entity.getCurrentTrap()) && !entity.getContinuousJump()) {
+                    if (!trapLocation.equals(entity.getCurrentTrap()) && !entity.isJumping()) {
                         entity.hit(1, 0, 0);
                         entity.setCurrentTrap(trapLocation);
                     }
@@ -121,7 +121,7 @@ public class CollisionHandler {
                 } else if ((tileNum1 == 6 || tileNum2 == 6)) {
                     Point trapLocation = new Point(entityLeftCol, entityTopRow);
 
-                    if (!trapLocation.equals(entity.getCurrentTrap()) && !entity.getContinuousJump()) {
+                    if (!trapLocation.equals(entity.getCurrentTrap()) && !entity.isJumping()) {
                         entity.hit(1, 0, 0);
                         entity.setCurrentTrap(trapLocation);
                     }
