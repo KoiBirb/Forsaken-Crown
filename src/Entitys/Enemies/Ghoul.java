@@ -288,8 +288,6 @@ public class Ghoul extends Enemy {
 
             if (currentHealth > 0)
                 MusicHandler.ghoulHit();
-             else
-                MusicHandler.ghoulDeath();
 
             hit = true;
         }
@@ -308,6 +306,8 @@ public class Ghoul extends Enemy {
             velocity.x = 0;
             velocity.y = 0;
             MusicHandler.stopGhoulAttack();
+            MusicHandler.stopGhoulFootsteps();
+            MusicHandler.ghoulDeath();
         }
     }
 
