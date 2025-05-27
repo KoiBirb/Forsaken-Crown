@@ -3,6 +3,7 @@ package Entitys.Enemies;
 import Attacks.MeleeAttacks.GhoulAttack;
 import Handlers.CollisionHandler;
 import Handlers.ImageHandler;
+import Handlers.Sound.EnemySoundHandler;
 import Handlers.Sound.MusicHandler;
 import Handlers.Vector2;
 import Handlers.SpikeDetectionHandler;
@@ -18,6 +19,7 @@ public class Ghoul extends Enemy {
     protected State currentState = State.IDLE;
     private double visionRadius = 200;
     private long lastAttackTime = 0;
+    private EnemySoundHandler soundHandler = new EnemySoundHandler();
 
     public Ghoul(Vector2 pos) {
         super(pos, 1, 8, 62, 33, 3,  new Rectangle(0, 0, 20, 40));
@@ -65,7 +67,7 @@ public class Ghoul extends Enemy {
                         spriteCounter = 0;
                         velocity.x = 0;
                         new Attacks.MeleeAttacks.GhoulAttack(this);
-                        MusicHandler.ghoulAttack();
+                        soundHandler.ghoulAttack();
                         lastAttackTime = now;
                     } else {
                         velocity.x = 0;
@@ -112,9 +114,9 @@ public class Ghoul extends Enemy {
             }
 
             if (currentState == State.WALK && onGround) {
-                MusicHandler.ghoulFootsteps();
+                soundHandler.ghoulFootsteps();
             } else {
-                MusicHandler.stopGhoulFootsteps();
+                soundHandler.stopGhoulFootsteps();
             }
 
             if (!onGround) {
@@ -284,10 +286,10 @@ public class Ghoul extends Enemy {
 
             currentState = State.DAMAGED;
 
-            MusicHandler.stopGhoulAttack();
+            soundHandler.stopGhoulAttack();
 
             if (currentHealth > 0)
-                MusicHandler.ghoulHit();
+                soundHandler.ghoulHit();
 
             hit = true;
         }
@@ -305,9 +307,9 @@ public class Ghoul extends Enemy {
             maxSpriteCol = 6;
             velocity.x = 0;
             velocity.y = 0;
-            MusicHandler.stopGhoulAttack();
-            MusicHandler.stopGhoulFootsteps();
-            MusicHandler.ghoulDeath();
+            soundHandler.stopGhoulAttack();
+            soundHandler.stopGhoulFootsteps();
+            soundHandler.ghoulDeath();
         }
     }
 
