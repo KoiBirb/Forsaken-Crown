@@ -1,54 +1,114 @@
 package Handlers.Sound;
 
-public class EnemySoundHandler {
+     public class EnemySoundHandler {
 
-    public final Sound footsteps = new Sound();
-    public final Sound effect = new Sound();
+         private static final Sound ghoulSteps = new Sound();
+         private static final Sound ghoulEffect = new Sound();
 
+         private static final Sound summonerSteps = new Sound();
+         private static final Sound summonerEffect = new Sound();
 
-    private boolean footstepsPlaying;
+         private static int walkingGhouls = 0, attackingGhouls = 0;
+         private static int walkingSummoners = 0, attackingSummoners = 0;
 
-    public void ghoulDeath() {
-        playSoundEffect("/Audio/Enemy/Ghoul/Ghoul_Death.wav", effect);
-    }
-    public void ghoulAttack() {
-        playSoundEffect("/Audio/Enemy/Ghoul/Ghoul_Attack.wav", effect);
-    }
+         public static void summonerDeath() {
+             playSoundEffect("/Audio/Enemy/Summoner/Death.wav", ghoulEffect);
+         }
 
-    public void stopGhoulAttack() {
-        if (effect.clip != null) {
-            effect.stop();
-        }
-    }
-    public void ghoulFootsteps() {
-        if (!footstepsPlaying) {
-            footstepsPlaying = true;
-            footsteps.setFile("/Audio/Enemy/Ghoul/Ghoul_Footsteps.wav");
-            footsteps.play();
-            footsteps.loop();
-        }
-    }
-    public void stopGhoulFootsteps() {
-        if (footstepsPlaying) {
-            footstepsPlaying = false;
-            if (footsteps.clip != null) {
-                footsteps.stop();
-            }
-        }
-    }
+         public static synchronized void summonerAttack() {
+             if (attackingSummoners == 0) {
+                 summonerEffect.setFile("/Audio/Enemy/Summoner/Swing.wav");
+                 summonerEffect.play();
+             }
+             attackingSummoners++;
+         }
 
-    public void ghoulHit() {
-        playSoundEffect("/Audio/Enemy/Ghoul/Ghoul_Hit.wav", effect);
-    }
+         public static synchronized void stopSummonerAttack() {
+             if (attackingSummoners > 0) {
+                 attackingSummoners--;
+                 if (attackingSummoners == 0) {
+                     summonerEffect.stop();
+                 }
+             }
+         }
 
-    /**
-     * Plays a given sound effect on a sound object
-     * @param sound Sound object used to play effect
-     * @param path String file path from Assets
-     */
-    private void playSoundEffect(String path, Sound sound) {
-        if (sound.setFile(path)) {
-            sound.play();
-        }
-    }
-}
+         public static void summonerHit() {
+             playSoundEffect("/Audio/Enemy/Summoner/Hit.wav", summonerEffect);
+         }
+
+         public static void summonerSlam() {
+             playSoundEffect("/Audio/Enemy/Summoner/HitGround.wav", summonerEffect);
+         }
+
+         public static synchronized void summonerFootsteps() {
+             if (walkingSummoners == 0) {
+                 summonerSteps.setFile("/Audio/Enemy/Summoner/Footsteps.wav");
+                 summonerSteps.play();
+                 summonerSteps.loop();
+             }
+             walkingSummoners++;
+         }
+
+         public static synchronized void stopSummonerFootsteps() {
+             if (walkingSummoners > 0) {
+                 walkingSummoners--;
+                 if (walkingSummoners == 0) {
+                     summonerSteps.stop();
+                 }
+             }
+         }
+
+         public static void ghoulDeath() {
+             playSoundEffect("/Audio/Enemy/Ghoul/Ghoul_Death.wav", ghoulEffect);
+         }
+
+         public static synchronized void ghoulAttack() {
+             if (attackingGhouls == 0) {
+                 ghoulEffect.setFile("/Audio/Enemy/Ghoul/Ghoul_Attack.wav");
+                 ghoulEffect.play();
+             }
+             attackingGhouls++;
+         }
+
+         public static synchronized void stopGhoulAttack() {
+             if (attackingGhouls > 0) {
+                 attackingGhouls--;
+                 if (attackingGhouls == 0) {
+                     ghoulEffect.stop();
+                 }
+             }
+         }
+
+         public static synchronized void ghoulFootsteps() {
+             if (walkingGhouls == 0) {
+                 ghoulSteps.setFile("/Audio/Enemy/Ghoul/Ghoul_Footsteps.wav");
+                 ghoulSteps.play();
+                 ghoulSteps.loop();
+             }
+             walkingGhouls++;
+         }
+
+         public static synchronized void stopGhoulFootsteps() {
+             if (walkingGhouls > 0) {
+                 walkingGhouls--;
+                 if (walkingGhouls == 0) {
+                     ghoulSteps.stop();
+                 }
+             }
+         }
+
+         public static void ghoulHit() {
+             playSoundEffect("/Audio/Enemy/Ghoul/Ghoul_Hit.wav", ghoulEffect);
+         }
+
+         /**
+          * Plays a given sound effect on a sound object
+          * @param path String file path from Assets
+          * @param sound Sound object used to play effect
+          */
+         private static void playSoundEffect(String path, Sound sound) {
+             if (sound.setFile(path)) {
+                 sound.play();
+             }
+         }
+     }

@@ -25,16 +25,15 @@ public class SkeletonSummoner extends Enemy{
 
     private final double visionRadius = 300;
     private long lastAttackTime = 0;
-    private final EnemySoundHandler soundHandler = new EnemySoundHandler();
     boolean summoned = false;
     private ArrayList<Ghoul> summons = new ArrayList<>();
 
     private long patrolStateChangeTime = 0;
     private long patrolDuration = 0;
-    private boolean patrolWalking = false;
+    private boolean patrolWalking = false, footstepsPlaying = false;
 
     public SkeletonSummoner(Vector2 pos) {
-        super(pos, 2, 8, 132, 83, 5,  new Rectangle(0, 0, 50, 65));
+        super(pos, 2, 8, 132, 83, 6,  new Rectangle(0, 0, 50, 65));
 
         this.image = ImageHandler.loadImage("Assets/Images/Enemies/Skeleton Summoner/Summoner/Skeleton Summoner 132x83.png");
     }
@@ -261,9 +260,15 @@ public class SkeletonSummoner extends Enemy{
             }
 
             if (currentState == State.WALK && onGround) {
-                soundHandler.ghoulFootsteps();
+                if (!footstepsPlaying) {
+                    EnemySoundHandler.summonerFootsteps();
+                    footstepsPlaying = true;
+                }
             } else {
-                soundHandler.stopGhoulFootsteps();
+                if (footstepsPlaying) {
+                    EnemySoundHandler.stopSummonerFootsteps();
+                    footstepsPlaying = false;
+                }
             }
         }
 
@@ -416,10 +421,10 @@ public class SkeletonSummoner extends Enemy{
         if (!hit){
             currentHealth -= damage;
 
-            Vector2 ghoulCenter = getSolidAreaCenter();
+            Vector2 summonerCenter = getSolidAreaCenter();
             Vector2 playerCenter = GamePanel.player.getSolidAreaCenter();
 
-            if (ghoulCenter.x > playerCenter.x) {
+            if (summonerCenter.x > playerCenter.x) {
                 knockbackX = -Math.abs(knockbackX);
             } else {
                 knockbackX = Math.abs(knockbackX);
@@ -444,10 +449,10 @@ public class SkeletonSummoner extends Enemy{
 
             currentState = State.DAMAGED;
 
-            soundHandler.stopGhoulAttack();
+            EnemySoundHandler.stopSummonerAttack();
 
             if (currentHealth > 0)
-                soundHandler.ghoulHit();
+                EnemySoundHandler.summonerHit();
 
             hit = true;
         }
@@ -465,9 +470,9 @@ public class SkeletonSummoner extends Enemy{
             maxSpriteCol = 12;
             velocity.x = 0;
             velocity.y = 0;
-            soundHandler.stopGhoulAttack();
-            soundHandler.stopGhoulFootsteps();
-            soundHandler.ghoulDeath();
+            EnemySoundHandler.stopSummonerFootsteps();
+            EnemySoundHandler.stopSummonerAttack();
+            EnemySoundHandler.summonerDeath();
         }
     }
 

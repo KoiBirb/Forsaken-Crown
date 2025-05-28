@@ -14,11 +14,10 @@ import java.awt.*;
 public class Ghoul extends Enemy {
 
     public enum State {IDLE, WALK, DAMAGED, ATTACKING, DEAD}
-    private boolean idleForward = true;
+    private boolean idleForward = true, footstepsPlaying = false;
     protected State currentState = State.IDLE;
     private final double visionRadius = 200;
     private long lastAttackTime = 0;
-    private final EnemySoundHandler soundHandler = new EnemySoundHandler();
 
     public Ghoul(Vector2 pos) {
         super(pos, 1, 8, 62, 33, 3,  new Rectangle(0, 0, 20, 40));
@@ -66,7 +65,7 @@ public class Ghoul extends Enemy {
                         spriteCounter = 0;
                         velocity.x = 0;
                         new GhoulAttack(this);
-                        soundHandler.ghoulAttack();
+                        EnemySoundHandler.ghoulAttack();
                         lastAttackTime = now;
                     } else {
                         velocity.x = 0;
@@ -113,9 +112,15 @@ public class Ghoul extends Enemy {
             }
 
             if (currentState == State.WALK && onGround) {
-                soundHandler.ghoulFootsteps();
+                if (!footstepsPlaying) {
+                    EnemySoundHandler.ghoulFootsteps();
+                    footstepsPlaying = true;
+                }
             } else {
-                soundHandler.stopGhoulFootsteps();
+                if (footstepsPlaying) {
+                    EnemySoundHandler.stopGhoulFootsteps();
+                    footstepsPlaying = false;
+                }
             }
 
             if (!onGround) {
@@ -292,10 +297,10 @@ public class Ghoul extends Enemy {
 
             currentState = State.DAMAGED;
 
-            soundHandler.stopGhoulAttack();
+            EnemySoundHandler.stopGhoulAttack();
 
             if (currentHealth > 0)
-                soundHandler.ghoulHit();
+                EnemySoundHandler.ghoulHit();
 
             hit = true;
         }
@@ -313,9 +318,9 @@ public class Ghoul extends Enemy {
             maxSpriteCol = 6;
             velocity.x = 0;
             velocity.y = 0;
-            soundHandler.stopGhoulAttack();
-            soundHandler.stopGhoulFootsteps();
-            soundHandler.ghoulDeath();
+            EnemySoundHandler.stopGhoulAttack();
+            EnemySoundHandler.stopGhoulFootsteps();
+            EnemySoundHandler.ghoulDeath();
         }
     }
 

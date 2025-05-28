@@ -3,6 +3,7 @@ package Attacks.MeleeAttacks.Enemies;
 import Attacks.MeleeAttacks.MeleeAttack;
 import Entitys.Enemies.Ghoul;
 import Entitys.Enemies.Summoner.SkeletonSummoner;
+import Handlers.Sound.EnemySoundHandler;
 import Main.Panels.GamePanel;
 
 import java.awt.*;
@@ -26,11 +27,15 @@ public class SummonerAttack extends MeleeAttack {
     @Override
     public void update() {
 
-        if (frame == 18) {
+        if (frame == 18 || (summoner.getState() == SkeletonSummoner.State.DEAD || summoner.getState() == SkeletonSummoner.State.DAMAGED)) {
             GamePanel.enemyAttacks.remove(this);
-        } else if (frame == 6 && summoner.getState() != SkeletonSummoner.State.DEAD && summoner.getState() != SkeletonSummoner.State.DAMAGED) {
+        } else if (frame == 6) {
             hitBox = new Rectangle((summoner.getDirection().contains("right")) ? (int) summoner.getPosition().x + 50 : (int) summoner.getPosition().x - 115, (int) (summoner.getPosition().y - 7), 120, 73);
-        } else {
+            if (spriteCounter == 0) {
+                EnemySoundHandler.summonerAttack();
+            }
+        } else if (spriteCounter == 0 && frame == 7) {
+            EnemySoundHandler.summonerSlam();
             hitBox = null;
         }
 
