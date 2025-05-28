@@ -64,6 +64,25 @@ public abstract class Enemy extends Entitys.Entity {
 
     @Override
     public void update() {
+
+        for (Enemy other : GamePanel.enemies) {
+            if (other != this && other.getSolidArea().intersects(this.getSolidArea())) {
+                Rectangle myArea = this.getSolidArea();
+                Rectangle otherArea = other.getSolidArea();
+                int dx = (myArea.x + myArea.width / 2) - (otherArea.x + otherArea.width / 2);
+
+                // Push apart horizontally
+                int push = 2;
+                if (dx > 0) {
+                    this.position.x += push;
+                    other.position.x -= push;
+                } else {
+                    this.position.x -= push;
+                    other.position.x += push;
+                }
+            }
+        }
+
         super.update();
     }
 
