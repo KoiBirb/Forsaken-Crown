@@ -40,6 +40,10 @@ package Handlers.Sound;
              playSoundEffect("/Audio/Enemy/Summoner/HitGround.wav", summonerEffect);
          }
 
+         public static void summonerSummon() {
+             playSoundEffect("/Audio/Enemy/Summoner/Summon.wav", summonerEffect);
+         }
+
          public static synchronized void summonerFootsteps() {
              if (walkingSummoners == 0) {
                  summonerSteps.setFile("/Audio/Enemy/Summoner/Footsteps.wav");

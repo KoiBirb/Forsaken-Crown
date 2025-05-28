@@ -280,10 +280,8 @@ public class Ghoul extends Enemy {
                 knockbackX = Math.abs(knockbackX);
             }
 
-            velocity.x += knockbackX;
-            velocity.y += knockbackY;
             position.x += knockbackX;
-            position.y += knockbackY;
+            position.y -= knockbackY;
 
             if (velocity.x > 0) {
                 direction = "right";

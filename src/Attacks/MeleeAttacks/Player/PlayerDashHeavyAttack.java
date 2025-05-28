@@ -7,6 +7,7 @@
 package Attacks.MeleeAttacks.Player;
 
 import Attacks.MeleeAttacks.MeleeAttack;
+import Entitys.Enemies.Summoner.SkeletonSummoner;
 import Entitys.Player;
 import Handlers.CollisionHandler;
 import Handlers.Sound.MusicHandler;
@@ -39,7 +40,7 @@ public class PlayerDashHeavyAttack extends MeleeAttack {
     @Override
     public void update() {
 
-        if (frame == 5) {
+        if (frame == 5 || (player.getState() == Player.PlayerState.DEAD || player.getState() == Player.PlayerState.HIT)) {
             GamePanel.playerAttacks.remove(this);
         } else if (frame == 0) {
             hitBox = new Rectangle( (player.getDirection().contains("right")) ? (int) player.getPosition().x + 7 : (int) player.getPosition().x + 18, (int) (player.getPosition().y + 20), 20, 35);

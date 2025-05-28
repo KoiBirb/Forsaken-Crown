@@ -33,7 +33,7 @@ public class PlayerHeavyAttack extends MeleeAttack {
     @Override
     public void update() {
 
-        if (frame == 4) {
+        if (frame == 4 || (player.getState() == Player.PlayerState.DEAD || player.getState() == Player.PlayerState.HIT)) {
             GamePanel.playerAttacks.remove(this);
         } else if (frame == 0) {
             hitBox = new Rectangle( (player.getDirection().contains("right")) ? (int) player.getPosition().x : (int) player.getPosition().x + 12, (int) (player.getPosition().y), 30, 40);

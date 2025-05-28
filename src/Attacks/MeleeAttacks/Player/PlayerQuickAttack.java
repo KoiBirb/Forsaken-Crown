@@ -37,7 +37,7 @@ public class PlayerQuickAttack extends MeleeAttack {
     @Override
     public void update() {
         if (chain) {
-            if (frame == 6) {
+            if (frame == 6 || (player.getState() == Player.PlayerState.DEAD || player.getState() == Player.PlayerState.HIT)) {
                 GamePanel.playerAttacks.remove(this);
             } else if (frame == 1) {
                 hitBox = new Rectangle((player.getDirection().contains("right")) ? (int) (player.getPosition().x + 3) : (int) (player.getPosition().x - 95) , (int) (player.getPosition().y + 21), 137, 30);

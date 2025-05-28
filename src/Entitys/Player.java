@@ -187,7 +187,7 @@ public class Player extends Entity {
         }
 
         // Jumping
-        if (keyI.wPressed && state != PlayerState.HEALING && state != PlayerState.HIT) {
+        if (keyI.wPressed && state != PlayerState.HEALING) {
             if (jump && (onGround || System.currentTimeMillis() - lastGroundedTime <= coyoteTime) && jumpKeyPressStartTime == 0) {
                 jumpKeyPressStartTime = System.currentTimeMillis();
                 jump = false;
@@ -205,23 +205,23 @@ public class Player extends Entity {
             jump = true;
         }
 
-        if (keyI.wPressed && continuousJump && !keyI.iPressed && state != PlayerState.HIT) {
+        if (keyI.wPressed && continuousJump && !keyI.iPressed) {
             velocity.y = -8;
             isColliding = false;
             if (state != PlayerState.ATTACKING && state != PlayerState.DASHING) {
                 spriteRow = 13;
                 maxSpriteCol = 2;
             }
-        } else if (!onGround && spriteCol == maxSpriteCol && state != PlayerState.ATTACKING && state != PlayerState.DASHING && state != PlayerState.HIT && velocity.y < 6) {
+        } else if (!onGround && spriteCol == maxSpriteCol && state != PlayerState.ATTACKING && state != PlayerState.DASHING && velocity.y < 6) {
             spriteRow = 14;
             maxSpriteCol = 3;
-        } else if (!onGround && velocity.y > 6 && state != PlayerState.ATTACKING && state != PlayerState.DASHING && state != PlayerState.HIT) {
+        } else if (!onGround && velocity.y > 6 && state != PlayerState.ATTACKING && state != PlayerState.DASHING) {
             spriteRow = 15;
             maxSpriteCol = 2;
         }
 
         // Dashing
-        if (keyI.kPressed && state != PlayerState.DASHING && System.currentTimeMillis() - lastDashTime >= 1000 && currentMana > 0 && state != PlayerState.HIT && state != PlayerState.SPAWNING) {
+        if (keyI.kPressed && state != PlayerState.DASHING && System.currentTimeMillis() - lastDashTime >= 1000 && currentMana > 0) {
             state = PlayerState.DASHING;
             dashStartTime = System.currentTimeMillis();
             lastDashTime = dashStartTime;
@@ -281,7 +281,7 @@ public class Player extends Entity {
             }
         }
 
-        if (keyI.jPressed && state != PlayerState.ATTACKING && !keyI.iPressed && state != PlayerState.HIT) {
+        if (keyI.jPressed && state != PlayerState.ATTACKING && !keyI.iPressed) {
             long currentTime = System.currentTimeMillis();
             if (currentTime - lastHeavyAttackTime >= PlayerHeavyAttack.COOLDOWN) {
                 if (state == PlayerState.DASHING) {
@@ -301,7 +301,7 @@ public class Player extends Entity {
         }
 
         // Healing
-        if (keyI.iPressed && onGround && state != PlayerState.HEALING && state != PlayerState.HIT) {
+        if (keyI.iPressed && onGround && state != PlayerState.HEALING) {
             if (healStartTime == 0) {
                 healStartTime = System.currentTimeMillis();
                 MusicHandler.healCharge();
@@ -336,7 +336,7 @@ public class Player extends Entity {
         }
 
         // Movement
-        if ((keyI.aPressed || keyI.dPressed) && !(keyI.iPressed && onGround) && state != PlayerState.HEALING && state != PlayerState.DASHING && state != PlayerState.HIT) {
+        if ((keyI.aPressed || keyI.dPressed) && !(keyI.iPressed && onGround) && state != PlayerState.HEALING && state != PlayerState.DASHING) {
             if (onGround && !continuousJump && state != PlayerState.ATTACKING) {
                 maxSpriteCol = 7;
                 spriteRow = 3;
@@ -356,7 +356,7 @@ public class Player extends Entity {
                 state = PlayerState.WALKING;
         } else {
             MusicHandler.stopFootsteps();
-            if (onGround && !continuousJump && state != PlayerState.ATTACKING && state != PlayerState.HEALING && state != PlayerState.DASHING && state != PlayerState.SPAWNING && state != PlayerState.HIT) {
+            if (onGround && !continuousJump && state != PlayerState.ATTACKING && state != PlayerState.HEALING && state != PlayerState.DASHING && state != PlayerState.SPAWNING) {
                 spriteRow = 1;
                 maxSpriteCol = 8;
                 state = PlayerState.IDLE;
@@ -454,5 +454,9 @@ public class Player extends Entity {
 
     public void increaseMana(int amount) {
         currentMana = Math.min(currentMana + amount, maxMana);
+    }
+
+    public PlayerState getState() {
+        return state;
     }
 }

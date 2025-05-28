@@ -365,6 +365,7 @@ public class SkeletonSummoner extends Enemy{
             spriteRow = 2;
             spriteCol = 0;
             maxSpriteCol = 15;
+            EnemySoundHandler.summonerSummon();
     }
 
     public void setAttacking(boolean attacking) {
@@ -420,26 +421,6 @@ public class SkeletonSummoner extends Enemy{
     public void hit(int damage, int knockbackX, int knockbackY) {
         if (!hit){
             currentHealth -= damage;
-
-            Vector2 summonerCenter = getSolidAreaCenter();
-            Vector2 playerCenter = GamePanel.player.getSolidAreaCenter();
-
-            if (summonerCenter.x > playerCenter.x) {
-                knockbackX = -Math.abs(knockbackX);
-            } else {
-                knockbackX = Math.abs(knockbackX);
-            }
-
-            velocity.x += knockbackX;
-            velocity.y += knockbackY;
-            position.x += knockbackX;
-            position.y += knockbackY;
-
-            if (velocity.x > 0) {
-                direction = "right";
-            } else if (velocity.x < 0) {
-                direction = "left";
-            }
 
             if (currentState != State.SUMMONING) {
                 spriteRow = 4;
