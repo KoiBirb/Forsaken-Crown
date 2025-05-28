@@ -1,5 +1,6 @@
-package Attacks.MeleeAttacks;
+package Attacks.MeleeAttacks.Player;
 
+import Attacks.MeleeAttacks.MeleeAttack;
 import Entitys.Player;
 import Handlers.Sound.MusicHandler;
 import Main.Panels.GamePanel;
@@ -9,7 +10,7 @@ import java.awt.*;
 
 import static Handlers.CollisionHandler.checkAttackTileCollision;
 
-public class PlayerQuickAttack extends MeleeAttack{
+public class PlayerQuickAttack extends MeleeAttack {
 
     public static final int COOLDOWN = 650;
     private final Player player;
@@ -38,7 +39,7 @@ public class PlayerQuickAttack extends MeleeAttack{
         if (chain) {
             if (frame == 6) {
                 GamePanel.playerAttacks.remove(this);
-            } else if (frame == 1 || frame == 2) {
+            } else if (frame == 1) {
                 hitBox = new Rectangle((player.getDirection().contains("right")) ? (int) (player.getPosition().x + 3) : (int) (player.getPosition().x - 95) , (int) (player.getPosition().y + 21), 137, 30);
                 if (spriteCounter == 1 && frame == 1 && checkAttackTileCollision(hitBox, player)) {
                     TiledMap.cameraShake(4, 6);

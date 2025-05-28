@@ -1,5 +1,12 @@
-package Attacks.MeleeAttacks;
+/*
+ * PlayerDashHeavyAttack.java
+ * Leo Bogaert
+ * May 6, 2025,
+ * Extends MeleeAttack, used for the player dash heavy attack
+ */
+package Attacks.MeleeAttacks.Player;
 
+import Attacks.MeleeAttacks.MeleeAttack;
 import Entitys.Player;
 import Handlers.CollisionHandler;
 import Handlers.Sound.MusicHandler;
@@ -8,17 +15,17 @@ import Map.TiledMap;
 
 import java.awt.*;
 
-public class PlayerHeavyAttack extends MeleeAttack{
+public class PlayerDashHeavyAttack extends MeleeAttack {
 
-    public static final int COOLDOWN = 1350;
+    public static final int COOLDOWN = 1000;
     private final Player player;
 
     /**
-     * Constructor for the PlayerHeavyAttack class.
+     * Constructor for the PlayerDashHeavyAttack class.
      * @param player The player object that is performing the attack.
      */
-    public PlayerHeavyAttack(Player player) {
-        super(6);
+    public PlayerDashHeavyAttack(Player player) {
+        super(4);
 
         this.player = player;
 
@@ -32,12 +39,12 @@ public class PlayerHeavyAttack extends MeleeAttack{
     @Override
     public void update() {
 
-        if (frame == 4) {
+        if (frame == 5) {
             GamePanel.playerAttacks.remove(this);
         } else if (frame == 0) {
-            hitBox = new Rectangle( (player.getDirection().contains("right")) ? (int) player.getPosition().x : (int) player.getPosition().x + 12, (int) (player.getPosition().y), 30, 40);
-        } else if (frame == 1 || frame == 2){
-            hitBox = new Rectangle((player.getDirection().contains("right")) ? (int) player.getPosition().x + 7: (int) player.getPosition().x - 90, (int) (player.getPosition().y - 10), 128, 63);
+            hitBox = new Rectangle( (player.getDirection().contains("right")) ? (int) player.getPosition().x + 7 : (int) player.getPosition().x + 18, (int) (player.getPosition().y + 20), 20, 35);
+        } else if (frame == 1){
+            hitBox = new Rectangle((player.getDirection().contains("right")) ? (int) player.getPosition().x + 20: (int) player.getPosition().x - 50, (int) (player.getPosition().y), 80, 52);
             if (spriteCounter == 2 && frame == 1 && (player.isOnGround() || CollisionHandler.checkAttackTileCollision(hitBox, player))) {
                 MusicHandler.hitTile();
                 MusicHandler.hitColladable();

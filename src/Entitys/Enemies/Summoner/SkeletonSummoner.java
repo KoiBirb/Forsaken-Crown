@@ -1,6 +1,7 @@
 package Entitys.Enemies.Summoner;
 
-import Attacks.MeleeAttacks.GhoulAttack;
+import Attacks.MeleeAttacks.Enemies.GhoulAttack;
+import Attacks.MeleeAttacks.Enemies.SummonerAttack;
 import Entitys.Enemies.Enemy;
 import Entitys.Enemies.Ghoul;
 import Handlers.CollisionHandler;
@@ -16,7 +17,7 @@ import java.util.ArrayList;
 
 public class SkeletonSummoner extends Enemy{
 
-    private enum State {IDLE, WALK, DAMAGED, ATTACKING, DEAD, SUMMONING}
+    public enum State {IDLE, WALK, DAMAGED, ATTACKING, DEAD, SUMMONING}
     private enum Logic {PATROL, AGGRESSIVE, PASSIVE}
 
     private State currentState = State.IDLE;
@@ -59,7 +60,12 @@ public class SkeletonSummoner extends Enemy{
 
             if (canSeePlayer) {
                 hasStartedChasing = true;
-                if (summoned) {
+                long now = System.currentTimeMillis();
+                boolean cooldownActive = (now - lastAttackTime) < SummonerAttack.COOLDOWN;
+
+                if (cooldownActive && currentState != State.ATTACKING) {
+                    currentLogic = Logic.PASSIVE;
+                } else if (summoned) {
                     summons.removeIf(g -> !GamePanel.enemies.contains(g));
                     if (summons.isEmpty()) {
                         currentLogic = Logic.AGGRESSIVE;
@@ -95,12 +101,13 @@ public class SkeletonSummoner extends Enemy{
                         long now = System.currentTimeMillis();
 
                         if (dist <= 4 * ts && currentState != State.ATTACKING) {
-                            if (now - lastAttackTime >= GhoulAttack.COOLDOWN) {
+                            if (now - lastAttackTime >= SummonerAttack.COOLDOWN) {
                                 setAttacking(true);
                                 spriteCol = 0;
                                 spriteRow = 3;
                                 maxSpriteCol = 18;
                                 spriteCounter = 0;
+                                new SummonerAttack(this);
                                 velocity.x = 0;
                                 lastAttackTime = now;
                             } else {
@@ -109,6 +116,7 @@ public class SkeletonSummoner extends Enemy{
                                 spriteRow = 0;
                                 maxSpriteCol = 11;
                                 if (spriteCol > maxSpriteCol) spriteCol = 0;
+                                break;
                             }
 
                         } else if (!closeX) {
@@ -288,6 +296,9 @@ public class SkeletonSummoner extends Enemy{
                     } else if (currentState == State.SUMMONING) {
                         currentState = State.IDLE;
                         spriteCol = 0;
+                    } else if (currentState == State.DAMAGED) {
+                        currentState = State.IDLE;
+                        spriteCol = 0;
                     } else {
                         spriteCol = 0;
                     }
@@ -310,7 +321,6 @@ public class SkeletonSummoner extends Enemy{
 
     @Override
     public void draw(Graphics2D g2) {
-        debugDraw(g2);
         Vector2 cam = GamePanel.tileMap.returnCameraPos();
 
         int sx = (int) (position.x - cam.x);
@@ -427,7 +437,7 @@ public class SkeletonSummoner extends Enemy{
             }
 
             if (currentState != State.SUMMONING) {
-                spriteRow = 0;
+                spriteRow = 4;
                 spriteCol = 0;
                 maxSpriteCol = 3;
             }

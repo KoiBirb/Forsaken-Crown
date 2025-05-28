@@ -1,10 +1,9 @@
 package Entitys.Enemies;
 
-import Attacks.MeleeAttacks.GhoulAttack;
+import Attacks.MeleeAttacks.Enemies.GhoulAttack;
 import Handlers.CollisionHandler;
 import Handlers.ImageHandler;
 import Handlers.Sound.EnemySoundHandler;
-import Handlers.Sound.MusicHandler;
 import Handlers.Vector2;
 import Handlers.SpikeDetectionHandler;
 import Main.Panels.GamePanel;

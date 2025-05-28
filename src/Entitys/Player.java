@@ -1,6 +1,9 @@
 package Entitys;
 
-import Attacks.MeleeAttacks.*;
+import Attacks.MeleeAttacks.Player.PlayerDashHeavyAttack;
+import Attacks.MeleeAttacks.Player.PlayerDashSwingAttack;
+import Attacks.MeleeAttacks.Player.PlayerHeavyAttack;
+import Attacks.MeleeAttacks.Player.PlayerQuickAttack;
 import Handlers.CollisionHandler;
 import Handlers.ImageHandler;
 import Handlers.Sound.MusicHandler;

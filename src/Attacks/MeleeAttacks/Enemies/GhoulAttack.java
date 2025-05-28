@@ -1,11 +1,12 @@
-package Attacks.MeleeAttacks;
+package Attacks.MeleeAttacks.Enemies;
 
+import Attacks.MeleeAttacks.MeleeAttack;
 import Entitys.Enemies.Ghoul;
 import Main.Panels.GamePanel;
 
 import java.awt.*;
 
-public class GhoulAttack extends MeleeAttack{
+public class GhoulAttack extends MeleeAttack {
 
     public static final int COOLDOWN = 3500;
 

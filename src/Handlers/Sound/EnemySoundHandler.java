@@ -2,7 +2,6 @@ package Handlers.Sound;
 
 public class EnemySoundHandler {
 
-
     public final Sound footsteps = new Sound();
     public final Sound effect = new Sound();
 
