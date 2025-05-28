@@ -595,8 +595,8 @@ public class TiledMap {
 
     public static int getRoomId(double x, double y) {
         int scaledTileSize = getScaledTileSize();
-        int tileX = (int) (x / scaledTileSize);
-        int tileY = (int) (y / scaledTileSize);
+        int tileX = (int) ((x + 10) / scaledTileSize);
+        int tileY = (int) ((y + 10) / scaledTileSize);
 
         TiledMap map = GamePanel.tileMap;
 
