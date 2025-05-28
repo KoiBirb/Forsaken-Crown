@@ -1,6 +1,12 @@
+/*
+ * PlayerDashHeavyAttack.java
+ * Leo Bogaert, Heeyoung Shin
+ * May 28, 2025,
+ * Extends Entity, used as a parent class for all enemies
+ */
+
 package Entitys.Enemies;
 
-import Handlers.CollisionHandler;
 import Handlers.Vector2;
 import Main.Panels.GamePanel;
 import Map.TiledMap;
@@ -12,19 +18,14 @@ public abstract class Enemy extends Entitys.Entity {
     protected static final double GRAVITY = 0.8;
     protected static final double TERMINAL_VELOCITY = 12;
     protected static final double JUMP_FORCE = -8;
-    protected final int ts;
 
     protected final Vector2 spawnPos;
-    protected final int detectionRadiusTiles;
-    protected boolean jumpedOut = false;
-    protected boolean hasStartedChasing = false;
+    protected final int detectionRadiusTiles, ts;
+    protected boolean jumpedOut = false, hasStartedChasing = false;
     protected long lastJumpTime = 0;
     protected static final long JUMP_COOLDOWN_MS = 1000;
 
-    protected int spriteCounter = 0;
-    protected int spriteCol = 0;
-    protected int spriteRow = 0;
-    protected int maxSpriteCol = 7;
+    protected int spriteCounter = 0, spriteCol = 0, spriteRow = 0, maxSpriteCol = 0;
 
     public Enemy(Vector2 pos, double speed, int detectionRadiusTiles, int width, int height, int health, Rectangle solidArea) {
         super(pos, new Vector2(0, 0), width, height, speed,
@@ -44,7 +45,7 @@ public abstract class Enemy extends Entitys.Entity {
         double dx = to.x - from.x;
         double dy = to.y - from.y;
         double distance = Math.hypot(dx, dy);
-        int steps = (int) (distance / ((double) tileSize / 4)); // step in small increments
+        int steps = (int) (distance / ((double) tileSize / 4));
 
         for (int i = 1; i <= steps; i++) {
             double t = i / (double) steps;
@@ -66,7 +67,7 @@ public abstract class Enemy extends Entitys.Entity {
     public void update() {
 
         for (Enemy other : GamePanel.enemies) {
-            if (other != this && other.getSolidArea().intersects(this.getSolidArea())) {
+            if (other.getClass() == this.getClass() && other != this && other.getSolidArea().intersects(this.getSolidArea())) {
                 Rectangle myArea = this.getSolidArea();
                 Rectangle otherArea = other.getSolidArea();
                 int dx = (myArea.x + myArea.width / 2) - (otherArea.x + otherArea.width / 2);

@@ -1,6 +1,12 @@
+/*
+ * SkeletonSummoner.java
+ * Leo Bogaert
+ * May 28, 2025,
+ * Extends enemy, represents a skeleton summoner enemy that can summon skeletons and attack the player.
+ */
+
 package Entitys.Enemies.Summoner;
 
-import Attacks.MeleeAttacks.Enemies.GhoulAttack;
 import Attacks.MeleeAttacks.Enemies.SummonerAttack;
 import Entitys.Enemies.Enemy;
 import Entitys.Enemies.Ghoul;
@@ -17,6 +23,7 @@ import java.util.ArrayList;
 
 public class SkeletonSummoner extends Enemy{
 
+    // states
     public enum State {IDLE, WALK, DAMAGED, ATTACKING, DEAD, SUMMONING}
     private enum Logic {PATROL, AGGRESSIVE, PASSIVE}
 
@@ -32,12 +39,19 @@ public class SkeletonSummoner extends Enemy{
     private long patrolDuration = 0;
     private boolean patrolWalking = false, footstepsPlaying = false;
 
+    /**
+     * Summoner constructor.
+     * @param pos The initial position of the summoner.
+     */
     public SkeletonSummoner(Vector2 pos) {
         super(pos, 2, 8, 132, 83, 6,  new Rectangle(0, 0, 50, 65));
 
         this.image = ImageHandler.loadImage("Assets/Images/Enemies/Skeleton Summoner/Summoner/Skeleton Summoner 132x83.png");
     }
 
+    /**
+     * Updates summoner state and behavior.
+     */
     public void update() {
 
         if (currentState != State.DEAD) {
@@ -45,18 +59,20 @@ public class SkeletonSummoner extends Enemy{
             Vector2 playerPos = GamePanel.player.getSolidAreaCenter();
             playerPos.x -= 20;
             Vector2 currentPos = getSolidAreaCenter();
+            Vector2 topCenter = getSolidAreaXCenter();
 
             //room check
             int myRoom = TiledMap.getRoomId(currentPos.x, currentPos.y);
             int playerRoom = TiledMap.getPlayerRoomId();
             boolean inSameRoom = myRoom == playerRoom;
 
-            // los
+            // line of sight
             double dist = currentPos.distanceTo(playerPos);
             boolean inVision = dist <= visionRadius;
 
-            boolean canSeePlayer = inSameRoom && inVision && hasLineOfSight(currentPos, playerPos);
+            boolean canSeePlayer = inSameRoom && inVision && hasLineOfSight(topCenter,playerPos);
 
+            // Logic handling
             if (canSeePlayer) {
                 hasStartedChasing = true;
                 long now = System.currentTimeMillis();
@@ -79,6 +95,7 @@ public class SkeletonSummoner extends Enemy{
                 currentLogic = Logic.PATROL;
             }
 
+            // collision and gravity handling
             CollisionHandler.checkTileCollision(this);
             boolean onGround = isOnGround();
 
@@ -89,9 +106,8 @@ public class SkeletonSummoner extends Enemy{
                 jumpedOut = false;
             }
 
-
             switch (currentLogic) {
-                case AGGRESSIVE:
+                case AGGRESSIVE: // chase and attack player
                     Vector2 target = hasStartedChasing && canSeePlayer ? playerPos : spawnPos;
                     double dx = target.x - currentPos.x;
                     boolean closeX = Math.abs(dx) <= ts;
@@ -155,7 +171,7 @@ public class SkeletonSummoner extends Enemy{
                     }
                     break;
 
-                case PATROL:
+                case PATROL: // Randomly walk back and forth
                     boolean onGroundPatrol = isOnGround();
                     long now = System.currentTimeMillis();
 
@@ -204,7 +220,7 @@ public class SkeletonSummoner extends Enemy{
                     }
                     break;
 
-                case PASSIVE:
+                case PASSIVE: // keep distance from player
                     if (currentState != State.SUMMONING) {
                         int tileSize = TiledMap.getScaledTileSize();
                         double minDist = 7 * tileSize;
@@ -317,15 +333,23 @@ public class SkeletonSummoner extends Enemy{
             super.update();
     }
 
+    /**
+     * Checks for ledges.
+     * @return true if no ledge, false otherwise.
+     */
     public boolean isGroundAhead(double x, double y, double direction) {
-        // Check a point just ahead of the Ghoul's feet in the direction of movement
         int checkX = (int) (x + direction * (width /4.0));
         int checkY = (int) (y + height/2.0 + 5);
         return CollisionHandler.isSolidTileAt(checkX, checkY);
     }
 
+    /**
+     * Draws the summoner
+     * @param g2 graphics object to draw on
+     */
     @Override
     public void draw(Graphics2D g2) {
+        debugDraw(g2);
         Vector2 cam = GamePanel.tileMap.returnCameraPos();
 
         int sx = (int) (position.x - cam.x);
@@ -350,6 +374,9 @@ public class SkeletonSummoner extends Enemy{
         }
     }
 
+    /**
+     * Summons skeletons
+     */
     private void summon(){
             summoned = true;
             int offset = 10;
@@ -368,6 +395,10 @@ public class SkeletonSummoner extends Enemy{
             EnemySoundHandler.summonerSummon();
     }
 
+    /**
+     * Sets the attacking state of the summoner.
+     * @param attacking true if summoner is attacking, false otherwise.
+     */
     public void setAttacking(boolean attacking) {
         if (attacking) {
             currentState = State.ATTACKING;
@@ -382,34 +413,41 @@ public class SkeletonSummoner extends Enemy{
         }
     }
 
+    /**
+     * Debug draw method to visualize the summoner's vision radius and line of sight.
+     * @param g2 Graphics2D object for drawing.
+     */
     private void debugDraw(Graphics2D g2) {
         Vector2 cam = GamePanel.tileMap.returnCameraPos();
 
-        // Draw vision radius
+        // vision radius
         g2.setColor(new Color(0, 0, 255, 64));
         int r = (int) visionRadius;
         Vector2 center = getSolidAreaCenter();
         g2.drawOval((int) (center.x - r - cam.x), (int) (center.y - r - cam.y), r * 2, r * 2);
 
-        // Draw line to player using solid area centers
-        Vector2 playerCenter = GamePanel.player.getSolidAreaCenter();
+        // Path
+        Vector2 topCenter = getSolidAreaXCenter();
+        Vector2 playerCenter = GamePanel.player.getSolidAreaXCenter();
         playerCenter.x -= 20;
         int myRoom = TiledMap.getRoomId(center.x, center.y);
         int playerRoom = TiledMap.getPlayerRoomId();
         boolean inSameRoom = myRoom == playerRoom;
         boolean inVision = center.distanceTo(playerCenter) <= visionRadius;
-        boolean canSee = inSameRoom && inVision && hasLineOfSight(center, playerCenter);
+        boolean canSee = inSameRoom && inVision && hasLineOfSight(topCenter, playerCenter);
 
         g2.setColor(canSee ? Color.GREEN : Color.RED);
         g2.drawLine(
-                (int) (center.x - cam.x), (int) (center.y - cam.y),
+                (int) (topCenter.x - cam.x), (int) (topCenter.y - cam.y),
                 (int) (playerCenter.x - cam.x), (int) (playerCenter.y - cam.y)
         );
 
+        // hitbox
         g2.setColor(Color.MAGENTA);
         Rectangle solid = getSolidArea();
         g2.drawRect((int) (solid.x - cam.x), (int) (solid.y - cam.y), solid.width, solid.height);
 
+        // ledge check
         double moveDir = (velocity.x < 0) ? -1 : 1;
         int checkX = (int) (center.x + moveDir * (width /4.0));
         int checkY = (int) (center.y + height/2.0 + 5);
@@ -418,6 +456,12 @@ public class SkeletonSummoner extends Enemy{
         g2.fillRect(checkX - (int) cam.x - 2, checkY - (int) cam.y - 2, 4, 4);
     }
 
+    /**
+     * Handles damage taken by the summoner.
+     * @param damage The amount of damage taken.
+     * @param knockbackX The knockback force in the X direction.
+     * @param knockbackY The knockback force in the Y direction.
+     */
     public void hit(int damage, int knockbackX, int knockbackY) {
         if (!hit){
             currentHealth -= damage;
@@ -443,6 +487,9 @@ public class SkeletonSummoner extends Enemy{
         }
     }
 
+    /**
+     * Handles the death of the summoner.
+     */
     public void death(){
         if (currentState != State.DEAD) {
             currentState = State.DEAD;
@@ -457,6 +504,10 @@ public class SkeletonSummoner extends Enemy{
         }
     }
 
+    /**
+     * Gets the current state of the summoner.
+     * @return The current state.
+     */
     public State getState(){
         return currentState;
     }

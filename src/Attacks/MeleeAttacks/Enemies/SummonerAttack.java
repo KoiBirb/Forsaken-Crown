@@ -1,7 +1,12 @@
+/*
+ * SummonerAttack.java
+ * Leo Bogaert
+ * May 28, 2025,
+ * Extends MeleeAttack, used for the summoner attack
+ */
 package Attacks.MeleeAttacks.Enemies;
 
 import Attacks.MeleeAttacks.MeleeAttack;
-import Entitys.Enemies.Ghoul;
 import Entitys.Enemies.Summoner.SkeletonSummoner;
 import Handlers.Sound.EnemySoundHandler;
 import Main.Panels.GamePanel;

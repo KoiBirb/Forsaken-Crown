@@ -163,7 +163,14 @@ public abstract class Entity {
     public Vector2 getSolidAreaCenter() {
         return new Vector2(
                 solidArea.x + solidArea.width / 2.0,
-                solidArea.y + solidArea.height / 2.0
+                solidArea.y + solidArea.height/2.0
+        );
+    }
+
+    public Vector2 getSolidAreaXCenter() {
+        return new Vector2(
+                solidArea.x + solidArea.width / 2.0,
+                solidArea.y
         );
     }
 

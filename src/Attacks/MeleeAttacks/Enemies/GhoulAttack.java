@@ -1,3 +1,10 @@
+/*
+ * GhoulAttack.java
+ * Leo Bogaert
+ * May 28, 2025,
+ * Extends MeleeAttack, used for the ghoul attack
+ */
+
 package Attacks.MeleeAttacks.Enemies;
 
 import Attacks.MeleeAttacks.MeleeAttack;

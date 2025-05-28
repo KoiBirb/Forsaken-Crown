@@ -32,6 +32,7 @@ public class Ghoul extends Enemy {
             Vector2 playerPos = GamePanel.player.getSolidAreaCenter();
             playerPos.x -= 20;
             Vector2 currentPos = getSolidAreaCenter();
+            Vector2 currentTopPos = getSolidAreaXCenter();
 
             //room check
             int myRoom = TiledMap.getRoomId(currentPos.x, currentPos.y);
@@ -42,7 +43,7 @@ public class Ghoul extends Enemy {
             double dist = currentPos.distanceTo(playerPos);
             boolean inVision = dist <= visionRadius;
 
-            boolean canSeePlayer = inSameRoom && inVision && hasLineOfSight(currentPos, playerPos);
+            boolean canSeePlayer = inSameRoom && inVision && hasLineOfSight(currentTopPos, GamePanel.player.getSolidAreaXCenter());
 
             if (canSeePlayer) hasStartedChasing = true;
 
@@ -240,19 +241,19 @@ public class Ghoul extends Enemy {
         Vector2 center = getSolidAreaCenter();
         g2.drawOval((int) (center.x - r - cam.x), (int) (center.y - r - cam.y), r * 2, r * 2);
 
-        // Draw line to player using solid area centers
-        Vector2 playerCenter = GamePanel.player.getSolidAreaCenter();
+        Vector2 playerCenter = GamePanel.player.getSolidAreaXCenter();
+        Vector2 topCenter = getSolidAreaXCenter();
         playerCenter.x -= 20;
         int myRoom = TiledMap.getRoomId(center.x, center.y);
         int playerRoom = TiledMap.getPlayerRoomId();
         boolean inSameRoom = myRoom == playerRoom;
         boolean inVision = center.distanceTo(playerCenter) <= visionRadius;
-        boolean canSee = inSameRoom && inVision && hasLineOfSight(center, playerCenter);
+        boolean canSee = inSameRoom && inVision && hasLineOfSight(topCenter,playerCenter);
 
         g2.setColor(canSee ? Color.GREEN : Color.RED);
         g2.drawLine(
-                (int) (center.x - cam.x), (int) (center.y - cam.y),
-                (int) (playerCenter.x - cam.x), (int) (playerCenter.y - cam.y)
+                (int) (center.x - cam.x), (int) (position.y - cam.y),
+                (int) (playerCenter.x - cam.x), (int) (GamePanel.player.getPosition().y - cam.y)
         );
 
         g2.setColor(Color.MAGENTA);
