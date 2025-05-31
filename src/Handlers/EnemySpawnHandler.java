@@ -2,6 +2,7 @@ package Handlers;
 
 import Entitys.Enemies.Enemy;
 import Entitys.Enemies.Ghoul;
+import Entitys.Enemies.Summoner.Skeleton;
 import Entitys.Enemies.Summoner.SkeletonSummoner;
 import Main.Panels.GamePanel;
 

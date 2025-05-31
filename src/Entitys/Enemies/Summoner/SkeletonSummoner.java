@@ -33,7 +33,7 @@ public class SkeletonSummoner extends Enemy{
     private final double visionRadius = 300;
     private long lastAttackTime = 0;
     boolean summoned = false;
-    private ArrayList<Ghoul> summons = new ArrayList<>();
+    private final ArrayList<Skeleton> summons = new ArrayList<>();
 
     private long patrolStateChangeTime = 0;
     private long patrolDuration = 0;
@@ -378,15 +378,17 @@ public class SkeletonSummoner extends Enemy{
      */
     private void summon(){
             summoned = true;
-            int offset = 10;
+            int offset = 20;
             int dir = "left".equals(direction) ? -1 : 1;
 
             for (int i = 1; i <= 3; i++) {
-                double ghoulX = position.x + dir * i * offset;
-                Ghoul ghoul = new Ghoul(new Vector2(ghoulX, position.y));
-                GamePanel.enemies.add(ghoul);
-                summons.add(ghoul);
+                double summonX = position.x + dir * i * offset;
+                Skeleton skeleton = new Skeleton(new Vector2(summonX, position.y + 32));
+                GamePanel.enemies.add(skeleton);
+                summons.add(skeleton);
             }
+
+            EnemySoundHandler.resetSkeletonSpawn();
             currentState = State.SUMMONING;
             spriteRow = 2;
             spriteCol = 0;
@@ -509,6 +511,10 @@ public class SkeletonSummoner extends Enemy{
      */
     public State getState(){
         return currentState;
+    }
+
+    public void setState(State state){
+        this.currentState = state;
     }
 }
 

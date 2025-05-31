@@ -8,8 +8,14 @@ package Handlers.Sound;
          private static final Sound summonerSteps = new Sound();
          private static final Sound summonerEffect = new Sound();
 
+         private static final Sound skeletonSteps = new Sound();
+         private static final Sound skeletonEffect = new Sound();
+
          private static int walkingGhouls = 0, attackingGhouls = 0;
          private static int walkingSummoners = 0, attackingSummoners = 0;
+         private static int walkingSkeletons = 0, attackingSkeletons = 0;
+         private static boolean skeletonSpawn = false;
+
 
          public static void summonerDeath() {
              playSoundEffect("/Audio/Enemy/Summoner/Death.wav", ghoulEffect);
@@ -103,6 +109,61 @@ package Handlers.Sound;
 
          public static void ghoulHit() {
              playSoundEffect("/Audio/Enemy/Ghoul/Ghoul_Hit.wav", ghoulEffect);
+         }
+
+
+         public static void skeletonDeath() {
+             playSoundEffect("/Audio/Enemy/Skeleton/Death.wav", skeletonEffect);
+         }
+
+         public static synchronized void skeletonAttack() {
+             if (attackingSkeletons == 0) {
+                 skeletonEffect.setFile("/Audio/Enemy/Skeleton/Attack.wav");
+                 skeletonEffect.play();
+             }
+             attackingSkeletons++;
+         }
+
+         public static synchronized void stopSkeletonAttack() {
+             if (attackingSkeletons > 0) {
+                 attackingSkeletons--;
+                 if (attackingSkeletons == 0) {
+                     skeletonEffect.stop();
+                 }
+             }
+         }
+
+         public static synchronized void skeletonFootsteps() {
+             if (walkingSkeletons == 0) {
+                 skeletonSteps.setFile("/Audio/Enemy/Skeleton/Footsteps.wav");
+                 skeletonSteps.play();
+                 skeletonSteps.loop();
+             }
+             walkingSkeletons++;
+         }
+
+         public static synchronized void stopSkeletonFootsteps() {
+             if (walkingSkeletons > 0) {
+                 walkingSkeletons--;
+                 if (walkingSkeletons == 0) {
+                     skeletonSteps.stop();
+                 }
+             }
+         }
+
+         public static void skeletonHit() {
+             playSoundEffect("/Audio/Enemy/Skeleton/Hit.wav", skeletonEffect);
+         }
+
+         public static void skeletonSpawn() {
+             if (!skeletonSpawn) {
+                    skeletonSpawn = true;
+                    playSoundEffect("/Audio/Enemy/Skeleton/Spawn.wav", skeletonEffect);
+                }
+         }
+
+         public static void resetSkeletonSpawn() {
+                skeletonSpawn = false;
          }
 
          /**

@@ -1,7 +1,7 @@
-package Entitys.Enemies;
+package Entitys.Enemies.Summoner;
 
 import Attacks.MeleeAttacks.Enemies.GhoulAttack;
-import Entitys.Enemies.Summoner.Skeleton;
+import Entitys.Enemies.Enemy;
 import Handlers.CollisionHandler;
 import Handlers.ImageHandler;
 import Handlers.Sound.EnemySoundHandler;
@@ -12,35 +12,56 @@ import Map.TiledMap;
 
 import java.awt.*;
 
-public class Ghoul extends Enemy {
+public class Skeleton extends Enemy {
 
-    public enum State {IDLE, WALK, DAMAGED, ATTACKING, DEAD}
-    private boolean idleForward = true, footstepsPlaying = false;
-    protected State currentState = State.IDLE;
-    private final double visionRadius = 200;
+    public enum State {IDLE, WALK, DAMAGED, ATTACKING, DEAD, SPAWNING}
+    private boolean footstepsPlaying = false;
+    protected State currentState;
+    private final double visionRadius = 300;
     private long lastAttackTime = 0;
 
-    public Ghoul(Vector2 pos) {
-        super(pos, 1, 8, 62, 33, 3,  new Rectangle(0, 0, 20, 40));
+    public Skeleton(Vector2 pos) {
+        super(pos, 2, 8, 43, 22, 2,  new Rectangle(0, 0, 25, 33));
 
-        this.image = ImageHandler.loadImage("Assets/Images/Enemies/Ghoul/Ghoul Sprite Sheet 62 x 33.png");
+        this.image = ImageHandler.loadImage("Assets/Images/Enemies/Skeleton Summoner/Skeleton - Unarmed/Skeleton - Unarmed 43x22.png");
+
+        this.currentState = State.SPAWNING;
+        this.spriteRow = 0;
+        this.spriteCol = 0;
+        this.maxSpriteCol = 16;
+
+        EnemySoundHandler.skeletonSpawn();
     }
 
     public void update() {
 
+        if (currentState == State.SPAWNING) {
+            spriteCounter++;
+            if (spriteCounter > 4) {
+                spriteCounter = 0;
+                spriteCol++;
+                if (spriteCol > maxSpriteCol) {
+                    currentState = State.IDLE;
+                    spriteRow = 1;
+                    spriteCol = 0;
+                    maxSpriteCol = 11;
+                }
+            }
+            return;
+        }
+
         if (currentState != State.DEAD) {
+
             int ts = TiledMap.getScaledTileSize();
             Vector2 playerPos = GamePanel.player.getSolidAreaCenter();
             playerPos.x -= 20;
             Vector2 currentPos = getSolidAreaCenter();
             Vector2 currentTopPos = getSolidAreaXCenter();
 
-            //room check
             int myRoom = TiledMap.getRoomId(currentPos.x, currentPos.y);
             int playerRoom = TiledMap.getPlayerRoomId();
             boolean inSameRoom = myRoom == playerRoom;
 
-            // los
             double dist = currentPos.distanceTo(playerPos);
             boolean inVision = dist <= visionRadius;
 
@@ -62,18 +83,17 @@ public class Ghoul extends Enemy {
                     if (now - lastAttackTime >= GhoulAttack.COOLDOWN) {
                         setAttacking(true);
                         spriteCol = 0;
-                        spriteRow = 2;
-                        maxSpriteCol = 6;
+                        spriteRow = 3;
+                        maxSpriteCol = 8;
                         spriteCounter = 0;
                         velocity.x = 0;
-                        new GhoulAttack(this);
-                        EnemySoundHandler.ghoulAttack();
+                        EnemySoundHandler.skeletonAttack();
                         lastAttackTime = now;
                     } else {
                         velocity.x = 0;
                         currentState = State.IDLE;
-                        spriteRow = 0;
-                        maxSpriteCol = 3;
+                        spriteRow = 1;
+                        maxSpriteCol = 11;
                         if (spriteCol > maxSpriteCol) spriteCol = 0;
                     }
 
@@ -84,14 +104,15 @@ public class Ghoul extends Enemy {
                         direction = velocity.x < 0 ? "left" : "right";
                         if (currentState != State.ATTACKING) {
                             currentState = State.WALK;
-                            spriteRow = 1;
+                            spriteRow = 2;
                             maxSpriteCol = 7;
+                            if (spriteCol > maxSpriteCol) spriteCol = 0;
                         }
                     } else {
                         velocity.x = 0;
                         currentState = State.IDLE;
-                        spriteRow = 0;
-                        maxSpriteCol = 3;
+                        spriteRow = 1;
+                        maxSpriteCol = 11;
                         if (spriteCol > maxSpriteCol) spriteCol = 0;
                     }
 
@@ -108,19 +129,19 @@ public class Ghoul extends Enemy {
             } else if (!hit) {
                 velocity.x = 0;
                 currentState = State.IDLE;
-                spriteRow = 0;
-                maxSpriteCol = 3;
+                spriteRow = 1;
+                maxSpriteCol = 11;
                 if (spriteCol > maxSpriteCol) spriteCol = 0;
             }
 
             if (currentState == State.WALK && onGround) {
                 if (!footstepsPlaying) {
-                    EnemySoundHandler.ghoulFootsteps();
+                    EnemySoundHandler.skeletonFootsteps();
                     footstepsPlaying = true;
                 }
             } else {
                 if (footstepsPlaying) {
-                    EnemySoundHandler.stopGhoulFootsteps();
+                    EnemySoundHandler.stopSkeletonFootsteps();
                     footstepsPlaying = false;
                 }
             }
@@ -135,23 +156,8 @@ public class Ghoul extends Enemy {
 
 
         spriteCounter++;
-        if (spriteCounter >= 12) {
+        if (spriteCounter >= 4) {
             spriteCounter = 0;
-            if (currentState == State.IDLE) {
-                if (idleForward) {
-                    spriteCol++;
-                    if (spriteCol >= 3) {
-                        spriteCol = 3;
-                        idleForward = false;
-                    }
-                } else {
-                    spriteCol--;
-                    if (spriteCol <= 0) {
-                        spriteCol = 0;
-                        idleForward = true;
-                    }
-                }
-            } else {
                 spriteCol++;
                 if (spriteCol >= maxSpriteCol) {
                     if (currentState == State.ATTACKING) {
@@ -159,12 +165,13 @@ public class Ghoul extends Enemy {
                         setAttacking(false);
                         if (hasStartedChasing && !hit) {
                             currentState = State.WALK;
-                            spriteRow = 1;
+                            spriteRow = 2;
                             maxSpriteCol = 7;
+                            if (spriteCol > maxSpriteCol) spriteCol = 0;
                         } else {
                             currentState = State.IDLE;
-                            spriteRow = 0;
-                            maxSpriteCol = 3;
+                            spriteRow = 1;
+                            maxSpriteCol = 11;
                         }
                     } else if (hit && !currentState.equals(State.DEAD)) {
                         spriteCol = 3;
@@ -176,7 +183,6 @@ public class Ghoul extends Enemy {
                     }
                 }
             }
-        }
 
         if (currentState == State.ATTACKING) {
             velocity.x = 0;
@@ -195,19 +201,19 @@ public class Ghoul extends Enemy {
 
         if ("left".equals(direction)) {
             g2.drawImage(
-                image,
-                sx + width * 2 - 50, sy, sx - 50, sy + height * 2,
-                spriteCol * width, spriteRow * height,
-                (spriteCol + 1) * width, (spriteRow + 1) * height,
-                null
+                    image,
+                    sx + width * 2 - 32, sy + 2, sx - 32, sy + height * 2 + 2,
+                    spriteCol * width, spriteRow * height,
+                    (spriteCol + 1) * width, (spriteRow + 1) * height,
+                    null
             );
         } else {
             g2.drawImage(
-                image,
-                sx - 50, sy, sx + width * 2 - 50, sy + height * 2,
-                spriteCol * width, spriteRow * height,
-                (spriteCol + 1) * width, (spriteRow + 1) * height,
-                null
+                    image,
+                    sx - 32, sy + 2, sx + width * 2 - 32, sy + height * 2 + 2,
+                    spriteCol * width, spriteRow * height,
+                    (spriteCol + 1) * width, (spriteRow + 1) * height,
+                    null
             );
         }
     }
@@ -217,12 +223,12 @@ public class Ghoul extends Enemy {
             currentState = State.ATTACKING;
             spriteRow = 2;
             spriteCol = 0;
-            maxSpriteCol = 6;
+            maxSpriteCol = 8;
         } else {
             currentState = State.IDLE;
-            spriteRow = 0;
+            spriteRow = 1;
             spriteCol = 0;
-            maxSpriteCol = 3;
+            maxSpriteCol = 11;
         }
     }
 
@@ -293,16 +299,16 @@ public class Ghoul extends Enemy {
                 direction = "left";
             }
 
-            spriteRow = 3;
+            spriteRow = 1;
             spriteCol = 0;
             maxSpriteCol = 3;
 
             currentState = State.DAMAGED;
 
-            EnemySoundHandler.stopGhoulAttack();
+            EnemySoundHandler.stopSkeletonAttack();
 
             if (currentHealth > 0)
-                EnemySoundHandler.ghoulHit();
+                EnemySoundHandler.skeletonHit();
 
             hit = true;
         }
@@ -317,20 +323,12 @@ public class Ghoul extends Enemy {
             currentState = State.DEAD;
             spriteRow = 4;
             spriteCol = 0;
-            maxSpriteCol = 6;
+            maxSpriteCol = 15;
             velocity.x = 0;
             velocity.y = 0;
-            EnemySoundHandler.stopGhoulAttack();
-            EnemySoundHandler.stopGhoulFootsteps();
-            EnemySoundHandler.ghoulDeath();
+            EnemySoundHandler.stopSkeletonAttack();
+            EnemySoundHandler.stopSkeletonFootsteps();
+            EnemySoundHandler.skeletonDeath();
         }
-    }
-
-    public State getState(){
-        return currentState;
-    }
-
-    public void setState(State state){
-        this.currentState = state;
     }
 }

@@ -74,25 +74,31 @@ public abstract class Enemy extends Entitys.Entity {
     public void update() {
 
         for (Enemy other : GamePanel.enemies) {
-            if (other.getClass() == this.getClass() && other != this && other.getSolidArea().intersects(this.getSolidArea())) {
-                Rectangle myArea = this.getSolidArea();
-                Rectangle otherArea = other.getSolidArea();
-                int dx = (myArea.x + myArea.width / 2) - (otherArea.x + otherArea.width / 2);
+                if (other.getClass() == this.getClass() && other != this && other.getSolidArea().intersects(this.getSolidArea())) {
+                    Rectangle myArea = this.getSolidArea();
+                    Rectangle otherArea = other.getSolidArea();
+                    int dx = (myArea.x + myArea.width / 2) - (otherArea.x + otherArea.width / 2);
 
-                // Push apart horizontally
-                int push = 2;
-                if (dx > 0) {
-                    this.position.x += push;
-                    other.position.x -= push;
-                } else {
-                    this.position.x -= push;
-                    other.position.x += push;
+                    int push = 2;
+                    double newThisX = this.position.x + (dx > 0 ? push : -push);
+                    double newOtherX = other.position.x + (dx > 0 ? -push : push);
+
+                    boolean thisOnGround = this.isGroundAhead(newThisX, this.position.y + this.height, dx > 0 ? 1 : -1);
+                    boolean otherOnGround = other.isGroundAhead(newOtherX, other.position.y + other.height, dx > 0 ? -1 : 1);
+
+                    if (thisOnGround) {
+                        this.position.x = newThisX;
+                    }
+                    if (otherOnGround) {
+                        other.position.x = newOtherX;
+                    }
                 }
             }
-        }
 
         super.update();
     }
+
+    public abstract boolean isGroundAhead(double x, double y, double direction);
 
     @Override
     public abstract void draw(Graphics2D g2);
