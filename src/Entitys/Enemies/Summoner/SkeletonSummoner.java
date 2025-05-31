@@ -462,7 +462,7 @@ public class SkeletonSummoner extends Enemy{
      * @param knockbackY The knockback force in the Y direction.
      */
     public void hit(int damage, int knockbackX, int knockbackY) {
-        if (!hit){
+        if (canBeHit() && !hit){
             currentHealth -= damage;
 
             if (currentState != State.SUMMONING) {

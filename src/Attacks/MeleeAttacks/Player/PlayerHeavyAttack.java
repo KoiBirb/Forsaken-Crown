@@ -19,7 +19,7 @@ public class PlayerHeavyAttack extends MeleeAttack {
      * @param player The player object that is performing the attack.
      */
     public PlayerHeavyAttack(Player player) {
-        super(6);
+        super(5);
 
         this.player = player;
 

@@ -19,6 +19,9 @@ public abstract class Enemy extends Entitys.Entity {
     protected static final double TERMINAL_VELOCITY = 12;
     protected static final double JUMP_FORCE = -8;
 
+    protected long lastHitTime = 0;
+    protected static final long INVINCIBILITY_DURATION_MS = 200;
+
     protected final Vector2 spawnPos;
     protected final int detectionRadiusTiles, ts;
     protected boolean jumpedOut = false, hasStartedChasing = false;
@@ -35,6 +38,10 @@ public abstract class Enemy extends Entitys.Entity {
         this.detectionRadiusTiles = detectionRadiusTiles;
 
         ts = TiledMap.getScaledTileSize();
+    }
+
+    public boolean canBeHit() {
+        return System.currentTimeMillis() - lastHitTime > INVINCIBILITY_DURATION_MS;
     }
 
     protected boolean hasLineOfSight(Vector2 from, Vector2 to) {

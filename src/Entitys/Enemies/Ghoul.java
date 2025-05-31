@@ -269,7 +269,7 @@ public class Ghoul extends Enemy {
     }
 
     public void hit(int damage, int knockbackX, int knockbackY) {
-        if (!hit){
+        if (canBeHit() && !hit){
             currentHealth -= damage;
 
             Vector2 ghoulCenter = getSolidAreaCenter();
