@@ -215,8 +215,8 @@ public class CollisionHandler {
 
         Vector2 cameraPos = GamePanel.tileMap.getCameraPos();
 
-        int screenX = (int) (x - cameraPos.x);
-        int screenY = (int) (y - cameraPos.y);
+        int screenX = (int) (entity.getSolidArea().x - cameraPos.x);
+        int screenY = (int) (entity.getSolidArea().y - cameraPos.y);
 
         g2.drawRect(screenX, screenY, width, height);
 

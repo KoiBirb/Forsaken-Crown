@@ -209,6 +209,7 @@ public class GamePanel extends JPanel implements Runnable{
 
         // Draw player hit box and colidable tiles
 //        CollisionHandler.draw(g2, player);
+//        CollisionHandler.draw(g2, enemies.getFirst());
 //
 //        for (int i = 0; i < playerAttacks.size(); i++) {
 //            playerAttacks.get(i).draw(g2);

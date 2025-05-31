@@ -15,7 +15,7 @@ public class EnemySpawnHandler {
      */
     public static void setup() {
         GamePanel.enemies.clear(); // Remove existing enemies
-        GamePanel.enemies.add(new SkeletonSummoner(new Vector2(600, 100)));
+        GamePanel.enemies.add(new Skeleton(new Vector2(600, 100)));
     }
 
     /**

@@ -1,6 +1,7 @@
 package Entitys.Enemies.Summoner;
 
 import Attacks.MeleeAttacks.Enemies.GhoulAttack;
+import Attacks.MeleeAttacks.Enemies.SkeletonAttack;
 import Entitys.Enemies.Enemy;
 import Handlers.CollisionHandler;
 import Handlers.ImageHandler;
@@ -54,7 +55,6 @@ public class Skeleton extends Enemy {
 
             int ts = TiledMap.getScaledTileSize();
             Vector2 playerPos = GamePanel.player.getSolidAreaCenter();
-            playerPos.x -= 20;
             Vector2 currentPos = getSolidAreaCenter();
             Vector2 currentTopPos = getSolidAreaXCenter();
 
@@ -79,15 +79,15 @@ public class Skeleton extends Enemy {
             if (hasStartedChasing && canSeePlayer && !hit) {
                 long now = System.currentTimeMillis();
 
-                if (dist <= 1.2 * ts && currentState != State.ATTACKING) {
-                    if (now - lastAttackTime >= GhoulAttack.COOLDOWN) {
+                if (dist <= ts && currentState != State.ATTACKING) {
+                    if (now - lastAttackTime >= SkeletonAttack.COOLDOWN) {
                         setAttacking(true);
                         spriteCol = 0;
                         spriteRow = 3;
                         maxSpriteCol = 8;
                         spriteCounter = 0;
                         velocity.x = 0;
-                        EnemySoundHandler.skeletonAttack();
+                        new SkeletonAttack(this);
                         lastAttackTime = now;
                     } else {
                         velocity.x = 0;
@@ -250,7 +250,6 @@ public class Skeleton extends Enemy {
 
         Vector2 playerCenter = GamePanel.player.getSolidAreaXCenter();
         Vector2 topCenter = getSolidAreaXCenter();
-        playerCenter.x -= 20;
         int myRoom = TiledMap.getRoomId(center.x, center.y);
         int playerRoom = TiledMap.getPlayerRoomId();
         boolean inSameRoom = myRoom == playerRoom;
@@ -330,5 +329,13 @@ public class Skeleton extends Enemy {
             EnemySoundHandler.stopSkeletonFootsteps();
             EnemySoundHandler.skeletonDeath();
         }
+    }
+
+    /**
+     * Gets the current state of the summoner.
+     * @return The current state.
+     */
+    public State getState(){
+        return currentState;
     }
 }

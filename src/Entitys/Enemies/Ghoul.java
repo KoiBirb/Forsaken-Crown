@@ -31,7 +31,6 @@ public class Ghoul extends Enemy {
         if (currentState != State.DEAD) {
             int ts = TiledMap.getScaledTileSize();
             Vector2 playerPos = GamePanel.player.getSolidAreaCenter();
-            playerPos.x -= 20;
             Vector2 currentPos = getSolidAreaCenter();
             Vector2 currentTopPos = getSolidAreaXCenter();
 
@@ -244,7 +243,6 @@ public class Ghoul extends Enemy {
 
         Vector2 playerCenter = GamePanel.player.getSolidAreaXCenter();
         Vector2 topCenter = getSolidAreaXCenter();
-        playerCenter.x -= 20;
         int myRoom = TiledMap.getRoomId(center.x, center.y);
         int playerRoom = TiledMap.getPlayerRoomId();
         boolean inSameRoom = myRoom == playerRoom;

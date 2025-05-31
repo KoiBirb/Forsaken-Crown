@@ -44,7 +44,7 @@ public class Player extends Entity {
 
     public Player(Vector2 position) {
         super(position, new Vector2(0, 0), 90, 37,
-                6.4, new Rectangle(30, 8, 18, 47),
+                6.4, new Rectangle(0, 0, 18, 47),
                 ImageHandler.loadImage("Assets/Images/Hero/SwordMaster/The SwordMaster/Sword Master Sprite Sheet 90x37.png"), 10, 10);
 
         spawnPosition = new Vector2(position.x, position.y);
@@ -442,18 +442,20 @@ public class Player extends Entity {
         Vector2 cameraPos = GamePanel.tileMap.returnCameraPos();
         double screenX = position.x - cameraPos.x;
         double screenY = position.y - cameraPos.y;
-        AffineTransform originalTransform = g2.getTransform();
         if (direction.contains("left")){
-                g2.scale(-1, 1);
-                screenX = -screenX - solidArea.width * GamePanel.scale - 5;
+            g2.drawImage(image,
+                    (int) screenX - 115, (int) screenY - 17,
+                    (int) (screenX - 115 + 90 * GamePanel.scale), (int) (screenY - 17 + 37 * GamePanel.scale),
+                    (spriteCol + 1) * 90, spriteRow * 37,
+                    spriteCol * 90, (spriteRow + 1) * 37, null);
+
+        } else {
+            g2.drawImage(image,
+                    (int) screenX - 45, (int) screenY - 17,
+                    (int) (screenX - 45 + 90 * GamePanel.scale), (int) (screenY - 17 + 37 * GamePanel.scale),
+                    spriteCol * 90, spriteRow * 37,
+                    (spriteCol + 1) * 90, (spriteRow + 1) * 37, null);
         }
-        g2.setColor(Color.red);
-        g2.drawImage(image,
-                (int) screenX - 30, (int) screenY - 17,
-                (int) (screenX - 30 + 90 * GamePanel.scale), (int) (screenY - 17 + 37 * GamePanel.scale),
-                spriteCol * 90, spriteRow * 37,
-                (spriteCol + 1) * 90, (spriteRow + 1) * 37, null);
-        g2.setTransform(originalTransform);
     }
 
     public void increaseMana(int amount) {
