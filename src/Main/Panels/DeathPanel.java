@@ -16,33 +16,29 @@ import java.awt.image.VolatileImage;
 
 import static Main.Main.keyI;
 
-public class MenuPanel extends JPanel implements Runnable{
+public class DeathPanel extends JPanel implements Runnable{
 
     // Screen settings
     public final static double screenWidth = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
     public final static double screenHeight = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
 
-    private float helpAlpha = 0f;
-    private float titleAlpha = 1f;
-    private static final float HELP_LERP_SPEED = 0.15f;
-    private static final float TITLE_LERP_SPEED = 0.15f;
-    public static boolean help = false;
+    public static boolean leader = false;
     private float parallaxSelected = 1.0f;
     private static final float PARALLAX_LERP_SPEED = 0.15f;
 
     public UIManager ui;
 
-    public static Thread menuThread;
+    public static Thread deathThread;
 
     private VolatileImage[] background;
-    private VolatileImage redCircleBackground, title, helpImage;
+    private VolatileImage title, yellowCircleBackground;
 
     private int row, col, count;
 
     /**
-     * Constructor for the MenuPanel class.
+     * Constructor for the DeathPanel class.
      */
-    public MenuPanel(){
+    public DeathPanel() {
         this.setPreferredSize(Toolkit.getDefaultToolkit().getScreenSize());
         this.setBackground(Color.BLACK);
         this.addKeyListener(keyI);
@@ -65,24 +61,26 @@ public class MenuPanel extends JPanel implements Runnable{
      * Load background images
      */
     private void loadBackground(){
-        background = new VolatileImage[4];
+        background = new VolatileImage[7];
 
-        background[0] = ImageHandler.loadImage("Assets/Images/Backgrounds/The Circle Underground/layer 1.png");
-        background[1] = ImageHandler.loadImage("Assets/Images/Backgrounds/The Circle Underground/layer 2.png");
-        background[2] = ImageHandler.loadImage("Assets/Images/Backgrounds/The Circle Underground/layer 3.png");
-        background[3] = ImageHandler.loadImage("Assets/Images/Backgrounds/The Circle Underground/layer 4.png");
+        background[0] = ImageHandler.loadImage("Assets/Images/Backgrounds/Sword Parallax/Color 1/BG1.png");
+        background[1] = ImageHandler.loadImage("Assets/Images/Backgrounds/Sword Parallax/Color 1/Close1.png");
+        background[2] = ImageHandler.loadImage("Assets/Images/Backgrounds/Sword Parallax/Color 1/Dense Atmostphere1.png");
+        background[3] = ImageHandler.loadImage("Assets/Images/Backgrounds/Sword Parallax/Color 1/Far1.png");
+        background[4] = ImageHandler.loadImage("Assets/Images/Backgrounds/Sword Parallax/Color 1/Fog1.png");
+        background[5] = ImageHandler.loadImage("Assets/Images/Backgrounds/Sword Parallax/Color 1/Mid1.png");
 
-        redCircleBackground = ImageHandler.loadImage("Assets/Images/Backgrounds/The Circle Underground/Red Circle/The Circle 35x37.png");
-        title = ImageHandler.loadImage("Assets/Images/UI/UI - Words/Title.png");
-        helpImage = ImageHandler.loadImage("Assets/Images/UI/UI - Words/help.png");
+
+        yellowCircleBackground = ImageHandler.loadImage("Assets/Images/UI/UI - Words/The Circle 35x37 Yellow.png");
+        title = ImageHandler.loadImage("Assets/Images/UI/UI - Words/DeathTitle.png");
     }
 
     /**
      * Starts game thread
      */
     public void startThread() {
-        menuThread = new Thread(this);
-        menuThread.start();
+        deathThread = new Thread(this);
+        deathThread.start();
     }
 
     /**
@@ -97,7 +95,7 @@ public class MenuPanel extends JPanel implements Runnable{
         long timer = 0;
         int drawCount = 0;
 
-        while (menuThread != null) {
+        while (deathThread != null) {
 
             currentTime = System.nanoTime();
 
@@ -130,14 +128,6 @@ public class MenuPanel extends JPanel implements Runnable{
 
         parallaxSelected += (target - parallaxSelected) * PARALLAX_LERP_SPEED;
 
-        // Animate help alpha
-        float targetHelpAlpha = help ? 1f : 0f;
-        helpAlpha += (targetHelpAlpha - helpAlpha) * HELP_LERP_SPEED;
-
-        // Animate title alpha (fade in when helpAlpha is near 0)
-        float targetTitleAlpha = 1f - helpAlpha;
-        titleAlpha += (targetTitleAlpha - titleAlpha) * TITLE_LERP_SPEED;
-
         count++;
         if (count > 3) {
             count = 0;
@@ -166,31 +156,10 @@ public class MenuPanel extends JPanel implements Runnable{
 
         drawParallaxBackground(g2);
 
-        g2.drawImage(
-                redCircleBackground,
-                (int) (screenWidth / 2 - (250 - 18.5) / 2), (int) (screenHeight * (1.76/3) - (250 - 18.5) / 2),
-                (int) (screenWidth / 2 + (250 - 18.5) / 2), (int) (screenHeight * (1.76/3) + (250 - 18.5) / 2),
-                col * 35, row * 37,
-                (col + 1) * 35, (row + 1) * 37, null);
-
-        if (helpAlpha > 0.01f) {
-            Composite old = g2.getComposite();
-            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, helpAlpha));
-            g2.drawImage(helpImage, (int) (screenWidth / 2 - helpImage.getWidth() * 1.5),
-                    150, (int) (screenWidth / 2 + helpImage.getWidth() * 1.5),
-                    150 + (helpImage.getHeight() * 3), 0, 0,
-                    helpImage.getWidth(), helpImage.getHeight(), null);
-            g2.setComposite(old);
-        }
-        if (titleAlpha > 0.01f) {
-            Composite old = g2.getComposite();
-            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, titleAlpha));
-            g2.drawImage(title, (int) (screenWidth / 2 - title.getWidth() * 0.9),
-                    150, (int) (screenWidth / 2 + title.getWidth() * 0.9),
-                    150 + (int) (title.getHeight() * 1.8), 0, 0,
-                    title.getWidth(), title.getHeight(), null);
-            g2.setComposite(old);
-        }
+        g2.drawImage(title, (int) (screenWidth / 2 - title.getWidth() * 0.9),
+                150, (int) (screenWidth / 2 + title.getWidth() * 0.9),
+                150 + (int) (title.getHeight() * 1.8), 0, 0,
+                title.getWidth(), title.getHeight(), null);
 
         if (ui != null)
             ui.draw(g2);
@@ -205,23 +174,36 @@ public class MenuPanel extends JPanel implements Runnable{
     private void drawParallaxBackground(Graphics2D g2) {
         int screenW = (int) screenWidth;
         int screenH = (int) screenHeight;
-        float scale = 1.1f;
+        float scale = 1.2f;
 
         int bgW = Math.round(screenW * scale);
         int bgH = Math.round(screenH * scale);
 
         int baseOffset = Math.round((parallaxSelected - 1) * 150);
-        float[] parallaxFactors = {1.0f, 0.7f, 0.4f, 0.2f};
+        float[] parallaxFactors = {0.5f, 0.4f, 0.35f, 0.3f, 0.25f, 0.2f, 0.15f};
 
         for (int i = 0; i < background.length; i++) {
+
             VolatileImage bg = background[i];
             float factor = (i < parallaxFactors.length) ? parallaxFactors[i] : 1.0f;
             int offset = Math.round(baseOffset * factor);
 
+            if (i == 5) {
+                g2.drawImage(
+                        yellowCircleBackground,
+                        (int) (screenWidth / 2 - (250 - 18.5) + offset/2), (int) (screenHeight * (1.76/3) - (250 - 18.5) - 20),
+                        (int) (screenWidth / 2 + (250 - 18.5) + offset/2), (int) (screenHeight * (1.76/3) + (250 - 18.5) - 20),
+                        col * 35, row * 37,
+                        (col + 1) * 35, (row + 1) * 37, null);
+            }
+
             int x = (screenW - bgW) / 2 + offset;
             int y = (screenH - bgH) / 2;
 
-            g2.drawImage(bg, x, y, bgW, bgH, null);
+            if (i == 0)
+                g2.drawImage(bg, x, y, bgW, bgH, null);
+            else
+                g2.drawImage(bg, x, y + 40, bgW, bgH + 40, null);
         }
     }
 }

@@ -40,7 +40,7 @@ public class UIManager {
         if (gameState == Main.GameState.GAME) {
             healthBar.update();
             manaBar.update();
-        } else if (gameState == Main.GameState.MENU) {
+        } else {
             buttonManager.update();
             selectedButton = buttonManager.getSelectedIndex();
         }
@@ -62,7 +62,7 @@ public class UIManager {
         if (gameState == Main.GameState.GAME) {
             healthBar.draw(g2);
             manaBar.draw(g2);
-        } else if (gameState == Main.GameState.MENU) {
+        } else {
             buttonManager.draw(g2);
         }
     }

@@ -349,7 +349,6 @@ public class SkeletonSummoner extends Enemy{
      */
     @Override
     public void draw(Graphics2D g2) {
-        debugDraw(g2);
         Vector2 cam = GamePanel.tileMap.returnCameraPos();
 
         int sx = (int) (position.x - cam.x);
