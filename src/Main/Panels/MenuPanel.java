@@ -56,8 +56,9 @@ public class MenuPanel extends JPanel implements Runnable{
      * Set up the game.
      */
     public void setup() {
-        this.requestFocusInWindow();
         ui = new UIManager();
+        this.requestFocusInWindow();
+        keyI.uPressed = false;
         startThread();
     }
 

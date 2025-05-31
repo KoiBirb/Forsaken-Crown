@@ -50,7 +50,7 @@ public class Main {
         window.setLocationRelativeTo(null);
         window.setVisible(true);
 
-        switchToDeath();
+        switchToMenu();
     }
 
     /**
@@ -58,6 +58,8 @@ public class Main {
      */
     public static void switchToMenu() {
         gameState = GameState.MENU;
+        DeathPanel.deathThread = null;
+        GamePanel.gameThread = null;
         cardLayout.show(mainPanel, "MENU");
         menuPanel.setup();
     }
@@ -67,6 +69,8 @@ public class Main {
      */
     public static void switchToDeath() {
         gameState = GameState.DEATH;
+        MenuPanel.menuThread = null;
+        GamePanel.gameThread = null;
         cardLayout.show(mainPanel, "DEATH");
         deathPanel.setup();
     }
@@ -76,6 +80,8 @@ public class Main {
      */
     public static void switchToGame() {
         gameState = GameState.GAME;
+        MenuPanel.menuThread = null;
+        DeathPanel.deathThread = null;
         cardLayout.show(mainPanel, "GAME");
         gamePanel.setupGame();
     }

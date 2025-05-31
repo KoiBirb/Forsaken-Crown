@@ -14,7 +14,7 @@ import Map.TiledMap;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 
-import static Main.Main.keyI;
+import static Main.Main.*;
 
 public class Player extends Entity {
 
@@ -32,8 +32,7 @@ public class Player extends Entity {
     }
 
     private PlayerState state;
-    private int spriteCounter, spriteRow, spriteCol, maxSpriteCol, lastSpriteRow;
-    private final int coyoteTime;
+    private int spriteCounter, spriteRow, spriteCol, maxSpriteCol, lastSpriteRow, lives;
 
     // timers
     private long jumpKeyPressStartTime, lastQuickAttackTime, lastHeavyAttackTime,
@@ -50,7 +49,7 @@ public class Player extends Entity {
 
         spawnPosition = new Vector2(position.x, position.y);
         state = PlayerState.SPAWNING;
-        coyoteTime = 100;
+        lives = 1;
     }
 
     @Override
@@ -89,6 +88,10 @@ public class Player extends Entity {
             MusicHandler.stopFootsteps();
             MusicHandler.stopFalling();
             MusicHandler.stopHealCharge();
+
+            lives--;
+            if (lives <= 0)
+                switchToDeath();
         }
 
         determineDirection();
@@ -188,6 +191,7 @@ public class Player extends Entity {
 
         // Jumping
         if (keyI.wPressed && state != PlayerState.HEALING) {
+            int coyoteTime = 100;
             if (jump && (onGround || System.currentTimeMillis() - lastGroundedTime <= coyoteTime) && jumpKeyPressStartTime == 0) {
                 jumpKeyPressStartTime = System.currentTimeMillis();
                 jump = false;
