@@ -6,6 +6,7 @@
  */
 package Main.UI;
 
+import Entitys.Player;
 import Main.Main;
 import Main.Panels.GamePanel;
 import Main.UI.Buttons.ButtonManager;
@@ -16,8 +17,8 @@ import static Main.Main.gameState;
 
 public class UIManager {
 
-    private final HealthBar healthBar;
-    private final ManaBar manaBar;
+    private HealthBar healthBar;
+    private ManaBar manaBar;
     private final ButtonManager buttonManager;
 
     private int selectedButton;
@@ -26,9 +27,11 @@ public class UIManager {
      * Constructor for UIManager
      * Creates UI elements
      */
-    public UIManager() {
-        healthBar = new HealthBar(GamePanel.player, 55, 160, 400, 100);
-        manaBar = new ManaBar(GamePanel.player, 55, 110, 400, 100);
+    public UIManager(Player player, boolean bars) {
+        if (bars) {
+            healthBar = new HealthBar(player, 55, 160, 400, 100);
+            manaBar = new ManaBar(player, 55, 110, 400, 100);
+        }
         buttonManager = new ButtonManager();
         selectedButton = 0;
     }

@@ -26,7 +26,7 @@ public class PlayerDashHeavyAttack extends MeleeAttack {
      * @param player The player object that is performing the attack.
      */
     public PlayerDashHeavyAttack(Player player) {
-        super(5);
+        super(3);
 
         this.player = player;
 

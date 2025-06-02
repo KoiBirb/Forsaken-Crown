@@ -53,7 +53,7 @@ public class DeathPanel extends JPanel implements Runnable{
      */
     public void setup() {
         this.requestFocusInWindow();
-        ui = new UIManager();
+        ui = new UIManager(null, false);
         startThread();
     }
 

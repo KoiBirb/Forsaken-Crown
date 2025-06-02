@@ -10,6 +10,7 @@ import Attacks.MeleeAttacks.MeleeAttack;
 import Entitys.Enemies.Summoner.SkeletonSummoner;
 import Handlers.Sound.EnemySoundHandler;
 import Main.Panels.GamePanel;
+import Map.TiledMap;
 
 import java.awt.*;
 
@@ -42,6 +43,10 @@ public class SummonerAttack extends MeleeAttack {
         } else if (spriteCounter == 0 && frame == 7) {
             EnemySoundHandler.summonerSlam();
             hitBox = null;
+        }
+
+        if (frame == 6 || frame == 7){
+            TiledMap.cameraShake(6, 1);
         }
 
         spriteCounter++;

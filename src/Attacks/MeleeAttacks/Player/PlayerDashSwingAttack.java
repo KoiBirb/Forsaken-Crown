@@ -20,7 +20,7 @@ public class PlayerDashSwingAttack extends MeleeAttack {
      * @param player The player object that is performing the attack.
      */
     public PlayerDashSwingAttack(Player player) {
-        super(3);
+        super(2);
 
         this.player = player;
 

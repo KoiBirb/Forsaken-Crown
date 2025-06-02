@@ -8,6 +8,7 @@ package Handlers;
 
 import Attacks.MeleeAttacks.MeleeAttack;
 import Entitys.Entity;
+import Entitys.Player;
 import Main.Panels.GamePanel;
 import Main.UI.VFX.Hit;
 import Map.TiledMap;
@@ -129,11 +130,11 @@ public class CollisionHandler {
             }
 
         } catch (ArrayIndexOutOfBoundsException e) {
+            if (entity instanceof Player) {
             System.out.println("Player out of bounds: " + e.getMessage());
-
-            // reset the player back to spawn
-            entity.getPosition().x = 100;
-            entity.getPosition().y = 100;
+                entity.getPosition().x = 100;
+                entity.getPosition().y = 100;
+            }
             entity.setColliding(true);
         }
     }

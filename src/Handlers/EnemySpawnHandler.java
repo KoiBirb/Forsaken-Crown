@@ -1,5 +1,6 @@
 package Handlers;
 
+import Entitys.Enemies.BloodKing;
 import Entitys.Enemies.Enemy;
 import Entitys.Enemies.Ghoul;
 import Entitys.Enemies.Summoner.Skeleton;
@@ -15,7 +16,7 @@ public class EnemySpawnHandler {
      */
     public static void setup() {
         GamePanel.enemies.clear(); // Remove existing enemies
-        GamePanel.enemies.add(new Skeleton(new Vector2(600, 100)));
+        GamePanel.enemies.add(new BloodKing(new Vector2(2800, 3102)));
     }
 
     /**

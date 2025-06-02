@@ -32,8 +32,8 @@ public class GamePanel extends JPanel implements Runnable{
 
     // initialize classes
     public static TiledMap tileMap;
-    public static final Player player = new Player(new Vector2(100,150));
-    public static UIManager ui = new UIManager();
+    public static Player player;
+    public static UIManager ui;
 
     public static ArrayList<MeleeAttack> playerAttacks = new ArrayList<>();
     public static ArrayList<MeleeAttack> enemyAttacks = new ArrayList<>();
@@ -70,6 +70,8 @@ public class GamePanel extends JPanel implements Runnable{
      */
     public void setupGame() {
         this.requestFocusInWindow();
+        player = new Player(new Vector2(2300,3000));
+        ui = new UIManager(player, true);
         EnemySpawnHandler.setup();
         startThread();
     }
@@ -131,8 +133,11 @@ public class GamePanel extends JPanel implements Runnable{
      * Update game objects
      */
     public void update() {
-        player.update();
-        tileMap.update();
+
+        if (player != null) {
+            player.update();
+            tileMap.update();
+        }
         EnemySpawnHandler.updateAll();
         ui.update();
 
@@ -198,9 +203,11 @@ public class GamePanel extends JPanel implements Runnable{
 
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
+        if (player != null){
+            tileMap.drawMap(g2);
+            player.draw(g2);
+        }
 
-        tileMap.drawMap(g2);
-        player.draw(g2);
         EnemySpawnHandler.drawAll(g2);
 
         for (int i = 0; i < effects.size(); i++) {
@@ -219,9 +226,10 @@ public class GamePanel extends JPanel implements Runnable{
 //            enemyAttacks.get(i).draw(g2);
 //        }
 
-        tileMap.coverScreen(g2);
-
-        ui.draw(g2);
+        if (player != null) {
+            tileMap.coverScreen(g2);
+            ui.draw(g2);
+        }
 
         if (fading) {
             g2.setColor(new Color(0, 0, 0, (float) fadeAlpha));

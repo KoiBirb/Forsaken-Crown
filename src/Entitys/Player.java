@@ -12,7 +12,6 @@ import Main.Panels.GamePanel;
 import Map.TiledMap;
 
 import java.awt.*;
-import java.awt.geom.AffineTransform;
 
 import static Main.Main.*;
 

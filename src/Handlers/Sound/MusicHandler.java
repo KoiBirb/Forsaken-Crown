@@ -36,8 +36,12 @@ public class MusicHandler {
      * Plays jump sound effect
      */
     public static void jump() {
-        playSoundEffect("/Audio/Player/jump.wav", effect);
+
+        String path = "/Audio/Player/jump_" + (rand.nextInt(3) + 1) + ".wav";
+
+        playSoundEffect(path, attack);
     }
+
 
     /**
      * Plays UI confirm sound effect
