@@ -21,7 +21,7 @@ public class Finisher extends MeleeAttack {
     private final BloodKing bloodKing;
 
     public Finisher(BloodKing bloodKing) {
-        super(3);
+        super(6);
 
         this.bloodKing = bloodKing;
         GamePanel.enemyAttacks.add(this);

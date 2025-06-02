@@ -20,7 +20,7 @@ public class Slash extends MeleeAttack {
     private final BloodKing bloodKing;
 
     public Slash(BloodKing bloodKing) {
-        super(1);
+        super(2);
 
         this.bloodKing = bloodKing;
         GamePanel.enemyAttacks.add(this);

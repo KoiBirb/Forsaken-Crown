@@ -20,7 +20,7 @@ public class Stab extends MeleeAttack {
     private final BloodKing bloodKing;
 
     public Stab(BloodKing bloodKing) {
-        super(2);
+        super(3);
 
         this.bloodKing = bloodKing;
         GamePanel.enemyAttacks.add(this);

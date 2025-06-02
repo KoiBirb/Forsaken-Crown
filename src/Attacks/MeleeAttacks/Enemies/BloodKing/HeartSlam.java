@@ -20,7 +20,7 @@ public class HeartSlam extends MeleeAttack {
     private final BloodKing bloodKing;
 
     public HeartSlam (BloodKing bloodKing) {
-        super(4);
+        super(5);
         this.bloodKing = bloodKing;
         GamePanel.enemyAttacks.add(this);
     }

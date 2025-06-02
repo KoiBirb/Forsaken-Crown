@@ -20,7 +20,7 @@ public class Dodge extends MeleeAttack {
     private final BloodKing bloodKing;
 
     public Dodge(BloodKing bloodKing) {
-        super(2);
+        super(3);
 
         this.bloodKing = bloodKing;
         GamePanel.enemyAttacks.add(this);
