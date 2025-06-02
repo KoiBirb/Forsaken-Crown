@@ -87,10 +87,6 @@ public class Player extends Entity {
             MusicHandler.stopFootsteps();
             MusicHandler.stopFalling();
             MusicHandler.stopHealCharge();
-
-            lives--;
-            if (lives <= 0)
-                switchToDeath();
         }
 
         determineDirection();
@@ -145,6 +141,9 @@ public class Player extends Entity {
         }
 
         if (state == PlayerState.DEAD && System.currentTimeMillis() - deathTime >= 5000) {
+            lives--;
+            if (lives <= 0)
+                switchToDeath();
             resetPlayer();
         }
 
