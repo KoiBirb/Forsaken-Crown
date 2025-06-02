@@ -65,6 +65,12 @@ public class Player extends Entity {
                     break;
 
                 case HIT:
+
+                    if (System.currentTimeMillis() - lastHitTime > 1000) {
+                        knockedBack = false;
+                        state = PlayerState.IDLE;
+                    }
+
                     if (spriteRow != 25) {
                         spriteRow = 25;
                         maxSpriteCol = 1;

@@ -48,6 +48,9 @@ public class BloodKing extends Enemy{
     private boolean footstepsPlaying = false, canMove = true,
             directionLocked = false, immune = false, moveImage = true;
 
+    private long lastDamagedTime = 0;
+    private static final long DAMAGED_DURATION_MS = 400; // adjust as needed
+
     /**
      * Summoner constructor.
      * @param pos The initial position of the summoner.
@@ -99,6 +102,19 @@ public class BloodKing extends Enemy{
             Vector2 target = hasStartedChasing && canSeePlayer ? playerPos : spawnPos;
             double dx = target.x - currentPos.x;
             boolean closeX = Math.abs(dx) <= ts;
+
+            if (currentState == State.DAMAGED) {
+                velocity.x = 0;
+                velocity.y = 0;
+                if (System.currentTimeMillis() - lastDamagedTime > DAMAGED_DURATION_MS) {
+                    currentState = State.IDLE;
+                    spriteRow = 11;
+                    maxSpriteCol = 11;
+                    if (spriteCol > maxSpriteCol) spriteCol = 0;
+                    hit = false;
+                }
+                return;
+            }
 
                 if ((now - actionStartTime > actionDuration) && currentState == State.IDLE) {
                     currentAction = Math.random() < 0.5 ? Action.ATTACK : Action.MOVE;
@@ -531,7 +547,7 @@ public class BloodKing extends Enemy{
 
         g2.setColor(Color.WHITE);
         g2.setFont(new Font("Arial", Font.BOLD, 16));
-        g2.drawString("Distance: " + dist, (int) (position.x - cam.x), (int) (position.y - cam.y - 10));
+        g2.drawString("Health: " + currentHealth, (int) (position.x - cam.x), (int) (position.y - cam.y - 10));
     }
 
     /**
@@ -546,7 +562,7 @@ public class BloodKing extends Enemy{
 
             if (currentAttack == null) {
                 currentState = State.DAMAGED;
-
+                lastDamagedTime = System.currentTimeMillis();
                 spriteRow = 10;
                 spriteCol = 0;
                 maxSpriteCol = 1;
