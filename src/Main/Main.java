@@ -7,7 +7,7 @@
 
 package Main;
 
-import Main.Panels.DeathPanel;
+import Main.Panels.EndPanel;
 import Main.Panels.GamePanel;
 import Main.Panels.MenuPanel;
 
@@ -16,7 +16,7 @@ import java.awt.*;
 
 public class Main {
 
-    public enum GameState {MENU, GAME, DEATH}
+    public enum GameState {MENU, GAME, DEATH, VICTORY}
     public static GameState gameState = GameState.MENU;
     private static final CardLayout cardLayout = new CardLayout();
     private static final JPanel mainPanel = new JPanel(cardLayout);
@@ -25,7 +25,7 @@ public class Main {
 
     public static GamePanel gamePanel = new GamePanel();
     public static MenuPanel menuPanel = new MenuPanel();
-    public static DeathPanel deathPanel = new DeathPanel();
+    public static EndPanel endPanel = new EndPanel();
 
     public static JFrame window = new JFrame();
 
@@ -43,7 +43,7 @@ public class Main {
 
         mainPanel.add(menuPanel, "MENU");
         mainPanel.add(gamePanel, "GAME");
-        mainPanel.add(deathPanel, "DEATH");
+        mainPanel.add(endPanel, "END");
 
         window.add(mainPanel);
         window.pack();
@@ -58,7 +58,7 @@ public class Main {
      */
     public static void switchToMenu() {
         gameState = GameState.MENU;
-        DeathPanel.deathThread = null;
+        EndPanel.endThread = null;
         GamePanel.gameThread = null;
         cardLayout.show(mainPanel, "MENU");
         menuPanel.setup();
@@ -67,12 +67,19 @@ public class Main {
     /**
      * Switch to the death screen
      */
-    public static void switchToDeath() {
-        gameState = GameState.DEATH;
+    public static void switchToEnd(boolean victory) {
+        if (victory) {
+            EndPanel.victory = true;
+            gameState = GameState.VICTORY;
+        } else {
+            EndPanel.victory = false;
+            gameState = GameState.DEATH;
+        }
+
         MenuPanel.menuThread = null;
         GamePanel.gameThread = null;
-        cardLayout.show(mainPanel, "DEATH");
-        deathPanel.setup();
+        cardLayout.show(mainPanel, "END");
+        endPanel.setup();
     }
 
     /**
@@ -81,7 +88,7 @@ public class Main {
     public static void switchToGame() {
         gameState = GameState.GAME;
         MenuPanel.menuThread = null;
-        DeathPanel.deathThread = null;
+        EndPanel.endThread = null;
         cardLayout.show(mainPanel, "GAME");
         gamePanel.setupGame();
     }

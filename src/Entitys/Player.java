@@ -163,7 +163,7 @@ public class Player extends Entity {
         if (state == PlayerState.DEAD && System.currentTimeMillis() - deathTime >= 5000) {
             lives--;
             if (lives <= 0)
-                switchToDeath();
+                switchToEnd(false);
             resetPlayer();
         }
 

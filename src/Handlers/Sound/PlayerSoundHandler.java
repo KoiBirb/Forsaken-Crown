@@ -49,6 +49,10 @@ public class PlayerSoundHandler {
         playSoundEffect("/Audio/UI/ui_button_confirm.wav", effect);
     }
 
+    public static void UISwitchPanel() {
+        playSoundEffect("/Audio/UI/SwitchPanel.wav", effect);
+    }
+
     /**
      * Plays UI hover sound effect
      */

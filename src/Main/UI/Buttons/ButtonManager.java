@@ -9,7 +9,7 @@ package Main.UI.Buttons;
 
 import Handlers.Sound.PlayerSoundHandler;
 import Main.Main;
-import Main.Panels.DeathPanel;
+import Main.Panels.EndPanel;
 import Main.Panels.GamePanel;
 import Main.Panels.MenuPanel;
 
@@ -68,7 +68,7 @@ public class ButtonManager {
                 updateMenu();
                 break;
 
-            case DEATH:
+            case DEATH, VICTORY:
                 updateDeath();
                 break;
         }
@@ -120,13 +120,13 @@ public class ButtonManager {
             selectLeft();
             PlayerSoundHandler.UIHover();
             keyI.aPressed = false;
-            DeathPanel.leader = false;
+            EndPanel.leader = false;
         }
         if (keyI.dPressed) {
             selectRight();
             PlayerSoundHandler.UIHover();
             keyI.dPressed = false;
-            DeathPanel.leader = false;
+            EndPanel.leader = false;
         }
 
         for (int i = 0; i < deathButtons.length; i++) {
@@ -148,7 +148,7 @@ public class ButtonManager {
                     Main.switchToMenu();
                     break;
                 case 2:
-                    DeathPanel.leader = !DeathPanel.leader;
+                    EndPanel.leader = !EndPanel.leader;
                     break;
             }
             PlayerSoundHandler.UIConfirm();

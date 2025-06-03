@@ -8,7 +8,6 @@ package Main.UI;
 
 import Entitys.Player;
 import Main.Main;
-import Main.Panels.GamePanel;
 import Main.UI.Buttons.ButtonManager;
 
 import java.awt.*;

@@ -12,6 +12,7 @@ import Handlers.CollisionHandler;
 import Handlers.ImageHandler;
 import Handlers.Sound.EnemySoundHandler;
 import Handlers.Vector2;
+import Main.Main;
 import Main.Panels.GamePanel;
 import Map.TiledMap;
 
@@ -56,7 +57,7 @@ public class BloodKing extends Enemy{
      * @param pos The initial position of the summoner.
      */
     public BloodKing(Vector2 pos) {
-        super(pos, 2, 8, 168, 79, 10,  new Rectangle(0, 0, 50, 65));
+        super(pos, 2, 8, 168, 79, 40,  new Rectangle(0, 0, 50, 65));
 
         imageReg = ImageHandler.loadImage("Assets/Images/Bosses/The Blood King/Blood_King_combined.png");
         imageHit = ImageHandler.loadImage("Assets/Images/Bosses/The Blood King/Blood_King_combined_Hit.png");
@@ -362,6 +363,7 @@ public class BloodKing extends Enemy{
                     hit = false;
                 } else if (currentState == State.DEAD) {
                     GamePanel.enemies.remove(this);
+                    Main.switchToEnd(true);
                 } else {
                     spriteCol = 0;
                 }

@@ -16,29 +16,30 @@ import java.awt.image.VolatileImage;
 
 import static Main.Main.keyI;
 
-public class DeathPanel extends JPanel implements Runnable{
+public class EndPanel extends JPanel implements Runnable{
 
     // Screen settings
     public final static double screenWidth = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
     public final static double screenHeight = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
 
     public static boolean leader = false;
+    public static boolean victory;
     private float parallaxSelected = 1.0f;
     private static final float PARALLAX_LERP_SPEED = 0.15f;
 
     public UIManager ui;
 
-    public static Thread deathThread;
+    public static Thread endThread;
 
     private VolatileImage[] background;
-    private VolatileImage title, yellowCircleBackground;
+    private VolatileImage deathTitle, circleBackground, victoryTitle;
 
     private int row, col, count;
 
     /**
      * Constructor for the DeathPanel class.
      */
-    public DeathPanel() {
+    public EndPanel() {
         this.setPreferredSize(Toolkit.getDefaultToolkit().getScreenSize());
         this.setBackground(Color.BLACK);
         this.addKeyListener(keyI);
@@ -57,6 +58,10 @@ public class DeathPanel extends JPanel implements Runnable{
         startThread();
     }
 
+    public void setVictory(boolean victory) {
+        EndPanel.victory = victory;
+    }
+
     /**
      * Load background images
      */
@@ -71,16 +76,17 @@ public class DeathPanel extends JPanel implements Runnable{
         background[5] = ImageHandler.loadImage("Assets/Images/Backgrounds/Sword Parallax/Color 1/Mid1.png");
 
 
-        yellowCircleBackground = ImageHandler.loadImage("Assets/Images/Backgrounds/The Circle Underground/Red Circle/The Circle 35x37 RED.png");
-        title = ImageHandler.loadImage("Assets/Images/UI/UI - Words/DeathTitle.png");
+        circleBackground = ImageHandler.loadImage("Assets/Images/Backgrounds/The Circle Underground/Red Circle/The Circle 35x37 RED.png");
+        deathTitle = ImageHandler.loadImage("Assets/Images/UI/UI - Words/DeathTitle.png");
+        victoryTitle = ImageHandler.loadImage("Assets/Images/UI/UI - Words/VictoryTitle.png");
     }
 
     /**
      * Starts game thread
      */
     public void startThread() {
-        deathThread = new Thread(this);
-        deathThread.start();
+        endThread = new Thread(this);
+        endThread.start();
     }
 
     /**
@@ -95,7 +101,7 @@ public class DeathPanel extends JPanel implements Runnable{
         long timer = 0;
         int drawCount = 0;
 
-        while (deathThread != null) {
+        while (endThread != null) {
 
             currentTime = System.nanoTime();
 
@@ -156,11 +162,23 @@ public class DeathPanel extends JPanel implements Runnable{
 
         drawParallaxBackground(g2);
 
-        g2.drawImage(title, (int) (screenWidth / 2 - title.getWidth() * 0.9),
-                150, (int) (screenWidth / 2 + title.getWidth() * 0.9),
-                150 + (int) (title.getHeight() * 1.8), 0, 0,
-                title.getWidth(), title.getHeight(), null);
-
+        if (victory) {
+            g2.drawImage(
+                    victoryTitle,
+                    (int) (screenWidth / 2 - victoryTitle.getWidth() * 3.5),
+                    50,
+                    (int) (screenWidth / 2 + victoryTitle.getWidth() * 3.5),
+                    50 + victoryTitle.getHeight() * 7,
+                    0, 0,
+                    victoryTitle.getWidth(), victoryTitle.getHeight(),
+                    null
+            );
+        } else {
+            g2.drawImage(deathTitle, (int) (screenWidth / 2 - deathTitle.getWidth() * 0.9),
+                    150, (int) (screenWidth / 2 + deathTitle.getWidth() * 0.9),
+                    150 + (int) (deathTitle.getHeight() * 1.8), 0, 0,
+                    deathTitle.getWidth(), deathTitle.getHeight(), null);
+        }
         if (ui != null)
             ui.draw(g2);
 
@@ -190,7 +208,7 @@ public class DeathPanel extends JPanel implements Runnable{
 
             if (i == 5) {
                 g2.drawImage(
-                        yellowCircleBackground,
+                        circleBackground,
                         (int) (screenWidth / 2 - (250 - 18.5) + offset/2), (int) (screenHeight * (1.76/3) - (250 - 18.5) - 20),
                         (int) (screenWidth / 2 + (250 - 18.5) + offset/2), (int) (screenHeight * (1.76/3) + (250 - 18.5) - 20),
                         col * 35, row * 37,
