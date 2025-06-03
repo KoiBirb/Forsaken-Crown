@@ -16,7 +16,7 @@ public class EnemySpawnHandler {
      */
     public static void setup() {
         GamePanel.enemies.clear(); // Remove existing enemies
-        GamePanel.enemies.add(new BloodKing(new Vector2(2800, 3102)));
+        GamePanel.enemies.add(new BloodKing(new Vector2(2650, 3102)));
     }
 
     /**

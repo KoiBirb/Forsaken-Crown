@@ -2,7 +2,7 @@ package Attacks.MeleeAttacks.Player;
 
 import Attacks.MeleeAttacks.MeleeAttack;
 import Entitys.Player;
-import Handlers.Sound.MusicHandler;
+import Handlers.Sound.PlayerSoundHandler;
 import Main.Panels.GamePanel;
 import Map.TiledMap;
 
@@ -43,7 +43,7 @@ public class PlayerQuickAttack extends MeleeAttack {
                 hitBox = new Rectangle((player.getDirection().contains("right")) ? (int) (player.getPosition().x + 3) : (int) (player.getPosition().x - 95) , (int) (player.getPosition().y + 17), 137, 30);
                 if (spriteCounter == 1 && frame == 1 && checkAttackTileCollision(hitBox, player)) {
                     TiledMap.cameraShake(4, 6);
-                    MusicHandler.hitColladable();
+                    PlayerSoundHandler.hitColladable();
                 } else {
                     TiledMap.cameraShake(2,6);
                 }
@@ -55,7 +55,7 @@ public class PlayerQuickAttack extends MeleeAttack {
             hitBox = new Rectangle((player.getDirection().contains("right")) ? (int) (player.getPosition().x + 3) : (int) (player.getPosition().x - 105), (int) (player.getPosition().y + 17), 147, 30);
             if (spriteCounter == 1 && frame == 1 && checkAttackTileCollision(hitBox, player)) {
                 TiledMap.cameraShake(4,6);
-                MusicHandler.hitColladable();
+                PlayerSoundHandler.hitColladable();
             } else {
                 TiledMap.cameraShake(2,6);
             }

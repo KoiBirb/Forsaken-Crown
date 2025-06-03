@@ -9,12 +9,11 @@ package Handlers.Sound;
 
 import java.util.Random;
 
-public class MusicHandler {
+public class PlayerSoundHandler {
 
     public static final Sound music = new Sound();
     public static final Sound attack = new Sound();
     public static final Sound footsteps = new Sound();
-    public static final Sound ghoulEffect = new Sound();
     public static final Sound heal = new Sound();
     public static final Sound effect = new Sound();
     public static final Sound falling = new Sound();
@@ -230,7 +229,7 @@ public class MusicHandler {
      * @param spawnPlaying boolean is spawn playing
      */
     public static void setSpawnPlaying (boolean spawnPlaying) {
-        MusicHandler.spawnPlaying = spawnPlaying;
+        PlayerSoundHandler.spawnPlaying = spawnPlaying;
     }
 
     /**
@@ -238,6 +237,6 @@ public class MusicHandler {
      * @param deathPlaying boolean is death playing
      */
     public static void setDeathPlaying (boolean deathPlaying) {
-        MusicHandler.deathPlaying = deathPlaying;
+        PlayerSoundHandler.deathPlaying = deathPlaying;
     }
 }

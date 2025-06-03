@@ -11,6 +11,7 @@ import Attacks.MeleeAttacks.MeleeAttack;
 import Entitys.Enemies.Enemy;
 import Entitys.Player;
 import Handlers.CollisionHandler;
+import Handlers.Sound.BackgroundMusicHandler;
 import Handlers.Vector2;
 import Handlers.EnemySpawnHandler;
 import Main.UI.UIManager;
@@ -34,6 +35,7 @@ public class GamePanel extends JPanel implements Runnable{
     public static TiledMap tileMap;
     public static Player player;
     public static UIManager ui;
+    public static BackgroundMusicHandler backgroundMusic;
 
     public static ArrayList<MeleeAttack> playerAttacks = new ArrayList<>();
     public static ArrayList<MeleeAttack> enemyAttacks = new ArrayList<>();
@@ -70,8 +72,10 @@ public class GamePanel extends JPanel implements Runnable{
      */
     public void setupGame() {
         this.requestFocusInWindow();
-        player = new Player(new Vector2(2300,3000));
+        player = new Player(new Vector2(2300,2500));
+//        player = new Player(new Vector2(100,400));
         ui = new UIManager(player, true);
+        backgroundMusic = new BackgroundMusicHandler();
         EnemySpawnHandler.setup();
         startThread();
     }
@@ -138,6 +142,8 @@ public class GamePanel extends JPanel implements Runnable{
             player.update();
             tileMap.update();
         }
+
+        backgroundMusic.update();
         EnemySpawnHandler.updateAll();
         ui.update();
 

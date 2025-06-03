@@ -3,7 +3,7 @@ package Attacks.MeleeAttacks.Player;
 import Attacks.MeleeAttacks.MeleeAttack;
 import Entitys.Player;
 import Handlers.CollisionHandler;
-import Handlers.Sound.MusicHandler;
+import Handlers.Sound.PlayerSoundHandler;
 import Main.Panels.GamePanel;
 import Map.TiledMap;
 
@@ -40,8 +40,8 @@ public class PlayerHeavyAttack extends MeleeAttack {
         } else if (frame == 1){
             hitBox = new Rectangle((player.getDirection().contains("right")) ? (int) player.getPosition().x + 7: (int) player.getPosition().x - 90, (int) (player.getPosition().y - 10), 128, 63);
             if (spriteCounter == 2 && frame == 1 && (player.isOnGround() || CollisionHandler.checkAttackTileCollision(hitBox, player))) {
-                MusicHandler.hitTile();
-                MusicHandler.hitColladable();
+                PlayerSoundHandler.hitTile();
+                PlayerSoundHandler.hitColladable();
             }
         } else {
             hitBox = null;

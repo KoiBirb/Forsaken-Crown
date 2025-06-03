@@ -6,7 +6,7 @@ import Attacks.MeleeAttacks.Player.PlayerHeavyAttack;
 import Attacks.MeleeAttacks.Player.PlayerQuickAttack;
 import Handlers.CollisionHandler;
 import Handlers.ImageHandler;
-import Handlers.Sound.MusicHandler;
+import Handlers.Sound.PlayerSoundHandler;
 import Handlers.Vector2;
 import Main.Panels.GamePanel;
 import Map.TiledMap;
@@ -53,7 +53,6 @@ public class Player extends Entity {
 
     @Override
     public void update() {
-
         if (currentHealth > 0) {
             switch (state) {
                 case SPAWNING:
@@ -61,7 +60,7 @@ public class Player extends Entity {
                     velocity.y = 0;
                     spriteRow = 17;
                     maxSpriteCol = 3;
-                    MusicHandler.spawn();
+                    PlayerSoundHandler.spawn();
                     break;
 
                 case HIT:
@@ -89,10 +88,10 @@ public class Player extends Entity {
             spriteCol = 0;
             velocity.setLength(0);
             deathTime = System.currentTimeMillis();
-            MusicHandler.playerDeath();
-            MusicHandler.stopFootsteps();
-            MusicHandler.stopFalling();
-            MusicHandler.stopHealCharge();
+            PlayerSoundHandler.playerDeath();
+            PlayerSoundHandler.stopFootsteps();
+            PlayerSoundHandler.stopFalling();
+            PlayerSoundHandler.stopHealCharge();
         }
 
         determineDirection();
@@ -136,7 +135,7 @@ public class Player extends Entity {
                         spriteCol = maxSpriteCol;
                     }
                     if (state == PlayerState.SPAWNING) {
-                        MusicHandler.setSpawnPlaying(false);
+                        PlayerSoundHandler.setSpawnPlaying(false);
                         state = PlayerState.IDLE;
                     }
                     if (state == PlayerState.DEAD) {
@@ -176,18 +175,18 @@ public class Player extends Entity {
             if (fallStartTime == 0)
                 fallStartTime = System.currentTimeMillis();
             if (velocity.y > 9)
-                MusicHandler.falling();
+                PlayerSoundHandler.falling();
         } else {
             fallStartTime = 0;
-            MusicHandler.stopFalling();
+            PlayerSoundHandler.stopFalling();
         }
 
         // Landing
         if (onGround) {
             if (fallStartTime > 0 && System.currentTimeMillis() - fallStartTime > 400) {
-                MusicHandler.landHard();
+                PlayerSoundHandler.landHard();
             } else if (fallStartTime > 0) {
-                MusicHandler.land();
+                PlayerSoundHandler.land();
             }
             velocity.y = 0;
             fallStartTime = 0;
@@ -199,7 +198,7 @@ public class Player extends Entity {
             if (jump && (onGround || System.currentTimeMillis() - lastGroundedTime <= coyoteTime) && jumpKeyPressStartTime == 0) {
                 jumpKeyPressStartTime = System.currentTimeMillis();
                 jump = false;
-                MusicHandler.jump();
+                PlayerSoundHandler.jump();
             }
             if (System.currentTimeMillis() - jumpKeyPressStartTime <= 200) {
                 continuousJump = true;
@@ -234,7 +233,7 @@ public class Player extends Entity {
             dashStartTime = System.currentTimeMillis();
             lastDashTime = dashStartTime;
             velocity.x = direction.contains("right") ? 30 : -30;
-            MusicHandler.dash();
+            PlayerSoundHandler.dash();
             TiledMap.cameraShake(3, 1);
             currentMana--;
             spriteRow = 12;
@@ -263,7 +262,7 @@ public class Player extends Entity {
                             spriteRow = 8;
                             maxSpriteCol = 4;
                             new PlayerQuickAttack(this, false);
-                            MusicHandler.hit();
+                            PlayerSoundHandler.hit();
                             chain = true;
                             lastQuickAttackTime = currentTime;
                             currentMana += 2;
@@ -273,7 +272,7 @@ public class Player extends Entity {
                         spriteRow = 7;
                         maxSpriteCol = 6;
                         new PlayerQuickAttack(this, true);
-                        MusicHandler.hit();
+                        PlayerSoundHandler.hit();
                         chain = false;
                         lastQuickAttackTime = currentTime;
                         state = PlayerState.ATTACKING;
@@ -283,7 +282,7 @@ public class Player extends Entity {
                     maxSpriteCol = 5;
                     state = PlayerState.ATTACKING;
                     new PlayerDashSwingAttack(this);
-                    MusicHandler.dashSwingAttack();
+                    PlayerSoundHandler.dashSwingAttack();
                     lastQuickAttackTime = currentTime;
                 }
             }
@@ -294,12 +293,12 @@ public class Player extends Entity {
             if (currentTime - lastHeavyAttackTime >= PlayerHeavyAttack.COOLDOWN) {
                 if (state == PlayerState.DASHING) {
                     new PlayerDashHeavyAttack(this);
-                    MusicHandler.dashHeavyAttack();
+                    PlayerSoundHandler.dashHeavyAttack();
                     spriteRow = 6;
                     maxSpriteCol = 5;
                 } else {
                     new PlayerHeavyAttack(this);
-                    MusicHandler.heavyAttack();
+                    PlayerSoundHandler.heavyAttack();
                     spriteRow = 9;
                     maxSpriteCol = 4;
                 }
@@ -312,7 +311,7 @@ public class Player extends Entity {
         if (keyI.iPressed && onGround && state != PlayerState.HEALING) {
             if (healStartTime == 0) {
                 healStartTime = System.currentTimeMillis();
-                MusicHandler.healCharge();
+                PlayerSoundHandler.healCharge();
             }
 
             long elapsedTime = System.currentTimeMillis() - healStartTime;
@@ -336,11 +335,11 @@ public class Player extends Entity {
 
                 TiledMap.cameraShake(healAmount, 1);
 
-                MusicHandler.stopHealCharge();
-                MusicHandler.heal();
+                PlayerSoundHandler.stopHealCharge();
+                PlayerSoundHandler.heal();
             }
             healStartTime = 0;
-            MusicHandler.stopHealCharge();
+            PlayerSoundHandler.stopHealCharge();
         }
 
         // Movement
@@ -357,13 +356,13 @@ public class Player extends Entity {
                 velocity.x = speed;
             }
             if (onGround)
-                MusicHandler.footsteps();
+                PlayerSoundHandler.footsteps();
             else
-                MusicHandler.stopFootsteps();
+                PlayerSoundHandler.stopFootsteps();
             if (state != PlayerState.ATTACKING)
                 state = PlayerState.WALKING;
         } else {
-            MusicHandler.stopFootsteps();
+            PlayerSoundHandler.stopFootsteps();
             if (onGround && !continuousJump && state != PlayerState.ATTACKING && state != PlayerState.HEALING && state != PlayerState.DASHING && state != PlayerState.SPAWNING) {
                 spriteRow = 1;
                 maxSpriteCol = 8;
@@ -411,7 +410,7 @@ public class Player extends Entity {
     }
 
     private void resetPlayer() {
-        MusicHandler.setDeathPlaying(false);
+        PlayerSoundHandler.setDeathPlaying(false);
         direction = "right";
         currentHealth = maxHealth;
         currentMana = maxMana;
@@ -437,7 +436,7 @@ public class Player extends Entity {
             velocity.set((direction.contains("left") ? knockbackX : -knockbackX), -knockbackY);
             knockedBack = true;
             state = PlayerState.HIT;
-            MusicHandler.playerDamaged();
+            PlayerSoundHandler.playerDamaged();
         }
     }
 

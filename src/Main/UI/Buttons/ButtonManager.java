@@ -7,7 +7,7 @@
 
 package Main.UI.Buttons;
 
-import Handlers.Sound.MusicHandler;
+import Handlers.Sound.PlayerSoundHandler;
 import Main.Main;
 import Main.Panels.DeathPanel;
 import Main.Panels.GamePanel;
@@ -77,13 +77,13 @@ public class ButtonManager {
     private void updateMenu() {
         if (keyI.aPressed) {
             selectLeft();
-            MusicHandler.UIHover();
+            PlayerSoundHandler.UIHover();
             keyI.aPressed = false;
             MenuPanel.help = false;
         }
         if (keyI.dPressed) {
             selectRight();
-            MusicHandler.UIHover();
+            PlayerSoundHandler.UIHover();
             keyI.dPressed = false;
             MenuPanel.help = false;
         }
@@ -110,7 +110,7 @@ public class ButtonManager {
                     MenuPanel.help = !MenuPanel.help;
                     break;
             }
-            MusicHandler.UIConfirm();
+            PlayerSoundHandler.UIConfirm();
             keyI.uPressed = false;
         }
     }
@@ -118,13 +118,13 @@ public class ButtonManager {
     private void updateDeath() {
         if (keyI.aPressed) {
             selectLeft();
-            MusicHandler.UIHover();
+            PlayerSoundHandler.UIHover();
             keyI.aPressed = false;
             DeathPanel.leader = false;
         }
         if (keyI.dPressed) {
             selectRight();
-            MusicHandler.UIHover();
+            PlayerSoundHandler.UIHover();
             keyI.dPressed = false;
             DeathPanel.leader = false;
         }
@@ -151,7 +151,7 @@ public class ButtonManager {
                     DeathPanel.leader = !DeathPanel.leader;
                     break;
             }
-            MusicHandler.UIConfirm();
+            PlayerSoundHandler.UIConfirm();
             keyI.uPressed = false;
         }
     }
