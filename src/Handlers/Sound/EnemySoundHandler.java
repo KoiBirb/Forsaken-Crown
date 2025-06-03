@@ -21,7 +21,6 @@ package Handlers.Sound;
          private static int walkingKings = 0;
          private static boolean skeletonSpawn = false;
 
-
          public static void dodgeDash() {
              playSoundEffect("/Audio/Enemy/BloodKing/Attacks/Dodge/Dash.wav", kingEffect);
          }
