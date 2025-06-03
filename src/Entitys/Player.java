@@ -6,6 +6,7 @@ import Attacks.MeleeAttacks.Player.PlayerHeavyAttack;
 import Attacks.MeleeAttacks.Player.PlayerQuickAttack;
 import Handlers.CollisionHandler;
 import Handlers.ImageHandler;
+import Handlers.Sound.BackgroundMusicHandler;
 import Handlers.Sound.PlayerSoundHandler;
 import Handlers.Vector2;
 import Main.Panels.GamePanel;
@@ -92,6 +93,7 @@ public class Player extends Entity {
             PlayerSoundHandler.stopFootsteps();
             PlayerSoundHandler.stopFalling();
             PlayerSoundHandler.stopHealCharge();
+            GamePanel.backgroundMusic.fadeOut(2000);
         }
 
         determineDirection();

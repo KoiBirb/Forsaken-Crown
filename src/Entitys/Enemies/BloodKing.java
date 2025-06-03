@@ -8,6 +8,7 @@
 package Entitys.Enemies;
 
 import Attacks.MeleeAttacks.Enemies.BloodKing.*;
+import Entitys.Enemies.Summoner.Skeleton;
 import Handlers.CollisionHandler;
 import Handlers.ImageHandler;
 import Handlers.Sound.EnemySoundHandler;
@@ -22,14 +23,14 @@ import java.util.ArrayList;
 public class BloodKing extends Enemy{
 
     // states
-    public enum State {IDLE, WALK, DAMAGED, ATTACKING, DEAD}
+    public enum State {IDLE, WALK, DAMAGED, ATTACKING, DEAD, SPAWNING}
     private enum Action {ATTACK, MOVE}
     private enum Attack {DODGE, SLASH, FINISHER, SLAM, HEART, STAB, HEARTTRANSFD, HEARTTRANSBW}
 
     private VolatileImage imageReg, imageHit;
 
     private final java.util.HashMap<Attack, Long> lastUsed = new java.util.HashMap<>();
-    private State currentState = State.IDLE;
+    private State currentState;
     private Attack currentAttack = null;
     private ArrayList<Attack> viableAttacks = new ArrayList<>();
 
@@ -37,6 +38,8 @@ public class BloodKing extends Enemy{
     private long actionStartTime = 0;
     private long actionDuration = 2000;
     private int moveDir = 1;
+    private int spawnCounter;
+    private boolean startSpawn = false;
 
     int offsetXL, offsetX, offsetY = 100, hitCounter = 0;
     private final double visionRadius = 1500;
@@ -44,8 +47,10 @@ public class BloodKing extends Enemy{
 
     private Vector2 orgPos = new Vector2(0, 0);
 
-    private boolean footstepsPlaying = false, canMove = true,
-            directionLocked = false, immune = false, moveImage = true;
+    private boolean footstepsPlaying = false;
+    private boolean canMove = true;
+    private boolean directionLocked = false;
+    private boolean immune = false;
 
     private long lastDamagedTime = 0;
     private static final long DAMAGED_DURATION_MS = 400; // adjust as needed
@@ -61,12 +66,42 @@ public class BloodKing extends Enemy{
         imageHit = ImageHandler.loadImage("Assets/Images/Bosses/The Blood King/Blood_King_combined_Hit.png");
 
         this.image = ImageHandler.loadImage("Assets/Images/Bosses/The Blood King/Blood_King_combined.png");
+
+        this.currentState = State.SPAWNING;
+
+        spriteRow = 16;
+        spriteCol = 0;
+        maxSpriteCol = 11;
+        spawnCounter = 0;
     }
 
     /**
      * Updates BloodKing state and behavior.
      */
     public void update() {
+
+        if (currentState == State.SPAWNING) {
+            if (!startSpawn) {
+                spawnCounter++;
+                if (spawnCounter > 150) {
+                    GamePanel.backgroundMusic.playBossMain();
+                    EnemySoundHandler.heartKingAppear();
+                    startSpawn = true;
+                }
+            } else {
+                spriteCounter++;
+                if (spriteCounter > 9) {
+                    spriteCounter = 0;
+                    spriteCol++;
+                    if (spriteCol >= maxSpriteCol) {
+                        currentState = State.IDLE;
+                        spawnCounter = 0;
+                        startSpawn = false;
+                    }
+                }
+            }
+            return;
+        }
 
         if (currentState != State.DEAD) {
             Vector2 playerPos = GamePanel.player.getSolidAreaCenter();
@@ -246,9 +281,6 @@ public class BloodKing extends Enemy{
             if (spriteCounter == 0) {
                 if (TiledMap.getRoomId(position.x + ((("left").equals(direction)) ? -getHitboxXOffset() : getHitboxXOffset()), position.y) == 19) {
                     position.x += (("left").equals(direction)) ? -getHitboxXOffset() : getHitboxXOffset();
-                    moveImage = true;
-                } else {
-                    moveImage = false;
                 }
             }
         } else if (currentState == State.ATTACKING && currentAttack == Attack.SLAM) {

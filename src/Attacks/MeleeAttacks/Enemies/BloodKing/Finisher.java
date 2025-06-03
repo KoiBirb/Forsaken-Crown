@@ -37,7 +37,7 @@ public class Finisher extends MeleeAttack {
         if (frame == 12 || (bloodKing.getState() == BloodKing.State.DEAD || bloodKing.getState() == BloodKing.State.DAMAGED)) {
             GamePanel.enemyAttacks.remove(this);
         } else if (frame == 6) {
-            hitBox = new Rectangle((bloodKing.getDirection().contains("right")) ? (int) bloodKing.getPosition().x + 45 : (int) bloodKing.getPosition().x - 20, (int) (bloodKing.getPosition().y + 10), 35, 60);
+            hitBox = new Rectangle((bloodKing.getDirection().contains("right")) ? (int) bloodKing.getPosition().x + 45 : (int) bloodKing.getPosition().x - 30, (int) (bloodKing.getPosition().y + 10), 45, 60);
             if (spriteCounter == 0) {
                 EnemySoundHandler.finisherSwing();
             }

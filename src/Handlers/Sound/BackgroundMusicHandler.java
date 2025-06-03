@@ -41,32 +41,35 @@ public class BackgroundMusicHandler {
 
         if (room <= 5) {
             if (currentMusicType != MusicType.DARK) {
-                transitionToMusic(getMusic(currentMusicType, currentMusicState), musicDarkMain, 2000);
+                transitionToMusic(musicDarkMain, 2000);
                 currentMusicType = MusicType.DARK;
                 currentMusicState = MusicState.MAIN;
             }
         } else if (room != 9 && room != 17 && room != 19) {
             if (currentMusicType != MusicType.CASTLE) {
-                transitionToMusic(getMusic(currentMusicType, currentMusicState), musicCastleMain, 2000);
+                transitionToMusic(musicCastleMain, 2000);
                 currentMusicType = MusicType.CASTLE;
                 currentMusicState = MusicState.MAIN;
             }
         } else if (room == 19){
             if (currentMusicType != MusicType.BOSS) {
-                fadeOut(getMusic(currentMusicType, currentMusicState), 2000);
+                fadeOut(2000);
                 currentMusicType = MusicType.BOSS;
                 currentMusicState = MusicState.MAIN;
             }
        } else {
             if (currentMusicType != MusicType.BLOOD) {
-                transitionToMusic(getMusic(currentMusicType, currentMusicState), musicBloodMain, 2000);
+                transitionToMusic(musicBloodMain, 2000);
                 currentMusicType = MusicType.BLOOD;
                 currentMusicState = MusicState.MAIN;
             }
        }
     }
 
-    public void transitionToMusic(Sound from, Sound to, int durationMs) {
+    public void transitionToMusic(Sound to, int durationMs) {
+
+        Sound from = getMusic(currentMusicType, currentMusicState);
+
         // Cancel any ongoing transition
         if (transitionThread != null && transitionThread.isAlive()) {
             transitionThread.interrupt();
@@ -96,7 +99,8 @@ public class BackgroundMusicHandler {
                     break;
                 }
             }
-            from.stop();
+            if (from.isPlaying())
+                from.stop();
             to.setVolume(toVolume);
             isTransitioning.set(false);
         });
@@ -104,7 +108,9 @@ public class BackgroundMusicHandler {
         transitionThread.start();
     }
 
-    public void fadeOut(Sound from, int durationMs) {
+    public void fadeOut(int durationMs) {
+
+        Sound from = getMusic(currentMusicType, currentMusicState);
         // Cancel any ongoing transition
         if (transitionThread != null && transitionThread.isAlive()) {
             transitionThread.interrupt();
@@ -126,9 +132,8 @@ public class BackgroundMusicHandler {
                     break;
                 }
             }
-            from.stop();
-            playBossMain();
-            musicBloodMain.setVolume(0.8f);
+            if (from.isPlaying())
+                from.stop();
             isTransitioning.set(false);
         });
         isTransitioning.set(true);
@@ -153,6 +158,7 @@ public class BackgroundMusicHandler {
         if (musicBossMain.setFile("/Audio/Background/Boss/BossMain.wav")) {
             musicBossMain.play();
             musicBossMain.loop();
+            musicBloodMain.setVolume(0.8f);
         }
     }
 
