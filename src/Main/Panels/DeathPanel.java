@@ -71,7 +71,7 @@ public class DeathPanel extends JPanel implements Runnable{
         background[5] = ImageHandler.loadImage("Assets/Images/Backgrounds/Sword Parallax/Color 1/Mid1.png");
 
 
-        yellowCircleBackground = ImageHandler.loadImage("Assets/Images/UI/UI - Words/The Circle 35x37 Yellow.png");
+        yellowCircleBackground = ImageHandler.loadImage("Assets/Images/Backgrounds/The Circle Underground/Red Circle/The Circle 35x37 RED.png");
         title = ImageHandler.loadImage("Assets/Images/UI/UI - Words/DeathTitle.png");
     }
 
