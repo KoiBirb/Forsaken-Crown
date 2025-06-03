@@ -60,7 +60,7 @@ public class HeartSlam extends MeleeAttack {
         }
 
         if (frame == 10 || frame == 11){
-            TiledMap.cameraShake(6, 1);
+            TiledMap.cameraShake(5, 1);
         }
 
         spriteCounter++;
