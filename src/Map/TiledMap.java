@@ -104,6 +104,8 @@ public class TiledMap {
         tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Castle of Bones Tileset.png"));
         tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Castle of Bones Tileset.png"));
         tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Castle of Bones Tileset.png"));
+        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/victorian tileset.png"));
+        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/victorian tileset.png"));
         tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Blood Temple Tileset.png"));
         tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Blood Temple Tileset.png"));
         tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Blood Temple Tileset.png"));
@@ -214,11 +216,13 @@ public class TiledMap {
             tilesetOffset.put(tileSets.get(16), 810);
             tilesetOffset.put(tileSets.get(17), 810);
             tilesetOffset.put(tileSets.get(18), 810);
-            tilesetOffset.put (tileSets.get(19), 1930);
-            tilesetOffset.put (tileSets.get(20), 1930);
+            tilesetOffset.put(tileSets.get(19), 594);
+            tilesetOffset.put(tileSets.get(20), 594);
             tilesetOffset.put (tileSets.get(21), 1930);
-            tilesetOffset.put(tileSets.get(22), 2186);
-            tilesetOffset.put(tileSets.get(23), 2186);
+            tilesetOffset.put (tileSets.get(22), 1930);
+            tilesetOffset.put (tileSets.get(23), 1930);
+            tilesetOffset.put(tileSets.get(24), 2186);
+            tilesetOffset.put(tileSets.get(25), 2186);
 
             JSONObject mapData = (JSONObject) parser.parse(reader);
             mapWidth = ((Long) mapData.get("width")).intValue();
@@ -229,7 +233,7 @@ public class TiledMap {
             JSONObject layer;
             JSONArray data;
 
-            for (int x = 0; x < 24; x++) {
+            for (int x = 0; x < 26; x++) {
                 layer = (JSONObject) layers.get(x);
                 data = (JSONArray) layer.get("data");
 
@@ -242,7 +246,7 @@ public class TiledMap {
             }
 
             // Room positions
-            JSONObject roomLayer = (JSONObject) layers.get(24);
+            JSONObject roomLayer = (JSONObject) layers.get(26);
             roomData = (JSONArray) roomLayer.get("data");
 
             minX = mapWidth; minY = mapHeight;
@@ -261,7 +265,7 @@ public class TiledMap {
                 }
             }
 
-            JSONObject collidables = (JSONObject) layers.get(25);
+            JSONObject collidables = (JSONObject) layers.get(27);
             JSONArray collidablesData = (JSONArray) collidables.get("data");
 
             collidablesTiles = new int[mapHeight][mapWidth];
@@ -500,7 +504,7 @@ public class TiledMap {
         int startY = Math.max(minY - 1, (int) (cameraPosition.y / scaledTileSize) - 1);
         int endY = Math.min(maxY + 1, (int) ((cameraPosition.y + screenHeight) / scaledTileSize) + 1);
 
-        for (int k = 0; k < 24; k++) {
+        for (int k = 0; k < 26; k++) {
             // Skip unused/transparent layers early
             if (k == 7) k++;
 
