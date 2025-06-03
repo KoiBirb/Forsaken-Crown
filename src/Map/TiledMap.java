@@ -8,26 +8,26 @@
 
 package Map;
 
-    import java.awt.*;
-    import java.awt.geom.AffineTransform;
-    import java.awt.image.VolatileImage;
-    import java.io.FileNotFoundException;
-    import java.io.FileReader;
-    import java.io.IOException;
-    import java.util.ArrayList;
-    import java.util.HashMap;
-    import java.util.Random;
+import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.image.VolatileImage;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Random;
 
-    import Handlers.CollisionHandler;
-    import Handlers.ImageHandler;
-    import Handlers.Vector2;
-    import Main.Panels.GamePanel;
-    import org.json.simple.JSONArray;
-    import org.json.simple.JSONObject;
-    import org.json.simple.parser.JSONParser;
-    import org.json.simple.parser.ParseException;
+import Handlers.CollisionHandler;
+import Handlers.ImageHandler;
+import Handlers.Vector2;
+import Main.Panels.GamePanel;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
-    import static Main.Panels.GamePanel.*;
+import static Main.Panels.GamePanel.*;
 
 public class TiledMap {
 
@@ -322,7 +322,7 @@ public class TiledMap {
 
         // Out of bounds or not in a room
         if (playerTileX < 0 || playerTileX >= mapWidth || playerTileY < 0 || playerTileY >= mapHeight ||
-            ((Long) roomData.get(playerTileY * mapWidth + playerTileX)).intValue() == 1) {
+                ((Long) roomData.get(playerTileY * mapWidth + playerTileX)).intValue() == 1) {
             return;
         }
 
@@ -421,7 +421,7 @@ public class TiledMap {
         int playerTileY = (int) player.getPosition().y / scaledTileSize;
 
         return new Vector2((int) (((playerTileX - (playerTileX - minX)) * scaledTileSize) - cameraPosition.x),
-                            (int) (((playerTileY - (playerTileY - minY)) * scaledTileSize) - cameraPosition.y));
+                (int) (((playerTileY - (playerTileY - minY)) * scaledTileSize) - cameraPosition.y));
     }
 
     /**
@@ -447,32 +447,32 @@ public class TiledMap {
             double offsetY = roomScreenPos.y - (playerDistanceY * parallaxFactor);
 
             g2.drawImage(layer, (int) offsetX - scaledTileSize - 2, (int) offsetY - 2 - scaledTileSize,
-                         oldRoomWidth + roomWidth / 16 + scaledTileSize,
-                         oldRoomHeight + roomHeight / 16 + scaledTileSize, null);
+                    oldRoomWidth + roomWidth / 16 + scaledTileSize,
+                    oldRoomHeight + roomHeight / 16 + scaledTileSize, null);
         }
     }
 
 
-   /**
-    * Covers the screen with a black rectangle
-    * @param g2 Graphics2D object
-    */
-   public void coverScreen(Graphics2D g2) {
+    /**
+     * Covers the screen with a black rectangle
+     * @param g2 Graphics2D object
+     */
+    public void coverScreen(Graphics2D g2) {
 
-       Vector2 roomScreenPos = getScreenRoomPos();
+        Vector2 roomScreenPos = getScreenRoomPos();
 
-       g2.setColor(Color.BLACK);
+        g2.setColor(Color.BLACK);
 
-       g2.fillRect(0, 0, (int) screenWidth, (int) roomScreenPos.y - getScaledTileSize() + 2);
+        g2.fillRect(0, 0, (int) screenWidth, (int) roomScreenPos.y - getScaledTileSize() + 2);
 
-       g2.fillRect(0, (int) (roomScreenPos.y + oldRoomHeight - 2 + getScaledTileSize()),
-               (int) screenWidth, (int) (screenHeight));
-       g2.fillRect(0, 0,
-               (int) roomScreenPos.x - getScaledTileSize() + 2, (int) screenHeight);
+        g2.fillRect(0, (int) (roomScreenPos.y + oldRoomHeight - 2 + getScaledTileSize()),
+                (int) screenWidth, (int) (screenHeight));
+        g2.fillRect(0, 0,
+                (int) roomScreenPos.x - getScaledTileSize() + 2, (int) screenHeight);
 
-       g2.fillRect((int) (roomScreenPos.x + oldRoomWidth - 2 + getScaledTileSize()), 0,
-               (int) screenWidth,(int) screenHeight);
-   }
+        g2.fillRect((int) (roomScreenPos.x + oldRoomWidth - 2 + getScaledTileSize()), 0,
+                (int) screenWidth,(int) screenHeight);
+    }
 
 
     /**
@@ -486,7 +486,7 @@ public class TiledMap {
             drawParallaxBackground(g2, backgrounds.get(1), new double[]{0.1, 0.4, 0.6});
         else if (activeRoomId == 1 || activeRoomId == 2 || activeRoomId == 3)
             drawParallaxBackground(g2, backgrounds.get(0), new double[]{0.2, 0.3, 0.4, 0.5, 0.6, 0.7});
-         else if (activeRoomId == 6){
+        else if (activeRoomId == 6){
             drawParallaxBackground(g2, backgrounds.get(2), new double[]{0.3, 0.4, 0.6, 0.7});
         } else if (activeRoomId == 5){
             drawParallaxBackground(g2, backgrounds.get(3), new double[]{0.3, 0.5, 0.6});
@@ -538,7 +538,7 @@ public class TiledMap {
 
                     AffineTransform originalTransform = g2.getTransform();
                     g2.translate(tileWorldX - cameraPosition.x + scaledTileSize / 2.0,
-                                 tileWorldY - cameraPosition.y + scaledTileSize / 2.0);
+                            tileWorldY - cameraPosition.y + scaledTileSize / 2.0);
 
                     // Flipping/rotation logic unchanged
                     if (flipDiagonally) {
