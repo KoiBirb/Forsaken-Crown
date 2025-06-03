@@ -19,14 +19,12 @@ import java.awt.*;
 import java.awt.image.VolatileImage;
 import java.util.ArrayList;
 
-import static Main.Panels.GamePanel.activeEnemies;
-
 public class BloodKing extends Enemy{
 
     // states
     public enum State {IDLE, WALK, DAMAGED, ATTACKING, DEAD, SPAWNING}
     private enum Action {ATTACK, MOVE}
-    private enum Attack {DODGE, SLASH, FINISHER, SLAM, HEART, STAB, HEARTTRANSFD, HEARTTRANSBW}
+    private enum Attack {DODGE, SLASH, FINISHER, SLAM, HEART, STAB, HEARTTRANSFD, HEARTTRANSBW, CHARGE}
 
     private VolatileImage imageReg, imageHit;
 
@@ -81,7 +79,7 @@ public class BloodKing extends Enemy{
         if (currentState == State.SPAWNING) {
             if (!startSpawn) {
                 spawnCounter++;
-                if (spawnCounter > 150) {
+                if (spawnCounter > 100) {
                     GamePanel.backgroundMusic.playBossMain();
                     EnemySoundHandler.heartKingAppear();
                     startSpawn = true;
