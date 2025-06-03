@@ -402,16 +402,13 @@ public class BloodKing extends Enemy{
                 }
             }
 
-            if (playerDistance < 5 * TileSize) {
+            if (playerDistance < 5 * TileSize && playerDistance > 2 * TileSize) {
 
                 if (isAttackOffCooldown(Attack.STAB)) {
                     viableAttacks.add(Attack.STAB);
                 }
-
-                if (playerDistance > 2 * TileSize) {
-                    if (isAttackOffCooldown(Attack.DODGE)) {
-                        viableAttacks.add(Attack.DODGE);
-                    }
+                if (isAttackOffCooldown(Attack.DODGE)) {
+                    viableAttacks.add(Attack.DODGE);
                 }
             }
 
