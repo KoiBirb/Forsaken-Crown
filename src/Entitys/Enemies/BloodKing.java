@@ -55,7 +55,7 @@ public class BloodKing extends Enemy{
      * @param pos The initial position of the summoner.
      */
     public BloodKing(Vector2 pos) {
-        super(pos, 2, 8, 168, 79, 25,  new Rectangle(0, 0, 50, 65));
+        super(pos, 2, 8, 168, 79, 30,  new Rectangle(0, 0, 50, 65));
 
         imageReg = ImageHandler.loadImage("Assets/Images/Bosses/The Blood King/Blood_King_combined.png");
         imageHit = ImageHandler.loadImage("Assets/Images/Bosses/The Blood King/Blood_King_combined_Hit.png");
@@ -282,7 +282,7 @@ public class BloodKing extends Enemy{
 
         if (image != imageReg) {
             hitCounter++;
-            if (hitCounter > 10) {
+            if (hitCounter > 18) {
                 hitCounter = 0;
                 image = imageReg;
             }
@@ -568,7 +568,7 @@ public class BloodKing extends Enemy{
      * @param knockbackY The knockback force in the Y direction.
      */
     public void hit(int damage, int knockbackX, int knockbackY) {
-        if (canBeHit() && !hit && spriteRow != 6 && spriteRow != 9 && spriteRow != 15 && !immune) {
+        if (spriteRow != 6 && spriteRow != 9 && spriteRow != 15 && !immune && image != imageHit) {
             currentHealth -= damage;
 
             if (currentAttack == null) {
@@ -581,7 +581,6 @@ public class BloodKing extends Enemy{
 
             image = imageHit;
 
-            hit = true;
             EnemySoundHandler.kingHit();
         }
 

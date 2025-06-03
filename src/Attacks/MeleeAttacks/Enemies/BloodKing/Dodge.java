@@ -33,7 +33,7 @@ public class Dodge extends MeleeAttack {
     @Override
     public void update() {
 
-        if (frame == 0) {
+        if (frame == 3) {
             bloodKing.setImmune(true);
         }
 

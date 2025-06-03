@@ -20,7 +20,7 @@ public abstract class Enemy extends Entitys.Entity {
     protected static final double JUMP_FORCE = -8;
 
     protected long lastHitTime = 0;
-    protected static final long INVINCIBILITY_DURATION_MS = 200;
+    protected static final long INVINCIBILITY_DURATION_MS = 500;
 
     protected final Vector2 spawnPos;
     protected final int detectionRadiusTiles, ts;

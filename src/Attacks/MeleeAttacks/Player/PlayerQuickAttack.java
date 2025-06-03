@@ -51,7 +51,7 @@ public class PlayerQuickAttack extends MeleeAttack {
         } else if (frame == 4) {
                 GamePanel.playerAttacks.remove(this);
                 player.setAttacking(false);
-        } else if (frame == 1 || frame == 2) {
+        } else if (frame == 1) {
             hitBox = new Rectangle((player.getDirection().contains("right")) ? (int) (player.getPosition().x + 3) : (int) (player.getPosition().x - 105), (int) (player.getPosition().y + 17), 147, 30);
             if (spriteCounter == 1 && frame == 1 && checkAttackTileCollision(hitBox, player)) {
                 TiledMap.cameraShake(4,6);
