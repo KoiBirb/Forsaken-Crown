@@ -32,7 +32,12 @@ public class HeartSlam extends MeleeAttack {
     @Override
     public void update() {
 
+        if (frame == 8) {
+            bloodKing.canMove(false);
+        }
+
         if (frame == 15) {
+            bloodKing.canMove(true);
             GamePanel.enemyAttacks.remove(this);
         } else if (frame == 10) {
             hitBox = new Rectangle((int) bloodKing.getPosition().x - 50, (int) (bloodKing.getPosition().y + 40), 150, 30);

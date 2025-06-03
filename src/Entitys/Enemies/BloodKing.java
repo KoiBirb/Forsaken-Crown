@@ -286,8 +286,8 @@ public class BloodKing extends Enemy{
         } else if (currentState == State.ATTACKING && currentAttack == Attack.SLAM) {
 
             if (spriteCounter == 0) {
-                position.y += getHitboxYOffset();
-                offsetY += getHitboxYOffset();
+                    position.y += getHitboxYOffset();
+                    offsetY += getHitboxYOffset();
             }
 
             if (canMove) {
@@ -306,6 +306,12 @@ public class BloodKing extends Enemy{
                     velocity.x = 0;
                 }
             }
+        } else if (currentAttack == Attack.HEART && currentState == State.ATTACKING && canMove){
+            Vector2 playerPos = GamePanel.player.getSolidAreaCenter();
+            Vector2 currentPos = getSolidAreaCenter();
+            moveDir = (playerPos.x < currentPos.x) ? -1 : 1; // -1 for left, 1 for right
+
+            velocity.x = moveDir * getSpeed();
         }
 
         if (!canMove) {
@@ -364,9 +370,10 @@ public class BloodKing extends Enemy{
             }
         }
 
-        if (currentState == State.ATTACKING && currentAttack != Attack.SLAM) {
+        if (currentState == State.ATTACKING && (currentAttack != Attack.SLAM && currentAttack != Attack.HEART)) {
             velocity.x = 0;
         }
+
         super.update();
     }
 
@@ -634,6 +641,7 @@ public class BloodKing extends Enemy{
             velocity.y = 0;
             EnemySoundHandler.stopKingFootsteps();
             EnemySoundHandler.kingDeath();
+            GamePanel.backgroundMusic.fadeOut(5000);
         }
     }
 

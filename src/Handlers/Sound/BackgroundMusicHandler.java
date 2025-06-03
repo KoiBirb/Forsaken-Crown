@@ -156,9 +156,9 @@ public class BackgroundMusicHandler {
 
     public void playBossMain() {
         if (musicBossMain.setFile("/Audio/Background/Boss/BossMain.wav")) {
+            musicBloodMain.setVolume(0.8f);
             musicBossMain.play();
             musicBossMain.loop();
-            musicBloodMain.setVolume(0.8f);
         }
     }
 
