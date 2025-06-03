@@ -27,6 +27,7 @@ public abstract class Enemy extends Entitys.Entity {
     protected boolean jumpedOut = false, hasStartedChasing = false;
     protected long lastJumpTime = 0;
     protected static final long JUMP_COOLDOWN_MS = 1000;
+    protected boolean canSeePlayer;
 
     protected int spriteCounter = 0, spriteCol = 0, spriteRow = 0, maxSpriteCol = 0;
 
@@ -76,6 +77,8 @@ public abstract class Enemy extends Entitys.Entity {
 
     @Override
     public void update() {
+
+
 
         for (Enemy other : GamePanel.enemies) {
                 if (other.getClass() == this.getClass() && other != this && other.getSolidArea().intersects(this.getSolidArea())) {

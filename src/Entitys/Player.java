@@ -12,6 +12,7 @@ import Main.Panels.GamePanel;
 import Map.TiledMap;
 
 import java.awt.*;
+import java.awt.image.VolatileImage;
 
 import static Main.Main.*;
 
@@ -31,12 +32,12 @@ public class Player extends Entity {
     }
 
     private PlayerState state;
-    private int spriteCounter, spriteRow, spriteCol, maxSpriteCol, lastSpriteRow, lives;
+    private VolatileImage imageReg, imageHit;
+    private int spriteCounter, spriteRow, spriteCol, maxSpriteCol, lastSpriteRow, lives, hitCounter;
 
     // timers
     private long jumpKeyPressStartTime, lastQuickAttackTime, lastHeavyAttackTime,
-            fallStartTime, healStartTime, dashStartTime, lastDashTime, deathTime, lastGroundedTime,
-            lastHitTime;
+            fallStartTime, healStartTime, dashStartTime, lastDashTime, deathTime, lastGroundedTime;
 
     private Vector2 spawnPosition;
     private boolean chain, continuousJump;
@@ -45,6 +46,9 @@ public class Player extends Entity {
         super(position, new Vector2(0, 0), 90, 37,
                 6.4, new Rectangle(0, 0, 18, 47),
                 ImageHandler.loadImage("Assets/Images/Hero/SwordMaster/The SwordMaster/Sword Master Sprite Sheet 90x37.png"), 10, 10);
+
+        imageHit = ImageHandler.loadImage("Assets/Images/Hero/SwordMaster/The SwordMaster/Sword Master Sprite Sheet 90x37 Hit.png");
+        imageReg = image;
 
         spawnPosition = new Vector2(position.x, position.y);
         state = PlayerState.SPAWNING;
@@ -64,11 +68,6 @@ public class Player extends Entity {
                     break;
 
                 case HIT:
-
-                    if (System.currentTimeMillis() - lastHitTime > 1000) {
-                        knockedBack = false;
-                        state = PlayerState.IDLE;
-                    }
 
                     if (spriteRow != 25) {
                         spriteRow = 25;
@@ -105,6 +104,14 @@ public class Player extends Entity {
                 velocity.y += 0.8;
             } else {
                 TiledMap.cameraShake(1, 6);
+            }
+        }
+
+        if (image != imageReg) {
+            hitCounter++;
+            if (hitCounter > 18) {
+                hitCounter = 0;
+                image = imageReg;
             }
         }
 
@@ -427,15 +434,22 @@ public class Player extends Entity {
     }
 
     public void hit(int damage, int knockbackX, int knockbackY) {
-        long now = System.currentTimeMillis();
-        if (currentHealth > 0 && state != PlayerState.HIT && now - lastHitTime > 500) {
-            lastHitTime = now;
-            spriteRow = 25;
-            maxSpriteCol = 1;
+
+        if (currentHealth > 0 && image != imageHit) {
+
+            if (state != PlayerState.ATTACKING) {
+                state = PlayerState.HIT;
+                spriteRow = 25;
+                spriteCounter = 0;
+                spriteCol = 0;
+                maxSpriteCol = 1;
+                knockedBack = true;
+                velocity.set((direction.contains("left") ? knockbackX : -knockbackX), -knockbackY);
+            }
+
+            image = imageHit;
+
             currentHealth -= damage;
-            velocity.set((direction.contains("left") ? knockbackX : -knockbackX), -knockbackY);
-            knockedBack = true;
-            state = PlayerState.HIT;
             PlayerSoundHandler.playerDamaged();
         }
     }

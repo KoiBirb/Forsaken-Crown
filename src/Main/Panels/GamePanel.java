@@ -42,6 +42,8 @@ public class GamePanel extends JPanel implements Runnable{
     public static ArrayList<Enemy> enemies = new ArrayList<>();
     public static ArrayList<Effect> effects = new ArrayList<>();
 
+    public static ArrayList<Enemy> activeEnemies = new ArrayList<>();
+
     // Room change effect
     public static boolean fading = false;
     private static double fadeAlpha = 0.0;
@@ -73,7 +75,6 @@ public class GamePanel extends JPanel implements Runnable{
     public void setupGame() {
         this.requestFocusInWindow();
         player = new Player(new Vector2(2300,2500));
-//        player = new Player(new Vector2(100,400));
         ui = new UIManager(player, true);
         backgroundMusic = new BackgroundMusicHandler();
         EnemySpawnHandler.setup();

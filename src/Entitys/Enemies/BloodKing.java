@@ -58,7 +58,7 @@ public class BloodKing extends Enemy{
      * @param pos The initial position of the summoner.
      */
     public BloodKing(Vector2 pos) {
-        super(pos, 2, 8, 168, 79, 30,  new Rectangle(0, 0, 50, 65));
+        super(pos, 2, 8, 168, 79, 35,  new Rectangle(0, 0, 50, 65));
 
         imageReg = ImageHandler.loadImage("Assets/Images/Bosses/The Blood King/Blood_King_combined.png");
         imageHit = ImageHandler.loadImage("Assets/Images/Bosses/The Blood King/Blood_King_combined_Hit.png");
@@ -115,7 +115,7 @@ public class BloodKing extends Enemy{
             double dist = currentPos.distanceTo(playerPos);
             boolean inVision = dist <= visionRadius;
 
-            boolean canSeePlayer = inSameRoom && inVision && hasLineOfSight(topCenter,playerPos);
+            canSeePlayer = inSameRoom && inVision && hasLineOfSight(topCenter,playerPos);
 
             hasStartedChasing = canSeePlayer;
 

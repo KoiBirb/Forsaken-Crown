@@ -69,7 +69,7 @@ public class SkeletonSummoner extends Enemy{
             double dist = currentPos.distanceTo(playerPos);
             boolean inVision = dist <= visionRadius;
 
-            boolean canSeePlayer = inSameRoom && inVision && hasLineOfSight(topCenter,playerPos);
+            canSeePlayer = inSameRoom && inVision && hasLineOfSight(topCenter,playerPos);
 
             // Logic handling
             if (canSeePlayer) {

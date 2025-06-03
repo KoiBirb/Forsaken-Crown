@@ -64,7 +64,7 @@ public class Skeleton extends Enemy {
             double dist = currentPos.distanceTo(playerPos);
             boolean inVision = dist <= visionRadius;
 
-            boolean canSeePlayer = inSameRoom && inVision && hasLineOfSight(currentTopPos, GamePanel.player.getSolidAreaXCenter());
+            canSeePlayer = inSameRoom && inVision && hasLineOfSight(currentTopPos, GamePanel.player.getSolidAreaXCenter());
 
             if (canSeePlayer) hasStartedChasing = true;
 

@@ -1,25 +1,28 @@
 package Handlers.Sound;
 
 
+import Main.Panels.GamePanel;
 import Map.TiledMap;
 
 public class BackgroundMusicHandler {
 
-    public final Sound musicDarkMain = new Sound();
-    public final Sound musicCastleMain = new Sound();
-    public final Sound musicBloodMain = new Sound();
-    public final Sound musicBossMain = new Sound();
+    private final Sound musicDarkMain = new Sound();
+    private final Sound musicDarkAction = new Sound();
+
+    private final Sound musicCastleMain = new Sound();
+    private final Sound musicCastleAction = new Sound();
+
+    private final Sound musicBloodMain = new Sound();
+    private final Sound musicBloodAction = new Sound();
+
+    private final Sound musicBossMain = new Sound();
 
     private final java.util.concurrent.atomic.AtomicBoolean isTransitioning = new java.util.concurrent.atomic.AtomicBoolean(false);
     private volatile Thread transitionThread = null;
 
-    private enum MusicType {
-        DARK, CASTLE, BLOOD, BOSS
-    }
+    private enum MusicType {DARK, CASTLE, BLOOD, BOSS}
 
-    private enum MusicState {
-        MAIN, ACTION
-    }
+    private enum MusicState {MAIN, ACTION}
 
     private MusicType currentMusicType = MusicType.DARK;
     private MusicState currentMusicState = MusicState.MAIN;
@@ -44,6 +47,10 @@ public class BackgroundMusicHandler {
                 transitionToMusic(musicDarkMain, 2000);
                 currentMusicType = MusicType.DARK;
                 currentMusicState = MusicState.MAIN;
+            }
+
+            if (!GamePanel.activeEnemies.isEmpty()) {
+
             }
         } else if (room != 9 && room != 17 && room != 19) {
             if (currentMusicType != MusicType.CASTLE) {
@@ -147,10 +154,38 @@ public class BackgroundMusicHandler {
         }
     }
 
+    public void playDarkAction() {
+        if (musicDarkMain.setFile("/Audio/Background/Dark/DarkAction.wav")) {
+            musicDarkMain.play();
+            musicDarkMain.loop();
+        }
+    }
+
     public void playCastleMain() {
         if (musicCastleMain.setFile("/Audio/Background/Castle/CastleMain.wav")) {
             musicCastleMain.play();
             musicCastleMain.loop();
+        }
+    }
+
+    public void playCastleAction() {
+        if (musicCastleMain.setFile("/Audio/Background/Castle/CastleAction.wav")) {
+            musicCastleMain.play();
+            musicCastleMain.loop();
+        }
+    }
+
+    public void playBloodMain() {
+        if (musicBloodMain.setFile("/Audio/Background/Blood/BloodMain.wav")) {
+            musicBloodMain.play();
+            musicBloodMain.loop();
+        }
+    }
+
+    public void playBloodAction() {
+        if (musicBloodMain.setFile("/Audio/Background/Blood/BloodAction.wav")) {
+            musicBloodMain.play();
+            musicBloodMain.loop();
         }
     }
 
@@ -162,31 +197,21 @@ public class BackgroundMusicHandler {
         }
     }
 
-    public void playBloodMain() {
-        if (musicBloodMain.setFile("/Audio/Background/Blood/BloodMain.wav")) {
-            musicBloodMain.play();
-            musicBloodMain.loop();
-        }
-    }
-
     public Sound getMusic(MusicType type, MusicState state) {
-        switch (type) {
-            case DARK:
-                switch (state) {
-                    case MAIN:
-                        return musicDarkMain;
-                    case ACTION:
-                        // Return a different sound for action state if needed
-                        return musicDarkMain; // Placeholder, replace with actual action music if available
-                }
-            case CASTLE:
-                return musicCastleMain;
-            case BLOOD:
-                return musicBloodMain;
-            case BOSS:
-                return musicBossMain;
-            default:
-                return musicDarkMain;
-        }
+        return switch (type) {
+            case DARK -> switch (state) {
+                case MAIN -> musicDarkMain;
+                case ACTION -> musicDarkAction;
+            };
+            case CASTLE -> switch (state) {
+                case MAIN -> musicCastleMain;
+                case ACTION -> musicCastleAction;
+            };
+            case BLOOD -> switch (state) {
+                case MAIN -> musicBloodMain;
+                case ACTION -> musicBloodAction;
+            };
+            case BOSS -> musicBossMain;
+        };
     }
 }
