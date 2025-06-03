@@ -33,14 +33,6 @@ public class Dodge extends MeleeAttack {
     @Override
     public void update() {
 
-        if (frame == 3) {
-            bloodKing.setImmune(true);
-        }
-
-        if (frame == 6) {
-            bloodKing.setImmune(false);
-        }
-
         if (frame == 17 || (bloodKing.getState() == BloodKing.State.DEAD || bloodKing.getState() == BloodKing.State.DAMAGED)) {
             GamePanel.enemyAttacks.remove(this);
         } else if (frame == 8) {

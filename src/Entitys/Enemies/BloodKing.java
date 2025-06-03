@@ -49,7 +49,6 @@ public class BloodKing extends Enemy{
     private boolean footstepsPlaying = false;
     private boolean canMove = true;
     private boolean directionLocked = false;
-    private boolean immune = false;
 
     private long lastDamagedTime = 0;
     private static final long DAMAGED_DURATION_MS = 400; // adjust as needed
@@ -606,7 +605,7 @@ public class BloodKing extends Enemy{
      * @param knockbackY The knockback force in the Y direction.
      */
     public void hit(int damage, int knockbackX, int knockbackY) {
-        if (spriteRow != 6 && spriteRow != 9 && spriteRow != 15 && !immune && image != imageHit) {
+        if (spriteRow != 9 && image != imageHit) {
             currentHealth -= damage;
 
             if (currentAttack == null) {
@@ -656,16 +655,8 @@ public class BloodKing extends Enemy{
         this.currentState = state;
     }
 
-    public void setImmune(boolean immune){
-        this.immune = immune;
-    }
-
     public void canMove (boolean canMove) {
         this.canMove = canMove;
-    }
-
-    public void setDirectionLocked(boolean locked) {
-        this.directionLocked = locked;
     }
 }
 
