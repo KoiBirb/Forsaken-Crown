@@ -474,7 +474,7 @@ public class SkeletonSummoner extends Enemy{
             currentState = State.DAMAGED;
 
             EnemySoundHandler.stopSummonerAttack();
-
+            super.hit();
             if (currentHealth > 0)
                 EnemySoundHandler.summonerHit();
 

@@ -6,7 +6,6 @@ import Attacks.MeleeAttacks.Player.PlayerHeavyAttack;
 import Attacks.MeleeAttacks.Player.PlayerQuickAttack;
 import Handlers.CollisionHandler;
 import Handlers.ImageHandler;
-import Handlers.Sound.BackgroundMusicHandler;
 import Handlers.Sound.PlayerSoundHandler;
 import Handlers.Vector2;
 import Main.Panels.GamePanel;
@@ -230,14 +229,14 @@ public class Player extends Entity {
         }
 
         // Dashing
-        if (keyI.kPressed && state != PlayerState.DASHING && System.currentTimeMillis() - lastDashTime >= 1000 && currentMana > 0) {
+        if (keyI.kPressed && state != PlayerState.DASHING && System.currentTimeMillis() - lastDashTime >= 1000 && currentMana >= 3) {
             state = PlayerState.DASHING;
             dashStartTime = System.currentTimeMillis();
             lastDashTime = dashStartTime;
             velocity.x = direction.contains("right") ? 30 : -30;
             PlayerSoundHandler.dash();
             TiledMap.cameraShake(3, 1);
-            currentMana--;
+            currentMana -= 3;
             spriteRow = 12;
             maxSpriteCol = 5;
         }
@@ -267,7 +266,6 @@ public class Player extends Entity {
                             PlayerSoundHandler.hit();
                             chain = true;
                             lastQuickAttackTime = currentTime;
-                            currentMana += 2;
                             state = PlayerState.ATTACKING;
                         }
                     } else {

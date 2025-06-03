@@ -296,7 +296,7 @@ public class Ghoul extends Enemy {
             maxSpriteCol = 3;
 
             currentState = State.DAMAGED;
-
+            super.hit();
             EnemySoundHandler.stopGhoulAttack();
 
             if (currentHealth > 0)

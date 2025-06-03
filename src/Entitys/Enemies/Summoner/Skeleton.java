@@ -302,7 +302,7 @@ public class Skeleton extends Enemy {
             maxSpriteCol = 3;
 
             currentState = State.DAMAGED;
-
+            super.hit();
             EnemySoundHandler.stopSkeletonAttack();
 
             if (currentHealth > 0)

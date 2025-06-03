@@ -163,7 +163,6 @@ public class GamePanel extends JPanel implements Runnable{
             for (int j = 0; j < playerAttacks.size(); j++) {
                 if (CollisionHandler.attackCollision(playerAttacks.get(j), enemies.get(i))) {
                     enemies.get(i).hit(playerAttacks.get(j).getDamage(), 3, 3);
-                    player.increaseMana(1);
                 }
             }
         }

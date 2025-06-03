@@ -8,7 +8,6 @@
 package Entitys.Enemies;
 
 import Attacks.MeleeAttacks.Enemies.BloodKing.*;
-import Entitys.Enemies.Summoner.Skeleton;
 import Handlers.CollisionHandler;
 import Handlers.ImageHandler;
 import Handlers.Sound.EnemySoundHandler;
@@ -619,7 +618,7 @@ public class BloodKing extends Enemy{
             }
 
             image = imageHit;
-
+            super.hit();
             EnemySoundHandler.kingHit();
         }
 

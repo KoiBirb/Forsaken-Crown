@@ -70,6 +70,10 @@ public abstract class Enemy extends Entitys.Entity {
         return true;
     }
 
+    public void hit() {
+        GamePanel.player.increaseMana(1);
+    }
+
     @Override
     public void update() {
 
