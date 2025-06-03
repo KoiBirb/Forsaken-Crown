@@ -18,8 +18,6 @@ import Map.TiledMap;
 import java.awt.*;
 import java.util.ArrayList;
 
-import static Main.Main.keyI;
-
 public class BloodKing extends Enemy{
 
     // states
@@ -35,8 +33,6 @@ public class BloodKing extends Enemy{
     private Action currentAction = Action.ATTACK;
     private long actionStartTime = 0;
     private long actionDuration = 2000;
-    private double moveTargetDistance = 0;
-    private double moveStartX = 0;
     private int moveDir = 1;
 
     int offsetXL, offsetX, offsetY = 100;
@@ -203,6 +199,7 @@ public class BloodKing extends Enemy{
                                     break;
                                 case HEARTTRANSFD:
                                     currentState = State.ATTACKING;
+                                    EnemySoundHandler.heartKingSink();
                                     setAttackUsed(Attack.HEART);
                                     orgPos.set(position.x, position.y);
                                     spriteRow = 6;
@@ -228,12 +225,12 @@ public class BloodKing extends Enemy{
 
             if (currentState == State.WALK && onGround) {
                 if (!footstepsPlaying) {
-                    EnemySoundHandler.summonerFootsteps();
+                    EnemySoundHandler.kingFootsteps();
                     footstepsPlaying = true;
                 }
             } else {
                 if (footstepsPlaying) {
-                    EnemySoundHandler.stopSummonerFootsteps();
+                    EnemySoundHandler.stopKingFootsteps();
                     footstepsPlaying = false;
                 }
             }
@@ -295,6 +292,7 @@ public class BloodKing extends Enemy{
                         position.set(GamePanel.player.getPosition().x, position.y);
                     } else if (spriteRow == 9){
                         currentAttack = Attack.HEARTTRANSBW;
+                        EnemySoundHandler.heartKingAppear();
                         spriteRow = 16;
                         spriteCol = 0;
                         maxSpriteCol = 11;
@@ -349,13 +347,12 @@ public class BloodKing extends Enemy{
                 if (isAttackOffCooldown(Attack.STAB)) {
                     viableAttacks.add(Attack.STAB);
                 }
-            }
 
-            if (playerDistance < 3 * TileSize && !GamePanel.playerAttacks.isEmpty()) {
-               if (isAttackOffCooldown(Attack.DODGE)) {
+                if (isAttackOffCooldown(Attack.DODGE)) {
                     viableAttacks.add(Attack.DODGE);
                 }
             }
+
 
             if (playerDistance > 5 * TileSize) {
                 if (isAttackOffCooldown(Attack.HEART)) {
@@ -569,7 +566,7 @@ public class BloodKing extends Enemy{
             }
 
             hit = true;
-            EnemySoundHandler.summonerHit();
+            EnemySoundHandler.kingHit();
         }
 
         if (currentHealth <= 0) {
@@ -588,6 +585,8 @@ public class BloodKing extends Enemy{
             maxSpriteCol = 10;
             velocity.x = 0;
             velocity.y = 0;
+            EnemySoundHandler.stopKingFootsteps();
+            EnemySoundHandler.kingDeath();
         }
     }
 

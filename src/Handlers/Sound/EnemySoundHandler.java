@@ -11,10 +11,118 @@ package Handlers.Sound;
          private static final Sound skeletonSteps = new Sound();
          private static final Sound skeletonEffect = new Sound();
 
+         private static final Sound kingSteps = new Sound();
+         private static final Sound kingEffect = new Sound();
+         private static final Sound kingHit = new Sound();
+
          private static int walkingGhouls = 0, attackingGhouls = 0;
          private static int walkingSummoners = 0, attackingSummoners = 0;
          private static int walkingSkeletons = 0, attackingSkeletons = 0;
+         private static int walkingKings = 0;
          private static boolean skeletonSpawn = false;
+
+
+         public static void dodgeDash() {
+             playSoundEffect("/Audio/Enemy/BloodKing/Attacks/Dodge/Dash.wav", kingEffect);
+         }
+
+         public static void dodgeSlash1() {
+             playSoundEffect("/Audio/Enemy/BloodKing/Attacks/Dodge/Slash1.wav", kingEffect);
+         }
+
+         public static void dodgeSlash2() {
+             playSoundEffect("/Audio/Enemy/BloodKing/Attacks/Dodge/Slash2.wav", kingEffect);
+         }
+
+         public static void dodgeStepBack() {
+             playSoundEffect("/Audio/Enemy/BloodKing/Attacks/Dodge/StepBack.wav", kingEffect);
+         }
+
+         public static void finisherCharge() {
+             playSoundEffect("/Audio/Enemy/BloodKing/Attacks/Finisher/Charge.wav", kingEffect);
+         }
+
+         public static void finisherHitGround() {
+             playSoundEffect("/Audio/Enemy/BloodKing/Attacks/Finisher/HitGround.wav", kingEffect);
+         }
+
+         public static void finisherSwing() {
+             playSoundEffect("/Audio/Enemy/BloodKing/Attacks/Finisher/Swing.wav", kingEffect);
+         }
+
+         public static void heartKingAppear() {
+             playSoundEffect("/Audio/Enemy/BloodKing/Attacks/Heart/Appear.wav", kingEffect);
+         }
+
+         public static void heartAppear() {
+             playSoundEffect("/Audio/Enemy/BloodKing/Attacks/Heart/HeartAppear.wav", kingEffect);
+         }
+
+         public static void heartKingSink() {
+             playSoundEffect("/Audio/Enemy/BloodKing/Attacks/Heart/Sink.wav", kingEffect);
+         }
+
+         public static void heartSplash() {
+             playSoundEffect("/Audio/Enemy/BloodKing/Attacks/Heart/Splash.wav", kingEffect);
+         }
+
+         public static void slamHitGround() {
+             playSoundEffect("/Audio/Enemy/BloodKing/Attacks/Slam/HitGround.wav", kingEffect);
+         }
+
+         public static void slamJump() {
+             playSoundEffect("/Audio/Enemy/BloodKing/Attacks/Slam/Jump.wav", kingEffect);
+         }
+
+         public static void slamSwing() {
+             playSoundEffect("/Audio/Enemy/BloodKing/Attacks/Slam/Swing.wav", kingEffect);
+         }
+
+         public static void slashSwing1() {
+             playSoundEffect("/Audio/Enemy/BloodKing/Attacks/Slash/Swing1.wav", kingEffect);
+         }
+
+         public static void slashSwing2() {
+             playSoundEffect("/Audio/Enemy/BloodKing/Attacks/Slash/Swing2.wav", kingEffect);
+         }
+
+         public static void stabSlice() {
+             playSoundEffect("/Audio/Enemy/BloodKing/Attacks/Stab/Slice.wav", kingEffect);
+         }
+
+         public static void stabStab() {
+             playSoundEffect("/Audio/Enemy/BloodKing/Attacks/Stab/Stab.wav", kingEffect);
+         }
+
+         public static void stabWarn() {
+             playSoundEffect("/Audio/Enemy/BloodKing/Attacks/Stab/Warn.wav", kingEffect);
+         }
+
+         public static synchronized void kingFootsteps() {
+             if (walkingKings == 0) {
+                 kingSteps.setFile("/Audio/Enemy/BloodKing/Footsteps.wav");
+                 kingSteps.play();
+                 kingSteps.loop();
+             }
+             walkingKings++;
+         }
+
+         public static synchronized void stopKingFootsteps() {
+             if (walkingKings > 0) {
+                 walkingKings--;
+                 if (walkingKings == 0) {
+                     kingSteps.stop();
+                 }
+             }
+         }
+
+         public static void kingDeath() {
+            playSoundEffect("/Audio/Enemy/BloodKing/Death.wav", kingEffect);
+         }
+
+         public static void kingHit() {
+             playSoundEffect("/Audio/Enemy/BloodKing/Hit.wav", kingHit);
+         }
 
 
          public static void summonerDeath() {
@@ -176,4 +284,4 @@ package Handlers.Sound;
                  sound.play();
              }
          }
-     }
+    }

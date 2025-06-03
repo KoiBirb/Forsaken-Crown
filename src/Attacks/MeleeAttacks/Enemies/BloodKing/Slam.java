@@ -8,6 +8,7 @@ package Attacks.MeleeAttacks.Enemies.BloodKing;
 
 import Attacks.MeleeAttacks.MeleeAttack;
 import Entitys.Enemies.BloodKing;
+import Handlers.Sound.EnemySoundHandler;
 import Main.Panels.GamePanel;
 import Map.TiledMap;
 
@@ -49,6 +50,16 @@ public class Slam extends MeleeAttack {
 
         if (frame == 6){
             TiledMap.cameraShake(5, 1);
+        }
+
+        if (spriteCounter == 0){
+            if (frame == 2) {
+                EnemySoundHandler.slamJump();
+            } else if (frame == 5) {
+                EnemySoundHandler.slamSwing();
+            } else if (frame == 6) {
+                EnemySoundHandler.slamHitGround();
+            }
         }
 
         spriteCounter++;

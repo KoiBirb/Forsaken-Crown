@@ -8,6 +8,7 @@ package Attacks.MeleeAttacks.Enemies.BloodKing;
 
 import Attacks.MeleeAttacks.MeleeAttack;
 import Entitys.Enemies.BloodKing;
+import Handlers.Sound.EnemySoundHandler;
 import Main.Panels.GamePanel;
 import Map.TiledMap;
 
@@ -43,6 +44,14 @@ public class HeartSlam extends MeleeAttack {
 
         if (frame == 4){
             TiledMap.cameraShake(3, 1);
+        }
+
+        if (spriteCounter == 0) {
+            if (frame == 3) {
+                EnemySoundHandler.heartAppear();
+            } else if (frame == 10) {
+                EnemySoundHandler.heartSplash();
+            }
         }
 
         if (frame == 10 || frame == 11){

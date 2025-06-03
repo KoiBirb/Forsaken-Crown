@@ -8,6 +8,7 @@ package Attacks.MeleeAttacks.Enemies.BloodKing;
 
 import Attacks.MeleeAttacks.MeleeAttack;
 import Entitys.Enemies.BloodKing;
+import Handlers.Sound.EnemySoundHandler;
 import Main.Panels.GamePanel;
 import Map.TiledMap;
 
@@ -53,6 +54,19 @@ public class Dodge extends MeleeAttack {
         if (frame == 8 || frame == 13){
             TiledMap.cameraShake(4, 1);
         }
+
+        if (spriteCounter == 0) {
+            if (frame == 4) {
+                EnemySoundHandler.dodgeStepBack();
+            } else if (frame == 8) {
+                EnemySoundHandler.dodgeDash();
+            } else if (frame == 14) {
+                EnemySoundHandler.dodgeSlash2();
+            }
+        }
+
+        if (frame == 8 && spriteCounter == 3)
+            EnemySoundHandler.dodgeSlash1();
 
         spriteCounter++;
         if (spriteCounter > 9) {

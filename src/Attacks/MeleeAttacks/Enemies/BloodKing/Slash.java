@@ -8,6 +8,7 @@ package Attacks.MeleeAttacks.Enemies.BloodKing;
 
 import Attacks.MeleeAttacks.MeleeAttack;
 import Entitys.Enemies.BloodKing;
+import Handlers.Sound.EnemySoundHandler;
 import Main.Panels.GamePanel;
 import Map.TiledMap;
 
@@ -42,6 +43,14 @@ public class Slash extends MeleeAttack {
 
         if (frame == 3 || frame == 7 && spriteCounter == 0){
             TiledMap.cameraShake(2, 7);
+        }
+
+        if (spriteCounter == 0){
+            if (frame == 2) {
+                EnemySoundHandler.slashSwing1();
+            } else if (frame == 6) {
+                EnemySoundHandler.slashSwing2();
+            }
         }
 
         spriteCounter++;

@@ -8,6 +8,7 @@ package Attacks.MeleeAttacks.Enemies.BloodKing;
 
 import Attacks.MeleeAttacks.MeleeAttack;
 import Entitys.Enemies.BloodKing;
+import Handlers.Sound.EnemySoundHandler;
 import Main.Panels.GamePanel;
 import Map.TiledMap;
 
@@ -23,6 +24,7 @@ public class Stab extends MeleeAttack {
         super(3);
 
         this.bloodKing = bloodKing;
+        EnemySoundHandler.stabWarn();
         GamePanel.enemyAttacks.add(this);
     }
 
@@ -44,6 +46,14 @@ public class Stab extends MeleeAttack {
 
         if (frame == 3 || frame == 8){
             TiledMap.cameraShake(4, 1);
+        }
+
+        if (spriteCounter == 0){
+            if (frame == 3) {
+                EnemySoundHandler.stabStab();
+            } else if (frame == 7) {
+                EnemySoundHandler.stabSlice();
+            }
         }
 
         spriteCounter++;

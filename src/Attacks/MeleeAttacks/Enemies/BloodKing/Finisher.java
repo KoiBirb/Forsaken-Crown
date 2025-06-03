@@ -24,6 +24,7 @@ public class Finisher extends MeleeAttack {
         super(6);
 
         this.bloodKing = bloodKing;
+        EnemySoundHandler.finisherCharge();
         GamePanel.enemyAttacks.add(this);
     }
 
@@ -38,7 +39,7 @@ public class Finisher extends MeleeAttack {
         } else if (frame == 6) {
             hitBox = new Rectangle((bloodKing.getDirection().contains("right")) ? (int) bloodKing.getPosition().x + 45 : (int) bloodKing.getPosition().x - 20, (int) (bloodKing.getPosition().y + 10), 35, 60);
             if (spriteCounter == 0) {
-                EnemySoundHandler.skeletonAttack();
+                EnemySoundHandler.finisherSwing();
             }
         } else {
             hitBox = null;
@@ -46,6 +47,10 @@ public class Finisher extends MeleeAttack {
 
         if (frame == 4){
             TiledMap.cameraShake(3, 1);
+        }
+
+        if (frame == 7 && spriteCounter == 0) {
+            EnemySoundHandler.finisherHitGround();
         }
 
         spriteCounter++;
