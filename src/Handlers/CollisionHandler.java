@@ -55,7 +55,7 @@ public class CollisionHandler {
                     Point trapLocation = new Point(entityLeftCol, entityTopRow);
 
                     if (!trapLocation.equals(entity.getCurrentTrap())) {
-                        entity.hit(1, 0, 0);
+                        entity.hit(1, 0, 8);
                         entity.setCurrentTrap(trapLocation);
                     }
                 }
@@ -77,7 +77,7 @@ public class CollisionHandler {
            } else if ((tileNum1 == 6 || tileNum2 == 6)) {
                 Point trapLocation = new Point(entityLeftCol, entityTopRow);
                 if (!trapLocation.equals(entity.getCurrentTrap()) && entity.getFalling() && !entity.isJumping()) {
-                    entity.hit(1, 0, 10);
+                    entity.hit(1, 0, 8);
                     entity.setCurrentTrap(trapLocation);
                 }
                 entity.setOnGround(false);

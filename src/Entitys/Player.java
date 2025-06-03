@@ -118,9 +118,10 @@ public class Player extends Entity {
 
         if (image != imageReg) {
             hitCounter++;
-            if (hitCounter > 22) {
+            if (hitCounter > 25) {
                 hitCounter = 0;
                 image = imageReg;
+                knockedBack = false;
             }
         }
 
