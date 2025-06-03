@@ -332,7 +332,7 @@ public class Player extends Entity {
 
                 state = PlayerState.HEALING;
 
-                int healAmount = (int) ((System.currentTimeMillis() - healStartTime) / 650);
+                int healAmount = (int) ((System.currentTimeMillis() - healStartTime) / 500);
                 healAmount = Math.min(healAmount, currentMana);
                 healAmount = Math.min(healAmount, maxHealth - currentHealth);
 
