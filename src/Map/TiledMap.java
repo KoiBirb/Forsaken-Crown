@@ -90,8 +90,8 @@ public class TiledMap {
         tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/DARK Edition Tileset No background.png"));
         tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/DARK Edition Tileset No background.png"));
         tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Blood Temple Tileset.png"));
-        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/pixil-frame-0 (2).png"));
-        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/pixil-frame-0 (2).png"));
+        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/pixil-frame-0 (6).png"));
+        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/pixil-frame-0 (5).png"));
         tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/pixil-frame-0.png"));
         tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/DARK Edition Tileset No background.png"));
         tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/DARK Edition Tileset No background.png"));
@@ -200,8 +200,8 @@ public class TiledMap {
             tilesetOffset.put(tileSets.get(2), 306);
             tilesetOffset.put(tileSets.get(3), 306);
             tilesetOffset.put (tileSets.get(4), 1930);
-            tilesetOffset.put(tileSets.get(5), 2249);
-            tilesetOffset.put(tileSets.get(6), 2249);
+            tilesetOffset.put(tileSets.get(5), 2447);
+            tilesetOffset.put(tileSets.get(6), 2285);
             tilesetOffset.put(tileSets.get(7), 0);
             tilesetOffset.put(tileSets.get(8), 306);
             tilesetOffset.put(tileSets.get(9), 306);
@@ -448,7 +448,7 @@ public class TiledMap {
 
             g2.drawImage(layer, (int) offsetX - scaledTileSize - 2, (int) offsetY - 2 - scaledTileSize,
                     oldRoomWidth + roomWidth / 16 + scaledTileSize,
-                    oldRoomHeight + roomHeight / 16 + scaledTileSize, null);
+                    oldRoomHeight + roomHeight / 16 + 2*scaledTileSize, null);
         }
     }
 
@@ -505,7 +505,7 @@ public class TiledMap {
             if (k == 7) k++;
 
             // Set alpha only for layer 5
-            g2.setComposite(k == 5
+            g2.setComposite(k == 5 || k == 6
                     ? AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha)
                     : originalComposite);
 
@@ -571,8 +571,9 @@ public class TiledMap {
                     g2.setTransform(originalTransform);
                 }
             }
+            if ( k== 5 || k == 6)
+                g2.setComposite(originalComposite);
         }
-        g2.setComposite(originalComposite);
     }
 
     public void updatePlayerRoom() {
