@@ -40,6 +40,8 @@ public class PlayerDashHeavyAttack extends MeleeAttack {
     public void update() {
 
         if (frame == 5 || player.getState() == Player.PlayerState.DEAD) {
+            player.setCanMove(true);
+            player.setDirectionLock(false);
             GamePanel.playerAttacks.remove(this);
         } else if (frame == 0) {
             hitBox = new Rectangle( (player.getDirection().contains("right")) ? (int) player.getPosition().x + 7 : (int) player.getPosition().x + 18, (int) (player.getPosition().y + 20), 20, 35);
@@ -48,6 +50,8 @@ public class PlayerDashHeavyAttack extends MeleeAttack {
             if (spriteCounter == 2 && frame == 1 && (player.isOnGround() || CollisionHandler.checkAttackTileCollision(hitBox, player))) {
                 PlayerSoundHandler.hitTile();
                 PlayerSoundHandler.hitColladable();
+                player.setCanMove(false);
+                player.setDirectionLock(true);
             }
         } else {
             hitBox = null;

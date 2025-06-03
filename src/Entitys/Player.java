@@ -33,14 +33,15 @@ public class Player extends Entity {
 
     private PlayerState state;
     private VolatileImage imageReg, imageHit;
-    private int spriteCounter, spriteRow, spriteCol, maxSpriteCol, lastSpriteRow, lives, hitCounter;
+    private int spriteCounter, spriteRow, spriteCol,
+            maxSpriteCol, lastSpriteRow, lives, hitCounter;
 
     // timers
     private long jumpKeyPressStartTime, lastQuickAttackTime, lastHeavyAttackTime,
             fallStartTime, healStartTime, dashStartTime, lastDashTime, deathTime, lastGroundedTime;
 
     private Vector2 spawnPosition;
-    private boolean chain, continuousJump;
+    private boolean chain, continuousJump, canMove, directionLock;
 
     public Player(Vector2 position) {
         super(position, new Vector2(0, 0), 90, 37,
@@ -53,6 +54,7 @@ public class Player extends Entity {
         spawnPosition = new Vector2(position.x, position.y);
         state = PlayerState.SPAWNING;
         lives = 1;
+        canMove = true;
     }
 
     @Override
@@ -77,7 +79,10 @@ public class Player extends Entity {
                     break;
 
                 default:
-                    handlePlayerInput();
+                    if (canMove)
+                        handlePlayerInput();
+                    else
+                        velocity.x = 0;
                     break;
             }
         } else if (state != PlayerState.DEAD) {
@@ -94,7 +99,9 @@ public class Player extends Entity {
             GamePanel.backgroundMusic.fadeOut(2000);
         }
 
-        determineDirection();
+        if (!directionLock) {
+            determineDirection();
+        }
 
         isColliding = false;
         CollisionHandler.checkTileCollision(this);
@@ -109,7 +116,7 @@ public class Player extends Entity {
 
         if (image != imageReg) {
             hitCounter++;
-            if (hitCounter > 18) {
+            if (hitCounter > 22) {
                 hitCounter = 0;
                 image = imageReg;
             }
@@ -481,5 +488,13 @@ public class Player extends Entity {
 
     public PlayerState getState() {
         return state;
+    }
+
+    public void setCanMove(boolean canMove) {
+        this.canMove = canMove;
+    }
+
+    public void setDirectionLock(boolean lock) {
+        this.directionLock = lock;
     }
 }
