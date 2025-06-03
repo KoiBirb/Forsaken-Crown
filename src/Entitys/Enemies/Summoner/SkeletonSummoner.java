@@ -21,6 +21,8 @@ import Map.TiledMap;
 import java.awt.*;
 import java.util.ArrayList;
 
+import static Main.Panels.GamePanel.activeEnemies;
+
 public class SkeletonSummoner extends Enemy{
 
     // states

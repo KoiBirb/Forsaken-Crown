@@ -19,6 +19,8 @@ import java.awt.*;
 import java.awt.image.VolatileImage;
 import java.util.ArrayList;
 
+import static Main.Panels.GamePanel.activeEnemies;
+
 public class BloodKing extends Enemy{
 
     // states
@@ -320,6 +322,7 @@ public class BloodKing extends Enemy{
             if (hitCounter > 18) {
                 hitCounter = 0;
                 image = imageReg;
+                currentAction = Action.ATTACK;
             }
         }
 

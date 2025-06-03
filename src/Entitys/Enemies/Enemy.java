@@ -81,8 +81,9 @@ public abstract class Enemy extends Entitys.Entity {
     public void update() {
 
         if (canSeePlayer) {
-            if (!activeEnemies.contains(this))
+            if (!activeEnemies.contains(this)) {
                 activeEnemies.add(this);
+            }
         } else {
             activeEnemies.remove(this);
         }

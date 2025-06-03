@@ -74,8 +74,8 @@ public class GamePanel extends JPanel implements Runnable{
      */
     public void setupGame() {
         this.requestFocusInWindow();
-//        player = new Player(new Vector2(100,100));
-        player = new Player(new Vector2(2300,2500));
+        player = new Player(new Vector2(100,100));
+//        player = new Player(new Vector2(2300,2500));
         ui = new UIManager(player, true);
         backgroundMusic = new BackgroundMusicHandler();
         EnemySpawnHandler.setup();
@@ -139,7 +139,6 @@ public class GamePanel extends JPanel implements Runnable{
      * Update game objects
      */
     public void update() {
-
         if (player != null) {
             player.update();
             tileMap.update();
@@ -159,6 +158,12 @@ public class GamePanel extends JPanel implements Runnable{
 
         for (int i = 0; i < effects.size(); i++) {
             effects.get(i).update();
+        }
+
+        for (int i = 0; i < activeEnemies.size(); i++) {
+            if (!enemies.contains(activeEnemies.get(i))){
+                activeEnemies.remove(activeEnemies.get(i));
+            }
         }
 
         for (int i = 0; i < enemies.size(); i++) {

@@ -12,6 +12,8 @@ import Map.TiledMap;
 
 import java.awt.*;
 
+import static Main.Panels.GamePanel.activeEnemies;
+
 public class Skeleton extends Enemy {
 
     public enum State {IDLE, WALK, DAMAGED, ATTACKING, DEAD, SPAWNING}
