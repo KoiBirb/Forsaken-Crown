@@ -20,7 +20,7 @@ public class GhoulAttack extends MeleeAttack {
     private final Ghoul ghoul;
 
     public GhoulAttack(Ghoul ghoul) {
-        super(1);
+        super(2);
 
         this.ghoul = ghoul;
         GamePanel.enemyAttacks.add(this);

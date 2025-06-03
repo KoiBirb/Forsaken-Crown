@@ -13,6 +13,8 @@ import Map.TiledMap;
 
 import java.awt.*;
 
+import static Main.Panels.GamePanel.activeEnemies;
+
 public abstract class Enemy extends Entitys.Entity {
 
     protected static final double GRAVITY = 0.8;
@@ -78,7 +80,12 @@ public abstract class Enemy extends Entitys.Entity {
     @Override
     public void update() {
 
-
+        if (canSeePlayer) {
+            if (!activeEnemies.contains(this))
+                activeEnemies.add(this);
+        } else {
+            activeEnemies.remove(this);
+        }
 
         for (Enemy other : GamePanel.enemies) {
                 if (other.getClass() == this.getClass() && other != this && other.getSolidArea().intersects(this.getSolidArea())) {

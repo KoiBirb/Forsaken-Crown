@@ -32,11 +32,20 @@ public class BackgroundMusicHandler {
         playDarkMain();
         musicDarkMain.setVolume(1.0f);
 
+        playDarkAction();
+        musicDarkAction.setVolume(0.0f);
+
         playCastleMain();
         musicCastleMain.setVolume(0.0f);
 
+        playCastleAction();
+        musicCastleAction.setVolume(0.0f);
+
         playBloodMain();
         musicBloodMain.setVolume(0.0f);
+
+        playBloodAction();
+        musicBloodAction.setVolume(0.0f);
     }
 
     public void update(){
@@ -49,14 +58,30 @@ public class BackgroundMusicHandler {
                 currentMusicState = MusicState.MAIN;
             }
 
-            if (!GamePanel.activeEnemies.isEmpty()) {
-
+            if (GamePanel.activeEnemies.isEmpty() && currentMusicState == MusicState.ACTION) {
+                transitionToMusic(musicDarkMain, 500);
+                currentMusicType = MusicType.DARK;
+                currentMusicState = MusicState.MAIN;
+            } else if (!GamePanel.activeEnemies.isEmpty() && currentMusicState != MusicState.ACTION){
+                transitionToMusic(musicDarkAction, 500);
+                currentMusicType = MusicType.DARK;
+                currentMusicState = MusicState.ACTION;
             }
         } else if (room != 9 && room != 17 && room != 19) {
             if (currentMusicType != MusicType.CASTLE) {
                 transitionToMusic(musicCastleMain, 2000);
                 currentMusicType = MusicType.CASTLE;
                 currentMusicState = MusicState.MAIN;
+            }
+
+            if (GamePanel.activeEnemies.isEmpty() && currentMusicState == MusicState.ACTION) {
+                transitionToMusic(musicCastleMain, 500);
+                currentMusicType = MusicType.CASTLE;
+                currentMusicState = MusicState.MAIN;
+            } else if (!GamePanel.activeEnemies.isEmpty() && currentMusicState != MusicState.ACTION){
+                transitionToMusic(musicCastleAction, 500);
+                currentMusicType = MusicType.CASTLE;
+                currentMusicState = MusicState.ACTION;
             }
         } else if (room == 19){
             if (currentMusicType != MusicType.BOSS) {
@@ -69,6 +94,16 @@ public class BackgroundMusicHandler {
                 transitionToMusic(musicBloodMain, 2000);
                 currentMusicType = MusicType.BLOOD;
                 currentMusicState = MusicState.MAIN;
+            }
+
+            if (GamePanel.activeEnemies.isEmpty() && currentMusicState == MusicState.ACTION) {
+                transitionToMusic(musicBloodMain, 500);
+                currentMusicType = MusicType.BLOOD;
+                currentMusicState = MusicState.MAIN;
+            } else if (!GamePanel.activeEnemies.isEmpty() && currentMusicState != MusicState.ACTION){
+                transitionToMusic(musicBloodAction, 500);
+                currentMusicType = MusicType.BLOOD;
+                currentMusicState = MusicState.ACTION;
             }
        }
     }
@@ -83,9 +118,9 @@ public class BackgroundMusicHandler {
             try { transitionThread.join(); } catch (InterruptedException ignored) {}
         }
         transitionThread = new Thread(() -> {
-            int steps = 100;
+            int steps = 80;
             float fromVolume = from.getVolume();
-            float toVolume = 0.8f;
+            float toVolume = 1.0f;
             to.setVolume(0f);
 
             if (to.getClip() != null && !to.isPlaying()) {
@@ -124,7 +159,7 @@ public class BackgroundMusicHandler {
             try { transitionThread.join(); } catch (InterruptedException ignored) {}
         }
         transitionThread = new Thread(() -> {
-            int steps = 100;
+            int steps = 80;
             float fromVolume = from.getVolume();
 
             for (int i = 0; i <= steps; i++) {
@@ -155,9 +190,9 @@ public class BackgroundMusicHandler {
     }
 
     public void playDarkAction() {
-        if (musicDarkMain.setFile("/Audio/Background/Dark/DarkAction.wav")) {
-            musicDarkMain.play();
-            musicDarkMain.loop();
+        if (musicDarkAction.setFile("/Audio/Background/Dark/DarkAction.wav")) {
+            musicDarkAction.play();
+            musicDarkAction.loop();
         }
     }
 
@@ -169,9 +204,9 @@ public class BackgroundMusicHandler {
     }
 
     public void playCastleAction() {
-        if (musicCastleMain.setFile("/Audio/Background/Castle/CastleAction.wav")) {
-            musicCastleMain.play();
-            musicCastleMain.loop();
+        if (musicCastleAction.setFile("/Audio/Background/Castle/CastleAction.wav")) {
+            musicCastleAction.play();
+            musicCastleAction.loop();
         }
     }
 
@@ -183,9 +218,9 @@ public class BackgroundMusicHandler {
     }
 
     public void playBloodAction() {
-        if (musicBloodMain.setFile("/Audio/Background/Blood/BloodAction.wav")) {
-            musicBloodMain.play();
-            musicBloodMain.loop();
+        if (musicBloodAction.setFile("/Audio/Background/Blood/BloodAction.wav")) {
+            musicBloodAction.play();
+            musicBloodAction.loop();
         }
     }
 

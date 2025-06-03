@@ -34,10 +34,8 @@ public class BloodKing extends Enemy{
     private ArrayList<Attack> viableAttacks = new ArrayList<>();
 
     private Action currentAction = Action.ATTACK;
-    private long actionStartTime = 0;
-    private long actionDuration = 2000;
-    private int moveDir = 1;
-    private int spawnCounter;
+    private long actionStartTime = 0, actionDuration = 2000;
+    private int moveDir = 1, spawnCounter, distanceToTravel = 0;
     private boolean startSpawn = false;
 
     int offsetXL, offsetX, offsetY = 100, hitCounter = 0;
@@ -58,7 +56,7 @@ public class BloodKing extends Enemy{
      * @param pos The initial position of the summoner.
      */
     public BloodKing(Vector2 pos) {
-        super(pos, 2, 8, 168, 79, 35,  new Rectangle(0, 0, 50, 65));
+        super(pos, 2, 8, 168, 79, 40,  new Rectangle(0, 0, 50, 65));
 
         imageReg = ImageHandler.loadImage("Assets/Images/Bosses/The Blood King/Blood_King_combined.png");
         imageHit = ImageHandler.loadImage("Assets/Images/Bosses/The Blood King/Blood_King_combined_Hit.png");
@@ -153,13 +151,14 @@ public class BloodKing extends Enemy{
 
                 if ((now - actionStartTime > actionDuration) && currentState == State.IDLE) {
                     currentAction = Math.random() < 0.5 ? Action.ATTACK : Action.MOVE;
+                    distanceToTravel = 1 + (int) (Math.random() * 4);
                     actionStartTime = now;
-                    actionDuration = 2000 + (int)(Math.random() * 3000);
+                    actionDuration = 1000 + (int)(Math.random() * 2000);
                 }
 
                 if (currentAction == Action.MOVE) {
                     directionLocked = false;
-                    if (dist <= 2 * ts && currentState != State.ATTACKING) {
+                    if (dist <= distanceToTravel * ts && currentState != State.ATTACKING) {
                         if (now - lastAttackTime >= 1000) {
                             currentAction = Action.ATTACK;
                             lastAttackTime = now;
@@ -383,24 +382,33 @@ public class BloodKing extends Enemy{
             viableAttacks.clear();
 
             if (playerDistance < 2 * TileSize) {
-                if (isAttackOffCooldown(Attack.SLASH)) {
-                    viableAttacks.add(Attack.SLASH);
-                }
                 if (isAttackOffCooldown(Attack.FINISHER)) {
                     viableAttacks.add(Attack.FINISHER);
                 }
             }
 
-            if (playerDistance < 3 * TileSize) {
+            if (playerDistance < 2.5 * TileSize) {
+                if (isAttackOffCooldown(Attack.SLASH)) {
+                    viableAttacks.add(Attack.SLASH);
+                }
+            }
+
+            if (playerDistance < 3.5 * TileSize && playerDistance > 1.5 * TileSize) {
                 if (isAttackOffCooldown(Attack.SLAM)) {
                     viableAttacks.add(Attack.SLAM);
                 }
+            }
+
+            if (playerDistance < 5 * TileSize) {
+
                 if (isAttackOffCooldown(Attack.STAB)) {
                     viableAttacks.add(Attack.STAB);
                 }
 
-                if (isAttackOffCooldown(Attack.DODGE)) {
-                    viableAttacks.add(Attack.DODGE);
+                if (playerDistance > 2 * TileSize) {
+                    if (isAttackOffCooldown(Attack.DODGE)) {
+                        viableAttacks.add(Attack.DODGE);
+                    }
                 }
             }
 
@@ -595,7 +603,7 @@ public class BloodKing extends Enemy{
 
         g2.setColor(Color.WHITE);
         g2.setFont(new Font("Arial", Font.BOLD, 16));
-        g2.drawString("Health: " + currentHealth, (int) (position.x - cam.x), (int) (position.y - cam.y - 10));
+        g2.drawString("Dist: " + dist/ts, (int) (position.x - cam.x), (int) (position.y - cam.y - 10));
     }
 
     /**
