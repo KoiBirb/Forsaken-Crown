@@ -16,6 +16,7 @@ import Main.Panels.GamePanel;
 import Map.TiledMap;
 
 import java.awt.*;
+import java.awt.image.VolatileImage;
 import java.util.ArrayList;
 
 public class BloodKing extends Enemy{
@@ -24,6 +25,8 @@ public class BloodKing extends Enemy{
     public enum State {IDLE, WALK, DAMAGED, ATTACKING, DEAD}
     private enum Action {ATTACK, MOVE}
     private enum Attack {DODGE, SLASH, FINISHER, SLAM, HEART, STAB, HEARTTRANSFD, HEARTTRANSBW}
+
+    private VolatileImage imageReg, imageHit;
 
     private final java.util.HashMap<Attack, Long> lastUsed = new java.util.HashMap<>();
     private State currentState = State.IDLE;
@@ -35,7 +38,7 @@ public class BloodKing extends Enemy{
     private long actionDuration = 2000;
     private int moveDir = 1;
 
-    int offsetXL, offsetX, offsetY = 100;
+    int offsetXL, offsetX, offsetY = 100, hitCounter = 0;
     private final double visionRadius = 1500;
     private long lastAttackTime = 0;
 
@@ -53,6 +56,9 @@ public class BloodKing extends Enemy{
      */
     public BloodKing(Vector2 pos) {
         super(pos, 2, 8, 168, 79, 25,  new Rectangle(0, 0, 50, 65));
+
+        imageReg = ImageHandler.loadImage("Assets/Images/Bosses/The Blood King/Blood_King_combined.png");
+        imageHit = ImageHandler.loadImage("Assets/Images/Bosses/The Blood King/Blood_King_combined_Hit.png");
 
         this.image = ImageHandler.loadImage("Assets/Images/Bosses/The Blood King/Blood_King_combined.png");
     }
@@ -272,6 +278,14 @@ public class BloodKing extends Enemy{
 
         if (!canMove) {
             velocity.x = 0;
+        }
+
+        if (image != imageReg) {
+            hitCounter++;
+            if (hitCounter > 10) {
+                hitCounter = 0;
+                image = imageReg;
+            }
         }
 
         spriteCounter++;
@@ -554,7 +568,7 @@ public class BloodKing extends Enemy{
      * @param knockbackY The knockback force in the Y direction.
      */
     public void hit(int damage, int knockbackX, int knockbackY) {
-        if (canBeHit() && !hit && spriteRow != 6 && spriteRow != 9 && !immune) {
+        if (canBeHit() && !hit && spriteRow != 6 && spriteRow != 9 && spriteRow != 15 && !immune) {
             currentHealth -= damage;
 
             if (currentAttack == null) {
@@ -564,6 +578,8 @@ public class BloodKing extends Enemy{
                 spriteCol = 0;
                 maxSpriteCol = 1;
             }
+
+            image = imageHit;
 
             hit = true;
             EnemySoundHandler.kingHit();
