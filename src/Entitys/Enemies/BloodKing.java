@@ -10,7 +10,7 @@ package Entitys.Enemies;
 import Attacks.MeleeAttacks.Enemies.BloodKing.*;
 import Handlers.CollisionHandler;
 import Handlers.ImageHandler;
-import Handlers.Sound.EnemySoundHandler;
+import Handlers.Sound.SoundHandlers.EnemySoundHandler;
 import Handlers.Vector2;
 import Main.Main;
 import Main.Panels.GamePanel;

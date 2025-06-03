@@ -1,6 +1,8 @@
-package Handlers.Sound;
+package Handlers.Sound.SoundHandlers;
 
-     public class EnemySoundHandler {
+import Handlers.Sound.Sound;
+
+public class EnemySoundHandler {
 
          private static final Sound ghoulSteps = new Sound();
          private static final Sound ghoulEffect = new Sound();

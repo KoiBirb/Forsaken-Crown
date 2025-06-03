@@ -8,7 +8,7 @@ package Attacks.MeleeAttacks.Enemies;
 
 import Attacks.MeleeAttacks.MeleeAttack;
 import Entitys.Enemies.Summoner.Skeleton;
-import Handlers.Sound.EnemySoundHandler;
+import Handlers.Sound.SoundHandlers.EnemySoundHandler;
 import Main.Panels.GamePanel;
 
 import java.awt.*;

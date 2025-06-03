@@ -9,10 +9,9 @@ package Entitys.Enemies.Summoner;
 
 import Attacks.MeleeAttacks.Enemies.SummonerAttack;
 import Entitys.Enemies.Enemy;
-import Entitys.Enemies.Ghoul;
 import Handlers.CollisionHandler;
 import Handlers.ImageHandler;
-import Handlers.Sound.EnemySoundHandler;
+import Handlers.Sound.SoundHandlers.EnemySoundHandler;
 import Handlers.SpikeDetectionHandler;
 import Handlers.Vector2;
 import Main.Panels.GamePanel;
@@ -20,8 +19,6 @@ import Map.TiledMap;
 
 import java.awt.*;
 import java.util.ArrayList;
-
-import static Main.Panels.GamePanel.activeEnemies;
 
 public class SkeletonSummoner extends Enemy{
 

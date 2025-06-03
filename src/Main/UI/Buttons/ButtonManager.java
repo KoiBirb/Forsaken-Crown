@@ -7,7 +7,7 @@
 
 package Main.UI.Buttons;
 
-import Handlers.Sound.PlayerSoundHandler;
+import Handlers.Sound.SoundHandlers.PlayerSoundHandler;
 import Main.Main;
 import Main.Panels.EndPanel;
 import Main.Panels.GamePanel;

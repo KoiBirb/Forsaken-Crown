@@ -6,7 +6,7 @@ import Attacks.MeleeAttacks.Player.PlayerHeavyAttack;
 import Attacks.MeleeAttacks.Player.PlayerQuickAttack;
 import Handlers.CollisionHandler;
 import Handlers.ImageHandler;
-import Handlers.Sound.PlayerSoundHandler;
+import Handlers.Sound.SoundHandlers.PlayerSoundHandler;
 import Handlers.Vector2;
 import Main.Panels.GamePanel;
 import Map.TiledMap;
@@ -38,7 +38,8 @@ public class Player extends Entity {
 
     // timers
     private long jumpKeyPressStartTime, lastQuickAttackTime, lastHeavyAttackTime,
-            fallStartTime, healStartTime, dashStartTime, lastDashTime, deathTime, lastGroundedTime;
+            fallStartTime, healStartTime, dashStartTime, lastDashTime, deathTime,
+            lastGroundedTime, now;
 
     private Vector2 spawnPosition;
     private boolean chain, continuousJump, canMove, directionLock;
@@ -59,6 +60,7 @@ public class Player extends Entity {
 
     @Override
     public void update() {
+        now = System.currentTimeMillis();
         if (currentHealth > 0) {
             switch (state) {
                 case SPAWNING:
@@ -91,7 +93,7 @@ public class Player extends Entity {
             maxSpriteCol = 5;
             spriteCol = 0;
             velocity.setLength(0);
-            deathTime = System.currentTimeMillis();
+            deathTime = now;
             PlayerSoundHandler.playerDeath();
             PlayerSoundHandler.stopFootsteps();
             PlayerSoundHandler.stopFalling();
@@ -160,7 +162,7 @@ public class Player extends Entity {
             }
         }
 
-        if (state == PlayerState.DEAD && System.currentTimeMillis() - deathTime >= 5000) {
+        if (state == PlayerState.DEAD && now - deathTime >= 5000) {
             lives--;
             if (lives <= 0)
                 switchToEnd(false);
@@ -179,7 +181,7 @@ public class Player extends Entity {
     private void handlePlayerInput() {
 
         if (onGround) {
-            lastGroundedTime = System.currentTimeMillis();
+            lastGroundedTime = now;
         }
 
         if (state != PlayerState.DASHING)
@@ -188,7 +190,7 @@ public class Player extends Entity {
         // Falling
         if (velocity.y > 0) {
             if (fallStartTime == 0)
-                fallStartTime = System.currentTimeMillis();
+                fallStartTime = now;
             if (velocity.y > 9)
                 PlayerSoundHandler.falling();
         } else {
@@ -198,7 +200,7 @@ public class Player extends Entity {
 
         // Landing
         if (onGround) {
-            if (fallStartTime > 0 && System.currentTimeMillis() - fallStartTime > 400) {
+            if (fallStartTime > 0 && now - fallStartTime > 400) {
                 PlayerSoundHandler.landHard();
             } else if (fallStartTime > 0) {
                 PlayerSoundHandler.land();
@@ -210,12 +212,12 @@ public class Player extends Entity {
         // Jumping
         if (keyI.wPressed && state != PlayerState.HEALING) {
             int coyoteTime = 100;
-            if (jump && (onGround || System.currentTimeMillis() - lastGroundedTime <= coyoteTime) && jumpKeyPressStartTime == 0) {
-                jumpKeyPressStartTime = System.currentTimeMillis();
+            if (jump && (onGround || now - lastGroundedTime <= coyoteTime) && jumpKeyPressStartTime == 0) {
+                jumpKeyPressStartTime = now;
                 jump = false;
                 PlayerSoundHandler.jump();
             }
-            if (System.currentTimeMillis() - jumpKeyPressStartTime <= 200) {
+            if (now - jumpKeyPressStartTime <= 200) {
                 continuousJump = true;
             } else {
                 jumpKeyPressStartTime = 0;
@@ -243,9 +245,9 @@ public class Player extends Entity {
         }
 
         // Dashing
-        if (keyI.kPressed && state != PlayerState.DASHING && System.currentTimeMillis() - lastDashTime >= 1000 && currentMana >= 3) {
+        if (keyI.kPressed && state != PlayerState.DASHING && now - lastDashTime >= 1000 && currentMana >= 3) {
             state = PlayerState.DASHING;
-            dashStartTime = System.currentTimeMillis();
+            dashStartTime = now;
             lastDashTime = dashStartTime;
             velocity.x = direction.contains("right") ? 30 : -30;
             PlayerSoundHandler.dash();
@@ -256,7 +258,7 @@ public class Player extends Entity {
         }
 
         if (state == PlayerState.DASHING) {
-            long elapsedTime = System.currentTimeMillis() - dashStartTime;
+            long elapsedTime = now - dashStartTime;
             double deceleration = 0.1;
             TiledMap.cameraShake(1, 6);
             if (elapsedTime <= 300) {
@@ -269,7 +271,7 @@ public class Player extends Entity {
 
         // Attacking
         if (keyI.uPressed && !keyI.iPressed) {
-            long currentTime = System.currentTimeMillis();
+            long currentTime = now;
             if (state != PlayerState.ATTACKING) {
                 if (state != PlayerState.DASHING) {
                     if (!chain) {
@@ -303,7 +305,7 @@ public class Player extends Entity {
         }
 
         if (keyI.jPressed && state != PlayerState.ATTACKING && !keyI.iPressed) {
-            long currentTime = System.currentTimeMillis();
+            long currentTime = now;
             if (currentTime - lastHeavyAttackTime >= PlayerHeavyAttack.COOLDOWN) {
                 if (state == PlayerState.DASHING) {
                     new PlayerDashHeavyAttack(this);
@@ -324,11 +326,11 @@ public class Player extends Entity {
         // Healing
         if (keyI.iPressed && onGround && state != PlayerState.HEALING) {
             if (healStartTime == 0) {
-                healStartTime = System.currentTimeMillis();
+                healStartTime = now;
                 PlayerSoundHandler.healCharge();
             }
 
-            long elapsedTime = System.currentTimeMillis() - healStartTime;
+            long elapsedTime = now - healStartTime;
 
             TiledMap.cameraShake((int) (1.0 + Math.min(elapsedTime / 1000.0, 2.0)), 1);
         } else {
@@ -339,7 +341,7 @@ public class Player extends Entity {
 
                 state = PlayerState.HEALING;
 
-                int healAmount = (int) ((System.currentTimeMillis() - healStartTime) / 500);
+                int healAmount = (int) ((now - healStartTime) / 500);
                 healAmount = Math.min(healAmount, currentMana);
                 healAmount = Math.min(healAmount, maxHealth - currentHealth);
 

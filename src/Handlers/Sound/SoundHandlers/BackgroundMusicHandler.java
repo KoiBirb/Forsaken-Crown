@@ -1,6 +1,7 @@
-package Handlers.Sound;
+package Handlers.Sound.SoundHandlers;
 
 
+import Handlers.Sound.Sound;
 import Main.Panels.GamePanel;
 import Map.TiledMap;
 
@@ -131,7 +132,7 @@ public class BackgroundMusicHandler {
             for (int i = 0; i <= steps; i++) {
                 if (Thread.currentThread().isInterrupted()) break;
                 float t = i / (float) steps;
-                float smooth = (1 - (float)Math.cos(Math.PI * t)) / 2f;
+                float smooth = t;
                 from.setVolume(fromVolume * (1 - smooth));
                 to.setVolume(toVolume * smooth);
                 try {

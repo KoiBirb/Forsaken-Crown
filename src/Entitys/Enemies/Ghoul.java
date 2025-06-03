@@ -1,18 +1,15 @@
 package Entitys.Enemies;
 
 import Attacks.MeleeAttacks.Enemies.GhoulAttack;
-import Entitys.Enemies.Summoner.Skeleton;
 import Handlers.CollisionHandler;
 import Handlers.ImageHandler;
-import Handlers.Sound.EnemySoundHandler;
+import Handlers.Sound.SoundHandlers.EnemySoundHandler;
 import Handlers.Vector2;
 import Handlers.SpikeDetectionHandler;
 import Main.Panels.GamePanel;
 import Map.TiledMap;
 
 import java.awt.*;
-
-import static Main.Panels.GamePanel.activeEnemies;
 
 public class Ghoul extends Enemy {
 

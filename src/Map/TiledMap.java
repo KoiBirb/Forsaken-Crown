@@ -514,14 +514,12 @@ public class TiledMap {
             drawParallaxBackground(g2, backgrounds.get(5), new double[]{0.3, 0.4, 0.5});
         }
 
-        float alpha = (float) (0.75 + 0.15 * Math.sin(System.currentTimeMillis() * 0.002));
-        Composite originalComposite = g2.getComposite();
-
         int startX = Math.max(minX - 1, (int) (cameraPosition.x / scaledTileSize) - 1);
         int endX = Math.min(maxX + 1, (int) ((cameraPosition.x + screenWidth) / scaledTileSize) + 1);
         int startY = Math.max(minY - 1, (int) (cameraPosition.y / scaledTileSize) - 1);
         int endY = Math.min(maxY + 1, (int) ((cameraPosition.y + screenHeight) / scaledTileSize) + 1);
 
+        int halfScaledTileSize = scaledTileSize / 2;
         for (int k = 0; k < 26; k++) {
 
 
@@ -581,8 +579,8 @@ public class TiledMap {
                     }
 
                     g2.drawImage(tileSetImage,
-                            -scaledTileSize / 2, -scaledTileSize / 2,
-                            scaledTileSize / 2, scaledTileSize / 2,
+                            -halfScaledTileSize, -halfScaledTileSize,
+                            halfScaledTileSize, halfScaledTileSize,
                             tileCol * tileSetTileSize, tileRow * tileSetTileSize,
                             (tileCol + 1) * tileSetTileSize, (tileRow + 1) * tileSetTileSize, null);
 

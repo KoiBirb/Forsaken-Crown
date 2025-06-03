@@ -5,13 +5,14 @@
  * Handles all sound effects and music for the game
  */
 
-package Handlers.Sound;
+package Handlers.Sound.SoundHandlers;
+
+import Handlers.Sound.Sound;
 
 import java.util.Random;
 
 public class PlayerSoundHandler {
 
-    public static final Sound music = new Sound();
     public static final Sound attack = new Sound();
     public static final Sound footsteps = new Sound();
     public static final Sound heal = new Sound();

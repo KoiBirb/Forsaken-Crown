@@ -2,7 +2,7 @@ package Attacks.MeleeAttacks.Player;
 
 import Attacks.MeleeAttacks.MeleeAttack;
 import Entitys.Player;
-import Handlers.Sound.PlayerSoundHandler;
+import Handlers.Sound.SoundHandlers.PlayerSoundHandler;
 import Main.Panels.GamePanel;
 import Map.TiledMap;
 

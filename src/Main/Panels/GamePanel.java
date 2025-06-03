@@ -11,7 +11,7 @@ import Attacks.MeleeAttacks.MeleeAttack;
 import Entitys.Enemies.Enemy;
 import Entitys.Player;
 import Handlers.CollisionHandler;
-import Handlers.Sound.BackgroundMusicHandler;
+import Handlers.Sound.SoundHandlers.BackgroundMusicHandler;
 import Handlers.Vector2;
 import Handlers.EnemySpawnHandler;
 import Main.UI.UIManager;
