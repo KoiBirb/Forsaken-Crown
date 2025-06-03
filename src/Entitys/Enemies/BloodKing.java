@@ -11,6 +11,7 @@ import Attacks.MeleeAttacks.Enemies.BloodKing.*;
 import Handlers.CollisionHandler;
 import Handlers.ImageHandler;
 import Handlers.Sound.SoundHandlers.EnemySoundHandler;
+import Handlers.Sound.SoundHandlers.PlayerSoundHandler;
 import Handlers.Vector2;
 import Main.Main;
 import Main.Panels.GamePanel;
@@ -362,6 +363,7 @@ public class BloodKing extends Enemy{
                     spriteCol = maxSpriteCol;
                     hit = false;
                 } else if (currentState == State.DEAD) {
+                    PlayerSoundHandler.stopFootsteps();
                     GamePanel.enemies.remove(this);
                     Main.switchToEnd(true);
                 } else {

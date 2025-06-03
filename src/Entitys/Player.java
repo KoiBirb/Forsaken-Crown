@@ -94,7 +94,7 @@ public class Player extends Entity {
             spriteCol = 0;
             velocity.setLength(0);
             deathTime = now;
-            PlayerSoundHandler.playerDeath();
+            PlayerSoundHandler.death();
             PlayerSoundHandler.stopFootsteps();
             PlayerSoundHandler.stopFalling();
             PlayerSoundHandler.stopHealCharge();
