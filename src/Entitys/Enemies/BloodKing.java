@@ -534,9 +534,9 @@ public class BloodKing extends Enemy{
             }
         } else if (spriteRow == 0) {
             switch (spriteCol) {
-                case 3: return 117;
-                case 7: return 17;
-                case 8: return 35;
+                case 5: return 117;
+                case 9: return 17;
+                case 10: return 35;
                 default: return 0;
             }
         }

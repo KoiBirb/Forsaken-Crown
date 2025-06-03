@@ -523,13 +523,9 @@ public class TiledMap {
         int endY = Math.min(maxY + 1, (int) ((cameraPosition.y + screenHeight) / scaledTileSize) + 1);
 
         for (int k = 0; k < 26; k++) {
-            // Skip unused/transparent layers early
-            if (k == 7) k++;
 
-            // Set alpha only for layer 5
-            g2.setComposite(k == 5 || k == 6
-                    ? AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha)
-                    : originalComposite);
+
+            if (k == 7) k++;
 
             VolatileImage tileSetImage = tileSets.get(k);
             int tilesPerRow = tileSetImage.getWidth() / tileSetTileSize;
@@ -593,8 +589,6 @@ public class TiledMap {
                     g2.setTransform(originalTransform);
                 }
             }
-            if ( k== 5 || k == 6)
-                g2.setComposite(originalComposite);
         }
     }
 
