@@ -76,7 +76,7 @@ public class GamePanel extends JPanel implements Runnable{
      */
     public void setupGame() {
         this.requestFocusInWindow();
-        player = new Player(new Vector2(100,400));
+        player = new Player(new Vector2(100,100));
 //        player = new Player(new Vector2(2300,2500));
 //        player = new Player(new Vector2(2993,1200));
         ui = new UIManager(player, true);

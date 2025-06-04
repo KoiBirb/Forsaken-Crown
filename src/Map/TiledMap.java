@@ -175,12 +175,12 @@ public class TiledMap {
         backgroundLayers[2] = ImageHandler.loadImage("Assets/Images/Backgrounds/Caves/Small Cave 1 Layers/layer 7.png");
         backgrounds.add(backgroundLayers);
 
-        backgroundLayers = new VolatileImage[4];
-        backgroundLayers[0] = ImageHandler.loadImage("Assets/Images/Backgrounds/The Columns/Vertical/layer 1.png");
-        backgroundLayers[1] = ImageHandler.loadImage("Assets/Images/Backgrounds/The Columns/Vertical/layer 2.png");
-        backgroundLayers[2] = ImageHandler.loadImage("Assets/Images/Backgrounds/The Columns/Vertical/layer 3.png");
-        backgroundLayers[3] = ImageHandler.loadImage("Assets/Images/Backgrounds/The Columns/Vertical/layer 4.png");
+        backgroundLayers = new VolatileImage[3];
+        backgroundLayers[0] = ImageHandler.loadImage("Assets/Images/Backgrounds/The Columns/background.png");
+        backgroundLayers[1] = ImageHandler.loadImage("Assets/Images/Backgrounds/The Columns/Horizontal/layer 3.png");
+        backgroundLayers[2] = ImageHandler.loadImage("Assets/Images/Backgrounds/The Columns/Horizontal/layer 4.png");
         backgrounds.add(backgroundLayers);
+
 
         backgroundLayers = new VolatileImage[5];
         backgroundLayers[0] = ImageHandler.loadImage("Assets/Images/Backgrounds/Bos/1.png");
@@ -498,13 +498,13 @@ public class TiledMap {
             drawParallaxBackground(g2, backgrounds.get(1), new double[]{0.1, 0.4, 0.6});
         else if (activeRoomId == 1 || activeRoomId == 2 || activeRoomId == 3)
             drawParallaxBackground(g2, backgrounds.get(0), new double[]{0.2, 0.3, 0.4, 0.5, 0.6, 0.7});
-        else if (activeRoomId == 6) {
-            drawParallaxBackground(g2, backgrounds.get(2), new double[]{0.3, 0.4, 0.6, 0.7});
-        } else if (activeRoomId == 19){
+        else if (activeRoomId == 5)
+            drawParallaxBackground(g2, backgrounds.get(2), new double[]{0.3, 0.5, 0.6});
+        else if (activeRoomId == 19)
             drawParallaxBackground(g2, backgrounds.get(3), new double[]{0.3,0.4, 0.5, 0.6,0.7});
-        } else if (activeRoomId == 17) {
+        else if (activeRoomId == 17)
             drawParallaxBackground(g2, backgrounds.get(4), new double[]{0.3, 0.4, 0.5});
-        }
+
 
         int startX = Math.max(minX - 1, (int) (cameraPosition.x / scaledTileSize) - 1);
         int endX = Math.min(maxX + 1, (int) ((cameraPosition.x + screenWidth) / scaledTileSize) + 1);
