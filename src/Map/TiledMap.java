@@ -506,8 +506,6 @@ public class TiledMap {
             drawParallaxBackground(g2, backgrounds.get(0), new double[]{0.2, 0.3, 0.4, 0.5, 0.6, 0.7});
         else if (activeRoomId == 6) {
             drawParallaxBackground(g2, backgrounds.get(2), new double[]{0.3, 0.4, 0.6, 0.7});
-        } else if (activeRoomId == 5) {
-            drawParallaxBackground(g2, backgrounds.get(3), new double[]{0.3, 0.5, 0.6});
         } else if (activeRoomId == 19){
             drawParallaxBackground(g2, backgrounds.get(4), new double[]{0.3,0.4, 0.5, 0.6,0.7});
         } else if (activeRoomId == 17) {

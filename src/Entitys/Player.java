@@ -5,6 +5,7 @@ import Attacks.MeleeAttacks.Player.PlayerDashSwingAttack;
 import Attacks.MeleeAttacks.Player.PlayerHeavyAttack;
 import Attacks.MeleeAttacks.Player.PlayerQuickAttack;
 import Handlers.CollisionHandler;
+import Handlers.EnemySpawnHandler;
 import Handlers.ImageHandler;
 import Handlers.Sound.SoundHandlers.PlayerSoundHandler;
 import Handlers.Vector2;
@@ -54,12 +55,13 @@ public class Player extends Entity {
 
         spawnPosition = new Vector2(position.x, position.y);
         state = PlayerState.SPAWNING;
-        lives = 1;
+        lives = 3;
         canMove = true;
     }
 
     @Override
     public void update() {
+//        System.out.println(TiledMap.getPlayerRoomId() + " " + position);
         now = System.currentTimeMillis();
         if (currentHealth > 0) {
             switch (state) {
@@ -167,6 +169,7 @@ public class Player extends Entity {
             lives--;
             if (lives <= 0)
                 switchToEnd(false);
+            EnemySpawnHandler.setup();
             resetPlayer();
         }
 
@@ -497,7 +500,15 @@ public class Player extends Entity {
         this.canMove = canMove;
     }
 
+    public int getLives() {
+        return lives;
+    }
+
     public void setDirectionLock(boolean lock) {
         this.directionLock = lock;
+    }
+
+    public void setSpawnPosition(Vector2 pos) {
+        this.spawnPosition.set(pos);
     }
 }

@@ -23,6 +23,7 @@ public class EnemySpawnHandler {
         GamePanel.enemies.add(new BloodKing(new Vector2(2650, 3102)));
     }
 
+
     /**
      * Updates all enemy objects in enemies list
      */

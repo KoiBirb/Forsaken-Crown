@@ -34,6 +34,7 @@ public class PlayerSoundHandler {
     public static final Sound landHard = new Sound();
     public static final Sound dash = new Sound();
     public static final Sound hitTile = new Sound();
+    public static final Sound checkPoint = new Sound();
 
     public static final Sound UIHover = new Sound();
     public static final Sound UIConfirm = new Sound();
@@ -70,6 +71,7 @@ public class PlayerSoundHandler {
         hitTile.setFile("/Audio/Player/sword_hit_tile.wav");
         UIHover.setFile("/Audio/UI/ui_change_selection.wav");
         UIConfirm.setFile("/Audio/UI/ui_button_confirm.wav");
+        checkPoint.setFile("/Audio/Checkpoints/Startup.wav");
     }
 
     public static void hit() {
@@ -78,6 +80,10 @@ public class PlayerSoundHandler {
 
     public static void hitColladable() {
         hitCollidable[rand.nextInt(hitCollidable.length)].play();
+    }
+
+    public static void checkpoint() {
+        checkPoint.play();
     }
 
     public static void jump() {

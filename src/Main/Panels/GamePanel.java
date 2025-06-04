@@ -16,6 +16,7 @@ import Handlers.Vector2;
 import Handlers.EnemySpawnHandler;
 import Main.UI.UIManager;
 import Main.UI.VFX.Effect;
+import Map.Checkpoints.CheckpointManager;
 import Map.TiledMap;
 
 import javax.swing.*;
@@ -35,6 +36,7 @@ public class GamePanel extends JPanel implements Runnable{
     public static TiledMap tileMap;
     public static Player player;
     public static UIManager ui;
+    public static CheckpointManager checkpointManager;
     public static BackgroundMusicHandler backgroundMusic = new BackgroundMusicHandler();;
 
     public static ArrayList<MeleeAttack> playerAttacks = new ArrayList<>();
@@ -74,9 +76,11 @@ public class GamePanel extends JPanel implements Runnable{
      */
     public void setupGame() {
         this.requestFocusInWindow();
-//        player = new Player(new Vector2(100,100));
-        player = new Player(new Vector2(2300,2500));
+        player = new Player(new Vector2(100,400));
+//        player = new Player(new Vector2(2300,2500));
+//        player = new Player(new Vector2(2993,1200));
         ui = new UIManager(player, true);
+        checkpointManager = new CheckpointManager();
         EnemySpawnHandler.setup();
         startThread();
     }
@@ -138,6 +142,7 @@ public class GamePanel extends JPanel implements Runnable{
 
         backgroundMusic.update();
         EnemySpawnHandler.updateAll();
+        checkpointManager.update();
         ui.update();
 
         for (int i = 0; i < playerAttacks.size(); i++) {
@@ -209,6 +214,7 @@ public class GamePanel extends JPanel implements Runnable{
 
         if (player != null){
             tileMap.drawMap(g2);
+            checkpointManager.draw(g2);
             player.draw(g2);
         }
 

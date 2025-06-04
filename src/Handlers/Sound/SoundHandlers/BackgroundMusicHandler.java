@@ -29,7 +29,7 @@ public class BackgroundMusicHandler {
     private long actionSwitchRequestTime = 0;
     private boolean actionSwitchPending = false;
     private MusicState requestedMusicState = MusicState.MAIN;
-    private static final long ACTION_SWITCH_GRACE_MS = 500;
+    private static final long ACTION_SWITCH_GRACE_MS = 800;
 
 
 
@@ -81,7 +81,7 @@ public class BackgroundMusicHandler {
         if (room <= 5) {
             desiredType = MusicType.DARK;
             desiredState = GamePanel.activeEnemies.isEmpty() ? MusicState.MAIN : MusicState.ACTION;
-        } else if (room != 9 && room != 17 && room != 19) {
+        } else if (room != 8 && room != 17 && room != 19) {
             desiredType = MusicType.CASTLE;
             desiredState = GamePanel.activeEnemies.isEmpty() ? MusicState.MAIN : MusicState.ACTION;
         } else if (room == 19) {
@@ -120,21 +120,6 @@ public class BackgroundMusicHandler {
    public void playBossMain(){
        musicBossMain.play();
    }
-
-    private void stopAll(Sound except) {
-        Sound[] allTracks = {
-                musicDarkMain, musicDarkAction,
-                musicCastleMain, musicCastleAction,
-                musicBloodMain, musicBloodAction,
-                musicBossMain
-        };
-        for (Sound s : allTracks) {
-            if (s != except) {
-                s.setVolume(0f);
-                if (s.isPlaying()) s.stop();
-            }
-        }
-    }
 
     public void transitionToMusic(Sound to, int durationMs) {
         Sound from = getMusic(currentMusicType, currentMusicState);
