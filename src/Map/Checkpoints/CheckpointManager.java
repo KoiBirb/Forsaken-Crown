@@ -1,3 +1,9 @@
+/*
+ * CheckpointManager.java
+ * Leo Bogaert
+ * Jun 4, 2025,
+ * Manages checkpoints in the game
+ */
 package Map.Checkpoints;
 
 import Handlers.Vector2;
@@ -7,8 +13,11 @@ import java.util.ArrayList;
 
 public class CheckpointManager {
 
-    private ArrayList<Checkpoint> checkpoints;
+    private final ArrayList<Checkpoint> checkpoints;
 
+    /**
+     * Creates checkpoints
+     */
     public CheckpointManager() {
         checkpoints = new ArrayList<>();
 
@@ -16,12 +25,19 @@ public class CheckpointManager {
         checkpoints.add(new Checkpoint(new Vector2(2900,1045),8));
     }
 
+    /**
+     * Updates all checkpoints
+     */
     public void update() {
         for (int i = 0; i < checkpoints.size(); i++) {
             checkpoints.get(i).update();
         }
     }
 
+    /**
+     * Draws all checkpoints
+     * @param g2 graphics 2D object to draw on
+     */
     public void draw(Graphics2D g2) {
         for (int i = 0; i < checkpoints.size(); i++) {
             checkpoints.get(i).draw(g2);

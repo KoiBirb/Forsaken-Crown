@@ -116,6 +116,9 @@ public class TiledMap {
         loadBackgrounds();
     }
 
+    /**
+     * Assigns unique room IDs to each room in the map.
+     */
     private void assignRoomIds() {
         roomIds = new int[mapHeight][mapWidth];
         boolean[][] visited = new boolean[mapHeight][mapWidth];
@@ -130,6 +133,13 @@ public class TiledMap {
         }
     }
 
+    /**
+     * Flood fill to assign room IDs.
+     * @param startX Starting x coordinate
+     * @param startY Starting y coordinate
+     * @param roomId ID to assign to the room
+     * @param visited 2D array to track visited tiles
+     */
     private void floodFillRoom(int startX, int startY, int roomId, boolean[][] visited) {
         int[] dx = {0, 1, 0, -1};
         int[] dy = {-1, 0, 1, 0};
@@ -159,7 +169,6 @@ public class TiledMap {
     private void loadBackgrounds(){
         backgrounds = new ArrayList<>();
 
-        // The columns
         VolatileImage[] backgroundLayers = new VolatileImage[6];
         backgroundLayers[0] = ImageHandler.loadImage("Assets/Images/Backgrounds/Beneath Parallax/background.png");
         backgroundLayers[1] = ImageHandler.loadImage("Assets/Images/Backgrounds/Beneath Parallax/pillars.png");
@@ -332,13 +341,11 @@ public class TiledMap {
         int playerTileX = (int) (playerX / scaledTileSize);
         int playerTileY = (int) (playerY / scaledTileSize);
 
-        // Out of bounds or not in a room
         if (playerTileX < 0 || playerTileX >= mapWidth || playerTileY < 0 || playerTileY >= mapHeight ||
                 ((Long) roomData.get(playerTileY * mapWidth + playerTileX)).intValue() == 1) {
             return;
         }
 
-        // Find new room boundaries
         int[] roomBounds = findRoomBounds(playerTileX, playerTileY);
         int newMinX = roomBounds[0], newMaxX = roomBounds[1], newMinY = roomBounds[2], newMaxY = roomBounds[3];
         int newRoomWidth = (newMaxX - newMinX + 1) * scaledTileSize;
@@ -397,18 +404,17 @@ public class TiledMap {
      */
     public Vector2 getCameraPos() {
 
-        // Camera pos for player center
         double cameraX = player.getPosition().x - GamePanel.screenWidth / 2;
         double cameraY = player.getPosition().y - GamePanel.screenHeight / 2;
 
         int cameraMargin = 400;
 
-        // Check what side of room player is on and see if camera is farther than max camera pan
+        // check bounds
         if (roomWidth > GamePanel.screenWidth) {
             cameraX = (cameraX < roomScreenPos.x) ? Math.max(roomScreenPos.x - cameraMargin, cameraX) :
                     Math.min(cameraX, roomScreenPos.x + roomWidth - cameraMargin * 3.88);
         } else {
-            cameraX = roomScreenPos.x; // room fits screen
+            cameraX = roomScreenPos.x;
         }
 
         if (roomHeight > GamePanel.screenHeight) {
@@ -548,7 +554,6 @@ public class TiledMap {
                     g2.translate(tileWorldX - cameraPosition.x + scaledTileSize / 2.0,
                             tileWorldY - cameraPosition.y + scaledTileSize / 2.0);
 
-                    // Flipping/rotation logic unchanged
                     if (flipDiagonally) {
                         g2.rotate(Math.PI / 2);
                         if (flipHorizontally && flipVertically) {
@@ -582,6 +587,9 @@ public class TiledMap {
         }
     }
 
+    /**
+     * Updates the player's current room
+     */
     public void updatePlayerRoom() {
         int scaledTileSize = getScaledTileSize();
         double playerX = player.getPosition().x;
@@ -595,6 +603,10 @@ public class TiledMap {
         activeRoomId = roomIds[playerTileY][playerTileX];
     }
 
+    /**
+     * Returns the current room ID of the player
+     * @return int value of current room ID
+     */
     public static int getPlayerRoomId(){
         TiledMap map = GamePanel.tileMap;
         return map.activeRoomId;

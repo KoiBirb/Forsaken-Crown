@@ -1,3 +1,9 @@
+/*
+ * Checkpoint.java
+ * Leo Bogaert
+ * Jun 4, 2025,
+ * Manages checkpoints in the game
+ */
 package Map.Checkpoints;
 
 import Handlers.ImageHandler;
@@ -19,6 +25,11 @@ public class Checkpoint {
     private int spriteCounter = 0, spriteCounterSpeed;
     private int row, col, maxCol;
 
+    /**
+     * Constructor for the Checkpoint class.
+     * @param position The position of the checkpoint in the game world.
+     * @param roomId The ID of the room where this checkpoint is located.
+     */
     public Checkpoint(Vector2 position, int roomId) {
         this.position = position;
         this.isActive = false;
@@ -26,15 +37,21 @@ public class Checkpoint {
 
         this.solidArea = new Rectangle((int) position.x, (int) position.y, 60, 80);
         this.checkpointImage = ImageHandler.loadImage("Assets/Images/Tilesets/Objects/Save/spritesheet_vertical.png");
+
+        // initial idle state
         row = 3;
         col = 0;
         spriteCounterSpeed = 5;
         maxCol = 0;
     }
 
+    /**
+     * Updates the checkpoint state.
+     */
     public void update() {
         if (TiledMap.getPlayerRoomId() == roomId) {
             if (!isActive && GamePanel.player.getSolidArea().intersects(solidArea)) {
+                // activation animation
                 isActive = true;
                 PlayerSoundHandler.checkpoint();
                 maxCol = 6;
@@ -43,6 +60,7 @@ public class Checkpoint {
 
                 int lives = GamePanel.player.getLives();
 
+                // display player lives
                 if (row != 3) {
                     switch (lives) {
                         case 2 -> row = 1;
@@ -72,6 +90,10 @@ public class Checkpoint {
         }
     }
 
+    /**
+     * Draws the checkpoint on the screen
+     * @param g2 Graphics2D object to draw on
+     */
     public void draw(Graphics2D g2) {
         if (TiledMap.getPlayerRoomId() == roomId) {
 
@@ -90,6 +112,10 @@ public class Checkpoint {
         }
     }
 
+    /**
+     * Debug draw method to show hitbox
+     * @param g2 graphics object to draw on
+     */
     public void debugDraw(Graphics2D g2) {
         if (TiledMap.getPlayerRoomId() == roomId) {
             Vector2 cameraPos = GamePanel.tileMap.returnCameraPos();
