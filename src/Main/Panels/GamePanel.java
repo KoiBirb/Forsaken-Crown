@@ -35,7 +35,7 @@ public class GamePanel extends JPanel implements Runnable{
     public static TiledMap tileMap;
     public static Player player;
     public static UIManager ui;
-    public static BackgroundMusicHandler backgroundMusic;
+    public static BackgroundMusicHandler backgroundMusic = new BackgroundMusicHandler();;
 
     public static ArrayList<MeleeAttack> playerAttacks = new ArrayList<>();
     public static ArrayList<MeleeAttack> enemyAttacks = new ArrayList<>();
@@ -74,10 +74,9 @@ public class GamePanel extends JPanel implements Runnable{
      */
     public void setupGame() {
         this.requestFocusInWindow();
-        player = new Player(new Vector2(100,100));
-//        player = new Player(new Vector2(2300,2500));
+//        player = new Player(new Vector2(100,100));
+        player = new Player(new Vector2(2300,2500));
         ui = new UIManager(player, true);
-        backgroundMusic = new BackgroundMusicHandler();
         EnemySpawnHandler.setup();
         startThread();
     }

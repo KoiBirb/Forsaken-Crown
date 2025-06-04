@@ -19,7 +19,6 @@ public class BackgroundMusicHandler {
    private final Sound musicBossMain = new Sound();
 
    private final java.util.concurrent.atomic.AtomicBoolean isTransitioning = new java.util.concurrent.atomic.AtomicBoolean(false);
-   private volatile Thread transitionThread = null;
 
    private enum MusicType {DARK, CASTLE, BLOOD, BOSS}
    private enum MusicState {MAIN, ACTION}
@@ -35,6 +34,7 @@ public class BackgroundMusicHandler {
 
 
     public BackgroundMusicHandler() {
+
        // Preload all music files once
        musicDarkMain.setFile("/Audio/Background/Dark/DarkMain.wav");
        musicDarkAction.setFile("/Audio/Background/Dark/DarkAction.wav");
@@ -120,6 +120,21 @@ public class BackgroundMusicHandler {
    public void playBossMain(){
        musicBossMain.play();
    }
+
+    private void stopAll(Sound except) {
+        Sound[] allTracks = {
+                musicDarkMain, musicDarkAction,
+                musicCastleMain, musicCastleAction,
+                musicBloodMain, musicBloodAction,
+                musicBossMain
+        };
+        for (Sound s : allTracks) {
+            if (s != except) {
+                s.setVolume(0f);
+                if (s.isPlaying()) s.stop();
+            }
+        }
+    }
 
     public void transitionToMusic(Sound to, int durationMs) {
         Sound from = getMusic(currentMusicType, currentMusicState);

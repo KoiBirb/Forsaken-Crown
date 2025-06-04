@@ -649,7 +649,7 @@ public class BloodKing extends Enemy{
             velocity.y = 0;
             EnemySoundHandler.stopKingFootsteps();
             EnemySoundHandler.kingDeath();
-            GamePanel.backgroundMusic.fadeOut(5000);
+            GamePanel.backgroundMusic.fadeOut(2000);
         }
     }
 
