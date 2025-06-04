@@ -46,6 +46,9 @@ public class GamePanel extends JPanel implements Runnable{
 
     public static ArrayList<Enemy> activeEnemies = new ArrayList<>();
 
+    public static long initialTime;
+    public static int points;
+
     // Room change effect
     public static boolean fading = false;
     private static double fadeAlpha = 0.0;
@@ -82,6 +85,8 @@ public class GamePanel extends JPanel implements Runnable{
         ui = new UIManager(player, true);
         checkpointManager = new CheckpointManager();
         EnemySpawnHandler.setup();
+        initialTime = System.currentTimeMillis();
+        points = 0;
         startThread();
     }
 

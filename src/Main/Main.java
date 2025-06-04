@@ -7,6 +7,7 @@
 
 package Main;
 
+import Handlers.ScoreHandler;
 import Main.Panels.EndPanel;
 import Main.Panels.GamePanel;
 import Main.Panels.MenuPanel;
@@ -34,6 +35,8 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+
+        ScoreHandler.readScoresFromFile("src/Assets/Map/Leaderboard.txt");
 
         // Change window settings
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

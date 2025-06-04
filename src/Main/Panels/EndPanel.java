@@ -8,6 +8,7 @@
 package Main.Panels;
 
 import Handlers.ImageHandler;
+import Handlers.ScoreHandler;
 import Main.UI.UIManager;
 
 import javax.swing.*;
@@ -55,11 +56,9 @@ public class EndPanel extends JPanel implements Runnable{
     public void setup() {
         this.requestFocusInWindow();
         ui = new UIManager(null, false);
+        ScoreHandler.addScore(ScoreHandler.generateRandomName(), GamePanel.points);
+        ScoreHandler.writeScoresToFile("src/Assets/Map/Leaderboard.txt");
         startThread();
-    }
-
-    public void setVictory(boolean victory) {
-        EndPanel.victory = victory;
     }
 
     /**

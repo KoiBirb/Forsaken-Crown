@@ -55,7 +55,7 @@ public class Player extends Entity {
 
         spawnPosition = new Vector2(position.x, position.y);
         state = PlayerState.SPAWNING;
-        lives = 3;
+        lives = 1;
         canMove = true;
     }
 

@@ -647,6 +647,8 @@ public class BloodKing extends Enemy{
             maxSpriteCol = 10;
             velocity.x = 0;
             velocity.y = 0;
+
+            GamePanel.points += (int) (5000 / (1 + 0.0003 * ((System.currentTimeMillis() - GamePanel.initialTime)/100.0)));
             EnemySoundHandler.stopKingFootsteps();
             EnemySoundHandler.kingDeath();
             GamePanel.backgroundMusic.fadeOut(2000);
