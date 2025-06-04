@@ -4,6 +4,10 @@ import Handlers.Sound.Sound;
 import Main.Panels.GamePanel;
 import Map.TiledMap;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 public class BackgroundMusicHandler {
 
    private final Sound musicDarkMain = new Sound();
@@ -23,7 +27,14 @@ public class BackgroundMusicHandler {
    private MusicType currentMusicType = MusicType.DARK;
    private MusicState currentMusicState = MusicState.MAIN;
 
-   public BackgroundMusicHandler() {
+    private long actionSwitchRequestTime = 0;
+    private boolean actionSwitchPending = false;
+    private MusicState requestedMusicState = MusicState.MAIN;
+    private static final long ACTION_SWITCH_GRACE_MS = 500;
+
+
+
+    public BackgroundMusicHandler() {
        // Preload all music files once
        musicDarkMain.setFile("/Audio/Background/Dark/DarkMain.wav");
        musicDarkAction.setFile("/Audio/Background/Dark/DarkAction.wav");
@@ -59,130 +70,130 @@ public class BackgroundMusicHandler {
        musicBloodAction.setVolume(0.0f);
    }
 
-   public void update() {
-       int room = TiledMap.getPlayerRoomId();
+    public void update() {
+        int room = TiledMap.getPlayerRoomId();
+        long now = System.currentTimeMillis();
 
-       if (room <= 5) {
-           if (currentMusicType != MusicType.DARK) {
-               transitionToMusic(musicDarkMain, 2000);
-               currentMusicType = MusicType.DARK;
-               currentMusicState = MusicState.MAIN;
-           }
-           if (GamePanel.activeEnemies.isEmpty() && currentMusicState == MusicState.ACTION) {
-               transitionToMusic(musicDarkMain, 500);
-               currentMusicState = MusicState.MAIN;
-           } else if (!GamePanel.activeEnemies.isEmpty() && currentMusicState != MusicState.ACTION) {
-               transitionToMusic(musicDarkAction, 500);
-               currentMusicState = MusicState.ACTION;
-           }
-       } else if (room != 9 && room != 17 && room != 19) {
-           if (currentMusicType != MusicType.CASTLE) {
-               transitionToMusic(musicCastleMain, 2000);
-               currentMusicType = MusicType.CASTLE;
-               currentMusicState = MusicState.MAIN;
-           }
-           if (GamePanel.activeEnemies.isEmpty() && currentMusicState == MusicState.ACTION) {
-               transitionToMusic(musicCastleMain, 500);
-               currentMusicState = MusicState.MAIN;
-           } else if (!GamePanel.activeEnemies.isEmpty() && currentMusicState != MusicState.ACTION) {
-               transitionToMusic(musicCastleAction, 500);
-               currentMusicState = MusicState.ACTION;
-           }
-       } else if (room == 19) {
-           if (currentMusicType != MusicType.BOSS) {
-               fadeOut(2000);
-               currentMusicType = MusicType.BOSS;
-               currentMusicState = MusicState.MAIN;
-           }
-       } else {
-           if (currentMusicType != MusicType.BLOOD) {
-               transitionToMusic(musicBloodMain, 2000);
-               currentMusicType = MusicType.BLOOD;
-               currentMusicState = MusicState.MAIN;
-           }
-           if (GamePanel.activeEnemies.isEmpty() && currentMusicState == MusicState.ACTION) {
-               transitionToMusic(musicBloodMain, 500);
-               currentMusicState = MusicState.MAIN;
-           } else if (!GamePanel.activeEnemies.isEmpty() && currentMusicState != MusicState.ACTION) {
-               transitionToMusic(musicBloodAction, 500);
-               currentMusicState = MusicState.ACTION;
-           }
-       }
-   }
+        // Determine the desired music type and state
+        MusicType desiredType;
+        MusicState desiredState;
+
+        if (room <= 5) {
+            desiredType = MusicType.DARK;
+            desiredState = GamePanel.activeEnemies.isEmpty() ? MusicState.MAIN : MusicState.ACTION;
+        } else if (room != 9 && room != 17 && room != 19) {
+            desiredType = MusicType.CASTLE;
+            desiredState = GamePanel.activeEnemies.isEmpty() ? MusicState.MAIN : MusicState.ACTION;
+        } else if (room == 19) {
+            desiredType = MusicType.BOSS;
+            desiredState = MusicState.MAIN;
+        } else {
+            desiredType = MusicType.BLOOD;
+            desiredState = GamePanel.activeEnemies.isEmpty() ? MusicState.MAIN : MusicState.ACTION;
+        }
+
+        // Handle type change immediately
+        if (desiredType != currentMusicType) {
+            transitionToMusic(getMusic(desiredType, MusicState.MAIN), 2000);
+            currentMusicType = desiredType;
+            currentMusicState = MusicState.MAIN;
+            actionSwitchPending = false;
+            return;
+        }
+
+
+        if (desiredState != currentMusicState) {
+            if (!actionSwitchPending || requestedMusicState != desiredState) {
+                actionSwitchPending = true;
+                actionSwitchRequestTime = now;
+                requestedMusicState = desiredState;
+            } else if (now - actionSwitchRequestTime >= ACTION_SWITCH_GRACE_MS) {
+                transitionToMusic(getMusic(currentMusicType, desiredState), 1000);
+                currentMusicState = desiredState;
+                actionSwitchPending = false;
+            }
+        } else {
+            actionSwitchPending = false;
+        }
+    }
 
    public void playBossMain(){
        musicBossMain.play();
    }
 
-   public void transitionToMusic(Sound to, int durationMs) {
-       Sound from = getMusic(currentMusicType, currentMusicState);
+    public void transitionToMusic(Sound to, int durationMs) {
+        Sound from = getMusic(currentMusicType, currentMusicState);
 
-       if (transitionThread != null && transitionThread.isAlive()) {
-           transitionThread.interrupt();
-           try { transitionThread.join(); } catch (InterruptedException ignored) {}
-       }
-       transitionThread = new Thread(() -> {
-           int steps = 80;
-           float fromVolume = from.getVolume();
-           float toVolume = 1.0f;
-           to.setVolume(0f);
+        if (isTransitioning.get()) {
+            return; // Prevent overlapping transitions
+        }
 
-           if (!to.isPlaying()) {
-               to.play();
-               to.loop();
-           }
+        isTransitioning.set(true);
+        int steps = 500;
+        float fromVolume = from.getVolume();
+        float toVolume = 1.0f;
+        to.setVolume(0f);
 
-           for (int i = 0; i <= steps; i++) {
-               if (Thread.currentThread().isInterrupted()) break;
-               float t = i / (float) steps;
-               float smooth = t;
-               from.setVolume(fromVolume * (1 - smooth));
-               to.setVolume(toVolume * smooth);
-               try {
-                   Thread.sleep(durationMs / steps);
-               } catch (InterruptedException e) {
-                   Thread.currentThread().interrupt();
-                   break;
-               }
-           }
-           if (from.isPlaying())
-               from.stop();
-           to.setVolume(toVolume);
-           isTransitioning.set(false);
-       });
-       isTransitioning.set(true);
-       transitionThread.start();
-   }
+        if (!to.isPlaying()) {
+            to.play();
+            to.loop();
+        }
 
-   public void fadeOut(int durationMs) {
-       Sound from = getMusic(currentMusicType, currentMusicState);
-       if (transitionThread != null && transitionThread.isAlive()) {
-           transitionThread.interrupt();
-           try { transitionThread.join(); } catch (InterruptedException ignored) {}
-       }
-       transitionThread = new Thread(() -> {
-           int steps = 80;
-           float fromVolume = from.getVolume();
+        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+        final int[] currentStep = {0};
 
-           for (int i = 0; i <= steps; i++) {
-               if (Thread.currentThread().isInterrupted()) break;
-               float t = i / (float) steps;
-               float smooth = (1 - (float)Math.cos(Math.PI * t)) / 2f;
-               from.setVolume(fromVolume * (1 - smooth));
-               try {
-                   Thread.sleep(durationMs / steps);
-               } catch (InterruptedException e) {
-                   Thread.currentThread().interrupt();
-                   break;
-               }
-           }
-           if (from.isPlaying())
-               from.stop();
-           isTransitioning.set(false);
-       });
-       isTransitioning.set(true);
-       transitionThread.start();
-   }
+        Runnable transitionTask = () -> {
+            if (currentStep[0] > steps || Thread.currentThread().isInterrupted()) {
+                from.setVolume(0f);
+                to.setVolume(toVolume);
+                isTransitioning.set(false);
+                scheduler.shutdown();
+                return;
+            }
+
+            float t = currentStep[0] / (float) steps;
+            float smooth = (1 - (float) Math.cos(Math.PI * t)) / 2f;
+            from.setVolume(fromVolume * (1 - smooth));
+            to.setVolume(toVolume * smooth);
+            currentStep[0]++;
+        };
+
+        long stepDelay = durationMs / steps;
+        scheduler.scheduleAtFixedRate(transitionTask, 0, stepDelay, TimeUnit.MILLISECONDS);
+    }
+
+    public void fadeOut(int durationMs) {
+        Sound from = getMusic(currentMusicType, currentMusicState);
+
+        if (isTransitioning.get()) {
+            return; // Prevent overlapping transitions
+        }
+
+        isTransitioning.set(true);
+        int steps = 500;
+        float fromVolume = from.getVolume();
+
+        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+        final int[] currentStep = {0};
+
+        Runnable fadeTask = () -> {
+            if (currentStep[0] > steps || Thread.currentThread().isInterrupted()) {
+                from.setVolume(0f);
+                if (from.isPlaying()) from.stop();
+                isTransitioning.set(false);
+                scheduler.shutdown();
+                return;
+            }
+
+            float t = currentStep[0] / (float) steps;
+            float smooth = (1 - (float) Math.cos(Math.PI * t)) / 2f;
+            from.setVolume(fromVolume * (1 - smooth));
+            currentStep[0]++;
+        };
+
+        long stepDelay = durationMs / steps;
+        scheduler.scheduleAtFixedRate(fadeTask, 0, stepDelay, TimeUnit.MILLISECONDS);
+    }
 
    public Sound getMusic(MusicType type, MusicState state) {
        return switch (type) {
