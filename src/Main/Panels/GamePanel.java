@@ -237,9 +237,9 @@ public class GamePanel extends JPanel implements Runnable{
 //            playerAttacks.get(i).draw(g2);
 //        }
 //
-//        for (int i = 0; i < enemyAttacks.size(); i++) {
-//            enemyAttacks.get(i).draw(g2);
-//        }
+        for (int i = 0; i < enemyAttacks.size(); i++) {
+            enemyAttacks.get(i).draw(g2);
+        }
 
         if (player != null) {
             tileMap.coverScreen(g2);

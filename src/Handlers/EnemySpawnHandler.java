@@ -3,6 +3,7 @@ package Handlers;
 import Entitys.Enemies.BloodKing;
 import Entitys.Enemies.Enemy;
 import Entitys.Enemies.Ghoul;
+import Entitys.Enemies.SkeletonKnight;
 import Entitys.Enemies.Summoner.Skeleton;
 import Entitys.Enemies.Summoner.SkeletonSummoner;
 import Main.Panels.GamePanel;
@@ -18,7 +19,7 @@ public class EnemySpawnHandler {
         GamePanel.activeEnemies.clear();
         GamePanel.enemies.clear();
 
-        GamePanel.enemies.add(new Ghoul(new Vector2(500, 100)));
+        GamePanel.enemies.add(new SkeletonKnight(new Vector2(500, 100)));
 
         GamePanel.enemies.add(new BloodKing(new Vector2(2650, 3102)));
     }
