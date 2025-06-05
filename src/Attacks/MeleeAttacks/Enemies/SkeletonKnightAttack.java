@@ -8,7 +8,6 @@ package Attacks.MeleeAttacks.Enemies;
 
 import Attacks.MeleeAttacks.MeleeAttack;
 import Entitys.Enemies.SkeletonKnight;
-import Entitys.Enemies.Summoner.Skeleton;
 import Handlers.Sound.SoundHandlers.EnemySoundHandler;
 import Main.Panels.GamePanel;
 
@@ -16,7 +15,7 @@ import java.awt.*;
 
 public class SkeletonKnightAttack extends MeleeAttack {
 
-    public static final int COOLDOWN = 750;
+    public static final int COOLDOWN = 1000;
 
     private final SkeletonKnight skeleton;
 
