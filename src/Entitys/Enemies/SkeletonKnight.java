@@ -92,15 +92,6 @@ public class SkeletonKnight extends Enemy {
                         maxSpriteCol = 11;
                         if (spriteCol > maxSpriteCol) spriteCol = 0;
                     }
-
-                    boolean facingSpike = SpikeDetectionHandler.isFacingSpike(currentPos.x, currentPos.y, velocity.x, width, height);
-                    boolean canLand = SpikeDetectionHandler.canLandAfterSpike(currentPos.x, currentPos.y, velocity.x, width, height);
-
-                    if (facingSpike && canLand && onGround && !jumpedOut && now - lastJumpTime >= JUMP_COOLDOWN_MS) {
-                        velocity.y = JUMP_FORCE;
-                        jumpedOut = true;
-                        lastJumpTime = now;
-                    }
                 }
 
             } else if (!hit) {
@@ -194,6 +185,21 @@ public class SkeletonKnight extends Enemy {
             );
         }
     }
+
+    @Override
+    public void stopSteps() {
+        if (footstepsPlaying) {
+            EnemySoundHandler.stopSkeletonFootsteps();
+            footstepsPlaying = false;
+        }
+    }
+
+    @Override
+    public boolean getFootstepsPlaying() {
+        return footstepsPlaying;
+    }
+
+
 
     public void setAttacking(boolean attacking) {
         if (attacking) {

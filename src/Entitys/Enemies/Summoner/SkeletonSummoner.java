@@ -101,7 +101,6 @@ public class SkeletonSummoner extends Enemy{
                 velocity.y = Math.min(velocity.y + GRAVITY, TERMINAL_VELOCITY);
             } else {
                 velocity.y = 0;
-                jumpedOut = false;
             }
 
             switch (currentLogic) {
@@ -329,6 +328,19 @@ public class SkeletonSummoner extends Enemy{
             }
 
             super.update();
+    }
+
+    @Override
+    public void stopSteps() {
+        if (footstepsPlaying) {
+            EnemySoundHandler.stopSummonerFootsteps();
+            footstepsPlaying = false;
+        }
+    }
+
+    @Override
+    public boolean getFootstepsPlaying() {
+        return footstepsPlaying;
     }
 
     /**

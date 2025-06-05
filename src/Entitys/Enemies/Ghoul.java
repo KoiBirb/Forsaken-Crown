@@ -309,6 +309,19 @@ public class Ghoul extends Enemy {
         }
     }
 
+    @Override
+    public void stopSteps() {
+        if (footstepsPlaying) {
+            EnemySoundHandler.stopGhoulFootsteps();
+            footstepsPlaying = false;
+        }
+    }
+
+    @Override
+    public boolean getFootstepsPlaying() {
+        return footstepsPlaying;
+    }
+
     public void death(){
         if (currentState != State.DEAD) {
             currentState = State.DEAD;

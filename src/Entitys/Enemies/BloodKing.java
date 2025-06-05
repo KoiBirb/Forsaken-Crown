@@ -130,7 +130,6 @@ public class BloodKing extends Enemy{
                 velocity.y = Math.min(velocity.y + GRAVITY, TERMINAL_VELOCITY);
             } else {
                 velocity.y = 0;
-                jumpedOut = false;
             }
 
             long now = System.currentTimeMillis();
@@ -377,6 +376,19 @@ public class BloodKing extends Enemy{
         }
 
         super.update();
+    }
+
+    @Override
+    public void stopSteps() {
+        if (footstepsPlaying) {
+            EnemySoundHandler.stopKingFootsteps();
+            footstepsPlaying = false;
+        }
+    }
+
+    @Override
+    public boolean getFootstepsPlaying() {
+        return footstepsPlaying;
     }
 
     private void chooseAttack(double playerDistance) {

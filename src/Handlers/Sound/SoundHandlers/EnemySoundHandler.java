@@ -52,14 +52,35 @@
      private static final Sound botStab = new Sound();
      private static final Sound botDeath = new Sound();
 
+     private static final Sound shockerSteps = new Sound();
+     private static final Sound shockerSwing1 = new Sound();
+     private static final Sound shockerSwing2 = new Sound();
+     private static final Sound shockerDeath = new Sound();
+     private static final Sound shockerHitGround = new Sound();
+     private static final Sound shockerHit = new Sound();
+     private static final Sound shockerCharge = new Sound();
+     private static final Sound shockerEnd = new Sound();
+
      private static int walkingGhouls = 0, attackingGhouls = 0;
      private static int walkingSummoners = 0, attackingSummoners = 0;
      private static int walkingSkeletons = 0, attackingSkeletons = 0;
      private static int walkingBots = 0;
+     private static int walkingShockers = 0;
      private static int walkingKings = 0;
      private static boolean skeletonSpawn = false;
 
      static {
+         // Shocker
+
+         shockerSteps.setFile("/Audio/Enemy/CagedShocker/Footsteps.wav");
+         shockerSwing1.setFile("/Audio/Enemy/CagedShocker/Sword1.wav");
+         shockerSwing2.setFile("/Audio/Enemy/CagedShocker/Sword2.wav");
+         shockerDeath.setFile("/Audio/Enemy/CagedShocker/Death.wav");
+         shockerHitGround.setFile("/Audio/Enemy/CagedShocker/DeathHitGround.wav");
+         shockerHit.setFile("/Audio/Enemy/CagedShocker/Hit.wav");
+         shockerCharge.setFile("/Audio/Enemy/CagedShocker/Charge.wav");
+         shockerEnd.setFile("/Audio/Enemy/CagedShocker/End.wav");
+
          // Bot
          botSteps.setFile("/Audio/Enemy/SlicerBot/Move.wav");
          botStab.setFile("/Audio/Enemy/SlicerBot/Swing.wav");
@@ -111,6 +132,30 @@
          kingStabStab.setFile("/Audio/Enemy/BloodKing/Attacks/Stab/Stab.wav");
          kingStabWarn.setFile("/Audio/Enemy/BloodKing/Attacks/Stab/Warn.wav");
      }
+
+     public static synchronized void shockerSteps() {
+         if (walkingShockers == 0) {
+             shockerSteps.play();
+             shockerSteps.loop();
+         }
+         walkingShockers++;
+     }
+     public static synchronized void stopShockerSteps() {
+         if (walkingShockers > 0) {
+             walkingShockers--;
+             if (walkingShockers == 0) {
+                 shockerSteps.stop();
+             }
+         }
+     }
+
+     public static void shockerSwing1() { shockerSwing1.play(); }
+     public static void shockerSwing2() { shockerSwing2.play(); }
+     public static void shockerDeath() { shockerDeath.play(); }
+     public static void shockerHit() { shockerHit.play(); }
+     public static void shockerHitGround() { shockerHitGround.play(); }
+     public static void shockerCharge() { shockerCharge.play(); }
+     public static void shockerEnd() { shockerEnd.play(); }
 
      public static synchronized void botSteps() {
          if (walkingBots == 0) {

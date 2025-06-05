@@ -73,6 +73,12 @@ public abstract class Enemy extends Entitys.Entity {
         return true;
     }
 
+    public void stopSteps(){}
+
+    public boolean getFootstepsPlaying(){
+        return false;
+    }
+
     public void hit() {
         GamePanel.player.increaseMana(1);
     }

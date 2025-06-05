@@ -297,6 +297,19 @@ public class SlicerBot extends Enemy{
         }
     }
 
+    @Override
+    public void stopSteps() {
+        if (footstepsPlaying) {
+            EnemySoundHandler.stopBotSteps();
+            footstepsPlaying = false;
+        }
+    }
+
+    @Override
+    public boolean getFootstepsPlaying() {
+        return footstepsPlaying;
+    }
+
     /**
      * Sets the attacking state of the summoner.
      * @param attacking true if summoner is attacking, false otherwise.

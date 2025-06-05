@@ -1,12 +1,8 @@
 package Handlers;
 
-import Entitys.Enemies.BloodKing;
-import Entitys.Enemies.Enemy;
-import Entitys.Enemies.Ghoul;
-import Entitys.Enemies.SkeletonKnight;
+import Entitys.Enemies.*;
 import Entitys.Enemies.Summoner.Skeleton;
 import Entitys.Enemies.Summoner.SkeletonSummoner;
-import Entitys.Enemies.SlicerBot;
 import Main.Panels.GamePanel;
 
 import java.awt.*;
@@ -20,7 +16,7 @@ public class EnemySpawnHandler {
         GamePanel.activeEnemies.clear();
         GamePanel.enemies.clear();
 
-        GamePanel.enemies.add(new SlicerBot(new Vector2(500, 100)));
+        GamePanel.enemies.add(new CagedShocker(new Vector2(500, 100)));
 
         GamePanel.enemies.add(new BloodKing(new Vector2(2650, 3102)));
     }
@@ -36,9 +32,12 @@ public class EnemySpawnHandler {
             int enemyRoom = Map.TiledMap.getRoomId(enemy.getPosition().x, enemy.getPosition().y);
             if (enemyRoom == playerRoom) {
                 enemy.update();
+            } else if (enemy.getFootstepsPlaying()) {
+                enemy.stopSteps();
             }
         }
     }
+
 
     /**
      * Draw each enemy object from enemies list
