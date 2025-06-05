@@ -9,20 +9,30 @@ public class ScoreHandler {
     private static String[] names;
     private static int[] scores = new int[10];
 
-    private static final String[] adjectives = {
-            "Swift", "Brave", "Silent", "Clever", "Mighty", "Lucky", "Fierce", "Nimble", "Bold", "Wise",
-            "Gentle", "Loyal", "Vivid", "Radiant", "Calm", "Daring", "Eager", "Fearless", "Gallant", "Heroic",
-            "Jolly", "Keen", "Lively", "Majestic", "Noble", "Quick", "Royal", "Sturdy", "Valiant", "Witty",
-            "Zesty", "Agile", "Bright", "Charming", "Diligent", "Energetic", "Faithful", "Graceful", "Humble", "Inventive",
-            "Joyful", "Kind", "Lucky", "Merry", "Nimble", "Optimistic", "Patient", "Quiet", "Resourceful", "Steady"
+    private static String[] adjectives = {
+        "Brave", "Calm", "Chilly", "Clever", "Cool", "Cozy", "Crafty", "Daring", "Eager", "Famous",
+        "Fancy", "Fast", "Fierce", "Gentle", "Giant", "Glad", "Graceful", "Grand", "Happy", "Heroic",
+        "Honest", "Humble", "Jolly", "Joyful", "Kind", "Lively", "Lucky", "Loyal", "Magic", "Mighty",
+        "Mild", "Mirthy", "Modest", "Nimble", "Noble", "Patient", "Peaceful", "Proud", "Quick", "Quiet",
+        "Rapid", "Rare", "Ready", "Regal", "Rich", "Robust", "Royal", "Shy", "Silly", "Simple",
+        "Skillful", "Smart", "Snappy", "Solid", "Speedy", "Spunky", "Sturdy", "Sunny", "Superb", "Swift",
+        "Tame", "Tidy", "Timid", "Tricky", "Trusty", "Valiant", "Vast", "Vivid", "Witty", "Wise",
+        "Zany", "Zesty", "Agile", "Bright", "Chic", "Chummy", "Dapper", "Dazzle", "Dutiful", "Eager",
+        "Elated", "Fabled", "Feisty", "Gallant", "Gleeful", "Gutsy", "Hearty", "Jovial", "Jumpy", "Keen",
+        "Lush", "Mellow", "Merry", "Mighty", "Mirthy", "Plucky", "Polite", "Prompt", "Quaint", "Sincere"
     };
 
-    private static final String[] nouns = {
-            "Falcon", "Tiger", "Wolf", "Eagle", "Lion", "Panther", "Dragon", "Shark", "Bear", "Hawk",
-            "Fox", "Otter", "Raven", "Stag", "Bull", "Cobra", "Dolphin", "Elk", "Frog", "Goose",
-            "Heron", "Ibis", "Jaguar", "Koala", "Lynx", "Moose", "Newt", "Owl", "Puma", "Quail",
-            "Ram", "Seal", "Toad", "Urchin", "Viper", "Walrus", "Yak", "Zebra", "Antelope", "Bison",
-            "Crane", "Deer", "Egret", "Ferret", "Gull", "Hound", "Ibex", "Jay", "Kite", "Lizard"
+    private static String[] nouns = {
+        "Falcon", "Tiger", "Wolf", "Eagle", "Lion", "Panther", "Dragon", "Shark", "Bear", "Hawk",
+        "Fox", "Otter", "Raven", "Stag", "Bull", "Cobra", "Elk", "Frog", "Goose", "Heron",
+        "Ibis", "Jaguar", "Koala", "Lynx", "Moose", "Newt", "Owl", "Puma", "Quail", "Ram",
+        "Seal", "Toad", "Urchin", "Viper", "Yak", "Zebra", "Bison", "Crane", "Deer", "Egret",
+        "Ferret", "Gull", "Hound", "Ibex", "Jay", "Kite", "Lizard", "Mole", "Mouse", "Otter",
+        "Pig", "Rabbit", "Robin", "Sheep", "Skunk", "Snail", "Swan", "Turtle", "Weasel", "Wren",
+        "Ant", "Bat", "Bee", "Boar", "Bug", "Calf", "Clam", "Crow", "Dingo", "Dove", "Duck",
+        "Eel", "Finch", "Gnat", "Goat", "Grouse", "Horse", "Lamb", "Lark", "Mink", "Myna",
+        "Osprey", "Panda", "Parrot", "Perch", "Pigeon", "Plover", "Prawn", "Quokka", "Rook", "Shrew",
+        "Snipe", "Sole", "Sparrow", "Stoat", "Tapir", "Tern", "Trout", "Vole", "Wasp", "Yak"
     };
 
     public static void readScoresFromFile(String filename) {
@@ -81,14 +91,18 @@ public class ScoreHandler {
         }
     }
 
-    private static void sortScores() {
-        Arrays.sort(scores);
-    }
-
     public static String generateRandomName() {
         java.util.Random rand = new java.util.Random();
         String adjective = adjectives[rand.nextInt(adjectives.length)];
         String noun = nouns[rand.nextInt(nouns.length)];
         return adjective + " " + noun;
+    }
+
+    public static String[] getNames() {
+        return Arrays.copyOf(names, names.length);
+    }
+
+    public static int[] getScores() {
+        return Arrays.copyOf(scores, scores.length);
     }
 }

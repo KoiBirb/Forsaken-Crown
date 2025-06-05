@@ -22,13 +22,10 @@ public class MenuPanel extends JPanel implements Runnable{
     public final static double screenWidth = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
     public final static double screenHeight = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
 
-    private float helpAlpha = 0f;
-    private float titleAlpha = 1f;
-    private static final float HELP_LERP_SPEED = 0.15f;
-    private static final float TITLE_LERP_SPEED = 0.15f;
+    private float helpAlpha = 0f, titleAlpha = 1f;
+    private static final float movementFactor = 0.15f;
     public static boolean help = false;
     private float parallaxSelected = 1.0f;
-    private static final float PARALLAX_LERP_SPEED = 0.15f;
 
     public UIManager ui;
 
@@ -129,15 +126,13 @@ public class MenuPanel extends JPanel implements Runnable{
         ui.update();
         int target = ui.getSelectedButton();
 
-        parallaxSelected += (target - parallaxSelected) * PARALLAX_LERP_SPEED;
+        parallaxSelected += (target - parallaxSelected) * movementFactor;
 
-        // Animate help alpha
         float targetHelpAlpha = help ? 1f : 0f;
-        helpAlpha += (targetHelpAlpha - helpAlpha) * HELP_LERP_SPEED;
+        helpAlpha += (targetHelpAlpha - helpAlpha) * movementFactor;
 
-        // Animate title alpha (fade in when helpAlpha is near 0)
         float targetTitleAlpha = 1f - helpAlpha;
-        titleAlpha += (targetTitleAlpha - titleAlpha) * TITLE_LERP_SPEED;
+        titleAlpha += (targetTitleAlpha - titleAlpha) * movementFactor;
 
         count++;
         if (count > 3) {

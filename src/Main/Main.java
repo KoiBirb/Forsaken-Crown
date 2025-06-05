@@ -27,6 +27,7 @@ public class Main {
     public static GamePanel gamePanel = new GamePanel();
     public static MenuPanel menuPanel = new MenuPanel();
     public static EndPanel endPanel = new EndPanel();
+    public static String name = ScoreHandler.generateRandomName();
 
     public static JFrame window = new JFrame();
 

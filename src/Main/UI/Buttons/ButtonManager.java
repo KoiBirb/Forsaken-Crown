@@ -24,7 +24,7 @@ public class ButtonManager {
     private static final int SHIFT_PIXELS = 20;
     private static final float LERP_SPEED = 0.15f;
 
-    private final Button[] menuButtons, deathButtons;
+    private final Button[] menuButtons, endButtons;
     private final float[] scales;
     private final float[] shifts;
     private final int[] initialX;
@@ -40,7 +40,7 @@ public class ButtonManager {
                         "Assets/Images/UI/UI - Words/Words With BG/UI - Words16.png")
         };
 
-        deathButtons = new Button[]{
+        endButtons = new Button[]{
                 new Button((int) (GamePanel.screenWidth/5) - 169, (int) (GamePanel.screenHeight * (4.6/6.2)), 120,
                         "Assets/Images/UI/UI - Words/Words With BG/UI - Words3.png"),
                 new Button((int) (GamePanel.screenWidth/2) - 169, (int) (GamePanel.screenHeight * (4.6/6.2)), 120,
@@ -69,7 +69,7 @@ public class ButtonManager {
                 break;
 
             case DEATH, VICTORY:
-                updateDeath();
+                updateEnd();
                 break;
         }
     }
@@ -115,7 +115,7 @@ public class ButtonManager {
         }
     }
 
-    private void updateDeath() {
+    private void updateEnd() {
         if (keyI.aPressed) {
             selectLeft();
             PlayerSoundHandler.UIHover();
@@ -129,7 +129,7 @@ public class ButtonManager {
             EndPanel.leader = false;
         }
 
-        for (int i = 0; i < deathButtons.length; i++) {
+        for (int i = 0; i < endButtons.length; i++) {
             float targetScale = (i == selectedIndex) ? SELECTED_SCALE : NORMAL_SCALE;
             float targetShift = 0;
             if (i != selectedIndex) {
@@ -172,7 +172,7 @@ public class ButtonManager {
 
     public void draw(Graphics2D g2) {
 
-        Button[] buttons = (Main.gameState == Main.GameState.MENU) ? menuButtons : deathButtons;
+        Button[] buttons = (Main.gameState == Main.GameState.MENU) ? menuButtons : endButtons;
 
         for (int i = 0; i < buttons.length; i++) {
             Button btn = buttons[i];

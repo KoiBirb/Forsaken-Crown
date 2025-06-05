@@ -23,17 +23,23 @@ public class EndPanel extends JPanel implements Runnable{
     public final static double screenWidth = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
     public final static double screenHeight = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
 
+    private float leaderAlpha = 0f, titleAlpha = 1f;
+    private static final float movementFactor = 0.15f;
+    private Font leaderboardFont;
+
     public static boolean leader = false;
     public static boolean victory;
     private float parallaxSelected = 1.0f;
-    private static final float PARALLAX_LERP_SPEED = 0.15f;
+
+    private int[] scores;
+    private String[] names;
 
     public UIManager ui;
 
     public static Thread endThread;
 
     private VolatileImage[] background;
-    private VolatileImage deathTitle, circleBackground, victoryTitle;
+    private VolatileImage deathTitle, circleBackground, victoryTitle, leaderBoardBackground;
 
     private int row, col, count;
 
@@ -56,8 +62,12 @@ public class EndPanel extends JPanel implements Runnable{
     public void setup() {
         this.requestFocusInWindow();
         ui = new UIManager(null, false);
-        ScoreHandler.addScore(ScoreHandler.generateRandomName(), GamePanel.points);
+        ScoreHandler.addScore(Main.Main.name, GamePanel.points);
         ScoreHandler.writeScoresToFile("src/Assets/Map/Leaderboard.txt");
+
+        scores = ScoreHandler.getScores();
+        names = ScoreHandler.getNames();
+
         startThread();
     }
 
@@ -78,6 +88,17 @@ public class EndPanel extends JPanel implements Runnable{
         circleBackground = ImageHandler.loadImage("Assets/Images/Backgrounds/The Circle Underground/Red Circle/The Circle 35x37 RED.png");
         deathTitle = ImageHandler.loadImage("Assets/Images/UI/UI - Words/DeathTitle.png");
         victoryTitle = ImageHandler.loadImage("Assets/Images/UI/UI - Words/VictoryTitle.png");
+        leaderBoardBackground = ImageHandler.loadImage("Assets/Images/UI/UI - Words/LeaderboardBackground.png");
+
+        try {
+            leaderboardFont = Font.createFont(Font.TRUETYPE_FONT, new java.io.File("src/Assets/Font/04B_03__.TTF"))
+                    .deriveFont(Font.BOLD, 48f);
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            ge.registerFont(leaderboardFont);
+        } catch (Exception e) {
+            System.out.println("Failed to load custom leaderboard font, using fallback. " + e.getMessage());
+            leaderboardFont = new Font("Arial", Font.BOLD, 48); // fallback
+        }
     }
 
     /**
@@ -131,7 +152,13 @@ public class EndPanel extends JPanel implements Runnable{
         ui.update();
         int target = ui.getSelectedButton();
 
-        parallaxSelected += (target - parallaxSelected) * PARALLAX_LERP_SPEED;
+        parallaxSelected += (target - parallaxSelected) * movementFactor;
+
+        float targetLeaderAlpha = leader ? 1f : 0f;
+        leaderAlpha += (targetLeaderAlpha - leaderAlpha) * movementFactor;
+
+        float targetTitleAlpha = 1f - leaderAlpha;
+        titleAlpha += (targetTitleAlpha - titleAlpha) * movementFactor;
 
         count++;
         if (count > 3) {
@@ -161,23 +188,75 @@ public class EndPanel extends JPanel implements Runnable{
 
         drawParallaxBackground(g2);
 
-        if (victory) {
-            g2.drawImage(
-                    victoryTitle,
-                    (int) (screenWidth / 2 - victoryTitle.getWidth() * 3.5),
-                    50,
-                    (int) (screenWidth / 2 + victoryTitle.getWidth() * 3.5),
-                    50 + victoryTitle.getHeight() * 7,
-                    0, 0,
-                    victoryTitle.getWidth(), victoryTitle.getHeight(),
-                    null
-            );
-        } else {
-            g2.drawImage(deathTitle, (int) (screenWidth / 2 - deathTitle.getWidth() * 0.9),
-                    150, (int) (screenWidth / 2 + deathTitle.getWidth() * 0.9),
-                    150 + (int) (deathTitle.getHeight() * 1.8), 0, 0,
-                    deathTitle.getWidth(), deathTitle.getHeight(), null);
+        if (leaderAlpha > 0.01f) {
+            Composite old = g2.getComposite();
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, leaderAlpha));
+            g2.drawImage(leaderBoardBackground, (int) (screenWidth / 2 - leaderBoardBackground.getWidth() * 1.5),
+                    65, (int) (screenWidth / 2 + leaderBoardBackground.getWidth() * 1.5),
+                    65 + (leaderBoardBackground.getHeight() * 3), 0, 0,
+                    leaderBoardBackground.getWidth(), leaderBoardBackground.getHeight(), null);
+
+            String title = "LEADERBOARD";
+            g2.setColor(Color.WHITE);
+
+            g2.setFont(leaderboardFont.deriveFont(Font.PLAIN, 80f));
+            FontMetrics fm = g2.getFontMetrics();
+
+            int textWidth = fm.stringWidth(title);
+
+            g2.drawString(title, (int) (screenWidth / 2 - textWidth / 2.0), 65 + fm.getAscent() + 30);
+
+            int bgLeft = (int) (screenWidth / 2 - leaderBoardBackground.getWidth() * 1.5);
+            int bgWidth = leaderBoardBackground.getWidth() * 3;
+            int bgHeight = leaderBoardBackground.getHeight() * 3;
+
+            int col1 = bgLeft + bgWidth / 4;
+            int col2 = bgLeft + 3 * bgWidth / 4;
+            int startY = 245;
+            int rowHeight = 64;
+
+            g2.setFont(leaderboardFont.deriveFont(Font.PLAIN, 36f));
+            FontMetrics entryFm = g2.getFontMetrics();
+
+            for (int i = 0; i < 10; i++) {
+                String entry = (i + 1) + ". " + (i < names.length ? names[i] : "---") + " - " + (i < scores.length ? scores[i] : "---");
+                int x = (i < 5) ? col1 : col2;
+                int y = startY + (i % 5) * rowHeight;
+                int entryWidth = entryFm.stringWidth(entry);
+                g2.drawString(entry, x - entryWidth / 2, y);
+            }
+
+            String currentEntry = "Your Score: " + Main.Main.name + " - " + GamePanel.points;
+            int currentY = 5 + bgHeight;
+            int currentX = (int) (screenWidth / 2 - entryFm.stringWidth(currentEntry) / 2.0);
+            g2.drawString(currentEntry, currentX, currentY);
+
+            g2.setComposite(old);
         }
+
+        if (titleAlpha > 0.01f) {
+            Composite old = g2.getComposite();
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, titleAlpha));
+            if (victory) {
+                g2.drawImage(
+                        victoryTitle,
+                        (int) (screenWidth / 2 - victoryTitle.getWidth() * 3.5),
+                        50,
+                        (int) (screenWidth / 2 + victoryTitle.getWidth() * 3.5),
+                        50 + victoryTitle.getHeight() * 7,
+                        0, 0,
+                        victoryTitle.getWidth(), victoryTitle.getHeight(),
+                        null
+                );
+            } else {
+                g2.drawImage(deathTitle, (int) (screenWidth / 2 - deathTitle.getWidth() * 0.9),
+                        150, (int) (screenWidth / 2 + deathTitle.getWidth() * 0.9),
+                        150 + (int) (deathTitle.getHeight() * 1.8), 0, 0,
+                        deathTitle.getWidth(), deathTitle.getHeight(), null);
+            }
+            g2.setComposite(old);
+        }
+
         if (ui != null)
             ui.draw(g2);
 
