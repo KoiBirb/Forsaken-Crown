@@ -20,9 +20,13 @@ public class PlayerSoundHandler {
             new Sound(), new Sound()
     };
 
+    public static final Sound[] heal = {
+            new Sound(), new Sound(), new Sound()
+    };
+
     public static final Sound footsteps = new Sound();
     public static final Sound healCharge = new Sound();
-    public static final Sound heal = new Sound();
+    public static final Sound healEnd = new Sound();
     public static final Sound dashSwingAttack = new Sound();
     public static final Sound dashHeavyAttack = new Sound();
     public static final Sound heavyAttack = new Sound();
@@ -51,13 +55,17 @@ public class PlayerSoundHandler {
             hitCollidable[i].setFile("/Audio/Player/sword_hit_reject_" + (i + 1) + ".wav");
         }
 
+        for (int i = 0; i < heal.length; i++) {
+            heal[i].setFile("/Audio/Player/heal" + (i + 1) + ".wav");
+        }
+
         for (int i = 0; i < jumps.length; i++) {
             jumps[i].setFile("/Audio/Player/jump_" + (i + 1) + ".wav");
         }
 
         footsteps.setFile("/Audio/Player/footsteps.wav");
         healCharge.setFile("/Audio/Player/heal_charge.wav");
-        heal.setFile("/Audio/Player/heal.wav");
+        healEnd.setFile("/Audio/Player/endHeal.wav");
         dashSwingAttack.setFile("/Audio/Player/sword_wide_swing.wav");
         dashHeavyAttack.setFile("/Audio/Player/sword_dash_heavy.wav");
         heavyAttack.setFile("/Audio/Player/heavy_sword.wav");
@@ -76,6 +84,10 @@ public class PlayerSoundHandler {
 
     public static void hit() {
         swordHits[rand.nextInt(swordHits.length)].play();
+    }
+
+    public static void heal() {
+        heal[rand.nextInt(heal.length)].play();
     }
 
     public static void hitColladable() {
@@ -120,8 +132,8 @@ public class PlayerSoundHandler {
         }
     }
 
-    public static void heal() {
-        heal.play();
+    public static void healEnd() {
+        healEnd.play();
     }
 
     public static void UIHover() {

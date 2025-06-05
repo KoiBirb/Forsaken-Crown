@@ -40,10 +40,10 @@ public class Player extends Entity {
     // timers
     private long jumpKeyPressStartTime, lastQuickAttackTime, lastHeavyAttackTime,
             fallStartTime, healStartTime, dashStartTime, lastDashTime, deathTime,
-            lastGroundedTime, now;
+            lastGroundedTime, now, lastHealTickTime;
 
     private Vector2 spawnPosition;
-    private boolean chain, continuousJump, canMove, directionLock;
+    private boolean chain, continuousJump, canMove, directionLock, heal;
 
     public Player(Vector2 position) {
         super(position, new Vector2(0, 0), 90, 37,
@@ -136,7 +136,7 @@ public class Player extends Entity {
                     if (spriteRow == 1 || spriteRow == 3 || spriteRow == 15) {
                         spriteCol = 0;
                     }
-                    if (state == PlayerState.HEALING) {
+                    if (state == PlayerState.HEALING && spriteRow != 1) {
                         state = PlayerState.IDLE;
                         spriteCol = maxSpriteCol;
                     }
@@ -328,37 +328,38 @@ public class Player extends Entity {
         }
 
         // Healing
-        if (keyI.iPressed && onGround && state != PlayerState.HEALING) {
+        if (keyI.iPressed && onGround && currentHealth != maxHealth && currentMana > 0) {
             if (healStartTime == 0) {
                 healStartTime = now;
+                lastHealTickTime = now;
                 PlayerSoundHandler.healCharge();
-            }
-
-            long elapsedTime = now - healStartTime;
-
-            TiledMap.cameraShake((int) (1.0 + Math.min(elapsedTime / 1000.0, 2.0)), 1);
-        } else {
-            if (healStartTime > 0) {
-
-                spriteRow = 11;
-                maxSpriteCol = 5;
-
                 state = PlayerState.HEALING;
 
-                int healAmount = (int) ((now - healStartTime) / 500);
-                healAmount = Math.min(healAmount, currentMana);
-                healAmount = Math.min(healAmount, maxHealth - currentHealth);
+                heal = true;
 
-
-                currentHealth += healAmount;
-                currentMana -= healAmount;
-
-                TiledMap.cameraShake(healAmount, 1);
-
-                PlayerSoundHandler.stopHealCharge();
-                PlayerSoundHandler.heal();
+                spriteRow = 1;
+                maxSpriteCol = 8;
             }
+            if (now - lastHealTickTime >= 1000 && currentMana > 0 && currentHealth < maxHealth) {
+                currentHealth++;
+                currentMana--;
+                lastHealTickTime = now;
+                PlayerSoundHandler.heal();
+                TiledMap.cameraShake(6, 4);
+            } else {
+                TiledMap.cameraShake(2, 1);
+            }
+        } else if (state == PlayerState.HEALING && heal) {
+            heal = false;
+
+            spriteRow = 11;
+            spriteCol = 0;
+            maxSpriteCol = 5;
+            spriteCounter = 0;
+
             healStartTime = 0;
+            lastHealTickTime = 0;
+            PlayerSoundHandler.healEnd();
             PlayerSoundHandler.stopHealCharge();
         }
 
