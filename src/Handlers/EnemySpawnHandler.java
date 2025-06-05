@@ -6,6 +6,7 @@ import Entitys.Enemies.Ghoul;
 import Entitys.Enemies.SkeletonKnight;
 import Entitys.Enemies.Summoner.Skeleton;
 import Entitys.Enemies.Summoner.SkeletonSummoner;
+import Entitys.Enemies.SlicerBot;
 import Main.Panels.GamePanel;
 
 import java.awt.*;
@@ -19,7 +20,7 @@ public class EnemySpawnHandler {
         GamePanel.activeEnemies.clear();
         GamePanel.enemies.clear();
 
-        GamePanel.enemies.add(new SkeletonKnight(new Vector2(500, 100)));
+        GamePanel.enemies.add(new SlicerBot(new Vector2(500, 100)));
 
         GamePanel.enemies.add(new BloodKing(new Vector2(2650, 3102)));
     }

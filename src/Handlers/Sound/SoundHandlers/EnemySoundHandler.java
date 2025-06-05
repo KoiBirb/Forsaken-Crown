@@ -6,13 +6,11 @@
  public class EnemySoundHandler {
 
      private static final Sound ghoulSteps = new Sound();
-     private static final Sound ghoulEffect = new Sound();
      private static final Sound ghoulAttack = new Sound();
      private static final Sound ghoulDeath = new Sound();
      private static final Sound ghoulHit = new Sound();
 
      private static final Sound summonerSteps = new Sound();
-     private static final Sound summonerEffect = new Sound();
      private static final Sound summonerAttack = new Sound();
      private static final Sound summonerDeath = new Sound();
      private static final Sound summonerHit = new Sound();
@@ -20,14 +18,12 @@
      private static final Sound summonerSummon = new Sound();
 
      private static final Sound skeletonSteps = new Sound();
-     private static final Sound skeletonEffect = new Sound();
      private static final Sound skeletonAttack = new Sound();
      private static final Sound skeletonDeath = new Sound();
      private static final Sound skeletonHit = new Sound();
      private static final Sound skeletonSpawnSound = new Sound();
 
      private static final Sound kingSteps = new Sound();
-     private static final Sound kingEffect = new Sound();
      private static final Sound kingHit = new Sound();
      private static final Sound kingDeath = new Sound();
 
@@ -52,13 +48,23 @@
      private static final Sound kingStabStab = new Sound();
      private static final Sound kingStabWarn = new Sound();
 
+     private static final Sound botSteps = new Sound();
+     private static final Sound botStab = new Sound();
+     private static final Sound botDeath = new Sound();
+
      private static int walkingGhouls = 0, attackingGhouls = 0;
      private static int walkingSummoners = 0, attackingSummoners = 0;
      private static int walkingSkeletons = 0, attackingSkeletons = 0;
+     private static int walkingBots = 0;
      private static int walkingKings = 0;
      private static boolean skeletonSpawn = false;
 
      static {
+         // Bot
+         botSteps.setFile("/Audio/Enemy/SlicerBot/Move.wav");
+         botStab.setFile("/Audio/Enemy/SlicerBot/Swing.wav");
+         botDeath.setFile("/Audio/Enemy/SlicerBot/Death.wav");
+
          // Ghoul
          ghoulSteps.setFile("/Audio/Enemy/Ghoul/Ghoul_Footsteps.wav");
          ghoulAttack.setFile("/Audio/Enemy/Ghoul/Ghoul_Attack.wav");
@@ -106,7 +112,25 @@
          kingStabWarn.setFile("/Audio/Enemy/BloodKing/Attacks/Stab/Warn.wav");
      }
 
-     // Example King attack methods
+     public static synchronized void botSteps() {
+         if (walkingBots == 0) {
+             botSteps.play();
+             botSteps.loop();
+         }
+         walkingBots++;
+     }
+     public static synchronized void stopBotSteps() {
+         if (walkingBots > 0) {
+             walkingBots--;
+             if (walkingBots == 0) {
+                 botSteps.stop();
+             }
+         }
+     }
+
+     public static void botStab() { botStab.play(); }
+     public static void botDeath() { botDeath.play(); }
+
      public static void dodgeDash() { kingDodgeDash.play(); }
      public static void dodgeSlash1() { kingDodgeSlash1.play(); }
      public static void dodgeSlash2() { kingDodgeSlash2.play(); }
