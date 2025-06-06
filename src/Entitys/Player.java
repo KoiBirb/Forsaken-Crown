@@ -35,7 +35,7 @@ public class Player extends Entity {
     private PlayerState state;
     private VolatileImage imageReg, imageHit;
     private int spriteCounter, spriteRow, spriteCol,
-            maxSpriteCol, lastSpriteRow, lives, hitCounter;
+            maxSpriteCol, lastSpriteRow, lives, hitCounter, initialHealTickTime;;
 
     // timers
     private long jumpKeyPressStartTime, lastQuickAttackTime, lastHeavyAttackTime,
@@ -56,6 +56,7 @@ public class Player extends Entity {
         spawnPosition = new Vector2(position.x, position.y);
         state = PlayerState.SPAWNING;
         lives = 3;
+        initialHealTickTime = 900;
         canMove = true;
     }
 
@@ -330,6 +331,7 @@ public class Player extends Entity {
         // Healing
         if (keyI.iPressed && onGround && currentHealth != maxHealth && currentMana > 0) {
             if (healStartTime == 0) {
+                initialHealTickTime = 900;
                 healStartTime = now;
                 lastHealTickTime = now;
                 PlayerSoundHandler.healCharge();
@@ -340,7 +342,8 @@ public class Player extends Entity {
                 spriteRow = 1;
                 maxSpriteCol = 8;
             }
-            if (now - lastHealTickTime >= 1000 && currentMana > 0 && currentHealth < maxHealth) {
+            if (now - lastHealTickTime >= initialHealTickTime && currentMana > 0 && currentHealth < maxHealth) {
+                initialHealTickTime -= 50;
                 currentHealth++;
                 currentMana--;
                 lastHealTickTime = now;
