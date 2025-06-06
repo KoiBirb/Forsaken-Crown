@@ -3,6 +3,7 @@ package Entitys.Enemies.TheHive;
 import Attacks.MeleeAttacks.Enemies.SummonerAttack;
 import Attacks.MeleeAttacks.Enemies.WaspAttack;
 import Entitys.Enemies.Enemy;
+import Entitys.Enemies.Ghoul;
 import Handlers.CollisionHandler;
 import Handlers.ImageHandler;
 import Handlers.Sound.SoundHandlers.EnemySoundHandler;
@@ -27,7 +28,6 @@ public class Wasp extends Enemy {
     private long patrolStateChangeTime = 0;
     private long patrolDuration = 0;
     private boolean patrolFlying = false, footstepsPlaying = false;
-    private double circleAngle = 0;
     private double passiveCircleAngle = 0;
     private boolean passiveArcForward = true;
 
@@ -210,6 +210,18 @@ public class Wasp extends Enemy {
 
                 velocity.returnSetLength(speed);
             }
+
+            if (currentState == State.FLY) {
+                if (!footstepsPlaying) {
+                    EnemySoundHandler.waspFly();
+                    footstepsPlaying = true;
+                }
+            } else {
+                if (footstepsPlaying) {
+                    EnemySoundHandler.stopWaspFly();
+                    footstepsPlaying = false;
+                }
+            }
         }
 
         spriteCounter++;
@@ -257,7 +269,10 @@ public class Wasp extends Enemy {
 
     @Override
     public void stopSteps() {
-        // No footsteps for flying enemies
+        if (footstepsPlaying) {
+            EnemySoundHandler.stopWaspFly();
+            footstepsPlaying = false;
+        }
     }
 
     @Override
@@ -370,7 +385,7 @@ public class Wasp extends Enemy {
 
             super.hit();
             if (currentHealth > 0)
-                EnemySoundHandler.summonerHit();
+                EnemySoundHandler.waspHit();
 
             hit = true;
         }
@@ -391,10 +406,9 @@ public class Wasp extends Enemy {
             maxSpriteCol = 4;
             velocity.x = 0;
             velocity.y = 0;
-            GamePanel.points += 25;
-            EnemySoundHandler.stopSummonerFootsteps();
-            EnemySoundHandler.stopSummonerAttack();
-            EnemySoundHandler.summonerDeath();
+            GamePanel.points += 50;
+            stopSteps();
+            EnemySoundHandler.waspDeath();
         }
     }
 

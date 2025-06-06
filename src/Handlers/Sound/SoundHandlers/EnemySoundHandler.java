@@ -61,17 +61,38 @@
      private static final Sound shockerCharge = new Sound();
      private static final Sound shockerEnd = new Sound();
 
+     private static final Sound hiveIdle = new Sound();
+     private static final Sound hiveExplode = new Sound();
+
+     private static final Sound waspDeath = new Sound();
+     private static final Sound waspSting = new Sound();
+     private static final Sound waspFly = new Sound();
+     private static final Sound waspHit = new Sound();
+
      private static int walkingGhouls = 0, attackingGhouls = 0;
      private static int walkingSummoners = 0, attackingSummoners = 0;
      private static int walkingSkeletons = 0, attackingSkeletons = 0;
      private static int walkingBots = 0;
      private static int walkingShockers = 0;
      private static int walkingKings = 0;
+     private static int idleHive = 0;
+     private static int flyingWasps = 0;
      private static boolean skeletonSpawn = false;
 
      static {
-         // Shocker
 
+         // Wasp
+
+         waspDeath.setFile("/Audio/Enemy/Wasp/Death.wav");
+         waspFly.setFile("/Audio/Enemy/Wasp/Fly.wav");
+         waspHit.setFile("/Audio/Enemy/Wasp/Hit.wav");
+         waspSting.setFile("/Audio/Enemy/Wasp/Sting.wav");
+
+         // Hive
+         hiveIdle.setFile("/Audio/Enemy/Hive/Idle.wav");
+         hiveExplode.setFile("/Audio/Enemy/Hive/Explode.wav");
+
+         // Shocker
          shockerSteps.setFile("/Audio/Enemy/CagedShocker/Footsteps.wav");
          shockerSwing1.setFile("/Audio/Enemy/CagedShocker/Sword1.wav");
          shockerSwing2.setFile("/Audio/Enemy/CagedShocker/Sword2.wav");
@@ -131,6 +152,44 @@
          kingStabSlice.setFile("/Audio/Enemy/BloodKing/Attacks/Stab/Slice.wav");
          kingStabStab.setFile("/Audio/Enemy/BloodKing/Attacks/Stab/Stab.wav");
          kingStabWarn.setFile("/Audio/Enemy/BloodKing/Attacks/Stab/Warn.wav");
+     }
+
+     public static void waspHit() { waspHit.play(); }
+     public static void waspDeath() { waspDeath.play(); }
+     public static void waspSting() { waspSting.play(); }
+
+     public static synchronized void waspFly() {
+         if (flyingWasps == 0) {
+             waspFly.play();
+             waspFly.loop();
+         }
+         flyingWasps++;
+     }
+     public static synchronized void stopWaspFly() {
+         if (flyingWasps > 0) {
+             flyingWasps--;
+             if (flyingWasps == 0) {
+                 waspFly.stop();
+             }
+         }
+     }
+
+     public static void hiveExplode() { hiveExplode.play(); }
+
+     public static synchronized void hiveIdle() {
+         if (idleHive == 0) {
+             hiveIdle.play();
+             hiveIdle.loop();
+         }
+         idleHive++;
+     }
+     public static synchronized void stopHiveIdle() {
+         if (idleHive > 0) {
+             idleHive--;
+             if (idleHive == 0) {
+                 hiveIdle.stop();
+             }
+         }
      }
 
      public static synchronized void shockerSteps() {

@@ -24,7 +24,7 @@ public class Hive extends Enemy{
 
     private State currentState = State.IDLE;
 
-    private final double visionRadius = 300;
+    private final double visionRadius = 250;
     boolean summoned = false;
     private final ArrayList<Wasp> summons = new ArrayList<>();
 
@@ -43,6 +43,8 @@ public class Hive extends Enemy{
         spriteCol = 0;
         maxSpriteCol = 8;
         spriteCounter = 0;
+
+
     }
 
     /**
@@ -51,6 +53,12 @@ public class Hive extends Enemy{
     public void update() {
 
         if (currentState != State.DEAD) {
+
+            if (!footstepsPlaying && currentState != State.EXPLODE) {
+                EnemySoundHandler.hiveIdle();
+                footstepsPlaying = true;
+            }
+
             Vector2 playerPos = GamePanel.player.getSolidAreaCenter();
             Vector2 currentPos = getSolidAreaCenter();
             Vector2 topCenter = getSolidAreaXCenter();
@@ -101,7 +109,7 @@ public class Hive extends Enemy{
     @Override
     public void stopSteps() {
         if (footstepsPlaying) {
-            EnemySoundHandler.stopSummonerFootsteps();
+            EnemySoundHandler.stopHiveIdle();
             footstepsPlaying = false;
         }
     }
@@ -148,13 +156,15 @@ public class Hive extends Enemy{
         summoned = true;
         double summonX = position.x;
 
+        EnemySoundHandler.hiveExplode();
+
+        stopSteps();
+
         for (int i = 1; i <= 6; i++) {
             Wasp wasp = new Wasp(new Vector2(summonX, position.y + 30));
             GamePanel.enemies.add(wasp);
             summons.add(wasp);
         }
-
-        EnemySoundHandler.summonerSummon();
     }
 
     /**
