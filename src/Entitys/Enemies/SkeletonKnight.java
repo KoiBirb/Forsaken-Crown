@@ -11,6 +11,7 @@ import Main.Panels.GamePanel;
 import Map.TiledMap;
 
 import java.awt.*;
+import java.awt.image.VolatileImage;
 
 public class SkeletonKnight extends Enemy {
 
@@ -20,10 +21,12 @@ public class SkeletonKnight extends Enemy {
     private final double visionRadius = 300;
     private long lastAttackTime = 0;
 
-    public SkeletonKnight(Vector2 pos) {
-        super(pos, 2, 8, 44, 24, 2,  new Rectangle(0, 0, 25, 33));
+    private static final VolatileImage imageReg = ImageHandler.loadImage("Assets/Images/Enemies/Skeleton Summoner/Skeleton Swordsman/Skeleton - Armored Swordsman 44x24.png");
 
-        this.image = ImageHandler.loadImage("Assets/Images/Enemies/Skeleton Summoner/Skeleton Swordsman/Skeleton - Armored Swordsman 44x24.png");
+    public SkeletonKnight(Vector2 pos) {
+        super(pos, 2, 8, 44, 24, 2, new Rectangle(0, 0, 25, 33));
+
+        this.image = imageReg;
     }
 
     public void update() {

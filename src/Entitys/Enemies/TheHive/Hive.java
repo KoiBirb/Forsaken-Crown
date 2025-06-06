@@ -15,6 +15,7 @@ import Main.Panels.GamePanel;
 import Map.TiledMap;
 
 import java.awt.*;
+import java.awt.image.VolatileImage;
 import java.util.ArrayList;
 
 public class Hive extends Enemy{
@@ -30,6 +31,8 @@ public class Hive extends Enemy{
 
     private boolean footstepsPlaying = false;
 
+    private static final VolatileImage imageReg = ImageHandler.loadImage("Assets/Images/Enemies/The Hive/The Hive 78x43.png");
+
     /**
      * Summoner constructor.
      * @param pos The initial position of the summoner.
@@ -37,7 +40,7 @@ public class Hive extends Enemy{
     public Hive(Vector2 pos) {
         super(pos, 0, 8, 78, 43, 1,  new Rectangle(0, 0, 55, 65));
 
-        this.image = ImageHandler.loadImage("Assets/Images/Enemies/The Hive/The Hive 78x43.png");
+        this.image = imageReg;
 
         spriteRow = 1;
         spriteCol = 0;

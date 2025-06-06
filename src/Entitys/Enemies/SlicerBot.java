@@ -17,6 +17,7 @@ import Main.Panels.GamePanel;
 import Map.TiledMap;
 
 import java.awt.*;
+import java.awt.image.VolatileImage;
 
 public class SlicerBot extends Enemy{
 
@@ -34,6 +35,8 @@ public class SlicerBot extends Enemy{
     private long patrolDuration = 0;
     private boolean patrolWalking = false, footstepsPlaying = false;
 
+    private static final VolatileImage imageReg = ImageHandler.loadImage("Assets/Images/Enemies/Slicer Bot/Sicer Bot Sprite Sheet 16x32.png");
+
     /**
      * Summoner constructor.
      * @param pos The initial position of the summoner.
@@ -41,7 +44,7 @@ public class SlicerBot extends Enemy{
     public SlicerBot(Vector2 pos) {
         super(pos, 2, 8, 16, 32, 1,  new Rectangle(0, 0, 20, 32));
 
-        this.image = ImageHandler.loadImage("Assets/Images/Enemies/Slicer Bot/Sicer Bot Sprite Sheet 16x32.png");
+        this.image = imageReg;
     }
 
     /**

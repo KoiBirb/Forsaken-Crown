@@ -10,6 +10,7 @@ import Main.Panels.GamePanel;
 import Map.TiledMap;
 
 import java.awt.*;
+import java.awt.image.VolatileImage;
 
 public class Ghoul extends Enemy {
 
@@ -19,10 +20,12 @@ public class Ghoul extends Enemy {
     private final double visionRadius = 200;
     private long lastAttackTime = 0;
 
+    private static final VolatileImage imageReg = ImageHandler.loadImage("Assets/Images/Enemies/Ghoul/Ghoul Sprite Sheet 62 x 33.png");
+
     public Ghoul(Vector2 pos) {
         super(pos, 1, 8, 62, 33, 3,  new Rectangle(0, 0, 20, 40));
 
-        this.image = ImageHandler.loadImage("Assets/Images/Enemies/Ghoul/Ghoul Sprite Sheet 62 x 33.png");
+        this.image = imageReg;
     }
 
     public void update() {

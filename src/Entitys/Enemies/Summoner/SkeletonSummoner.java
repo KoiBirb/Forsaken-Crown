@@ -18,6 +18,7 @@ import Main.Panels.GamePanel;
 import Map.TiledMap;
 
 import java.awt.*;
+import java.awt.image.VolatileImage;
 import java.util.ArrayList;
 
 public class SkeletonSummoner extends Enemy{
@@ -38,14 +39,16 @@ public class SkeletonSummoner extends Enemy{
     private long patrolDuration = 0;
     private boolean patrolWalking = false, footstepsPlaying = false;
 
+    private static VolatileImage imageReg = ImageHandler.loadImage("Assets/Images/Enemies/Skeleton Summoner/Summoner/Skeleton Summoner 132x83.png");;
+
     /**
      * Summoner constructor.
      * @param pos The initial position of the summoner.
      */
     public SkeletonSummoner(Vector2 pos) {
-        super(pos, 2, 8, 132, 83, 6,  new Rectangle(0, 0, 50, 65));
+        super(pos, 2, 8, 132, 83, 6, new Rectangle(0, 0, 50, 65));
 
-        this.image = ImageHandler.loadImage("Assets/Images/Enemies/Skeleton Summoner/Summoner/Skeleton Summoner 132x83.png");
+        this.image = imageReg;
     }
 
     /**

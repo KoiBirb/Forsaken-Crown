@@ -35,7 +35,9 @@ public class CagedShocker extends Enemy{
 
     private int hitCounter = 0;
 
-    private VolatileImage imageReg, imageHit;
+    private static final VolatileImage imageRegPRELOAD = ImageHandler.loadImage("Assets/Images/Enemies/Caged Shocker/caged shocker 110x42.png");
+    private static final VolatileImage imageHitPRELOAD = ImageHandler.loadImage("Assets/Images/Enemies/Caged Shocker/caged shocker 110x42.png");
+    private final VolatileImage imageReg, imageHit;
 
     /**
      * Summoner constructor.
@@ -44,8 +46,8 @@ public class CagedShocker extends Enemy{
     public CagedShocker(Vector2 pos) {
         super(pos, 1, 8, 110, 42, 8,  new Rectangle(0, 0, 40, 84));
 
-        imageReg = ImageHandler.loadImage("Assets/Images/Enemies/Caged Shocker/caged shocker 110x42.png");
-        imageHit = ImageHandler.loadImage("Assets/Images/Enemies/Caged Shocker/caged shocker 110x42 Hit.png");
+        imageReg = imageRegPRELOAD;
+        imageHit = imageHitPRELOAD;
 
         this.image = imageReg;
     }
