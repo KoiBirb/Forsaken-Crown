@@ -69,6 +69,11 @@
      private static final Sound waspFly = new Sound();
      private static final Sound waspHit = new Sound();
 
+     private static final Sound slicerSwing = new Sound();
+     private static final Sound slicerHit = new Sound();
+     private static final Sound slicerDeath = new Sound();
+     private static final Sound slicerFootsteps = new Sound();
+
      private static int walkingGhouls = 0, attackingGhouls = 0;
      private static int walkingSummoners = 0, attackingSummoners = 0;
      private static int walkingSkeletons = 0, attackingSkeletons = 0;
@@ -77,12 +82,19 @@
      private static int walkingKings = 0;
      private static int idleHive = 0;
      private static int flyingWasps = 0;
+     private static int walkingSlicers = 0;
      private static boolean skeletonSpawn = false;
 
      static {
 
-         // Wasp
+        // Slicer
+         slicerDeath.setFile("/Audio/Enemy/HeavySlicer/Death.wav");
+         slicerHit.setFile("/Audio/Enemy/HeavySlicer/Hit.wav");
+         slicerFootsteps.setFile("/Audio/Enemy/HeavySlicer/Walk.wav");
+         slicerSwing.setFile("/Audio/Enemy/HeavySlicer/Swing.wav");
 
+
+         // Wasp
          waspDeath.setFile("/Audio/Enemy/Wasp/Death.wav");
          waspFly.setFile("/Audio/Enemy/Wasp/Fly.wav");
          waspHit.setFile("/Audio/Enemy/Wasp/Hit.wav");
@@ -152,6 +164,26 @@
          kingStabSlice.setFile("/Audio/Enemy/BloodKing/Attacks/Stab/Slice.wav");
          kingStabStab.setFile("/Audio/Enemy/BloodKing/Attacks/Stab/Stab.wav");
          kingStabWarn.setFile("/Audio/Enemy/BloodKing/Attacks/Stab/Warn.wav");
+     }
+
+     public static void slicerHit() { slicerHit.play(); }
+     public static void slicerDeath() { slicerDeath.play(); }
+     public static void slicerSwing() { slicerSwing.play(); }
+
+     public static synchronized void slicerFootsteps() {
+         if (walkingSlicers == 0) {
+             slicerFootsteps.play();
+             slicerFootsteps.loop();
+         }
+         walkingSlicers++;
+     }
+     public static synchronized void stopSlicerFootsteps() {
+         if (walkingSlicers > 0) {
+             walkingSlicers--;
+             if (walkingSlicers == 0) {
+                 slicerFootsteps.stop();
+             }
+         }
      }
 
      public static void waspHit() { waspHit.play(); }

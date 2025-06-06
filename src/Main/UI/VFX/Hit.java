@@ -36,22 +36,21 @@ public class Hit extends Effect{
         double screenX = position.x - 41 - cameraPos.x;
         double screenY = position.y - 31 - cameraPos.y;
 
-       AffineTransform originalTransform = g2.getTransform();
-
         // Flip image
         if (flip) {
-            g2.scale(-1, 1);
-            screenX = -screenX - 82; // Adjust for flipped coordinate system
+            g2.drawImage(
+                    image,
+                    (int) screenX, (int) screenY,
+                    (int) (screenX + 82), (int) (screenY + 65),
+                    spriteCol * 82 + 82, spriteRow * 65, spriteCol * 82, spriteRow * 65 + 65, null);
+        } else {
+            g2.drawImage(
+                    image,
+                    (int) screenX, (int) screenY,
+                    (int) (screenX + 82), (int) (screenY + 65),
+                    spriteCol * 82, spriteRow * 65, spriteCol * 82 + 82, spriteRow * 65 + 65, null);
+
         }
-
-//        g2.drawRect((int) screenX, (int) screenY, 82, 65);
-        g2.drawImage(
-                image,
-                (int) screenX, (int) screenY,
-                (int) (screenX + 82), (int) (screenY + 65),
-                spriteCol * 82, spriteRow * 65, spriteCol * 82 + 82, spriteRow * 65 + 65, null);
-
-        g2.setTransform(originalTransform);
     }
 
 }
