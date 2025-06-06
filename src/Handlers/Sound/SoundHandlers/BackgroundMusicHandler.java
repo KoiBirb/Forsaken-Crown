@@ -119,6 +119,7 @@ public class BackgroundMusicHandler {
 
    public void playBossMain(){
        musicBossMain.play();
+       musicBloodAction.loop();
    }
 
     public void transitionToMusic(Sound to, int durationMs) {

@@ -48,9 +48,9 @@ public class Player extends Entity {
     public Player(Vector2 position) {
         super(position, new Vector2(0, 0), 90, 37,
                 6.4, new Rectangle(0, 0, 18, 47),
-                ImageHandler.loadImage("Assets/Images/Hero/SwordMaster/The SwordMaster/Sword Master Sprite Sheet 90x37.png"), 10, 10);
+                ImageHandler.loadImage("Images/Hero/Sword Master Sprite Sheet 90x37.png"), 10, 10);
 
-        imageHit = ImageHandler.loadImage("Assets/Images/Hero/SwordMaster/The SwordMaster/Sword Master Sprite Sheet 90x37 Hit.png");
+        imageHit = ImageHandler.loadImage("Images/Hero/Sword Master Sprite Sheet 90x37 Hit.png");
         imageReg = image;
 
         spawnPosition = new Vector2(position.x, position.y);
