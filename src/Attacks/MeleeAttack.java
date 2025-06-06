@@ -5,7 +5,7 @@
  * Parent attack class for melee attacks
  */
 
-package Attacks.MeleeAttacks;
+package Attacks;
 
 import Handlers.Vector2;
 import Main.Panels.GamePanel;

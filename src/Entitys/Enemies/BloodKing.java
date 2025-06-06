@@ -7,7 +7,7 @@
 
 package Entitys.Enemies;
 
-import Attacks.MeleeAttacks.Enemies.BloodKing.*;
+import Attacks.Enemies.BloodKing.*;
 import Handlers.CollisionHandler;
 import Handlers.ImageHandler;
 import Handlers.Sound.SoundHandlers.EnemySoundHandler;

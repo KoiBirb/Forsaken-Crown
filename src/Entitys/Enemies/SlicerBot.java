@@ -7,7 +7,7 @@
 
 package Entitys.Enemies;
 
-import Attacks.MeleeAttacks.Enemies.SlicerAttack;
+import Attacks.Enemies.SlicerAttack;
 import Handlers.CollisionHandler;
 import Handlers.ImageHandler;
 import Handlers.Sound.SoundHandlers.EnemySoundHandler;

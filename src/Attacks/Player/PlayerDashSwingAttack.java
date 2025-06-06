@@ -1,6 +1,6 @@
-package Attacks.MeleeAttacks.Player;
+package Attacks.Player;
 
-import Attacks.MeleeAttacks.MeleeAttack;
+import Attacks.MeleeAttack;
 import Entitys.Player;
 import Handlers.Sound.SoundHandlers.PlayerSoundHandler;
 import Main.Panels.GamePanel;

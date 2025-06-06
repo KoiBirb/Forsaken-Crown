@@ -1,11 +1,9 @@
 package Entitys.Enemies;
 
-import Attacks.MeleeAttacks.Enemies.SkeletonAttack;
-import Attacks.MeleeAttacks.Enemies.SkeletonKnightAttack;
+import Attacks.Enemies.SkeletonKnightAttack;
 import Handlers.CollisionHandler;
 import Handlers.ImageHandler;
 import Handlers.Sound.SoundHandlers.EnemySoundHandler;
-import Handlers.SpikeDetectionHandler;
 import Handlers.Vector2;
 import Main.Panels.GamePanel;
 import Map.TiledMap;

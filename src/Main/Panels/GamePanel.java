@@ -7,7 +7,7 @@
 
 package Main.Panels;
 
-import Attacks.MeleeAttacks.MeleeAttack;
+import Attacks.MeleeAttack;
 import Entitys.Enemies.Enemy;
 import Entitys.Player;
 import Handlers.CollisionHandler;

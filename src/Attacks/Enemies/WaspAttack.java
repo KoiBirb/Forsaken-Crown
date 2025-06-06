@@ -5,9 +5,9 @@
  * Extends MeleeAttack, used for the ghoul attack
  */
 
-package Attacks.MeleeAttacks.Enemies;
+package Attacks.Enemies;
 
-import Attacks.MeleeAttacks.MeleeAttack;
+import Attacks.MeleeAttack;
 import Entitys.Enemies.TheHive.Wasp;
 import Handlers.Sound.SoundHandlers.EnemySoundHandler;
 import Main.Panels.GamePanel;

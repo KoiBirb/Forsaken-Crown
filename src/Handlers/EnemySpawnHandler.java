@@ -18,7 +18,7 @@ public class EnemySpawnHandler {
         GamePanel.activeEnemies.clear();
         GamePanel.enemies.clear();
 
-        GamePanel.enemies.add(new Hive(new Vector2(500, 100)));
+        GamePanel.enemies.add(new HeavySlicer(new Vector2(500, 100)));
 
         GamePanel.enemies.add(new BloodKing(new Vector2(2650, 3102)));
     }

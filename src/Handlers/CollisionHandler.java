@@ -6,7 +6,7 @@
  */
 package Handlers;
 
-import Attacks.MeleeAttacks.MeleeAttack;
+import Attacks.MeleeAttack;
 import Entitys.Entity;
 import Entitys.Player;
 import Main.Panels.GamePanel;

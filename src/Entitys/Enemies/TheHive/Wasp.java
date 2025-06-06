@@ -1,9 +1,8 @@
 package Entitys.Enemies.TheHive;
 
-import Attacks.MeleeAttacks.Enemies.SummonerAttack;
-import Attacks.MeleeAttacks.Enemies.WaspAttack;
+import Attacks.Enemies.SummonerAttack;
+import Attacks.Enemies.WaspAttack;
 import Entitys.Enemies.Enemy;
-import Entitys.Enemies.Ghoul;
 import Handlers.CollisionHandler;
 import Handlers.ImageHandler;
 import Handlers.Sound.SoundHandlers.EnemySoundHandler;

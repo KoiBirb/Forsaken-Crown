@@ -7,7 +7,7 @@
 
 package Entitys.Enemies.Summoner;
 
-import Attacks.MeleeAttacks.Enemies.SummonerAttack;
+import Attacks.Enemies.SummonerAttack;
 import Entitys.Enemies.Enemy;
 import Handlers.CollisionHandler;
 import Handlers.ImageHandler;

@@ -1,6 +1,6 @@
 package Entitys.Enemies;
 
-import Attacks.MeleeAttacks.Enemies.GhoulAttack;
+import Attacks.Enemies.GhoulAttack;
 import Handlers.CollisionHandler;
 import Handlers.ImageHandler;
 import Handlers.Sound.SoundHandlers.EnemySoundHandler;

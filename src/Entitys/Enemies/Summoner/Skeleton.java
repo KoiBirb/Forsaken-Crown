@@ -1,6 +1,6 @@
 package Entitys.Enemies.Summoner;
 
-import Attacks.MeleeAttacks.Enemies.SkeletonAttack;
+import Attacks.Enemies.SkeletonAttack;
 import Entitys.Enemies.Enemy;
 import Handlers.CollisionHandler;
 import Handlers.ImageHandler;

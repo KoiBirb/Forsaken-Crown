@@ -1,9 +1,9 @@
 package Entitys;
 
-import Attacks.MeleeAttacks.Player.PlayerDashHeavyAttack;
-import Attacks.MeleeAttacks.Player.PlayerDashSwingAttack;
-import Attacks.MeleeAttacks.Player.PlayerHeavyAttack;
-import Attacks.MeleeAttacks.Player.PlayerQuickAttack;
+import Attacks.Player.PlayerDashHeavyAttack;
+import Attacks.Player.PlayerDashSwingAttack;
+import Attacks.Player.PlayerHeavyAttack;
+import Attacks.Player.PlayerQuickAttack;
 import Handlers.CollisionHandler;
 import Handlers.EnemySpawnHandler;
 import Handlers.ImageHandler;

@@ -5,12 +5,11 @@ import Handlers.Vector2;
 import Main.Panels.GamePanel;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.awt.image.VolatileImage;
 
 public class Effect {
 
-    protected final VolatileImage image;
+    protected VolatileImage image;
     protected Vector2 position;
 
     protected int spriteCounter, spriteCol, spriteRow, maxSpriteCol;
@@ -18,7 +17,7 @@ public class Effect {
 
 
     public Effect (){
-        image = ImageHandler.loadImage("Assets/Images/VFX/Hits/All.png");
+        image = ImageHandler.loadImage("Images/VFX/All.png");
 
         spriteScale = GamePanel.scale;
     }

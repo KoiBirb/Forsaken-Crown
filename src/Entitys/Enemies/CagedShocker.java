@@ -7,7 +7,7 @@
 
 package Entitys.Enemies;
 
-import Attacks.MeleeAttacks.Enemies.ShockerAttack;
+import Attacks.Enemies.ShockerAttack;
 import Handlers.CollisionHandler;
 import Handlers.ImageHandler;
 import Handlers.Sound.SoundHandlers.EnemySoundHandler;
@@ -44,7 +44,7 @@ public class CagedShocker extends Enemy{
      * @param pos The initial position of the summoner.
      */
     public CagedShocker(Vector2 pos) {
-        super(pos, 1, 8, 110, 42, 8,  new Rectangle(0, 0, 40, 84));
+        super(pos, 1, 8, 110, 42, 10,  new Rectangle(0, 0, 40, 84));
 
         imageReg = imageRegPRELOAD;
         imageHit = imageHitPRELOAD;

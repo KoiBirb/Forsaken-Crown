@@ -4,9 +4,9 @@
  * May 28, 2025,
  * Extends MeleeAttack, used for the summoner attack
  */
-package Attacks.MeleeAttacks.Enemies;
+package Attacks.Enemies;
 
-import Attacks.MeleeAttacks.MeleeAttack;
+import Attacks.MeleeAttack;
 import Entitys.Enemies.Summoner.SkeletonSummoner;
 import Handlers.Sound.SoundHandlers.EnemySoundHandler;
 import Main.Panels.GamePanel;

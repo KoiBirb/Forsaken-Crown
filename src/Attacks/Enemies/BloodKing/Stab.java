@@ -4,9 +4,9 @@
  * May 28, 2025,
  * Extends MeleeAttack, used for the summoner attack
  */
-package Attacks.MeleeAttacks.Enemies.BloodKing;
+package Attacks.Enemies.BloodKing;
 
-import Attacks.MeleeAttacks.MeleeAttack;
+import Attacks.MeleeAttack;
 import Entitys.Enemies.BloodKing;
 import Handlers.Sound.SoundHandlers.EnemySoundHandler;
 import Main.Panels.GamePanel;
