@@ -6,11 +6,11 @@ import Handlers.CollisionHandler;
 import Handlers.ImageHandler;
 import Handlers.Sound.SoundHandlers.EnemySoundHandler;
 import Handlers.Vector2;
-import Handlers.SpikeDetectionHandler;
 import Main.Panels.GamePanel;
 import Map.TiledMap;
 
 import java.awt.*;
+import java.awt.image.VolatileImage;
 
 public class Skeleton extends Enemy {
 
@@ -20,10 +20,12 @@ public class Skeleton extends Enemy {
     private final double visionRadius = 300;
     private long lastAttackTime = 0;
 
+    private static VolatileImage skeletonImage = ImageHandler.loadImage("Assets/Images/Enemies/Skeleton Summoner/Skeleton - Unarmed/Skeleton - Unarmed 43x22.png");
+
     public Skeleton(Vector2 pos) {
         super(pos, 2, 8, 43, 22, 2,  new Rectangle(0, 0, 25, 33));
 
-        this.image = ImageHandler.loadImage("Assets/Images/Enemies/Skeleton Summoner/Skeleton - Unarmed/Skeleton - Unarmed 43x22.png");
+        this.image = skeletonImage;
 
         this.currentState = State.SPAWNING;
         this.spriteRow = 0;

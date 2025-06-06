@@ -21,7 +21,7 @@ public class ShockerAttack extends MeleeAttack {
     private final CagedShocker shocker;
 
     public ShockerAttack(CagedShocker shocker) {
-        super(0);
+        super(4);
 
         this.shocker = shocker;
         GamePanel.enemyAttacks.add(this);

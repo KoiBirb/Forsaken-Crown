@@ -22,7 +22,7 @@ public class CheckpointManager {
         checkpoints = new ArrayList<>();
 
         checkpoints.add(new Checkpoint(new Vector2(615,470),4));
-        checkpoints.add(new Checkpoint(new Vector2(2900,1045),8));
+        checkpoints.add(new Checkpoint(new Vector2(2895,1045),8));
     }
 
     /**

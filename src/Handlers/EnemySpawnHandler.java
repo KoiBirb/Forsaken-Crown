@@ -3,6 +3,8 @@ package Handlers;
 import Entitys.Enemies.*;
 import Entitys.Enemies.Summoner.Skeleton;
 import Entitys.Enemies.Summoner.SkeletonSummoner;
+import Entitys.Enemies.TheHive.Hive;
+import Entitys.Enemies.TheHive.Wasp;
 import Main.Panels.GamePanel;
 
 import java.awt.*;
@@ -16,7 +18,7 @@ public class EnemySpawnHandler {
         GamePanel.activeEnemies.clear();
         GamePanel.enemies.clear();
 
-        GamePanel.enemies.add(new CagedShocker(new Vector2(500, 100)));
+        GamePanel.enemies.add(new Hive(new Vector2(500, 100)));
 
         GamePanel.enemies.add(new BloodKing(new Vector2(2650, 3102)));
     }

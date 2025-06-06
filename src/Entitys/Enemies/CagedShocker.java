@@ -387,6 +387,7 @@ public class CagedShocker extends Enemy{
 
             image = imageHit;
 
+            super.hit();
             EnemySoundHandler.shockerHit();
         }
 

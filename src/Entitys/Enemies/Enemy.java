@@ -85,7 +85,6 @@ public abstract class Enemy extends Entitys.Entity {
 
     @Override
     public void update() {
-
         if (canSeePlayer) {
             if (!activeEnemies.contains(this)) {
                 activeEnemies.add(this);
