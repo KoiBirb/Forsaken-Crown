@@ -89,8 +89,10 @@ public class Hive extends Enemy{
                 spriteCounter = 0;
                 spriteCol++;
 
-                if (currentState == State.EXPLODE && spriteCol == 2)
+                if (currentState == State.EXPLODE && spriteCol == 2) {
                     summon();
+                    TiledMap.cameraShake(3, 2);
+                }
                 if (spriteCol >= maxSpriteCol) {
                     if (currentState == State.IDLE) {
                         spriteCol = 0;

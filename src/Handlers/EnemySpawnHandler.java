@@ -28,13 +28,15 @@ public class EnemySpawnHandler {
      * Updates all enemy objects in enemies list
      */
     public static void updateAll() {
-        int playerRoom = Map.TiledMap.getRoomId(GamePanel.player.getPosition().x, GamePanel.player.getPosition().y);
+        int playerRoom = Map.TiledMap.getPlayerRoomId();
+
         for (int i = 0; i < GamePanel.enemies.size(); i++) {
             Enemy enemy = GamePanel.enemies.get(i);
-            int enemyRoom = Map.TiledMap.getRoomId(enemy.getPosition().x, enemy.getPosition().y);
+            int enemyRoom = enemy.getRoomId();
             if (enemyRoom == playerRoom) {
                 enemy.update();
-            } else if (enemy.getFootstepsPlaying()) {
+            } else {
+                GamePanel.activeEnemies.remove(enemy);
                 enemy.stopSteps();
             }
         }

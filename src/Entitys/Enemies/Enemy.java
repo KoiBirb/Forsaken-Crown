@@ -21,6 +21,7 @@ public abstract class Enemy extends Entitys.Entity {
     protected static final double TERMINAL_VELOCITY = 12;
     protected static final double JUMP_FORCE = -8;
 
+    protected int roomNumber;
     protected long lastHitTime = 0;
     protected static final long INVINCIBILITY_DURATION_MS = 500;
 
@@ -41,11 +42,18 @@ public abstract class Enemy extends Entitys.Entity {
         this.detectionRadiusTiles = detectionRadiusTiles;
 
         ts = TiledMap.getScaledTileSize();
+        roomNumber = TiledMap.getRoomId(pos.x, pos.y);
     }
 
     public boolean canBeHit() {
         return System.currentTimeMillis() - lastHitTime > INVINCIBILITY_DURATION_MS;
     }
+
+    public int getRoomId() {
+        return roomNumber;
+    }
+
+
 
     protected boolean hasLineOfSight(Vector2 from, Vector2 to) {
         int tileSize = TiledMap.getScaledTileSize();

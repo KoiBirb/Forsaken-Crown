@@ -252,6 +252,7 @@ public class Wasp extends Enemy {
                     GamePanel.enemies.remove(this);
                 } else if (currentState == State.DAMAGED) {
                     currentState = State.IDLE;
+                    spriteRow = 0;
                     spriteCol = 0;
                 } else {
                     spriteCol = 0;
@@ -269,7 +270,7 @@ public class Wasp extends Enemy {
 
     @Override
     public void stopSteps() {
-        if (footstepsPlaying) {
+        if (footstepsPlaying){
             EnemySoundHandler.stopWaspFly();
             footstepsPlaying = false;
         }
@@ -407,7 +408,8 @@ public class Wasp extends Enemy {
             velocity.x = 0;
             velocity.y = 0;
             GamePanel.points += 50;
-            stopSteps();
+            EnemySoundHandler.stopWaspFly();
+            footstepsPlaying = false;
             EnemySoundHandler.waspDeath();
         }
     }
