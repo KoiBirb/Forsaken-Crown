@@ -50,8 +50,8 @@ public class GamePanel extends JPanel implements Runnable{
     public static ArrayList<Effect> effects = new ArrayList<>();
     public static ArrayList<Enemy> activeEnemies = new ArrayList<>();
 
-    private VolatileImage title = ImageHandler.loadImage("Images/UI/Words/paused.png");
-    private VolatileImage Help = ImageHandler.loadImage("Images/UI/Words/help.png");
+    private VolatileImage title = ImageHandler.loadImage("Assets/Images/UI/Words/paused.png");
+    private VolatileImage Help = ImageHandler.loadImage("Assets/Images/UI/Words/help.png");
 
     public static long initialTime;
     public static int points;

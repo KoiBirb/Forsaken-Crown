@@ -14,6 +14,8 @@ import Main.UI.UIManager;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.VolatileImage;
+import java.io.IOException;
+import java.io.InputStream;
 
 import static Main.Main.keyI;
 
@@ -85,15 +87,18 @@ public class EndPanel extends JPanel implements Runnable{
 
 
         circleBackground = ImageHandler.loadImage("Assets/Images/Backgrounds/The Circle Underground/Red Circle/The Circle 35x37 RED.png");
-        deathTitle = ImageHandler.loadImage("Images/UI/Words/DeathTitle.png");
-        victoryTitle = ImageHandler.loadImage("Images/UI/Words/VictoryTitle.png");
-        leaderBoardBackground = ImageHandler.loadImage("Images/UI/Words/LeaderboardBackground.png");
+        deathTitle = ImageHandler.loadImage("Assets/Images/UI/Words/DeathTitle.png");
+        victoryTitle = ImageHandler.loadImage("Assets/Images/UI/Words/VictoryTitle.png");
+        leaderBoardBackground = ImageHandler.loadImage("Assets/Images/UI/Words/LeaderboardBackground.png");
 
-        try {
-            leaderboardFont = Font.createFont(Font.TRUETYPE_FONT, new java.io.File("src/Assets/Font/04B_03__.TTF"))
-                    .deriveFont(Font.BOLD, 48f);
-            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            ge.registerFont(leaderboardFont);
+        try (InputStream is = getClass().getResourceAsStream("/Assets/Font/04B_03__.TTF")) {
+            if (is != null) {
+                leaderboardFont = Font.createFont(Font.TRUETYPE_FONT, is).deriveFont(Font.BOLD, 48f);
+                GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+                ge.registerFont(leaderboardFont);
+            } else {
+                throw new IOException("Font resource not found");
+            }
         } catch (Exception e) {
             System.out.println("Failed to load custom leaderboard font, using fallback. " + e.getMessage());
             leaderboardFont = new Font("Arial", Font.BOLD, 48);
