@@ -62,7 +62,7 @@ public class EndPanel extends JPanel implements Runnable{
 
         ui = new UIManager(null, false);
         ScoreHandler.addScore(Main.Main.name, GamePanel.points);
-        ScoreHandler.writeScoresToFile("src/Assets/Map/Leaderboard.txt");
+        ScoreHandler.writeScoresToFile();
 
         scores = ScoreHandler.getScores();
         names = ScoreHandler.getNames();

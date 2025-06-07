@@ -6,13 +6,13 @@
  */
 package Handlers;
 
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.Arrays;
 
 public class ScoreHandler {
 
-    private static String[] names;
+    private static final String LEADERBOARD_PATH = System.getProperty("user.home") + "/ForsakenCrown_Leaderboard.txt";
+    private static String[] names = new String[10];
     private static final int[] scores = new int[10];
 
     private static final String[] adjectives = {
@@ -43,11 +43,13 @@ public class ScoreHandler {
 
     /**
      * Initializes the scores and names arrays.
-     * @param filename String value of the file to read scores from
      */
-    public static void readScoresFromFile(String filename) {
-        names = new String[scores.length];
-        try (java.io.BufferedReader reader = new java.io.BufferedReader(new java.io.FileReader(filename))) {
+    public static void readScoresFromFile() {
+        Arrays.fill(names, "");
+        Arrays.fill(scores, 0);
+        File file = new File(LEADERBOARD_PATH);
+        if (!file.exists()) return;
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
             int i = 0;
             while ((line = reader.readLine()) != null && i < scores.length) {
@@ -96,13 +98,11 @@ public class ScoreHandler {
 
     /**
      * Writes the scores to a file.
-     * @param filename String value of the file to write scores to
      */
-    public static void writeScoresToFile(String filename) {
-
-        try (FileWriter writer = new FileWriter(filename)) {
+    public static void writeScoresToFile() {
+        try (FileWriter writer = new FileWriter(LEADERBOARD_PATH)) {
             for (int i = 0; i < 10; i++) {
-                writer.write(names[i] + " " + scores[i] + "\n");
+                writer.write((names[i] == null ? "" : names[i]) + " " + scores[i] + "\n");
             }
         } catch (IOException e) {
             System.out.println("Error writing scores to file: " + e.getMessage());

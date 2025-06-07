@@ -37,7 +37,7 @@ public class Main {
      */
     public static void main(String[] args) {
 
-        ScoreHandler.readScoresFromFile("src/Assets/Map/Leaderboard.txt");
+        ScoreHandler.readScoresFromFile();
 
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setResizable(false);
