@@ -219,13 +219,13 @@ public class TiledMap {
     private void loadMap() {
         try (FileReader reader = new FileReader(mapPath)) {
 
-            tilesetOffset.put(CastleBones, 810);
-            tilesetOffset.put(DarkEdition, 306);
-            tilesetOffset.put(BloodTemple, 1930);
-            tilesetOffset.put(Glow1, 2447);
-            tilesetOffset.put(Glow2, 2285);
-            tilesetOffset.put(Victorian, 594);
-            tilesetOffset.put(Spikes, 2186);
+            tilesetOffset.put(CastleBones, 504);
+            tilesetOffset.put(DarkEdition, 36);
+            tilesetOffset.put(BloodTemple, 1624);
+            tilesetOffset.put(Glow1, 1988);
+            tilesetOffset.put(Glow2, 1907);
+            tilesetOffset.put(Victorian, 324);
+            tilesetOffset.put(Spikes, 1880);
 
             JSONObject mapData = (JSONObject) parser.parse(reader);
             mapWidth = ((Long) mapData.get("width")).intValue();
