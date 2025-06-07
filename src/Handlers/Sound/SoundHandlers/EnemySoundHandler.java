@@ -173,6 +173,152 @@
      }
 
      /**
+      * Unmutes all enemy sounds
+      */
+     public static void unmuteAll() {
+         ghoulSteps.setVolume(1.0f);
+         ghoulAttack.setVolume(1.0f);
+         ghoulDeath.setVolume(1.0f);
+         ghoulHit.setVolume(1.0f);
+
+         summonerSteps.setVolume(1.0f);
+         summonerAttack.setVolume(1.0f);
+         summonerDeath.setVolume(1.0f);
+         summonerHit.setVolume(1.0f);
+         summonerSlam.setVolume(1.0f);
+         summonerSummon.setVolume(1.0f);
+
+         skeletonSteps.setVolume(1.0f);
+         skeletonAttack.setVolume(1.0f);
+         skeletonDeath.setVolume(1.0f);
+         skeletonHit.setVolume(1.0f);
+         skeletonSpawnSound.setVolume(1.0f);
+
+         kingSteps.setVolume(1.0f);
+         kingHit.setVolume(1.0f);
+         kingDeath.setVolume(1.0f);
+
+         kingDodgeDash.setVolume(1.0f);
+         kingDodgeSlash1.setVolume(1.0f);
+         kingDodgeSlash2.setVolume(1.0f);
+         kingDodgeStepBack.setVolume(1.0f);
+         kingFinisherCharge.setVolume(1.0f);
+         kingFinisherHitGround.setVolume(1.0f);
+         kingFinisherSwing.setVolume(1.0f);
+         kingHeartAppear.setVolume(1.0f);
+         kingHeartKingAppear.setVolume(1.0f);
+         kingHeartKingSink.setVolume(1.0f);
+         kingHeartSplash.setVolume(1.0f);
+         kingSlamHitGround.setVolume(1.0f);
+         kingSlamJump.setVolume(1.0f);
+         kingSlamSwing.setVolume(1.0f);
+         kingSlashSwing1.setVolume(1.0f);
+         kingSlashSwing2.setVolume(1.0f);
+         kingStabSlice.setVolume(1.0f);
+         kingStabStab.setVolume(1.0f);
+         kingStabWarn.setVolume(1.0f);
+
+         botSteps.setVolume(1.0f);
+         botStab.setVolume(1.0f);
+         botDeath.setVolume(1.0f);
+
+         shockerSteps.setVolume(1.0f);
+         shockerSwing1.setVolume(1.0f);
+         shockerSwing2.setVolume(1.0f);
+         shockerDeath.setVolume(1.0f);
+         shockerHitGround.setVolume(1.0f);
+         shockerHit.setVolume(1.0f);
+         shockerCharge.setVolume(1.0f);
+         shockerEnd.setVolume(1.0f);
+
+         hiveIdle.setVolume(1.0f);
+         hiveExplode.setVolume(1.0f);
+
+         waspDeath.setVolume(1.0f);
+         waspSting.setVolume(1.0f);
+         waspFly.setVolume(1.0f);
+         waspHit.setVolume(1.0f);
+
+         slicerSwing.setVolume(1.0f);
+         slicerHit.setVolume(1.0f);
+         slicerDeath.setVolume(1.0f);
+         slicerFootsteps.setVolume(1.0f);
+     }
+
+     /**
+      * Mutes all enemy sounds
+      */
+     public static void muteAll() {
+         ghoulSteps.setVolume(0f);
+         ghoulAttack.setVolume(0f);
+         ghoulDeath.setVolume(0f);
+         ghoulHit.setVolume(0f);
+
+         summonerSteps.setVolume(0f);
+         summonerAttack.setVolume(0f);
+         summonerDeath.setVolume(0f);
+         summonerHit.setVolume(0f);
+         summonerSlam.setVolume(0f);
+         summonerSummon.setVolume(0f);
+
+         skeletonSteps.setVolume(0f);
+         skeletonAttack.setVolume(0f);
+         skeletonDeath.setVolume(0f);
+         skeletonHit.setVolume(0f);
+         skeletonSpawnSound.setVolume(0f);
+
+         kingSteps.setVolume(0f);
+         kingHit.setVolume(0f);
+         kingDeath.setVolume(0f);
+
+         kingDodgeDash.setVolume(0f);
+         kingDodgeSlash1.setVolume(0f);
+         kingDodgeSlash2.setVolume(0f);
+         kingDodgeStepBack.setVolume(0f);
+         kingFinisherCharge.setVolume(0f);
+         kingFinisherHitGround.setVolume(0f);
+         kingFinisherSwing.setVolume(0f);
+         kingHeartAppear.setVolume(0f);
+         kingHeartKingAppear.setVolume(0f);
+         kingHeartKingSink.setVolume(0f);
+         kingHeartSplash.setVolume(0f);
+         kingSlamHitGround.setVolume(0f);
+         kingSlamJump.setVolume(0f);
+         kingSlamSwing.setVolume(0f);
+         kingSlashSwing1.setVolume(0f);
+         kingSlashSwing2.setVolume(0f);
+         kingStabSlice.setVolume(0f);
+         kingStabStab.setVolume(0f);
+         kingStabWarn.setVolume(0f);
+
+         botSteps.setVolume(0f);
+         botStab.setVolume(0f);
+         botDeath.setVolume(0f);
+
+         shockerSteps.setVolume(0f);
+         shockerSwing1.setVolume(0f);
+         shockerSwing2.setVolume(0f);
+         shockerDeath.setVolume(0f);
+         shockerHitGround.setVolume(0f);
+         shockerHit.setVolume(0f);
+         shockerCharge.setVolume(0f);
+         shockerEnd.setVolume(0f);
+
+         hiveIdle.setVolume(0f);
+         hiveExplode.setVolume(0f);
+
+         waspDeath.setVolume(0f);
+         waspSting.setVolume(0f);
+         waspFly.setVolume(0f);
+         waspHit.setVolume(0f);
+
+         slicerSwing.setVolume(0f);
+         slicerHit.setVolume(0f);
+         slicerDeath.setVolume(0f);
+         slicerFootsteps.setVolume(0f);
+     }
+
+     /**
       * Plays Slicer hit sound
       */
      public static void slicerHit() {

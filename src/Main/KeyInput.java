@@ -1,6 +1,6 @@
 /*
  * KeyInput.java
- * Leo Bogaert
+ * Leo Bogaert, Benjamin Weir
  * May 7, 2025,
  * Detects key input
  */

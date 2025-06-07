@@ -283,4 +283,14 @@ public class BackgroundMusicHandler {
     public Sound getMusicMusicDarkMain() {
         return musicDarkMain;
     }
+
+    public void muteCurrent() {
+        Sound current = getMusic(currentMusicType, currentMusicState);
+        current.setVolume(0f);
+    }
+
+    public void unmuteCurrent() {
+        Sound current = getMusic(currentMusicType, currentMusicState);
+        current.setVolume(1f);
+    }
 }

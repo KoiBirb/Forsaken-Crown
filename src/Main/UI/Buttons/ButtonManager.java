@@ -1,13 +1,12 @@
 /*
  * ButtonManager.java
- * Leo Bogaert
+ * Leo Bogaert, Benjamin Weir
  * May 20, 2025,
  * Handles menu buttons
  */
 
 package Main.UI.Buttons;
 
-import Handlers.Sound.SoundHandlers.BackgroundMusicHandler;
 import Handlers.Sound.SoundHandlers.PlayerSoundHandler;
 import Main.Main;
 import Main.Panels.EndPanel;
@@ -199,6 +198,10 @@ public class ButtonManager {
             keyI.uPressed = false;
         }
     }
+
+    /**
+     * Updates the paused buttons
+     */
     private void updatePaused() {
 
         // Selection logic

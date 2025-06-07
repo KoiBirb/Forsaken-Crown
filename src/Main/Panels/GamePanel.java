@@ -1,6 +1,6 @@
 /*
  * GamePanel.java
- * Leo Bogaert
+ * Leo Bogaert, Benjamin Weir
  * May 7, 2025,
  * Main game loop
  */
@@ -13,6 +13,7 @@ import Entitys.Player;
 import Handlers.CollisionHandler;
 import Handlers.ImageHandler;
 import Handlers.Sound.SoundHandlers.BackgroundMusicHandler;
+import Handlers.Sound.SoundHandlers.EnemySoundHandler;
 import Handlers.Vector2;
 import Handlers.EnemySpawnHandler;
 import Main.UI.UIManager;
@@ -142,10 +143,22 @@ public class GamePanel extends JPanel implements Runnable{
      */
     public void update() {
         ui.update();
-        if(keyI.lPressed == true){
+
+        if(keyI.lPressed){
+
+            if(isPaused){
+                backgroundMusic.unmuteCurrent();
+                EnemySoundHandler.unmuteAll();
+            } else {
+                backgroundMusic.muteCurrent();
+                EnemySoundHandler.muteAll();
+            }
+
             isPaused = !isPaused;
             keyI.lPressed = false;
+
         }
+
         if (!isPaused) {
             if (player != null) {
                 player.update();

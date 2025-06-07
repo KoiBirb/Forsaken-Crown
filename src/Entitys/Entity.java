@@ -18,14 +18,13 @@ public abstract class Entity {
     protected boolean isColliding, jump, onGround, continuousJump;
 
     protected double speed;
-    public final int width;
-    public final int height;
+    public final int width, height;
     protected final int maxHealth, maxMana;
     protected int currentHealth, currentMana;
     protected int solidAreaOffsetX, solidAreaOffsetY;
     protected boolean knockedBack;
-
     protected boolean hit;
+
     private Point currentTrap;
     protected Rectangle solidArea;
     protected String direction;
@@ -85,20 +84,32 @@ public abstract class Entity {
         solidArea.setLocation((int) position.x + solidAreaOffsetX, (int)position.y + solidAreaOffsetY);
     }
 
+    /**
+     * Check if the entity is falling
+     * @return true if falling, false otherwise
+     */
     public boolean getFalling(){
         return velocity.y > 2;
     }
 
+    /**
+     * Get the current trap point
+     * @return Point current trap
+     */
     public Point getCurrentTrap() {
         return currentTrap;
     }
 
+    /**
+     * Set the current trap point
+     * @param currentTrap Point to set as the current trap
+     */
     public void setCurrentTrap(Point currentTrap) {
         this.currentTrap = currentTrap;
     }
 
     /**
-     * Draw the entity
+     * Draw the entity hitbox
      * @param g2 Graphics object to draw on
      */
     public void draw(Graphics2D g2) {
@@ -129,14 +140,6 @@ public abstract class Entity {
     }
 
     /**
-     * Sets the players knockback status
-     * @param knockback true if knockback, false otherwise
-     */
-    public void setKnockback(boolean knockback) {
-        this.knockedBack = knockback;
-    }
-
-    /**
      * Gets the entity's velocity vector
      * @return Vector2 velocity
      */
@@ -160,6 +163,10 @@ public abstract class Entity {
         return direction;
     }
 
+    /**
+     * Gets the center point of an entity
+     * @return Vector2 center point
+     */
     public Vector2 getSolidAreaCenter() {
         return new Vector2(
                 solidArea.x + solidArea.width / 2.0,
@@ -167,6 +174,10 @@ public abstract class Entity {
         );
     }
 
+    /**
+     * Gets the x center point of an entity's solid area
+     * @return Vector2 x center point
+     */
     public Vector2 getSolidAreaXCenter() {
         return new Vector2(
                 solidArea.x + solidArea.width / 2.0,
@@ -198,35 +209,11 @@ public abstract class Entity {
     }
 
     /**
-     * Gets the x component of the entity's solid area
-     * @return double x component
-     */
-    public double getSolidAreaOffsetX(){
-        return solidAreaOffsetX;
-    }
-
-    /**
      * Gets the y component of the entity's solid area
      * @return double y component
      */
     public double getSolidAreaOffsetY(){
         return solidAreaOffsetY;
-    }
-
-    /**
-     * returns the entity's max health
-     * @return int max health
-     */
-    public int getMaxHealth() {
-        return maxHealth;
-    }
-
-    /**
-     * Gets entity's jumping state
-     * @return true if jumping, false otherwise
-     */
-    public boolean isjumping() {
-        return jump;
     }
 
     /**
@@ -253,10 +240,18 @@ public abstract class Entity {
         return onGround;
     }
 
+    /**
+     * Returns the entity hit state
+     * @return boolean hit true if hit, false otherwise
+     */
     public boolean isHit() {
         return hit;
     }
 
+    /**
+     * Gets the entity death state
+     * @return boolean true if dead, false otherwise
+     */
     public boolean isDead() {
         return currentHealth <= 0;
     }

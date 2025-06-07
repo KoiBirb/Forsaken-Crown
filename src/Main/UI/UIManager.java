@@ -1,6 +1,6 @@
 /*
  * UIManager.java
- * Leo Bogaert
+ * Leo Bogaert, Benjamin Weir
  * May 7, 2025,
  * Manages UI elements
  */
@@ -13,7 +13,6 @@ import Main.UI.Buttons.ButtonManager;
 
 import java.awt.*;
 
-import static Main.Main.gamePanel;
 import static Main.Main.gameState;
 import static Main.Panels.GamePanel.screenHeight;
 import static Main.Panels.GamePanel.screenWidth;
@@ -74,7 +73,7 @@ public class UIManager {
             healthBar.draw(g2);
             manaBar.draw(g2);
             if(GamePanel.isPaused) {
-                g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.8f));
+                g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
                 g2.fillRect(0, 0, (int) screenWidth, (int) screenHeight);
                 g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
                 buttonManager.draw(g2);
