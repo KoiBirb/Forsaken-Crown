@@ -11,7 +11,7 @@ import java.awt.event.KeyListener;
 
 public class KeyInput implements KeyListener {
 
-    public boolean wPressed, sPressed, aPressed, dPressed, uPressed, jPressed, iPressed, kPressed, oPressed;
+    public boolean wPressed, sPressed, aPressed, dPressed, uPressed, jPressed, iPressed, kPressed, oPressed, lPressed;
 
     /**
      * Find keys typed
@@ -56,6 +56,9 @@ public class KeyInput implements KeyListener {
         if(code == KeyEvent.VK_O){
             oPressed = true;
         }
+        if(code == KeyEvent.VK_L){
+            lPressed = true;
+        }
     }
 
     /**
@@ -93,6 +96,9 @@ public class KeyInput implements KeyListener {
         }
         if(code == KeyEvent.VK_O){
             oPressed = false;
+        }
+        if(code == KeyEvent.VK_L){
+            lPressed = false;
         }
     }
 }

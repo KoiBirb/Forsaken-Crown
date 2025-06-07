@@ -49,6 +49,7 @@ public class GamePanel extends JPanel implements Runnable{
     public static boolean fading = false, fadeIn = true;
     private static double fadeAlpha = 0.0;
     private int fadeDelay = 10, fadeDelayCounter = 0;
+    public static boolean isPaused = false;
 
     public static Thread gameThread;
 
@@ -131,70 +132,75 @@ public class GamePanel extends JPanel implements Runnable{
      * Update game objects
      */
     public void update() {
-        if (player != null) {
-            player.update();
-            tileMap.update();
+        if(keyI.lPressed == true){
+            isPaused = !isPaused;
+            keyI.lPressed = false;
         }
-
-        backgroundMusic.update();
-        EnemySpawnHandler.updateAll();
-        checkpointManager.update();
-        ui.update();
-
-        for (int i = 0; i < playerAttacks.size(); i++) {
-            playerAttacks.get(i).update();
-        }
-
-        for (int i = 0; i < enemyAttacks.size(); i++) {
-            enemyAttacks.get(i).update();
-        }
-
-        for (int i = 0; i < effects.size(); i++) {
-            effects.get(i).update();
-        }
-
-        for (int i = 0; i < activeEnemies.size(); i++) {
-            if (!enemies.contains(activeEnemies.get(i))){
-                activeEnemies.remove(activeEnemies.get(i));
+        if (!isPaused) {
+            if (player != null) {
+                player.update();
+                tileMap.update();
             }
-        }
 
-        for (int i = 0; i < enemies.size(); i++) {
-            for (int j = 0; j < playerAttacks.size(); j++) {
-                if (CollisionHandler.attackCollision(playerAttacks.get(j), enemies.get(i))) {
-                    enemies.get(i).hit(playerAttacks.get(j).getDamage(), 3, 3);
+            backgroundMusic.update();
+            EnemySpawnHandler.updateAll();
+            checkpointManager.update();
+            ui.update();
+
+            for (int i = 0; i < playerAttacks.size(); i++) {
+                playerAttacks.get(i).update();
+            }
+
+            for (int i = 0; i < enemyAttacks.size(); i++) {
+                enemyAttacks.get(i).update();
+            }
+
+            for (int i = 0; i < effects.size(); i++) {
+                effects.get(i).update();
+            }
+
+            for (int i = 0; i < activeEnemies.size(); i++) {
+                if (!enemies.contains(activeEnemies.get(i))) {
+                    activeEnemies.remove(activeEnemies.get(i));
                 }
             }
-        }
 
-        for (int j = 0; j < enemyAttacks.size(); j++) {
-            if (CollisionHandler.attackCollision(enemyAttacks.get(j), player)) {
-                player.hit(enemyAttacks.get(j).getDamage(), 0, 0);
-            }
-        }
-
-        if (fading) {
-            if (fadeIn) {
-                fadeAlpha += 0.09;
-                if (fadeAlpha >= 1.0) {
-                    fadeAlpha = 1.0;
-                    fadeIn = false;
-                    fadeDelayCounter = fadeDelay;
-                    tileMap.updatePlayerRoom();
+            for (int i = 0; i < enemies.size(); i++) {
+                for (int j = 0; j < playerAttacks.size(); j++) {
+                    if (CollisionHandler.attackCollision(playerAttacks.get(j), enemies.get(i))) {
+                        enemies.get(i).hit(playerAttacks.get(j).getDamage(), 3, 3);
+                    }
                 }
-            } else if (fadeDelayCounter > 0) {
-                fadeDelayCounter--;
-            } else {
-                fadeAlpha -= 0.09;
-                if (fadeAlpha <= 0.0) {
-                    fadeAlpha = 0.0;
-                    fading = false;
+            }
 
+            for (int j = 0; j < enemyAttacks.size(); j++) {
+                if (CollisionHandler.attackCollision(enemyAttacks.get(j), player)) {
+                    player.hit(enemyAttacks.get(j).getDamage(), 0, 0);
+                }
+            }
+
+            if (fading) {
+                if (fadeIn) {
+                    fadeAlpha += 0.09;
+                    if (fadeAlpha >= 1.0) {
+                        fadeAlpha = 1.0;
+                        fadeIn = false;
+                        fadeDelayCounter = fadeDelay;
+                        tileMap.updatePlayerRoom();
+                    }
+                } else if (fadeDelayCounter > 0) {
+                    fadeDelayCounter--;
+                } else {
+                    fadeAlpha -= 0.09;
+                    if (fadeAlpha <= 0.0) {
+                        fadeAlpha = 0.0;
+                        fading = false;
+
+                    }
                 }
             }
         }
     }
-
 
     /**
      * Draw game objects
@@ -206,7 +212,6 @@ public class GamePanel extends JPanel implements Runnable{
         Graphics2D g2 = (Graphics2D) g;
 
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
         if (player != null){
             tileMap.drawMap(g2);
             checkpointManager.draw(g2);
@@ -241,7 +246,11 @@ public class GamePanel extends JPanel implements Runnable{
             g2.setColor(new Color(0, 0, 0, (float) fadeAlpha));
             g2.fillRect(0, 0, (int) screenWidth, (int) screenHeight);
         }
-
-        g2.dispose();
+        if(isPaused) {
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.8f));
+            g2.fillRect(0, 0, (int) screenWidth, (int) screenHeight);
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
+        }
+            g2.dispose();
     }
 }

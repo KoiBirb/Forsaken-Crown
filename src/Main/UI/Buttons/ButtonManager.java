@@ -18,13 +18,14 @@ import java.awt.*;
 import static Main.Main.keyI;
 
 public class ButtonManager {
-
+    private enum ButtonState {MENU,PAUSED,END};
+    private ButtonState currentState;
     private static final float SELECTED_SCALE = 1.15f;
     private static final float NORMAL_SCALE = 1.0f;
     private static final int SHIFT_PIXELS = 20;
     private static final float MOVEMENT_SPEED = 0.15f;
 
-    private final Button[] menuButtons, endButtons;
+    private final Button[] menuButtons, endButtons, pauseButtons;
     private final float[] scales, shifts;
     private final int[] initialX;
 
@@ -52,6 +53,14 @@ public class ButtonManager {
                 new Button((int) (GamePanel.screenWidth * (4.0/5) - 169), (int) (GamePanel.screenHeight * (4.6/6.2)), 120,
                         "Images/UI/Words/Words With BG/UI - Words17.png")
         };
+        pauseButtons = new Button[]{
+                new Button((int) (GamePanel.screenWidth/5) - 169, (int) (GamePanel.screenHeight * (4.6/6.2)), 120,
+                        "Images/UI/Words/Words With BG/UI - Words3.png"),
+                new Button((int) (GamePanel.screenWidth/2) - 169, (int) (GamePanel.screenHeight * (4.6/6.2)), 120,
+                        "Images/UI/Words/Words With BG/UI - Words10.png"),
+                new Button((int) (GamePanel.screenWidth * (4.0/5) - 169), (int) (GamePanel.screenHeight * (4.6/6.2)), 120,
+                        "Images/UI/Words/Words With BG/UI - Words16.png")
+        };
 
         // initial positions and scales
         scales = new float[3];
@@ -72,11 +81,26 @@ public class ButtonManager {
         switch (Main.gameState) {
 
             case MENU:
-                updateMenu();
+                currentState = ButtonState.MENU;
                 break;
 
             case DEATH, VICTORY:
+                currentState = ButtonState.END;
+                break;
+        }
+        if(GamePanel.isPaused){
+            currentState = ButtonState.PAUSED;
+        }
+        switch (currentState){
+
+            case ButtonState.MENU:
+                updateMenu();
+                break;
+            case ButtonState.END:
                 updateEnd();
+                break;
+            case ButtonState.PAUSED:
+                updatePaused();
                 break;
         }
     }
@@ -173,6 +197,46 @@ public class ButtonManager {
             keyI.uPressed = false;
         }
     }
+    private void updatePaused() {
+
+        // Selection logic
+        if (keyI.aPressed) {
+            selectLeft();
+            PlayerSoundHandler.UIHover();
+            keyI.aPressed = false;
+        }
+        if (keyI.dPressed) {
+            selectRight();
+            PlayerSoundHandler.UIHover();
+            keyI.dPressed = false;
+        }
+
+        for (int i = 0; i < pauseButtons.length; i++) {
+            float targetScale = (i == selectedIndex) ? SELECTED_SCALE : NORMAL_SCALE;
+            float targetShift = 0;
+            if (i != selectedIndex) {
+                targetShift = (initialX[i] < initialX[selectedIndex]) ? -SHIFT_PIXELS : SHIFT_PIXELS;
+            }
+            scales[i] += (targetScale - scales[i]) * MOVEMENT_SPEED;
+            shifts[i] += (targetShift - shifts[i]) * MOVEMENT_SPEED;
+        }
+
+        // Action Logic
+        if (keyI.uPressed) {
+            switch (selectedIndex) {
+                case 0:
+                    System.exit(0);
+                    break;
+                case 1:
+                    Main.switchToMenu();
+                    break;
+                case 2:
+                    break;
+            }
+            PlayerSoundHandler.UIConfirm();
+            keyI.uPressed = false;
+        }
+    }
 
     /**
      * Selects the next left button
@@ -202,7 +266,20 @@ public class ButtonManager {
      */
     public void draw(Graphics2D g2) {
 
-        Button[] buttons = (Main.gameState == Main.GameState.MENU) ? menuButtons : endButtons;
+        Button[] buttons = new Button[3];
+
+        switch (currentState){
+
+            case ButtonState.MENU:
+                buttons = menuButtons;
+                break;
+            case ButtonState.END:
+                buttons = endButtons;
+                break;
+            case ButtonState.PAUSED:
+                buttons = pauseButtons;
+                break;
+        }
 
         for (int i = 0; i < buttons.length; i++) {
             Button btn = buttons[i];
