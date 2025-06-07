@@ -11,6 +11,7 @@ import Attacks.MeleeAttack;
 import Entitys.Enemies.Enemy;
 import Entitys.Player;
 import Handlers.CollisionHandler;
+import Handlers.ImageHandler;
 import Handlers.Sound.SoundHandlers.BackgroundMusicHandler;
 import Handlers.Vector2;
 import Handlers.EnemySpawnHandler;
@@ -21,6 +22,7 @@ import Map.TiledMap;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.VolatileImage;
 import java.util.ArrayList;
 
 import static Main.Main.keyI;
@@ -37,11 +39,18 @@ public class GamePanel extends JPanel implements Runnable{
     public static CheckpointManager checkpointManager;
     public static BackgroundMusicHandler backgroundMusic = new BackgroundMusicHandler();
 
+    private float helpAlpha = 0f, titleAlpha = 1f;
+    private static final float movementFactor = 0.15f;
+    public static boolean help = false;
+
     public static ArrayList<MeleeAttack> playerAttacks = new ArrayList<>();
     public static ArrayList<MeleeAttack> enemyAttacks = new ArrayList<>();
     public static ArrayList<Enemy> enemies = new ArrayList<>();
     public static ArrayList<Effect> effects = new ArrayList<>();
     public static ArrayList<Enemy> activeEnemies = new ArrayList<>();
+
+    private VolatileImage title = ImageHandler.loadImage("Images/UI/Words/paused.png");
+    private VolatileImage Help = ImageHandler.loadImage("Images/UI/Words/help.png");
 
     public static long initialTime;
     public static int points;
@@ -132,6 +141,7 @@ public class GamePanel extends JPanel implements Runnable{
      * Update game objects
      */
     public void update() {
+        ui.update();
         if(keyI.lPressed == true){
             isPaused = !isPaused;
             keyI.lPressed = false;
@@ -145,7 +155,6 @@ public class GamePanel extends JPanel implements Runnable{
             backgroundMusic.update();
             EnemySpawnHandler.updateAll();
             checkpointManager.update();
-            ui.update();
 
             for (int i = 0; i < playerAttacks.size(); i++) {
                 playerAttacks.get(i).update();
@@ -199,6 +208,13 @@ public class GamePanel extends JPanel implements Runnable{
                     }
                 }
             }
+        } else {
+
+            float targetHelpAlpha = help ? 1f : 0f;
+            helpAlpha += (targetHelpAlpha - helpAlpha) * movementFactor;
+
+            float targetTitleAlpha = 1f - helpAlpha;
+            titleAlpha += (targetTitleAlpha - titleAlpha) * movementFactor;
         }
     }
 
@@ -247,9 +263,25 @@ public class GamePanel extends JPanel implements Runnable{
             g2.fillRect(0, 0, (int) screenWidth, (int) screenHeight);
         }
         if(isPaused) {
-            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.8f));
-            g2.fillRect(0, 0, (int) screenWidth, (int) screenHeight);
-            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
+            ui.draw(g2);
+            if (helpAlpha > 0.01f) {
+                Composite old = g2.getComposite();
+                g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, helpAlpha));
+                g2.drawImage(Help, (int) (screenWidth / 2 - Help.getWidth() * 1.5),
+                        150, (int) (screenWidth / 2 + Help.getWidth() * 1.5),
+                        150 + (Help.getHeight() * 3), 0, 0,
+                        Help.getWidth(), Help.getHeight(), null);
+                g2.setComposite(old);
+            }
+            if (titleAlpha > 0.01f) {
+                Composite old = g2.getComposite();
+                g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, titleAlpha));
+                g2.drawImage(title, (int) (screenWidth / 2 - title.getWidth() * 2.5),
+                        150, (int) (screenWidth / 2 + title.getWidth() * 2.5),
+                        150 + (int) (title.getHeight() * 5), 0, 0,
+                        title.getWidth(), title.getHeight(), null);
+                g2.setComposite(old);
+            }
         }
             g2.dispose();
     }

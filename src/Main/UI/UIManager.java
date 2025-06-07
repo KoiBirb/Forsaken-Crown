@@ -8,11 +8,15 @@ package Main.UI;
 
 import Entitys.Player;
 import Main.Main;
+import Main.Panels.GamePanel;
 import Main.UI.Buttons.ButtonManager;
 
 import java.awt.*;
 
+import static Main.Main.gamePanel;
 import static Main.Main.gameState;
+import static Main.Panels.GamePanel.screenHeight;
+import static Main.Panels.GamePanel.screenWidth;
 
 public class UIManager {
 
@@ -43,6 +47,10 @@ public class UIManager {
         if (gameState == Main.GameState.GAME) {
             healthBar.update();
             manaBar.update();
+            if (GamePanel.isPaused){
+                buttonManager.update();
+                selectedButton = buttonManager.getSelectedIndex();
+            }
         } else {
             buttonManager.update();
             selectedButton = buttonManager.getSelectedIndex();
@@ -65,6 +73,12 @@ public class UIManager {
         if (gameState == Main.GameState.GAME) {
             healthBar.draw(g2);
             manaBar.draw(g2);
+            if(GamePanel.isPaused) {
+                g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.8f));
+                g2.fillRect(0, 0, (int) screenWidth, (int) screenHeight);
+                g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
+                buttonManager.draw(g2);
+            }
         } else {
             buttonManager.draw(g2);
         }

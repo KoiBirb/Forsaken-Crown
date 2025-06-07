@@ -7,6 +7,7 @@
 
 package Main.UI.Buttons;
 
+import Handlers.Sound.SoundHandlers.BackgroundMusicHandler;
 import Handlers.Sound.SoundHandlers.PlayerSoundHandler;
 import Main.Main;
 import Main.Panels.EndPanel;
@@ -19,7 +20,7 @@ import static Main.Main.keyI;
 
 public class ButtonManager {
     private enum ButtonState {MENU,PAUSED,END};
-    private ButtonState currentState;
+    private ButtonState currentState = ButtonState.MENU;
     private static final float SELECTED_SCALE = 1.15f;
     private static final float NORMAL_SCALE = 1.0f;
     private static final int SHIFT_PIXELS = 20;
@@ -141,6 +142,7 @@ public class ButtonManager {
                     System.exit(0);
                     break;
                 case 1:
+                    GamePanel.backgroundMusic.fadeIn(GamePanel.backgroundMusic.getMusicMusicDarkMain(),1000);
                     Main.switchToGame();
                     break;
                 case 2:
@@ -228,9 +230,12 @@ public class ButtonManager {
                     System.exit(0);
                     break;
                 case 1:
+                    GamePanel.isPaused = false;
+                    GamePanel.backgroundMusic.fadeOut(1000);
                     Main.switchToMenu();
                     break;
                 case 2:
+                    GamePanel.help = !GamePanel.help;
                     break;
             }
             PlayerSoundHandler.UIConfirm();
