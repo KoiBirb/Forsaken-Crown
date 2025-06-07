@@ -279,4 +279,8 @@ public class BackgroundMusicHandler {
            case BOSS -> musicBossMain;
        };
     }
+
+    public Sound getMusicMusicDarkMain() {
+        return musicDarkMain;
+    }
 }
