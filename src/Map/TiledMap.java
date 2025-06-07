@@ -31,39 +31,44 @@ import static Main.Panels.GamePanel.*;
 
 public class TiledMap {
 
-    // File reading
     private final ArrayList<VolatileImage> tileSets;
+    private ArrayList<VolatileImage[]> backgrounds;
+    private final ArrayList<int[][]> mapLayers;
+    private final HashMap<VolatileImage, Integer> tilesetOffset;
+    private JSONArray roomData;
+    public int[][] collidablesTiles;
+
     private final String mapPath;
     private final JSONParser parser;
-    private final ArrayList<int[][]> mapLayers;
-    private int mapWidth;
-    private int mapHeight;
+
+    private int mapWidth, mapHeight;
     private static int tileSetTileSize;
-    private JSONArray roomData;
-    private ArrayList<VolatileImage[]> backgrounds;
-    private final HashMap<VolatileImage, Integer> tilesetOffset;
+
     private int[][] roomIds;
     private int nextRoomId = 1;
     private int activeRoomId = -1;
 
-    // Camera room switching
+
     private final int CAMERADELAY = 10;
     private int cameraDelayCounter,oldRoomWidth,oldRoomHeight;
     private boolean roomChanged;
+    private Vector2 cameraPosition;
+    private static Vector2 cameraShakeOffset = new Vector2(0, 0);
+    private static int shakeDuration = 0;
+    private static final Random random = new Random();
 
     private final double SCALE = GamePanel.scale;
-    private Vector2 cameraPosition;
-
-    // Room data
     private Vector2 roomScreenPos;
     private int roomWidth,roomHeight;
     private int minX, maxX, minY, maxY;
 
-    public int[][] collidablesTiles;
-
-    private static Vector2 cameraShakeOffset = new Vector2(0, 0);
-    private static int shakeDuration = 0;
-    private static final Random random = new Random();
+    private static final VolatileImage CastleBones = ImageHandler.loadImage("Assets/Images/Tilesets/Map/Castle of Bones Tileset.png");
+    private static final VolatileImage DarkEdition = ImageHandler.loadImage("Assets/Images/Tilesets/Map/DARK Edition Tileset No background.png");
+    private static final VolatileImage BloodTemple = ImageHandler.loadImage("Assets/Images/Tilesets/Map/Blood Temple Tileset.png");
+    private static final VolatileImage Glow1 = ImageHandler.loadImage("Assets/Images/Tilesets/Map/pixil-frame-0 (6).png");
+    private static final VolatileImage Glow2 = ImageHandler.loadImage("Assets/Images/Tilesets/Map/pixil-frame-0 (5).png");
+    private static final VolatileImage Victorian = ImageHandler.loadImage("Assets/Images/Tilesets/Map/victorian tileset.png");
+    private static final VolatileImage Spikes = ImageHandler.loadImage("Assets/Images/Traps/Spikes 48x16.png");
 
     /**
      * Constructor
@@ -84,33 +89,33 @@ public class TiledMap {
         mapLayers = new ArrayList<>();
         tilesetOffset = new HashMap<>();
 
-        // Add each tileset image to the list
-        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Castle of Bones Tileset.png"));
-        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Castle of Bones Tileset.png"));
-        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/DARK Edition Tileset No background.png"));
-        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/DARK Edition Tileset No background.png"));
-        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Blood Temple Tileset.png"));
-        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/pixil-frame-0 (6).png"));
-        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/pixil-frame-0 (5).png"));
-        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/pixil-frame-0.png"));
-        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/DARK Edition Tileset No background.png"));
-        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/DARK Edition Tileset No background.png"));
-        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/DARK Edition Tileset No background.png"));
-        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/DARK Edition Tileset No background.png"));
-        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/DARK Edition Tileset No background.png"));
-        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Blood Temple Tileset.png"));
-        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Castle of Bones Tileset.png"));
-        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Castle of Bones Tileset.png"));
-        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Castle of Bones Tileset.png"));
-        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Castle of Bones Tileset.png"));
-        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Castle of Bones Tileset.png"));
-        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/victorian tileset.png"));
-        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/victorian tileset.png"));
-        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Blood Temple Tileset.png"));
-        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Blood Temple Tileset.png"));
-        tileSets.add(ImageHandler.loadImage("Assets/Images/Tilesets/Map/Blood Temple Tileset.png"));
-        tileSets.add(ImageHandler.loadImage("Assets/Images/Traps/Spikes 48x16.png"));
-        tileSets.add(ImageHandler.loadImage("Assets/Images/Traps/Spikes 48x16.png"));
+
+        tileSets.add(CastleBones);
+        tileSets.add(CastleBones);
+        tileSets.add(DarkEdition);
+        tileSets.add(DarkEdition);
+        tileSets.add(BloodTemple);
+        tileSets.add(Glow1);
+        tileSets.add(Glow2);
+        tileSets.add(null);
+        tileSets.add(DarkEdition);
+        tileSets.add(DarkEdition);
+        tileSets.add(DarkEdition);
+        tileSets.add(DarkEdition);
+        tileSets.add(DarkEdition);
+        tileSets.add(BloodTemple);
+        tileSets.add(CastleBones);
+        tileSets.add(CastleBones);
+        tileSets.add(CastleBones);
+        tileSets.add(CastleBones);
+        tileSets.add(CastleBones);
+        tileSets.add(Victorian);
+        tileSets.add(Victorian);
+        tileSets.add(BloodTemple);
+        tileSets.add(BloodTemple);
+        tileSets.add(BloodTemple);
+        tileSets.add(Spikes);
+        tileSets.add(Spikes);
 
         loadMap();
         loadBackgrounds();
@@ -214,32 +219,13 @@ public class TiledMap {
     private void loadMap() {
         try (FileReader reader = new FileReader(mapPath)) {
 
-            tilesetOffset.put(tileSets.get(0), 810);
-            tilesetOffset.put(tileSets.get(1), 810);
-            tilesetOffset.put(tileSets.get(2), 306);
-            tilesetOffset.put(tileSets.get(3), 306);
-            tilesetOffset.put (tileSets.get(4), 1930);
-            tilesetOffset.put(tileSets.get(5), 2447);
-            tilesetOffset.put(tileSets.get(6), 2285);
-            tilesetOffset.put(tileSets.get(7), 0);
-            tilesetOffset.put(tileSets.get(8), 306);
-            tilesetOffset.put(tileSets.get(9), 306);
-            tilesetOffset.put(tileSets.get(10), 306);
-            tilesetOffset.put(tileSets.get(11), 306);
-            tilesetOffset.put(tileSets.get(12), 306);
-            tilesetOffset.put(tileSets.get(13), 1930);
-            tilesetOffset.put(tileSets.get(14), 810);
-            tilesetOffset.put(tileSets.get(15), 810);
-            tilesetOffset.put(tileSets.get(16), 810);
-            tilesetOffset.put(tileSets.get(17), 810);
-            tilesetOffset.put(tileSets.get(18), 810);
-            tilesetOffset.put(tileSets.get(19), 594);
-            tilesetOffset.put(tileSets.get(20), 594);
-            tilesetOffset.put (tileSets.get(21), 1930);
-            tilesetOffset.put (tileSets.get(22), 1930);
-            tilesetOffset.put (tileSets.get(23), 1930);
-            tilesetOffset.put(tileSets.get(24), 2186);
-            tilesetOffset.put(tileSets.get(25), 2186);
+            tilesetOffset.put(CastleBones, 810);
+            tilesetOffset.put(DarkEdition, 306);
+            tilesetOffset.put(BloodTemple, 1930);
+            tilesetOffset.put(Glow1, 2447);
+            tilesetOffset.put(Glow2, 2285);
+            tilesetOffset.put(Victorian, 594);
+            tilesetOffset.put(Spikes, 2186);
 
             JSONObject mapData = (JSONObject) parser.parse(reader);
             mapWidth = ((Long) mapData.get("width")).intValue();
@@ -250,6 +236,7 @@ public class TiledMap {
             JSONObject layer;
             JSONArray data;
 
+            // tile layers
             for (int x = 0; x < 26; x++) {
                 layer = (JSONObject) layers.get(x);
                 data = (JSONArray) layer.get("data");
@@ -269,7 +256,6 @@ public class TiledMap {
             minX = mapWidth; minY = mapHeight;
             maxX = 0; maxY = 0;
 
-            // set initial room boundaries
             for (int i = 0; i < mapHeight; i++) {
                 for (int j = 0; j < mapWidth; j++) {
                     int tileId = ((Long) roomData.get(i * mapWidth + j)).intValue();
@@ -409,7 +395,6 @@ public class TiledMap {
 
         int cameraMargin = 400;
 
-        // check bounds
         if (roomWidth > GamePanel.screenWidth) {
             cameraX = (cameraX < roomScreenPos.x) ? Math.max(roomScreenPos.x - cameraMargin, cameraX) :
                     Math.min(cameraX, roomScreenPos.x + roomWidth - cameraMargin * 3.88);
@@ -612,6 +597,12 @@ public class TiledMap {
         return map.activeRoomId;
     }
 
+    /**
+     * Returns the room ID for the specified coordinates.
+     * @param x X coordinate
+     * @param y Y coordinate
+     * @return int value of room ID, or -1 if out of bounds or no room data
+     */
     public static int getRoomId(double x, double y) {
         int scaledTileSize = getScaledTileSize();
         int tileX = (int) ((x + 10) / scaledTileSize);
@@ -631,21 +622,6 @@ public class TiledMap {
      */
     public static int getScaledTileSize() {
         return (int) (tileSetTileSize * scale);
-    }
-
-    /**
-     * Determines if the given tile is passable
-     * @param gridX int value, x-coordinates of the grid
-     * @param gridY int value, y-coordinates of the grid
-     * @return boolean value of whether the tile is walkable
-     */
-    public boolean isWalkable(int gridX, int gridY) {
-        // if out of map bounds, false
-        if (gridX < 0 || gridX >= mapWidth || gridY < 0 || gridY >= mapHeight) {
-            return false;
-        }
-
-        return collidablesTiles[gridY][gridX] == 0;
     }
 
     /**
