@@ -94,15 +94,6 @@ public class Vector2 {
     }
 
     /**
-     * Calculates the dot product of this vector and another vector
-     * @param v Vector2 vector to be dotted
-     * @return double dot product
-     */
-    public double dot(Vector2 v) {
-        return this.x * v.x + this.y * v.y;
-    }
-
-    /**
      * Calculates the length of this vector
      * @return double length of the vector
      */

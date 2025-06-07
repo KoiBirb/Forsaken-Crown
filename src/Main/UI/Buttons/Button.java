@@ -11,12 +11,11 @@ import Handlers.ImageHandler;
 import Main.UI.UIElement;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.awt.image.VolatileImage;
 
 public class Button extends UIElement {
 
-    private boolean isHovered;
+    private final VolatileImage imageButton;
 
     /**
      * Constructor for Button
@@ -32,17 +31,8 @@ public class Button extends UIElement {
         this.y = y;
         this.height = height;
         this.width = (int) (height * 2.818181);
-        this.isHovered = false;
 
-        image = ImageHandler.loadImage(imagePath);
-    }
-
-    /**
-     * Sets hovered status
-     * @param hovered boolean to set hovered status
-     */
-    public void setHovered(boolean hovered) {
-        this.isHovered = hovered;
+        imageButton = ImageHandler.loadImage(imagePath);
     }
 
 
@@ -51,7 +41,7 @@ public class Button extends UIElement {
      * @param g2 Graphics2D object to draw on
      */
     public void draw(Graphics2D g2) {
-        g2.drawImage(image, x, y, width, height, null);
+        g2.drawImage(imageButton, x, y, width, height, null);
     }
 
     /**
@@ -59,7 +49,7 @@ public class Button extends UIElement {
      * @return BufferedImage of the button
      */
     public VolatileImage getImage() {
-        return image;
+        return imageButton;
     }
 
     /**

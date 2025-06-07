@@ -2,7 +2,7 @@
  * MenuPanel.java
  * Leo Bogaert
  * May 20, 2025,
- * Main menu
+ * Main menu panel
  */
 
 package Main.Panels;
@@ -18,14 +18,13 @@ import static Main.Main.keyI;
 
 public class MenuPanel extends JPanel implements Runnable{
 
-    // Screen settings
     public final static double screenWidth = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
     public final static double screenHeight = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
 
     private float helpAlpha = 0f, titleAlpha = 1f;
     private static final float movementFactor = 0.15f;
-    public static boolean help = false;
     private float parallaxSelected = 1.0f;
+    public static boolean help = false;
 
     public UIManager ui;
 
@@ -46,11 +45,11 @@ public class MenuPanel extends JPanel implements Runnable{
         this.setDoubleBuffered(true);
         this.setFocusable(true);
 
-        loadBackground();
+        loadImages();
     }
 
     /**
-     * Set up the game.
+     * Set up the panel
      */
     public void setup() {
         ui = new UIManager(null, false);
@@ -60,9 +59,9 @@ public class MenuPanel extends JPanel implements Runnable{
     }
 
     /**
-     * Load background images
+     * Loads images
      */
-    private void loadBackground(){
+    private void loadImages(){
         background = new VolatileImage[4];
 
         background[0] = ImageHandler.loadImage("Assets/Images/Backgrounds/The Circle Underground/layer 1.png");
@@ -76,7 +75,7 @@ public class MenuPanel extends JPanel implements Runnable{
     }
 
     /**
-     * Starts game thread
+     * Starts thread
      */
     public void startThread() {
         menuThread = new Thread(this);
@@ -88,39 +87,31 @@ public class MenuPanel extends JPanel implements Runnable{
      */
     @Override
     public void run() {
-        double drawInterval = 1000000000.0/60; // 60 FPS
-        double delta = 0;
+        final double drawInterval = 1_000_000_000.0 / 60.0;
         long lastTime = System.nanoTime();
-        long currentTime;
-        long timer = 0;
-        int drawCount = 0;
+        double delta = 0;
 
         while (menuThread != null) {
+            long now = System.nanoTime();
+            delta += (now - lastTime) / drawInterval;
+            lastTime = now;
 
-            currentTime = System.nanoTime();
-
-            delta += (currentTime - lastTime) / drawInterval;
-            timer += (currentTime - lastTime);
-            lastTime = currentTime;
-
-            if(delta >= 1) {
+            while (delta >= 1) {
                 update();
                 repaint();
                 delta--;
-                drawCount++;
             }
 
-            if(timer>= 1000000000) {
-                // FPS counter
-//                System.out.println("FPS:" + drawCount);
-                drawCount = 0;
-                timer = 0;
+            try {
+                Thread.sleep(2);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
             }
         }
     }
 
     /**
-     * Update game objects
+     * Updates the menu panel
      */
     public void update() {
         ui.update();
@@ -150,7 +141,7 @@ public class MenuPanel extends JPanel implements Runnable{
 
 
     /**
-     * Draw game objects
+     * Draw menu components
      * @param g Graphics object
      */
     public void paintComponent(Graphics g) {

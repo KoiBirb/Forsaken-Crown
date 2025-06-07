@@ -2,8 +2,9 @@
  * Checkpoint.java
  * Leo Bogaert
  * Jun 4, 2025,
- * Manages checkpoints in the game
+ * Handles the checkpoint logic and rendering
  */
+
 package Map.Checkpoints;
 
 import Handlers.ImageHandler;
@@ -18,10 +19,12 @@ import java.awt.image.VolatileImage;
 public class Checkpoint {
 
     private final Vector2 position;
-    private final int roomId;
     private final Rectangle solidArea;
-    private final VolatileImage checkpointImage;
+    private static final VolatileImage checkpointImage = ImageHandler.loadImage("Assets/Images/Tilesets/Objects/Save/spritesheet_vertical.png");
+
     private boolean isActive;
+    private final int roomId;
+
     private int spriteCounter = 0, spriteCounterSpeed;
     private int row, col, maxCol;
 
@@ -36,9 +39,7 @@ public class Checkpoint {
         this.roomId = roomId;
 
         this.solidArea = new Rectangle((int) position.x, (int) position.y, 60, 80);
-        this.checkpointImage = ImageHandler.loadImage("Assets/Images/Tilesets/Objects/Save/spritesheet_vertical.png");
 
-        // initial idle state
         row = 3;
         col = 0;
         spriteCounterSpeed = 5;
@@ -51,16 +52,13 @@ public class Checkpoint {
     public void update() {
         if (TiledMap.getPlayerRoomId() == roomId) {
             if (!isActive && GamePanel.player.getSolidArea().intersects(solidArea)) {
-                // activation animation
                 isActive = true;
                 PlayerSoundHandler.checkpoint();
                 maxCol = 6;
                 GamePanel.player.setSpawnPosition(new Vector2(position.x + 20, position.y - 5));
             } else {
-
                 int lives = GamePanel.player.getLives();
 
-                // display player lives
                 if (row != 3) {
                     switch (lives) {
                         case 2 -> row = 1;
@@ -125,7 +123,7 @@ public class Checkpoint {
             Color oldColor = g2.getColor();
             Composite oldComposite = g2.getComposite();
 
-            g2.setColor(new Color(255, 0, 0, 128)); // semi-transparent red
+            g2.setColor(new Color(255, 0, 0, 128));
             g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
             g2.fillRect((int) screenX, (int) screenY, solidArea.width, solidArea.height);
 

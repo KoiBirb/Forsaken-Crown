@@ -1,3 +1,9 @@
+/*
+ * ScoreHandler.java
+ * Leo Bogaert
+ * Jun 7, 2025,
+ * Handles leader board scores
+ */
 package Handlers;
 
 import java.io.FileWriter;
@@ -7,9 +13,9 @@ import java.util.Arrays;
 public class ScoreHandler {
 
     private static String[] names;
-    private static int[] scores = new int[10];
+    private static final int[] scores = new int[10];
 
-    private static String[] adjectives = {
+    private static final String[] adjectives = {
         "Brave", "Calm", "Chilly", "Clever", "Cool", "Cozy", "Crafty", "Daring", "Eager", "Famous",
         "Fancy", "Fast", "Fierce", "Gentle", "Giant", "Glad", "Graceful", "Grand", "Happy", "Heroic",
         "Honest", "Humble", "Jolly", "Joyful", "Kind", "Lively", "Lucky", "Loyal", "Magic", "Mighty",
@@ -22,7 +28,7 @@ public class ScoreHandler {
         "Lush", "Mellow", "Merry", "Mighty", "Mirthy", "Plucky", "Polite", "Prompt", "Quaint", "Sincere"
     };
 
-    private static String[] nouns = {
+    private static final String[] nouns = {
         "Falcon", "Tiger", "Wolf", "Eagle", "Lion", "Panther", "Dragon", "Shark", "Bear", "Hawk",
         "Fox", "Otter", "Raven", "Stag", "Bull", "Cobra", "Elk", "Frog", "Goose", "Heron",
         "Ibis", "Jaguar", "Koala", "Lynx", "Moose", "Newt", "Owl", "Puma", "Quail", "Ram",
@@ -35,6 +41,10 @@ public class ScoreHandler {
         "Snipe", "Sole", "Sparrow", "Stoat", "Tapir", "Tern", "Trout", "Vole", "Wasp", "Yak"
     };
 
+    /**
+     * Initializes the scores and names arrays.
+     * @param filename String value of the file to read scores from
+     */
     public static void readScoresFromFile(String filename) {
         names = new String[scores.length];
         try (java.io.BufferedReader reader = new java.io.BufferedReader(new java.io.FileReader(filename))) {
@@ -43,7 +53,6 @@ public class ScoreHandler {
             while ((line = reader.readLine()) != null && i < scores.length) {
                 String[] parts = line.trim().split("\\s+");
                 if (parts.length >= 2) {
-                    // Join all parts except the last as the name
                     StringBuilder nameBuilder = new StringBuilder();
                     for (int j = 0; j < parts.length - 1; j++) {
                         if (j > 0) nameBuilder.append(" ");
@@ -66,6 +75,11 @@ public class ScoreHandler {
         }
     }
 
+    /**
+     * Adds a score to the leaderboard.
+     * @param name String value of the player's name
+     * @param score int value of the player's score
+     */
     public static void addScore(String name, int score) {
         for (int i = 0; i < scores.length; i++) {
             if (scores[i] < score) {
@@ -80,6 +94,10 @@ public class ScoreHandler {
         }
     }
 
+    /**
+     * Writes the scores to a file.
+     * @param filename String value of the file to write scores to
+     */
     public static void writeScoresToFile(String filename) {
 
         try (FileWriter writer = new FileWriter(filename)) {
@@ -91,6 +109,10 @@ public class ScoreHandler {
         }
     }
 
+    /**
+     * Generates a random name
+     * @return String value of the generated name
+     */
     public static String generateRandomName() {
         java.util.Random rand = new java.util.Random();
         String adjective = adjectives[rand.nextInt(adjectives.length)];
@@ -98,10 +120,18 @@ public class ScoreHandler {
         return adjective + " " + noun;
     }
 
+    /**
+     * Gets the names arrays.
+     * @return String[] array of names
+     */
     public static String[] getNames() {
         return Arrays.copyOf(names, names.length);
     }
 
+    /**
+     * Gets the scores array.
+     * @return int[] array of scores
+     */
     public static int[] getScores() {
         return Arrays.copyOf(scores, scores.length);
     }

@@ -18,6 +18,7 @@ public class UIManager {
 
     private HealthBar healthBar;
     private ManaBar manaBar;
+
     private final ButtonManager buttonManager;
 
     private int selectedButton;

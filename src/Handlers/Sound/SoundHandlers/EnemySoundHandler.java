@@ -1,3 +1,9 @@
+/*
+ * EnemySoundHandler.java
+ * Leo Bogaert
+ * Jun 7, 2025,
+ * Handles enemy sound effects
+ */
 
  package Handlers.Sound.SoundHandlers;
 
@@ -27,7 +33,6 @@
      private static final Sound kingHit = new Sound();
      private static final Sound kingDeath = new Sound();
 
-     // King attack sounds
      private static final Sound kingDodgeDash = new Sound();
      private static final Sound kingDodgeSlash1 = new Sound();
      private static final Sound kingDodgeSlash2 = new Sound();
@@ -85,6 +90,7 @@
      private static int walkingSlicers = 0;
      private static boolean skeletonSpawn = false;
 
+     // Preload all sound files
      static {
 
         // Slicer
@@ -166,10 +172,30 @@
          kingStabWarn.setFile("/Audio/Enemy/BloodKing/Attacks/Stab/Warn.wav");
      }
 
-     public static void slicerHit() { slicerHit.play(); }
-     public static void slicerDeath() { slicerDeath.play(); }
-     public static void slicerSwing() { slicerSwing.play(); }
+     /**
+      * Plays Slicer hit sound
+      */
+     public static void slicerHit() {
+         slicerHit.play();
+     }
 
+     /**
+      * Plays Slicer death sound
+      */
+     public static void slicerDeath() {
+         slicerDeath.play();
+     }
+
+     /**
+      * Plays Slicer swing sound
+      */
+     public static void slicerSwing() {
+         slicerSwing.play();
+     }
+
+     /**
+      * Plays Slicer footsteps
+      */
      public static synchronized void slicerFootsteps() {
          if (walkingSlicers == 0) {
              slicerFootsteps.play();
@@ -177,6 +203,10 @@
          }
          walkingSlicers++;
      }
+
+     /**
+      * Stops Slicer footsteps
+      */
      public static synchronized void stopSlicerFootsteps() {
          if (walkingSlicers > 0) {
              walkingSlicers--;
@@ -186,10 +216,30 @@
          }
      }
 
-     public static void waspHit() { waspHit.play(); }
-     public static void waspDeath() { waspDeath.play(); }
-     public static void waspSting() { waspSting.play(); }
+     /**
+      * Plays wasp hit sound
+      */
+     public static void waspHit() {
+         waspHit.play();
+     }
 
+     /**
+      * Plays wasp death sound
+      */
+     public static void waspDeath() {
+         waspDeath.play();
+     }
+
+     /**
+      * Plays wasp sting sound
+      */
+     public static void waspSting() {
+         waspSting.play();
+     }
+
+     /**
+      * Plays wasp flying sound
+      */
      public static synchronized void waspFly() {
          if (flyingWasps == 0) {
              waspFly.play();
@@ -197,6 +247,10 @@
          }
          flyingWasps++;
      }
+
+     /**
+      * Stops wasp flying sound
+      */
      public static synchronized void stopWaspFly() {
          if (flyingWasps > 0) {
              flyingWasps--;
@@ -206,8 +260,16 @@
          }
      }
 
-     public static void hiveExplode() { hiveExplode.play(); }
+     /**
+      * Plays hive explosion sound
+      */
+     public static void hiveExplode() {
+         hiveExplode.play();
+     }
 
+     /**
+      * Plays hive idle sound
+      */
      public static synchronized void hiveIdle() {
          if (idleHive == 0) {
              hiveIdle.play();
@@ -215,6 +277,10 @@
          }
          idleHive++;
      }
+
+     /**
+      * Stops hive idle sound
+      */
      public static synchronized void stopHiveIdle() {
          if (idleHive > 0) {
              idleHive--;
@@ -224,6 +290,9 @@
          }
      }
 
+     /**
+      * Plays shocker footsteps sound
+      */
      public static synchronized void shockerSteps() {
          if (walkingShockers == 0) {
              shockerSteps.play();
@@ -231,6 +300,10 @@
          }
          walkingShockers++;
      }
+
+     /**
+      * Stops shocker footsteps sound
+      */
      public static synchronized void stopShockerSteps() {
          if (walkingShockers > 0) {
              walkingShockers--;
@@ -240,14 +313,58 @@
          }
      }
 
-     public static void shockerSwing1() { shockerSwing1.play(); }
-     public static void shockerSwing2() { shockerSwing2.play(); }
-     public static void shockerDeath() { shockerDeath.play(); }
-     public static void shockerHit() { shockerHit.play(); }
-     public static void shockerHitGround() { shockerHitGround.play(); }
-     public static void shockerCharge() { shockerCharge.play(); }
-     public static void shockerEnd() { shockerEnd.play(); }
+     /**
+      * Plays shockers first swing sound
+      */
+     public static void shockerSwing1() {
+         shockerSwing1.play();
+     }
 
+     /**
+      * Plays shocker second swing sound
+      */
+     public static void shockerSwing2() {
+         shockerSwing2.play();
+     }
+
+     /**
+      * Plays shocker death sound
+      */
+     public static void shockerDeath() {
+         shockerDeath.play();
+     }
+
+     /**
+      * Plays shocker hit sound
+      */
+     public static void shockerHit() {
+         shockerHit.play();
+     }
+
+     /**
+      * Plays shocker hit ground sound
+      */
+     public static void shockerHitGround() {
+         shockerHitGround.play();
+     }
+
+     /**
+      * Plays shocker charge up sound
+      */
+     public static void shockerCharge() {
+         shockerCharge.play();
+     }
+
+     /**
+      * Plays shocker 2nd charge up sound
+      */
+     public static void shockerEnd() {
+         shockerEnd.play();
+     }
+
+     /**
+      * Plays bot footsteps sound
+      */
      public static synchronized void botSteps() {
          if (walkingBots == 0) {
              botSteps.play();
@@ -255,6 +372,10 @@
          }
          walkingBots++;
      }
+
+     /**
+      * Stops bot footsteps sound
+      */
      public static synchronized void stopBotSteps() {
          if (walkingBots > 0) {
              walkingBots--;
@@ -264,29 +385,156 @@
          }
      }
 
-     public static void botStab() { botStab.play(); }
-     public static void botDeath() { botDeath.play(); }
+     /**
+      * Plays bot stab sound
+      */
+     public static void botStab() {
+         botStab.play();
+     }
 
-     public static void dodgeDash() { kingDodgeDash.play(); }
-     public static void dodgeSlash1() { kingDodgeSlash1.play(); }
-     public static void dodgeSlash2() { kingDodgeSlash2.play(); }
-     public static void dodgeStepBack() { kingDodgeStepBack.play(); }
-     public static void finisherCharge() { kingFinisherCharge.play(); }
-     public static void finisherHitGround() { kingFinisherHitGround.play(); }
-     public static void finisherSwing() { kingFinisherSwing.play(); }
-     public static void heartKingAppear() { kingHeartKingAppear.play(); }
-     public static void heartAppear() { kingHeartAppear.play(); }
-     public static void heartKingSink() { kingHeartKingSink.play(); }
-     public static void heartSplash() { kingHeartSplash.play(); }
-     public static void slamHitGround() { kingSlamHitGround.play(); }
-     public static void slamJump() { kingSlamJump.play(); }
-     public static void slamSwing() { kingSlamSwing.play(); }
-     public static void slashSwing1() { kingSlashSwing1.play(); }
-     public static void slashSwing2() { kingSlashSwing2.play(); }
-     public static void stabSlice() { kingStabSlice.play(); }
-     public static void stabStab() { kingStabStab.play(); }
-     public static void stabWarn() { kingStabWarn.play(); }
+     /**
+      * Plays bot death sound
+      */
+     public static void botDeath() {
+         botDeath.play();
+     }
 
+     /**
+      * Plays king dodge sound
+      */
+     public static void dodgeDash() {
+         kingDodgeDash.play();
+     }
+
+     /**
+      * Plays king dodge first slash sound
+      */
+     public static void dodgeSlash1() {
+         kingDodgeSlash1.play();
+     }
+
+     /**
+      * Plays king dodge second slash sound
+      */
+     public static void dodgeSlash2() {
+         kingDodgeSlash2.play();
+     }
+
+     /**
+      * Plays king dodge stepback sound
+      */
+     public static void dodgeStepBack() {
+         kingDodgeStepBack.play();
+     }
+
+     /**
+      * Plays king finisher charge sound
+      */
+     public static void finisherCharge() {
+         kingFinisherCharge.play();
+     }
+
+     /**
+      * Plays king finisher hit ground sound
+      */
+     public static void finisherHitGround() {
+         kingFinisherHitGround.play();
+     }
+
+     /**
+      * Plays king finisher swing sound
+      */
+     public static void finisherSwing() {
+         kingFinisherSwing.play();
+     }
+
+     /**
+      * Plays king appear sound
+      */
+     public static void heartKingAppear() {
+         kingHeartKingAppear.play();
+     }
+
+     /**
+      * Plays king heart appear sound
+      */
+     public static void heartAppear() {
+         kingHeartAppear.play();
+     }
+
+     /**
+      * Plays king disappear sound
+      */
+     public static void heartKingSink() {
+         kingHeartKingSink.play();
+     }
+
+     /**
+      * Plays king heart splash sound
+      */
+     public static void heartSplash() {
+         kingHeartSplash.play();
+     }
+
+    /**
+    * Plays king slam hit ground sound
+    */
+     public static void slamHitGround() {
+         kingSlamHitGround.play();
+     }
+
+    /**
+    * Plays king slam jump sound
+    */
+     public static void slamJump() {
+         kingSlamJump.play();
+     }
+
+     /**
+      * Plays king slam swing sound
+      */
+     public static void slamSwing() {
+         kingSlamSwing.play();
+     }
+
+    /**
+    * Plays king slash first swing sound
+    */
+     public static void slashSwing1() {
+         kingSlashSwing1.play();
+     }
+
+    /**
+     * Plays king slash second swing sound
+     */
+     public static void slashSwing2() {
+         kingSlashSwing2.play();
+     }
+
+     /**
+      * Plays king stab second swing sound
+      */
+     public static void stabSlice() {
+         kingStabSlice.play();
+     }
+
+     /**
+      * Plays king stab first swing sound
+      */
+     public static void stabStab() {
+         kingStabStab.play();
+     }
+
+     /**
+      * Plays king warning for stab sound
+      */
+     public static void stabWarn() {
+         kingStabWarn.play();
+     }
+
+     /**
+      * Plays kings footsteps
+      */
      public static synchronized void kingFootsteps() {
          if (walkingKings == 0) {
              kingSteps.play();
@@ -294,6 +542,10 @@
          }
          walkingKings++;
      }
+
+     /**
+      * Stops kings footsteps
+      */
      public static synchronized void stopKingFootsteps() {
          if (walkingKings > 0) {
              walkingKings--;
@@ -302,17 +554,41 @@
              }
          }
      }
-     public static void kingDeath() { kingDeath.play(); }
-     public static void kingHit() { kingHit.play(); }
 
-     // Summoner
-     public static void summonerDeath() { summonerDeath.play(); }
+     /**
+      * Plays king death sound
+      */
+     public static void kingDeath() {
+         kingDeath.play();
+     }
+
+     /**
+      * Plays king hit sound
+      */
+     public static void kingHit() {
+         kingHit.play();
+     }
+
+     /**
+      * Plays summoner death sound
+      */
+     public static void summonerDeath() {
+         summonerDeath.play();
+     }
+
+     /**
+      * Plays summoner attack sound
+      */
      public static synchronized void summonerAttack() {
          if (attackingSummoners == 0) {
              summonerAttack.play();
          }
          attackingSummoners++;
      }
+
+     /**
+      * Stops summoner attack sound
+      */
      public static synchronized void stopSummonerAttack() {
          if (attackingSummoners > 0) {
              attackingSummoners--;
@@ -321,9 +597,31 @@
              }
          }
      }
-     public static void summonerHit() { summonerHit.play(); }
-     public static void summonerSlam() { summonerSlam.play(); }
-     public static void summonerSummon() { summonerSummon.play(); }
+
+     /**
+      * Plays summoner hit sound
+      */
+     public static void summonerHit() {
+         summonerHit.play();
+     }
+
+     /**
+      * Plays summoner slam sound
+      */
+     public static void summonerSlam() {
+         summonerSlam.play();
+     }
+
+     /**
+      * Plays summoner summon sound
+      */
+     public static void summonerSummon() {
+         summonerSummon.play();
+     }
+
+     /**
+      * Plays summoner footsteps
+      */
      public static synchronized void summonerFootsteps() {
          if (walkingSummoners == 0) {
              summonerSteps.play();
@@ -331,6 +629,10 @@
          }
          walkingSummoners++;
      }
+
+     /**
+      * Stops summoner footsteps
+      */
      public static synchronized void stopSummonerFootsteps() {
          if (walkingSummoners > 0) {
              walkingSummoners--;
@@ -340,14 +642,26 @@
          }
      }
 
-     // Ghoul
-     public static void ghoulDeath() { ghoulDeath.play(); }
+     /**
+      * Plays ghoul death sound
+      */
+     public static void ghoulDeath() {
+         ghoulDeath.play();
+     }
+
+     /**
+      * Plays ghoul attack sound
+      */
      public static synchronized void ghoulAttack() {
          if (attackingGhouls == 0) {
              ghoulAttack.play();
          }
          attackingGhouls++;
      }
+
+     /**
+      * Stops ghoul attack sound
+      */
      public static synchronized void stopGhoulAttack() {
          if (attackingGhouls > 0) {
              attackingGhouls--;
@@ -356,6 +670,10 @@
              }
          }
      }
+
+     /**
+      * Plays ghoul footsteps
+      */
      public static synchronized void ghoulFootsteps() {
          if (walkingGhouls == 0) {
              ghoulSteps.play();
@@ -363,6 +681,10 @@
          }
          walkingGhouls++;
      }
+
+     /**
+      * Stops ghoul footsteps
+      */
      public static synchronized void stopGhoulFootsteps() {
          if (walkingGhouls > 0) {
              walkingGhouls--;
@@ -371,16 +693,34 @@
              }
          }
      }
-     public static void ghoulHit() { ghoulHit.play(); }
 
-     // Skeleton
-     public static void skeletonDeath() { skeletonDeath.play(); }
+     /**
+      * Plays ghoul hit sound
+      */
+     public static void ghoulHit() {
+         ghoulHit.play();
+     }
+
+     /**
+      * Plays Skeleton death sound
+      */
+     public static void skeletonDeath() {
+         skeletonDeath.play();
+     }
+
+     /**
+      * Plays Skeleton attack sound
+      */
      public static synchronized void skeletonAttack() {
          if (attackingSkeletons == 0) {
              skeletonAttack.play();
          }
          attackingSkeletons++;
      }
+
+     /**
+      * Stops Skeleton attack sound
+      */
      public static synchronized void stopSkeletonAttack() {
          if (attackingSkeletons > 0) {
              attackingSkeletons--;
@@ -389,6 +729,10 @@
              }
          }
      }
+
+     /**
+      * Plays Skeleton footsteps
+      */
      public static synchronized void skeletonFootsteps() {
          if (walkingSkeletons == 0) {
              skeletonSteps.play();
@@ -396,6 +740,10 @@
          }
          walkingSkeletons++;
      }
+
+     /**
+      * Stops Skeleton footsteps
+      */
      public static synchronized void stopSkeletonFootsteps() {
          if (walkingSkeletons > 0) {
              walkingSkeletons--;
@@ -404,12 +752,26 @@
              }
          }
      }
-     public static void skeletonHit() { skeletonHit.play(); }
+
+     /**
+      * Plays Skeleton hit sound
+      */
+     public static void skeletonHit() {
+         skeletonHit.play();
+     }
+
+     /**
+      * Plays Skeleton spawn sound
+      */
      public static void skeletonSpawn() {
          if (!skeletonSpawn) {
              skeletonSpawn = true;
              skeletonSpawnSound.play();
          }
      }
+
+    /**
+    * Resets the skeleton spawns sound state
+    */
      public static void resetSkeletonSpawn() { skeletonSpawn = false; }
  }

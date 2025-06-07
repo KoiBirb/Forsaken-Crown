@@ -1,8 +1,8 @@
 /*
- * MenuPanel.java
+ * EndPanel.java
  * Leo Bogaert
  * May 20, 2025,
- * Main menu
+ * End menu panel
  */
 
 package Main.Panels;
@@ -19,17 +19,14 @@ import static Main.Main.keyI;
 
 public class EndPanel extends JPanel implements Runnable{
 
-    // Screen settings
     public final static double screenWidth = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
     public final static double screenHeight = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
 
     private float leaderAlpha = 0f, titleAlpha = 1f;
     private static final float movementFactor = 0.15f;
-    private Font leaderboardFont;
-
-    public static boolean leader = false;
-    public static boolean victory;
     private float parallaxSelected = 1.0f;
+    public static boolean leader = false, victory;
+    private Font leaderboardFont;
 
     private int[] scores;
     private String[] names;
@@ -53,14 +50,16 @@ public class EndPanel extends JPanel implements Runnable{
         this.setDoubleBuffered(true);
         this.setFocusable(true);
 
-        loadBackground();
+        loadResources();
     }
 
     /**
-     * Set up the game.
+     * Sets up the end panel
      */
     public void setup() {
         this.requestFocusInWindow();
+        keyI.uPressed = false;
+
         ui = new UIManager(null, false);
         ScoreHandler.addScore(Main.Main.name, GamePanel.points);
         ScoreHandler.writeScoresToFile("src/Assets/Map/Leaderboard.txt");
@@ -72,9 +71,9 @@ public class EndPanel extends JPanel implements Runnable{
     }
 
     /**
-     * Load background images
+     * Loads resources
      */
-    private void loadBackground(){
+    private void loadResources(){
         background = new VolatileImage[7];
 
         background[0] = ImageHandler.loadImage("Images/Backgrounds/Sword Parallax/BG1.png");
@@ -97,12 +96,12 @@ public class EndPanel extends JPanel implements Runnable{
             ge.registerFont(leaderboardFont);
         } catch (Exception e) {
             System.out.println("Failed to load custom leaderboard font, using fallback. " + e.getMessage());
-            leaderboardFont = new Font("Arial", Font.BOLD, 48); // fallback
+            leaderboardFont = new Font("Arial", Font.BOLD, 48);
         }
     }
 
     /**
-     * Starts game thread
+     * Starts thread
      */
     public void startThread() {
         endThread = new Thread(this);
@@ -114,39 +113,31 @@ public class EndPanel extends JPanel implements Runnable{
      */
     @Override
     public void run() {
-        double drawInterval = 1000000000.0/60; // 60 FPS
-        double delta = 0;
-        long lastTime = System.nanoTime();
-        long currentTime;
-        long timer = 0;
-        int drawCount = 0;
+            final double drawInterval = 1_000_000_000.0 / 60.0;
+            long lastTime = System.nanoTime();
+            double delta = 0;
 
-        while (endThread != null) {
+            while (endThread != null) {
+                long now = System.nanoTime();
+                delta += (now - lastTime) / drawInterval;
+                lastTime = now;
 
-            currentTime = System.nanoTime();
+                while (delta >= 1) {
+                    update();
+                    repaint();
+                    delta--;
+                }
 
-            delta += (currentTime - lastTime) / drawInterval;
-            timer += (currentTime - lastTime);
-            lastTime = currentTime;
-
-            if(delta >= 1) {
-                update();
-                repaint();
-                delta--;
-                drawCount++;
-            }
-
-            if(timer>= 1000000000) {
-                // FPS counter
-//                System.out.println("FPS:" + drawCount);
-                drawCount = 0;
-                timer = 0;
+                try {
+                    Thread.sleep(2);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
             }
         }
-    }
 
     /**
-     * Update game objects
+     * Updates UI
      */
     public void update() {
         ui.update();
@@ -176,7 +167,7 @@ public class EndPanel extends JPanel implements Runnable{
 
 
     /**
-     * Draw game objects
+     * Draws the end panel components
      * @param g Graphics object
      */
     public void paintComponent(Graphics g) {
@@ -188,6 +179,7 @@ public class EndPanel extends JPanel implements Runnable{
 
         drawParallaxBackground(g2);
 
+        // Leaderboard
         if (leaderAlpha > 0.01f) {
             Composite old = g2.getComposite();
             g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, leaderAlpha));
@@ -234,6 +226,7 @@ public class EndPanel extends JPanel implements Runnable{
             g2.setComposite(old);
         }
 
+        // Title
         if (titleAlpha > 0.01f) {
             Composite old = g2.getComposite();
             g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, titleAlpha));
@@ -287,8 +280,8 @@ public class EndPanel extends JPanel implements Runnable{
             if (i == 5) {
                 g2.drawImage(
                         circleBackground,
-                        (int) (screenWidth / 2 - (250 - 18.5) + offset/2), (int) (screenHeight * (1.76/3) - (250 - 18.5) - 20),
-                        (int) (screenWidth / 2 + (250 - 18.5) + offset/2), (int) (screenHeight * (1.76/3) + (250 - 18.5) - 20),
+                        (int) (screenWidth / 2 - (250 - 18.5) + offset/2.0), (int) (screenHeight * (1.76/3) - (250 - 18.5) - 20),
+                        (int) (screenWidth / 2 + (250 - 18.5) + offset/2.0), (int) (screenHeight * (1.76/3) + (250 - 18.5) - 20),
                         col * 35, row * 37,
                         (col + 1) * 35, (row + 1) * 37, null);
             }

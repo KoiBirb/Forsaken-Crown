@@ -10,7 +10,6 @@ package Main.UI;
 import Entitys.Entity;
 
 import java.awt.*;
-import java.awt.geom.AffineTransform;
 import java.util.Random;
 
 public class HealthBar extends UIElement {
@@ -66,7 +65,7 @@ public class HealthBar extends UIElement {
      * Trigger a shake effect on the health bar
      */
     protected void triggerShake() {
-        shakeTimer = 200; // Shake duration in milliseconds
+        shakeTimer = 200;
     }
 
     /**
@@ -76,10 +75,10 @@ public class HealthBar extends UIElement {
      */
     private int calculateTotalHealth(int[][] segments) {
         int totalHealth = 0;
-        if (segments[0][0] == 14) totalHealth += 1; // Left edge
-        if (segments[3][0] == 14) totalHealth += 1; // Right edge
-        if (segments[1][0] == 15) totalHealth += 4 - (segments[1][1] - 8); // Body 1
-        if (segments[2][0] == 15) totalHealth += 4 - (segments[2][1] - 8); // Body 2
+        if (segments[0][0] == 14) totalHealth += 1;
+        if (segments[3][0] == 14) totalHealth += 1;
+        if (segments[1][0] == 15) totalHealth += 4 - (segments[1][1] - 8);
+        if (segments[2][0] == 15) totalHealth += 4 - (segments[2][1] - 8);
         return totalHealth;
     }
 
@@ -91,7 +90,6 @@ public class HealthBar extends UIElement {
     public static int[][] calculateHealthSegments(int health) {
         int[][] segments = new int[4][2]; // [leftEdge, body1, body2, rightEdge]
 
-        // Left edge
         if (health > 0) {
             segments[0][0] = 14;
             segments[0][1] = 8;
@@ -101,7 +99,6 @@ public class HealthBar extends UIElement {
             segments[0][1] = 8;
         }
 
-        // Body segments
         if (health > 0) {
             int remainingHealth = Math.min(4, health);
 
@@ -157,7 +154,6 @@ public class HealthBar extends UIElement {
             segments[2][1] = 8;
         }
 
-        // Right edge
         if (health > 0) {
             segments[3][0] = 14;
         } else {
@@ -175,36 +171,28 @@ public class HealthBar extends UIElement {
     public void draw(Graphics2D g2) {
         int col, row;
 
-        // health bar
         for (int i = 0; i < 4; i++) {
             col = segments[i][0];
             row = segments[i][1];
 
-            AffineTransform originalTransform = g2.getTransform();
-
             if ((i == 3 && segments[i][0] == 14) || (i == 0 && segments[i][0] == 17)) {
-                g2.scale(-1, 1);
                 g2.drawImage(
                         imageGlow,
-                    -(x + shakeOffsetX + i * 16 * scale + 16 * scale), y + shakeOffsetY, -(x + shakeOffsetX + i * 16 * scale), y + shakeOffsetY + 16 * scale, // Adjusted for flipped coordinates
-                    col * 16, row * 16,
-                    (col + 1) * 16, (row + 1) * 16,    // src rectangle
-                    null
+                        x + shakeOffsetX + i * 16 * scale, y + shakeOffsetY, x + shakeOffsetX + (16 * scale) + (i * 16 * scale), y + shakeOffsetY + 16 * scale,    // dest rectangle
+                        (col + 1) * 16, row * 16, col * 16, (row + 1) * 16,
+                        null
                 );
             } else {
                 g2.drawImage(
                         imageGlow,
-                    x + shakeOffsetX + i * 16 * scale, y + shakeOffsetY, x + shakeOffsetX + (16 * scale) + (i * 16 * scale), y + shakeOffsetY + 16 * scale,    // dest rectangle
-                    col * 16, row * 16,
-                    (col + 1) * 16, (row + 1) * 16,    // src rectangle
-                    null
+                        x + shakeOffsetX + i * 16 * scale, y + shakeOffsetY, x + shakeOffsetX + (16 * scale) + (i * 16 * scale), y + shakeOffsetY + 16 * scale,    // dest rectangle
+                        col * 16, row * 16, (col + 1) * 16, (row + 1) * 16,
+                        null
                 );
             }
-
-            g2.setTransform(originalTransform);
         }
 
-        // emblem
+        // Emblem
 
         g2.drawImage(
                 image,

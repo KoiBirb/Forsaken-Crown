@@ -1,3 +1,10 @@
+/*
+ * BackgroundMusicHandler.java
+ * Leo Bogaert
+ * Jun 7, 2025,
+ * Handles background music
+ */
+
 package Handlers.Sound.SoundHandlers;
 
 import Handlers.Sound.Sound;
@@ -23,7 +30,7 @@ public class BackgroundMusicHandler {
    private enum MusicType {DARK, CASTLE, BLOOD, BOSS}
    private enum MusicState {MAIN, ACTION}
 
-   private MusicType currentMusicType = MusicType.DARK;
+   private MusicType currentMusicType = MusicType.BOSS;
    private MusicState currentMusicState = MusicState.MAIN;
 
     private long actionSwitchRequestTime = 0;
@@ -31,11 +38,12 @@ public class BackgroundMusicHandler {
     private MusicState requestedMusicState = MusicState.MAIN;
     private static final long ACTION_SWITCH_GRACE_MS = 800;
 
-
-
+    /**
+     * Constructor for BackgroundMusicHandler
+     * Loads all music and starts playing them
+     */
     public BackgroundMusicHandler() {
 
-       // Preload all music files once
        musicDarkMain.setFile("/Audio/Background/Dark/DarkMain.wav");
        musicDarkAction.setFile("/Audio/Background/Dark/DarkAction.wav");
        musicCastleMain.setFile("/Audio/Background/Castle/CastleMain.wav");
@@ -44,10 +52,9 @@ public class BackgroundMusicHandler {
        musicBloodAction.setFile("/Audio/Background/Blood/BloodAction.wav");
        musicBossMain.setFile("/Audio/Background/Boss/BossMain.wav");
 
-       // Start all tracks, but only set volume to 1 for the initial one
        musicDarkMain.play();
        musicDarkMain.loop();
-       musicDarkMain.setVolume(1.0f);
+       musicDarkMain.setVolume(0.0f);
 
        musicDarkAction.play();
        musicDarkAction.loop();
@@ -70,11 +77,14 @@ public class BackgroundMusicHandler {
        musicBloodAction.setVolume(0.0f);
    }
 
+    /**
+     * Updates the background music based on the current room and enemy state
+     * Handles transitions between different music types and states
+     */
     public void update() {
         int room = TiledMap.getPlayerRoomId();
         long now = System.currentTimeMillis();
 
-        // Determine the desired music type and state
         MusicType desiredType;
         MusicState desiredState;
 
@@ -92,7 +102,6 @@ public class BackgroundMusicHandler {
             desiredState = GamePanel.activeEnemies.isEmpty() ? MusicState.MAIN : MusicState.ACTION;
         }
 
-        // Handle type change immediately
         if (desiredType != currentMusicType) {
             transitionToMusic(getMusic(desiredType, MusicState.MAIN), 2000);
             currentMusicType = desiredType;
@@ -117,16 +126,24 @@ public class BackgroundMusicHandler {
         }
     }
 
+    /**
+     * Plays the main music for the boss fight
+     */
    public void playBossMain(){
        musicBossMain.play();
        musicBloodAction.loop();
    }
 
+   /**
+    * Transitions to a new music track smoothly over a specified duration
+    * @param to The new Sound object to transition to
+    * @param durationMs Duration of the transition in milliseconds
+    */
     public void transitionToMusic(Sound to, int durationMs) {
         Sound from = getMusic(currentMusicType, currentMusicState);
 
         if (isTransitioning.get()) {
-            return; // Prevent overlapping transitions
+            return;
         }
 
         isTransitioning.set(true);
@@ -163,11 +180,15 @@ public class BackgroundMusicHandler {
         scheduler.scheduleAtFixedRate(transitionTask, 0, stepDelay, TimeUnit.MILLISECONDS);
     }
 
+    /**
+     * Fades out the current music smoothly over a specified duration
+     * @param durationMs Duration of the fade-out in milliseconds
+     */
     public void fadeOut(int durationMs) {
         Sound from = getMusic(currentMusicType, currentMusicState);
 
         if (isTransitioning.get()) {
-            return; // Prevent overlapping transitions
+            return;
         }
 
         isTransitioning.set(true);
@@ -196,7 +217,13 @@ public class BackgroundMusicHandler {
         scheduler.scheduleAtFixedRate(fadeTask, 0, stepDelay, TimeUnit.MILLISECONDS);
     }
 
-   public Sound getMusic(MusicType type, MusicState state) {
+    /**
+     * Gets the current music based on type and state
+     * @param type current MusicType
+     * @param state current MusicState
+     * @return Sound object for the specified type and state
+     */
+    public Sound getMusic(MusicType type, MusicState state) {
        return switch (type) {
            case DARK -> switch (state) {
                case MAIN -> musicDarkMain;
@@ -212,5 +239,5 @@ public class BackgroundMusicHandler {
            };
            case BOSS -> musicBossMain;
        };
-   }
+    }
 }

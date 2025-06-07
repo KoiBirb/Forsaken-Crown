@@ -22,14 +22,18 @@ public class ButtonManager {
     private static final float SELECTED_SCALE = 1.15f;
     private static final float NORMAL_SCALE = 1.0f;
     private static final int SHIFT_PIXELS = 20;
-    private static final float LERP_SPEED = 0.15f;
+    private static final float MOVEMENT_SPEED = 0.15f;
 
     private final Button[] menuButtons, endButtons;
-    private final float[] scales;
-    private final float[] shifts;
+    private final float[] scales, shifts;
     private final int[] initialX;
+
     private int selectedIndex = 1;
 
+    /**
+     * Constructor for ButtonManager
+     * Initializes buttons with images and positions
+     */
     public ButtonManager() {
         menuButtons = new Button[]{
                 new Button((int) (GamePanel.screenWidth/5) - 169, (int) (GamePanel.screenHeight * (4.6/6.2)), 120,
@@ -49,17 +53,20 @@ public class ButtonManager {
                         "Images/UI/Words/Words With BG/UI - Words17.png")
         };
 
-        int n = menuButtons.length;
-        scales = new float[n];
-        shifts = new float[n];
-        initialX = new int[n];
-        for (int i = 0; i < n; i++) {
+        // initial positions and scales
+        scales = new float[3];
+        shifts = new float[3];
+        initialX = new int[3];
+        for (int i = 0; i < 3; i++) {
             scales[i] = NORMAL_SCALE;
             shifts[i] = 0;
             initialX[i] = menuButtons[i].getX();
         }
     }
 
+    /**
+     * Updates buttons
+     */
     public void update() {
 
         switch (Main.gameState) {
@@ -74,7 +81,12 @@ public class ButtonManager {
         }
     }
 
+    /**
+     * Updates the menu buttons
+     */
     private void updateMenu() {
+
+        // Selection logic
         if (keyI.aPressed) {
             selectLeft();
             PlayerSoundHandler.UIHover();
@@ -94,10 +106,11 @@ public class ButtonManager {
             if (i != selectedIndex) {
                 targetShift = (initialX[i] < initialX[selectedIndex]) ? -SHIFT_PIXELS : SHIFT_PIXELS;
             }
-            scales[i] += (targetScale - scales[i]) * LERP_SPEED;
-            shifts[i] += (targetShift - shifts[i]) * LERP_SPEED;
+            scales[i] += (targetScale - scales[i]) * MOVEMENT_SPEED;
+            shifts[i] += (targetShift - shifts[i]) * MOVEMENT_SPEED;
         }
 
+        // Action Logic
         if (keyI.uPressed) {
             switch (selectedIndex) {
                 case 0:
@@ -115,7 +128,11 @@ public class ButtonManager {
         }
     }
 
+    /**
+     * Updates the end buttons
+     */
     private void updateEnd() {
+        // Selection logic
         if (keyI.aPressed) {
             selectLeft();
             PlayerSoundHandler.UIHover();
@@ -135,10 +152,11 @@ public class ButtonManager {
             if (i != selectedIndex) {
                 targetShift = (initialX[i] < initialX[selectedIndex]) ? -SHIFT_PIXELS : SHIFT_PIXELS;
             }
-            scales[i] += (targetScale - scales[i]) * LERP_SPEED;
-            shifts[i] += (targetShift - shifts[i]) * LERP_SPEED;
+            scales[i] += (targetScale - scales[i]) * MOVEMENT_SPEED;
+            shifts[i] += (targetShift - shifts[i]) * MOVEMENT_SPEED;
         }
 
+        // Action Logic
         if (keyI.uPressed) {
             switch (selectedIndex) {
                 case 0:
@@ -156,27 +174,38 @@ public class ButtonManager {
         }
     }
 
-
-
+    /**
+     * Selects the next left button
+     */
     private void selectLeft() {
         selectedIndex = (selectedIndex - 1 + menuButtons.length) % menuButtons.length;
     }
 
+    /**
+     * Selects the next right button
+     */
     private void selectRight() {
         selectedIndex = (selectedIndex + 1) % menuButtons.length;
     }
 
+    /**
+     * Gets the index of the currently selected button
+     * @return  int index of the selected button
+     */
     public int getSelectedIndex() {
         return selectedIndex;
     }
 
+    /**
+     * Draws the buttons on the screen
+     * @param g2 Graphics2D object to draw on
+     */
     public void draw(Graphics2D g2) {
 
         Button[] buttons = (Main.gameState == Main.GameState.MENU) ? menuButtons : endButtons;
 
         for (int i = 0; i < buttons.length; i++) {
             Button btn = buttons[i];
-            boolean selected = (i == selectedIndex);
 
             int btnWidth = Math.toIntExact(Math.round(btn.getWidth() * scales[i]));
             int btnHeight = Math.toIntExact(Math.round(btn.getHeight() * scales[i]));
@@ -186,7 +215,6 @@ public class ButtonManager {
             int x = centerX - btnWidth / 2;
             int y = centerY - btnHeight / 2;
 
-            btn.setHovered(selected);
             g2.drawImage(btn.getImage(), x, y, btnWidth, btnHeight, null);
         }
     }

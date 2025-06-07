@@ -4,6 +4,7 @@
  * May 6, 2025,
  * Handles all collisions
  */
+
 package Handlers;
 
 import Attacks.MeleeAttack;
@@ -40,8 +41,8 @@ public class CollisionHandler {
         int tileNum1, tileNum2;
 
         try {
+            // Check top collision
             if (entity.getDirection().contains("up")) {
-                // Check top collision
                 entityTopRow = (int) ((entityTopWorldY - entity.getSpeed()) / getScaledTileSize());
                 tileNum1 = collidableTiles[entityTopRow][entityLeftCol];
                 tileNum2 = collidableTiles[entityTopRow][entityRightCol];
@@ -189,6 +190,12 @@ public class CollisionHandler {
         return false;
     }
 
+    /**
+     * Checks if a colidable tile is present at the specified coordinates.
+     * @param x The x-coordinate to check.
+     * @param y The y-coordinate to check.
+     * @return True if a solid tile is present, false otherwise.
+     */
     public static boolean isSolidTileAt(int x, int y) {
         int tileSize = TiledMap.getScaledTileSize();
         int col = x / tileSize;
@@ -254,6 +261,12 @@ public class CollisionHandler {
         }
     }
 
+    /**
+     * Checks if an attack collides with an entity.
+     * @param m The MeleeAttack object representing the attack.
+     * @param e The Entity object representing the entity to check for collision.
+     * @return True if the attack collides with the entity, false otherwise.
+     */
     public static boolean attackCollision (MeleeAttack m, Entity e) {
         return m.getHitBox() != null && m.getHitBox().intersects(e.getSolidArea()) && !e.isHit() && !e.isDead();
     }

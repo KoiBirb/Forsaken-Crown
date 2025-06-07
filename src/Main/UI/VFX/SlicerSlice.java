@@ -1,3 +1,10 @@
+/*
+ * SlicerSlice.java
+ * Leo Bogaert
+ * Jun 7, 2025,
+ * Renders a slice effect for the Slicer enemy
+ */
+
 package Main.UI.VFX;
 
 import Handlers.ImageHandler;
@@ -13,6 +20,12 @@ public class SlicerSlice extends Effect{
 
     private static final VolatileImage imageVFX = ImageHandler.loadImage("Assets/Images/Enemies/Heavy Slicer/VFX Sprite Sheet 60x41.png");
 
+    /**
+     * Constructor for SlicerSlice
+     * @param x int x position of the slice
+     * @param y int y position of the slice
+     * @param flip boolean whether the slice should be flipped horizontally
+     */
     public SlicerSlice(int x, int y, boolean flip) {
         super();
         position = new Vector2(x, y);
@@ -26,6 +39,9 @@ public class SlicerSlice extends Effect{
         GamePanel.effects.add(this);
     }
 
+    /**
+     * Update the slice effect
+     */
     public void update(){
         spriteCounter++;
         if (spriteCounter > 12) {
@@ -37,9 +53,13 @@ public class SlicerSlice extends Effect{
             GamePanel.effects.remove(this);
     }
 
+    /**
+     * Draw the slice effect
+     * @param g2 Graphics2D object to draw on
+     */
     public void draw(Graphics2D g2) {
-        // hitbox
-        super.draw(g2);
+
+//        super.draw(g2); // Debug
 
         Vector2 cameraPos = GamePanel.tileMap.returnCameraPos();
 

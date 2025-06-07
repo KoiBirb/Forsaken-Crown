@@ -2,7 +2,7 @@
  * CheckpointManager.java
  * Leo Bogaert
  * Jun 4, 2025,
- * Manages checkpoints in the game
+ * Manages and spawns checkpoints
  */
 package Map.Checkpoints;
 

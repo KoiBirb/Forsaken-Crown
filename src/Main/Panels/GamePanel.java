@@ -27,34 +27,28 @@ import static Main.Main.keyI;
 
 public class GamePanel extends JPanel implements Runnable{
 
-    // Screen settings
     public final static double screenWidth = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
     public final static double screenHeight = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
     public final static double scale = 2;
 
-    // initialize classes
     public static TiledMap tileMap;
     public static Player player;
     public static UIManager ui;
     public static CheckpointManager checkpointManager;
-    public static BackgroundMusicHandler backgroundMusic = new BackgroundMusicHandler();;
+    public static BackgroundMusicHandler backgroundMusic = new BackgroundMusicHandler();
 
     public static ArrayList<MeleeAttack> playerAttacks = new ArrayList<>();
     public static ArrayList<MeleeAttack> enemyAttacks = new ArrayList<>();
     public static ArrayList<Enemy> enemies = new ArrayList<>();
     public static ArrayList<Effect> effects = new ArrayList<>();
-
     public static ArrayList<Enemy> activeEnemies = new ArrayList<>();
 
     public static long initialTime;
     public static int points;
 
-    // Room change effect
-    public static boolean fading = false;
+    public static boolean fading = false, fadeIn = true;
     private static double fadeAlpha = 0.0;
-    private static boolean fadeIn = true;
-    private int fadeDelay = 10;
-    private int fadeDelayCounter = 0;
+    private int fadeDelay = 10, fadeDelayCounter = 0;
 
     public static Thread gameThread;
 
@@ -69,8 +63,6 @@ public class GamePanel extends JPanel implements Runnable{
 
         this.addKeyListener(keyI);
 
-        // initialize classes
-
         tileMap = new TiledMap();
     }
 
@@ -80,13 +72,13 @@ public class GamePanel extends JPanel implements Runnable{
     public void setupGame() {
         this.requestFocusInWindow();
         player = new Player(new Vector2(100,100));
-//        player = new Player(new Vector2(2300,2500));
-//        player = new Player(new Vector2(2993,1200));
         ui = new UIManager(player, true);
         checkpointManager = new CheckpointManager();
         EnemySpawnHandler.setup();
+
         initialTime = System.currentTimeMillis();
         points = 0;
+
         startThread();
     }
 
@@ -112,7 +104,7 @@ public class GamePanel extends JPanel implements Runnable{
      */
     @Override
     public void run() {
-        final double drawInterval = 1_000_000_000.0 / 60.0; // 60 FPS
+        final double drawInterval = 1_000_000_000.0 / 60.0;
         long lastTime = System.nanoTime();
         double delta = 0;
 
@@ -127,7 +119,6 @@ public class GamePanel extends JPanel implements Runnable{
                 delta--;
             }
 
-            // Optional: sleep a bit to reduce CPU usage
             try {
                 Thread.sleep(2);
             } catch (InterruptedException e) {
@@ -182,7 +173,6 @@ public class GamePanel extends JPanel implements Runnable{
             }
         }
 
-        // Fading
         if (fading) {
             if (fadeIn) {
                 fadeAlpha += 0.09;
@@ -229,7 +219,8 @@ public class GamePanel extends JPanel implements Runnable{
             effects.get(i).draw(g2);
         }
 
-        // Draw player hit box and colidable tiles
+        // Hitboxes for debugging
+
 //        CollisionHandler.draw(g2, player);
 //        CollisionHandler.draw(g2, enemies.getFirst());
 //
@@ -237,9 +228,9 @@ public class GamePanel extends JPanel implements Runnable{
 //            playerAttacks.get(i).draw(g2);
 //        }
 //
-        for (int i = 0; i < enemyAttacks.size(); i++) {
-            enemyAttacks.get(i).draw(g2);
-        }
+//        for (int i = 0; i < enemyAttacks.size(); i++) {
+//            enemyAttacks.get(i).draw(g2);
+//        }
 
         if (player != null) {
             tileMap.coverScreen(g2);

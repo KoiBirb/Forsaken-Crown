@@ -1,3 +1,10 @@
+/*
+ * Effect.java
+ * Leo Bogaert
+ * Jun 7, 2025,
+ * Parent class for effects
+ */
+
 package Main.UI.VFX;
 
 import Handlers.ImageHandler;
@@ -15,14 +22,18 @@ public class Effect {
     protected int spriteCounter, spriteCol, spriteRow, maxSpriteCol;
     protected double spriteScale;
 
-
+    /**
+     * Constructor for Effect
+     */
     public Effect (){
         image = ImageHandler.loadImage("Images/VFX/All.png");
 
         spriteScale = GamePanel.scale;
     }
 
-
+    /**
+     * Updates effect's sprite animation.
+     */
     public void update() {
         spriteCounter++;
         if (spriteCounter > 5) {
@@ -31,6 +42,10 @@ public class Effect {
         }
     }
 
+    /**
+     * Draws effect hitbox
+     * @param g2 Graphics2D object to draw on
+     */
     public void draw(Graphics2D g2) {
 
         Vector2 cameraPos = GamePanel.tileMap.returnCameraPos();
@@ -40,6 +55,5 @@ public class Effect {
 
         g2.drawRect((int) screenX, (int) screenY, 82, 65);
     }
-
 
 }

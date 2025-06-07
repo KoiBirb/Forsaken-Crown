@@ -2,7 +2,7 @@
  * UIElement.java
  * Leo Bogaert
  * May 7, 2025,
- * Parent element class for all UI elements
+ * Parent element class for UI elements
  */
 
 package Main.UI;
@@ -15,7 +15,8 @@ import java.awt.image.VolatileImage;
 public abstract class UIElement {
 
     protected int x, y, width, height;
-    protected VolatileImage imageGlow, image;
+    protected static final VolatileImage image = ImageHandler.loadImage("Images/UI/Borders and HP/UI - 16x16 UI Tileset.png");
+    protected static final VolatileImage imageGlow = ImageHandler.loadImage("Images/UI/Borders and HP/UI - 16x16 UI Tileset with glow.png");
 
     /**
      * Constructor for UIElement
@@ -29,9 +30,6 @@ public abstract class UIElement {
         this.y = y;
         this.width = width;
         this.height = height;
-
-        image = ImageHandler.loadImage("Images/UI/Borders and HP/UI - 16x16 UI Tileset.png");
-        imageGlow = ImageHandler.loadImage("Images/UI/Borders and HP/UI - 16x16 UI Tileset with glow.png");
     }
 
     /**

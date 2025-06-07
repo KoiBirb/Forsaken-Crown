@@ -1,3 +1,10 @@
+/*
+ * EnemySpawnHandler.java
+ * Leo Bogaert
+ * Jun 7, 2025,
+ * Spawns and manages enemies in the game
+ */
+
 package Handlers;
 
 import Entitys.Enemies.*;
@@ -17,15 +24,15 @@ public class EnemySpawnHandler {
     public static void setup() {
         GamePanel.activeEnemies.clear();
         GamePanel.enemies.clear();
+        GamePanel.enemyAttacks.clear();
 
         GamePanel.enemies.add(new HeavySlicer(new Vector2(500, 100)));
 
         GamePanel.enemies.add(new BloodKing(new Vector2(2650, 3102)));
     }
 
-
     /**
-     * Updates all enemy objects in enemies list
+     * Updates all enemy objects in the enemies list
      */
     public static void updateAll() {
         int playerRoom = Map.TiledMap.getPlayerRoomId();
@@ -44,15 +51,14 @@ public class EnemySpawnHandler {
 
 
     /**
-     * Draw each enemy object from enemies list
-     *
+     * Draw each enemy object from the enemies list
      * @param g2 Graphics 2D object to draw enemies
      */
     public static void drawAll(Graphics2D g2) {
         int playerRoom = Map.TiledMap.getPlayerRoomId();
         for (int i = 0; i < GamePanel.enemies.size(); i++) {
             Enemy enemy = GamePanel.enemies.get(i);
-            int enemyRoom = Map.TiledMap.getRoomId(enemy.getPosition().x, enemy.getPosition().y);
+            int enemyRoom = enemy.getRoomId();
             if (enemyRoom == playerRoom) {
                 enemy.draw(g2);
             }

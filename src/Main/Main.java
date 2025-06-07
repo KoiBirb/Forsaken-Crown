@@ -39,7 +39,6 @@ public class Main {
 
         ScoreHandler.readScoresFromFile("src/Assets/Map/Leaderboard.txt");
 
-        // Change window settings
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setResizable(false);
         window.setTitle("Forsaken Crown");

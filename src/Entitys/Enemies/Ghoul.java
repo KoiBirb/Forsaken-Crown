@@ -5,7 +5,6 @@ import Handlers.CollisionHandler;
 import Handlers.ImageHandler;
 import Handlers.Sound.SoundHandlers.EnemySoundHandler;
 import Handlers.Vector2;
-import Handlers.SpikeDetectionHandler;
 import Main.Panels.GamePanel;
 import Map.TiledMap;
 
@@ -94,15 +93,6 @@ public class Ghoul extends Enemy {
                         spriteRow = 0;
                         maxSpriteCol = 3;
                         if (spriteCol > maxSpriteCol) spriteCol = 0;
-                    }
-
-                    boolean facingSpike = SpikeDetectionHandler.isFacingSpike(currentPos.x, currentPos.y, velocity.x, width, height);
-                    boolean canLand = SpikeDetectionHandler.canLandAfterSpike(currentPos.x, currentPos.y, velocity.x, width, height);
-
-                    if (facingSpike && canLand && onGround && !jumpedOut && now - lastJumpTime >= JUMP_COOLDOWN_MS) {
-                        velocity.y = JUMP_FORCE;
-                        jumpedOut = true;
-                        lastJumpTime = now;
                     }
                 }
 
