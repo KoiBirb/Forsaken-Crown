@@ -278,7 +278,7 @@ public class Player extends Entity {
         }
 
         // Attacking
-        if (keyI.uPressed && !keyI.iPressed) {
+        if (keyI.uPressed && !keyI.iPressed && state != PlayerState.HEALING) {
             long currentTime = now;
             if (state != PlayerState.ATTACKING) {
                 if (state != PlayerState.DASHING) {
@@ -312,7 +312,7 @@ public class Player extends Entity {
             }
         }
 
-        if (keyI.jPressed && state != PlayerState.ATTACKING && !keyI.iPressed) {
+        if (keyI.jPressed && state != PlayerState.ATTACKING && !keyI.iPressed && state != PlayerState.HEALING) {
             long currentTime = now;
             if (currentTime - lastHeavyAttackTime >= PlayerHeavyAttack.COOLDOWN) {
                 if (state == PlayerState.DASHING) {
