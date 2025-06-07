@@ -30,7 +30,7 @@ public class BackgroundMusicHandler {
    private enum MusicType {DARK, CASTLE, BLOOD, BOSS}
    private enum MusicState {MAIN, ACTION}
 
-   private MusicType currentMusicType = MusicType.BOSS;
+   private MusicType currentMusicType = MusicType.DARK;
    private MusicState currentMusicState = MusicState.MAIN;
 
     private long actionSwitchRequestTime = 0;
@@ -210,6 +210,45 @@ public class BackgroundMusicHandler {
             float t = currentStep[0] / (float) steps;
             float smooth = (1 - (float) Math.cos(Math.PI * t)) / 2f;
             from.setVolume(fromVolume * (1 - smooth));
+            currentStep[0]++;
+        };
+
+        long stepDelay = durationMs / steps;
+        scheduler.scheduleAtFixedRate(fadeTask, 0, stepDelay, TimeUnit.MILLISECONDS);
+    }
+
+    /**
+     * Fades in a music track smoothly over a specified duration
+     * @param durationMs Duration of the fade-out in milliseconds
+     */
+    public void fadeIn(Sound to, int durationMs) {
+        if (isTransitioning.get()) {
+            return;
+        }
+
+        isTransitioning.set(true);
+        int steps = 500;
+        to.setVolume(0f);
+
+        if (!to.isPlaying()) {
+            to.play();
+            to.loop();
+        }
+
+        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+        final int[] currentStep = {0};
+
+        Runnable fadeTask = () -> {
+            if (currentStep[0] > steps || Thread.currentThread().isInterrupted()) {
+                to.setVolume(1f);
+                isTransitioning.set(false);
+                scheduler.shutdown();
+                return;
+            }
+
+            float t = currentStep[0] / (float) steps;
+            float smooth = (1 - (float) Math.cos(Math.PI * t)) / 2f;
+            to.setVolume(smooth);
             currentStep[0]++;
         };
 
