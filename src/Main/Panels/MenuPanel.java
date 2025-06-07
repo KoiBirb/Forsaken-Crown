@@ -71,8 +71,8 @@ public class MenuPanel extends JPanel implements Runnable{
         background[3] = ImageHandler.loadImage("Assets/Images/Backgrounds/The Circle Underground/layer 4.png");
 
         redCircleBackground = ImageHandler.loadImage("Assets/Images/Backgrounds/The Circle Underground/Red Circle/The Circle 35x37.png");
-        title = ImageHandler.loadImage("Assets/Images/UI/UI - Words/Title.png");
-        helpImage = ImageHandler.loadImage("Assets/Images/UI/UI - Words/help.png");
+        title = ImageHandler.loadImage("Images/UI/Words/Title.png");
+        helpImage = ImageHandler.loadImage("Images/UI/Words/help.png");
     }
 
     /**

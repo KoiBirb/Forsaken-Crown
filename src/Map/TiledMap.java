@@ -180,29 +180,29 @@ public class TiledMap {
 
         backgroundLayers = new VolatileImage[3];
         backgroundLayers[0] = ImageHandler.loadImage("Assets/Images/Backgrounds/Beneath Parallax/background.png");
-        backgroundLayers[1] = ImageHandler.loadImage("Assets/Images/Backgrounds/Caves/Small Cave 1 Layers/layer 6.png");
-        backgroundLayers[2] = ImageHandler.loadImage("Assets/Images/Backgrounds/Caves/Small Cave 1 Layers/layer 7.png");
+        backgroundLayers[1] = ImageHandler.loadImage("Images/Backgrounds/Caves Parallax/layer 6.png");
+        backgroundLayers[2] = ImageHandler.loadImage("Images/Backgrounds/Caves Parallax/layer 7.png");
         backgrounds.add(backgroundLayers);
 
         backgroundLayers = new VolatileImage[3];
         backgroundLayers[0] = ImageHandler.loadImage("Assets/Images/Backgrounds/The Columns/background.png");
-        backgroundLayers[1] = ImageHandler.loadImage("Assets/Images/Backgrounds/The Columns/Horizontal/layer 3.png");
-        backgroundLayers[2] = ImageHandler.loadImage("Assets/Images/Backgrounds/The Columns/Horizontal/layer 4.png");
+        backgroundLayers[1] = ImageHandler.loadImage("Images/Backgrounds/The Columns/layer 3.png");
+        backgroundLayers[2] = ImageHandler.loadImage("Images/Backgrounds/The Columns/layer 4.png");
         backgrounds.add(backgroundLayers);
 
 
         backgroundLayers = new VolatileImage[5];
-        backgroundLayers[0] = ImageHandler.loadImage("Assets/Images/Backgrounds/Bos/1.png");
-        backgroundLayers[1] = ImageHandler.loadImage("Assets/Images/Backgrounds/Bos/2.png");
-        backgroundLayers[2] = ImageHandler.loadImage("Assets/Images/Backgrounds/Bos/3.png");
-        backgroundLayers[3] = ImageHandler.loadImage("Assets/Images/Backgrounds/Bos/4.png");
-        backgroundLayers[4] = ImageHandler.loadImage("Assets/Images/Backgrounds/Bos/5.png");
+        backgroundLayers[0] = ImageHandler.loadImage("Images/Backgrounds/Boss Parallax/1.png");
+        backgroundLayers[1] = ImageHandler.loadImage("Images/Backgrounds/Boss Parallax/2.png");
+        backgroundLayers[2] = ImageHandler.loadImage("Images/Backgrounds/Boss Parallax/3.png");
+        backgroundLayers[3] = ImageHandler.loadImage("Images/Backgrounds/Boss Parallax/4.png");
+        backgroundLayers[4] = ImageHandler.loadImage("Images/Backgrounds/Boss Parallax/5.png");
         backgrounds.add(backgroundLayers);
 
         backgroundLayers = new VolatileImage[3];
-        backgroundLayers[0] = ImageHandler.loadImage("Assets/Images/Backgrounds/Bos/1.png");
-        backgroundLayers[1] = ImageHandler.loadImage("Assets/Images/Backgrounds/Bos/2.png");
-        backgroundLayers[2] = ImageHandler.loadImage("Assets/Images/Backgrounds/Bos/3.png");
+        backgroundLayers[0] = ImageHandler.loadImage("Images/Backgrounds/Boss Parallax/1.png");
+        backgroundLayers[1] = ImageHandler.loadImage("Images/Backgrounds/Boss Parallax/2.png");
+        backgroundLayers[2] = ImageHandler.loadImage("Images/Backgrounds/Boss Parallax/3.png");
         backgrounds.add(backgroundLayers);
     }
 

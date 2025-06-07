@@ -10,7 +10,6 @@ package Main.UI;
 import Handlers.ImageHandler;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.awt.image.VolatileImage;
 
 public abstract class UIElement {
@@ -31,8 +30,8 @@ public abstract class UIElement {
         this.width = width;
         this.height = height;
 
-        image = ImageHandler.loadImage("Assets/Images/UI/UI - Borders and HP/UI - 16x16 UI Tileset.png");
-        imageGlow = ImageHandler.loadImage("Assets/Images/UI/UI - Borders and HP/UI - 16x16 UI Tileset with glow.png");
+        image = ImageHandler.loadImage("Images/UI/Borders and HP/UI - 16x16 UI Tileset.png");
+        imageGlow = ImageHandler.loadImage("Images/UI/Borders and HP/UI - 16x16 UI Tileset with glow.png");
     }
 
     /**

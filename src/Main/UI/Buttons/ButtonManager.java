@@ -33,20 +33,20 @@ public class ButtonManager {
     public ButtonManager() {
         menuButtons = new Button[]{
                 new Button((int) (GamePanel.screenWidth/5) - 169, (int) (GamePanel.screenHeight * (4.6/6.2)), 120,
-                        "Assets/Images/UI/UI - Words/Words With BG/UI - Words3.png"),
+                        "Images/UI/Words/Words With BG/UI - Words3.png"),
                 new Button((int) (GamePanel.screenWidth/2) - 169, (int) (GamePanel.screenHeight * (4.6/6.2)), 120,
-                        "Assets/Images/UI/UI - Words/Words With BG/UI - Words5.png"),
+                        "Images/UI/Words/Words With BG/UI - Words5.png"),
                 new Button((int) (GamePanel.screenWidth * (4.0/5) - 169), (int) (GamePanel.screenHeight * (4.6/6.2)), 120,
-                        "Assets/Images/UI/UI - Words/Words With BG/UI - Words16.png")
+                        "Images/UI/Words/Words With BG/UI - Words16.png")
         };
 
         endButtons = new Button[]{
                 new Button((int) (GamePanel.screenWidth/5) - 169, (int) (GamePanel.screenHeight * (4.6/6.2)), 120,
-                        "Assets/Images/UI/UI - Words/Words With BG/UI - Words3.png"),
+                        "Images/UI/Words/Words With BG/UI - Words3.png"),
                 new Button((int) (GamePanel.screenWidth/2) - 169, (int) (GamePanel.screenHeight * (4.6/6.2)), 120,
-                        "Assets/Images/UI/UI - Words/Words With BG/UI - Words10.png"),
+                        "Images/UI/Words/Words With BG/UI - Words10.png"),
                 new Button((int) (GamePanel.screenWidth * (4.0/5) - 169), (int) (GamePanel.screenHeight * (4.6/6.2)), 120,
-                        "Assets/Images/UI/UI - Words/Words With BG/UI - Words17.png")
+                        "Images/UI/Words/Words With BG/UI - Words17.png")
         };
 
         int n = menuButtons.length;

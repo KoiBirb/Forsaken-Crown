@@ -77,18 +77,18 @@ public class EndPanel extends JPanel implements Runnable{
     private void loadBackground(){
         background = new VolatileImage[7];
 
-        background[0] = ImageHandler.loadImage("Assets/Images/Backgrounds/Sword Parallax/Color 1/BG1.png");
-        background[1] = ImageHandler.loadImage("Assets/Images/Backgrounds/Sword Parallax/Color 1/Close1.png");
-        background[2] = ImageHandler.loadImage("Assets/Images/Backgrounds/Sword Parallax/Color 1/Dense Atmostphere1.png");
-        background[3] = ImageHandler.loadImage("Assets/Images/Backgrounds/Sword Parallax/Color 1/Far1.png");
-        background[4] = ImageHandler.loadImage("Assets/Images/Backgrounds/Sword Parallax/Color 1/Fog1.png");
-        background[5] = ImageHandler.loadImage("Assets/Images/Backgrounds/Sword Parallax/Color 1/Mid1.png");
+        background[0] = ImageHandler.loadImage("Images/Backgrounds/Sword Parallax/BG1.png");
+        background[1] = ImageHandler.loadImage("Images/Backgrounds/Sword Parallax/Close1.png");
+        background[2] = ImageHandler.loadImage("Images/Backgrounds/Sword Parallax/Dense Atmostphere1.png");
+        background[3] = ImageHandler.loadImage("Images/Backgrounds/Sword Parallax/Far1.png");
+        background[4] = ImageHandler.loadImage("Images/Backgrounds/Sword Parallax/Fog1.png");
+        background[5] = ImageHandler.loadImage("Images/Backgrounds/Sword Parallax/Mid1.png");
 
 
         circleBackground = ImageHandler.loadImage("Assets/Images/Backgrounds/The Circle Underground/Red Circle/The Circle 35x37 RED.png");
-        deathTitle = ImageHandler.loadImage("Assets/Images/UI/UI - Words/DeathTitle.png");
-        victoryTitle = ImageHandler.loadImage("Assets/Images/UI/UI - Words/VictoryTitle.png");
-        leaderBoardBackground = ImageHandler.loadImage("Assets/Images/UI/UI - Words/LeaderboardBackground.png");
+        deathTitle = ImageHandler.loadImage("Images/UI/Words/DeathTitle.png");
+        victoryTitle = ImageHandler.loadImage("Images/UI/Words/VictoryTitle.png");
+        leaderBoardBackground = ImageHandler.loadImage("Images/UI/Words/LeaderboardBackground.png");
 
         try {
             leaderboardFont = Font.createFont(Font.TRUETYPE_FONT, new java.io.File("src/Assets/Font/04B_03__.TTF"))

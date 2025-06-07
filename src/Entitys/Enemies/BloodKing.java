@@ -60,10 +60,10 @@ public class BloodKing extends Enemy{
     public BloodKing(Vector2 pos) {
         super(pos, 2, 8, 168, 79, 40,  new Rectangle(0, 0, 50, 65));
 
-        imageReg = ImageHandler.loadImage("Assets/Images/Bosses/The Blood King/Blood_King_combined.png");
-        imageHit = ImageHandler.loadImage("Assets/Images/Bosses/The Blood King/Blood_King_combined_Hit.png");
+        imageReg = ImageHandler.loadImage("Images/Boss/Blood_King_combined.png");
+        imageHit = ImageHandler.loadImage("Images/Boss/Blood_King_combined_Hit.png");
 
-        this.image = ImageHandler.loadImage("Assets/Images/Bosses/The Blood King/Blood_King_combined.png");
+        this.image = ImageHandler.loadImage("Images/Boss/Blood_King_combined.png");
 
         this.currentState = State.SPAWNING;
 
