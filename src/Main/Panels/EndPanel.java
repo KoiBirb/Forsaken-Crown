@@ -89,7 +89,7 @@ public class EndPanel extends JPanel implements Runnable{
         circleBackground = ImageHandler.loadImage("Assets/Images/Backgrounds/The Circle Underground/Red Circle/The Circle 35x37 RED.png");
         deathTitle = ImageHandler.loadImage("Assets/Images/UI/Words/DeathTitle.png");
         victoryTitle = ImageHandler.loadImage("Assets/Images/UI/Words/VictoryTitle.png");
-        leaderBoardBackground = ImageHandler.loadImage("Assets/Images/UI/Words/LeaderboardBackground.png");
+        leaderBoardBackground = ImageHandler.loadImage("Assets/Images/UI/Words/leaderBoardbackground.png");
 
         try (InputStream is = getClass().getResourceAsStream("/Assets/Font/04B_03__.TTF")) {
             if (is != null) {
