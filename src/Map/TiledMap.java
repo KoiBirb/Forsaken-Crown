@@ -11,9 +11,7 @@ package Map;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.VolatileImage;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
@@ -75,7 +73,7 @@ public class TiledMap {
      * Initializes the map path and loads the map data.
      */
     public TiledMap() {
-        this.mapPath = "src/Assets/Map/forsakenMap.tmj";
+        this.mapPath = "Assets/Map/forsakenMap.tmj";
         this.parser = new JSONParser();
         this.tileSets = new ArrayList<>();
 
@@ -217,7 +215,10 @@ public class TiledMap {
      * Reads data from a JSON file and stores it in JSON arrays
      */
     private void loadMap() {
-        try (FileReader reader = new FileReader(mapPath)) {
+        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(mapPath)) {
+            if (inputStream == null) {
+                throw new FileNotFoundException("Resource not found: " + mapPath);
+            }
 
             tilesetOffset.put(CastleBones, 504);
             tilesetOffset.put(DarkEdition, 36);
@@ -227,7 +228,7 @@ public class TiledMap {
             tilesetOffset.put(Victorian, 324);
             tilesetOffset.put(Spikes, 1880);
 
-            JSONObject mapData = (JSONObject) parser.parse(reader);
+            JSONObject mapData = (JSONObject) parser.parse(new InputStreamReader(inputStream));
             mapWidth = ((Long) mapData.get("width")).intValue();
             mapHeight = ((Long) mapData.get("height")).intValue();
             tileSetTileSize = ((Long) mapData.get("tilewidth")).intValue();
