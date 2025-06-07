@@ -1,3 +1,10 @@
+/*
+ * Player.java
+ * Leo Bogaert
+ * Jun 7, 2025,
+ * Handles player entity and its actions
+ */
+
 package Entitys;
 
 import Attacks.Player.PlayerDashHeavyAttack;
@@ -19,32 +26,25 @@ import static Main.Main.*;
 
 public class Player extends Entity {
 
-    public enum PlayerState {
-        SPAWNING,
-        IDLE,
-        WALKING,
-        JUMPING,
-        FALLING,
-        ATTACKING,
-        DASHING,
-        HEALING,
-        HIT,
-        DEAD
-    }
-
+    public enum PlayerState { SPAWNING, IDLE, WALKING, JUMPING,
+                FALLING, ATTACKING, DASHING, HEALING, HIT, DEAD }
     private PlayerState state;
+
     private VolatileImage imageReg, imageHit;
+    private Vector2 spawnPosition;
+
+    private boolean chain, continuousJump, canMove, directionLock, heal;
     private int spriteCounter, spriteRow, spriteCol,
             maxSpriteCol, lastSpriteRow, lives, hitCounter, initialHealTickTime;;
 
-    // timers
     private long jumpKeyPressStartTime, lastQuickAttackTime, lastHeavyAttackTime,
             fallStartTime, healStartTime, dashStartTime, lastDashTime, deathTime,
             lastGroundedTime, now, lastHealTickTime;
 
-    private Vector2 spawnPosition;
-    private boolean chain, continuousJump, canMove, directionLock, heal;
-
+    /**
+     * Constructor for Player
+     * @param position Vector2 initial position of the player
+     */
     public Player(Vector2 position) {
         super(position, new Vector2(0, 0), 90, 37,
                 6.4, new Rectangle(0, 0, 18, 47),
@@ -60,10 +60,14 @@ public class Player extends Entity {
         canMove = true;
     }
 
+    /**
+     * Updates player state and actions
+     */
     @Override
     public void update() {
-//        System.out.println(TiledMap.getPlayerRoomId() + " " + position);
+
         now = System.currentTimeMillis();
+
         if (currentHealth > 0) {
             switch (state) {
                 case SPAWNING:
@@ -73,16 +77,13 @@ public class Player extends Entity {
                     maxSpriteCol = 3;
                     PlayerSoundHandler.spawn();
                     break;
-
                 case HIT:
-
                     if (spriteRow != 25) {
                         spriteRow = 25;
                         maxSpriteCol = 1;
                         spriteCol = 0;
                     }
                     break;
-
                 default:
                     if (canMove)
                         handlePlayerInput();
@@ -97,6 +98,7 @@ public class Player extends Entity {
             spriteCol = 0;
             velocity.setLength(0);
             deathTime = now;
+
             PlayerSoundHandler.death();
             PlayerSoundHandler.stopFootsteps();
             PlayerSoundHandler.stopFalling();
@@ -104,19 +106,17 @@ public class Player extends Entity {
             GamePanel.backgroundMusic.fadeOut(2000);
         }
 
-        if (!directionLock) {
+        if (!directionLock)
             determineDirection();
-        }
 
         isColliding = false;
         CollisionHandler.checkTileCollision(this);
 
         if (!onGround && !continuousJump && state != PlayerState.SPAWNING) {
-            if (velocity.y < 9) {
+            if (velocity.y < 9)
                 velocity.y += 0.8;
-            } else {
+             else
                 TiledMap.cameraShake(1, 6);
-            }
         }
 
         if (image != imageReg) {
@@ -166,7 +166,7 @@ public class Player extends Entity {
             }
         }
 
-        if (state == PlayerState.DEAD && now - deathTime >= 5000) {
+        if (state == PlayerState.DEAD && now - deathTime >= 4500) {
             lives--;
             if (lives <= 0)
                 switchToEnd(false);
@@ -183,6 +183,9 @@ public class Player extends Entity {
         lastSpriteRow = spriteRow;
     }
 
+    /**
+     * Handles player input and actions
+     */
     private void handlePlayerInput() {
 
         if (onGround) {
@@ -395,6 +398,9 @@ public class Player extends Entity {
         }
     }
 
+    /**
+     * Determines the player's direction based on velocity
+     */
     private void determineDirection() {
         if (velocity.x != 0) {
             if (velocity.x > 0) {
@@ -433,6 +439,9 @@ public class Player extends Entity {
         }
     }
 
+    /**
+     * Resets the player to its initial state
+     */
     private void resetPlayer() {
         PlayerSoundHandler.setDeathPlaying(false);
         direction = "right";
@@ -446,12 +455,21 @@ public class Player extends Entity {
         continuousJump = false;
     }
 
+    /**
+     * Sets the attacking state of the player
+     * @param attacking boolean indicating if the player is attacking
+     */
     public void setAttacking(boolean attacking) {
         state = attacking ? PlayerState.ATTACKING : PlayerState.IDLE;
     }
 
+    /**
+     * Handles the player's hit action
+     * @param damage int amount of damage taken
+     * @param knockbackX int horizontal knockback
+     * @param knockbackY int vertical knockback
+     */
     public void hit(int damage, int knockbackX, int knockbackY) {
-
         if (currentHealth > 0 && image != imageHit) {
 
             if (state != PlayerState.ATTACKING) {
@@ -471,11 +489,17 @@ public class Player extends Entity {
         }
     }
 
+    /**
+     * Draws the player on the screen
+     * @param g2 Graphics object to draw on
+     */
     @Override
     public void draw(Graphics2D g2) {
+
         Vector2 cameraPos = GamePanel.tileMap.returnCameraPos();
         double screenX = position.x - cameraPos.x;
         double screenY = position.y - cameraPos.y;
+
         if (direction.contains("left")){
             g2.drawImage(image,
                     (int) screenX - 115, (int) screenY - 17,
@@ -492,26 +516,50 @@ public class Player extends Entity {
         }
     }
 
+    /**
+     * Increases the player's mana by a specified amount
+     * @param amount int amount to increase mana by
+     */
     public void increaseMana(int amount) {
         currentMana = Math.min(currentMana + amount, maxMana);
     }
 
+    /**
+     * Gets the current state of the player
+     * @return PlayerState current state of the player
+     */
     public PlayerState getState() {
         return state;
     }
 
+    /**
+     * Sets the player ability to move
+     * @param canMove boolean indicating if the player can move
+     */
     public void setCanMove(boolean canMove) {
         this.canMove = canMove;
     }
 
+    /**
+     * Gets the current number of lives the player has
+     * @return int number of lives
+     */
     public int getLives() {
         return lives;
     }
 
+    /**
+     * Sets the players ability to change direction
+     * @param lock boolean indicating if the player should be locked in direction
+     */
     public void setDirectionLock(boolean lock) {
         this.directionLock = lock;
     }
 
+    /**
+     * Sets the spawn position of the player
+     * @param pos Vector2 new spawn position
+     */
     public void setSpawnPosition(Vector2 pos) {
         this.spawnPosition.set(pos);
     }

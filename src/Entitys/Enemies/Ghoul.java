@@ -4,6 +4,13 @@ import Attacks.Enemies.GhoulAttack;
 import Handlers.CollisionHandler;
 import Handlers.ImageHandler;
 import Handlers.Sound.SoundHandlers.EnemySoundHandler;
+/*
+ * HeavySlicer.java
+ * Leo Bogaert, Heeyoung Shin
+ * Jun 7, 2025,
+ * Creates a Ghoul enemy
+ */
+
 import Handlers.Vector2;
 import Main.Panels.GamePanel;
 import Map.TiledMap;
@@ -14,8 +21,9 @@ import java.awt.image.VolatileImage;
 public class Ghoul extends Enemy {
 
     public enum State {IDLE, WALK, DAMAGED, ATTACKING, DEAD}
-    private boolean idleForward = true, footstepsPlaying = false;
     protected State currentState = State.IDLE;
+
+    private boolean idleForward = true, footstepsPlaying = false;
     private final double visionRadius = 200;
     private long lastAttackTime = 0;
 
@@ -124,7 +132,6 @@ public class Ghoul extends Enemy {
             }
         }
 
-
         spriteCounter++;
         if (spriteCounter >= 12) {
             spriteCounter = 0;
@@ -176,6 +183,10 @@ public class Ghoul extends Enemy {
         super.update();
     }
 
+    /**
+     * Draws the Ghoul on the screen
+     * @param g2 Graphics2D object to draw on
+     */
     @Override
     public void draw(Graphics2D g2) {
 //        debugDraw(g2);
@@ -203,6 +214,10 @@ public class Ghoul extends Enemy {
         }
     }
 
+    /**
+     * Sets the Ghoul's state to attacking or idle
+     * @param attacking true if the Ghoul is attacking, false if idle
+     */
     public void setAttacking(boolean attacking) {
         if (attacking) {
             currentState = State.ATTACKING;
@@ -217,13 +232,20 @@ public class Ghoul extends Enemy {
         }
     }
 
+    /**
+     * Checks for ledges ahead of the Ghoul
+     * @return false if there is a ledge, true if there is no ledge
+     */
     public boolean isGroundAhead(double x, double y, double direction) {
-        // Check a point just ahead of the Ghoul's feet in the direction of movement
         int checkX = (int) (x + direction * ((double) width/2.0));
         int checkY = (int) (y + (double) height + 2);
         return CollisionHandler.isSolidTileAt(checkX, checkY);
     }
 
+    /**
+     * Debug draw
+     * @param g2
+     */
     private void debugDraw(Graphics2D g2) {
         Vector2 cam = GamePanel.tileMap.returnCameraPos();
 
@@ -259,6 +281,12 @@ public class Ghoul extends Enemy {
         g2.fillRect(checkX - (int) cam.x - 2, checkY - (int) cam.y - 2, 4, 4);
     }
 
+    /**
+     * Handles if the Ghoul has been hit
+     * @param damage int amount of damage taken
+     * @param knockbackX int knockback force in the X direction
+     * @param knockbackY int knockback force in the Y direction
+     */
     public void hit(int damage, int knockbackX, int knockbackY) {
         if (canBeHit() && !hit){
             currentHealth -= damage;
@@ -302,6 +330,9 @@ public class Ghoul extends Enemy {
         }
     }
 
+    /**
+     * Stops the footsteps sound if it is playing
+     */
     @Override
     public void stopSteps() {
         if (footstepsPlaying) {
@@ -310,11 +341,18 @@ public class Ghoul extends Enemy {
         }
     }
 
+    /**
+     * Checks if the footsteps sound is currently playing
+     * @return true if footsteps are playing, false otherwise
+     */
     @Override
     public boolean getFootstepsPlaying() {
         return footstepsPlaying;
     }
 
+    /**
+     * Handles the death of the Ghoul
+     */
     public void death(){
         if (currentState != State.DEAD) {
             currentState = State.DEAD;
@@ -323,17 +361,26 @@ public class Ghoul extends Enemy {
             maxSpriteCol = 6;
             velocity.x = 0;
             velocity.y = 0;
-            GamePanel.points += 50;
+            GamePanel.points += 100;
             EnemySoundHandler.stopGhoulAttack();
             EnemySoundHandler.stopGhoulFootsteps();
             EnemySoundHandler.ghoulDeath();
+            super.death();
         }
     }
 
+    /**
+     * Gets the current state of the Ghoul
+     * @return currentState the current state of the Ghoul
+     */
     public State getState(){
         return currentState;
     }
 
+    /**
+     * Sets the current state of the Ghoul
+     * @param state the new state to set
+     */
     public void setState(State state){
         this.currentState = state;
     }

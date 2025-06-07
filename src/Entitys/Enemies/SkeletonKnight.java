@@ -1,3 +1,10 @@
+/*
+ * SkeletonKnight.java
+ * Leo Bogaert,
+ * Jun 7, 2025,
+ * Creates a SkeletonKnight enemy
+ */
+
 package Entitys.Enemies;
 
 import Attacks.Enemies.SkeletonKnightAttack;
@@ -21,12 +28,20 @@ public class SkeletonKnight extends Enemy {
 
     private static final VolatileImage imageReg = ImageHandler.loadImage("Assets/Images/Enemies/Skeleton Summoner/Skeleton Swordsman/Skeleton - Armored Swordsman 44x24.png");
 
+    /**
+     * Constructor for SkeletonKnight
+     * @param pos Vector2 position of the SkeletonKnight
+     */
     public SkeletonKnight(Vector2 pos) {
         super(pos, 2, 8, 44, 24, 2, new Rectangle(0, 0, 25, 33));
 
         this.image = imageReg;
     }
 
+    /**
+     * Updates the skeleton knight's state and behavior
+     */
+    @Override
     public void update() {
 
         if (currentState != State.DEAD) {
@@ -123,7 +138,6 @@ public class SkeletonKnight extends Enemy {
             }
         }
 
-
         spriteCounter++;
         if (spriteCounter >= 4) {
             spriteCounter = 0;
@@ -156,10 +170,13 @@ public class SkeletonKnight extends Enemy {
         if (currentState == State.ATTACKING) {
             velocity.x = 0;
         }
-
         super.update();
     }
 
+    /**
+     * Draws the skeleton knight on the screen
+     * @param g2 Graphics2D object to draw on
+     */
     @Override
     public void draw(Graphics2D g2) {
 //        debugDraw(g2);
@@ -187,6 +204,9 @@ public class SkeletonKnight extends Enemy {
         }
     }
 
+    /**
+     * Stops the footsteps sound effect
+     */
     @Override
     public void stopSteps() {
         if (footstepsPlaying) {
@@ -195,13 +215,19 @@ public class SkeletonKnight extends Enemy {
         }
     }
 
+    /**
+     * Gets whether the footsteps sound effect is currently playing.
+     * @return boolean indicating if footsteps are playing.
+     */
     @Override
     public boolean getFootstepsPlaying() {
         return footstepsPlaying;
     }
 
-
-
+    /**
+     * Sets the attacking state of the skeleton knight.
+     * @param attacking boolean indicating if the skeleton knight is attacking.
+     */
     public void setAttacking(boolean attacking) {
         if (attacking) {
             currentState = State.ATTACKING;
@@ -216,13 +242,23 @@ public class SkeletonKnight extends Enemy {
         }
     }
 
+    /**
+     * Checks if there is ground ahead of the skeleton knight.
+     * @param x x position of the skeleton knight
+     * @param y y position of the skeleton knight
+     * @param direction direction of the skeleton knight (-1 for left, 1 for right)
+     * @return boolean indicating if there is ground ahead
+     */
     public boolean isGroundAhead(double x, double y, double direction) {
-        // Check a point just ahead of the Ghoul's feet in the direction of movement
-        int checkX = (int) (x + direction * ((double) width/2.0));
-        int checkY = (int) (y + (double) height + 2);
+        int checkX = (int) (position.x + direction * ((double) width/2.0));
+        int checkY = (int) (position.y + (double) height + 2);
         return CollisionHandler.isSolidTileAt(checkX, checkY);
     }
 
+    /**
+     * Debug draw method
+     * @param g2 Graphics2D object to draw on
+     */
     private void debugDraw(Graphics2D g2) {
         Vector2 cam = GamePanel.tileMap.returnCameraPos();
 
@@ -258,6 +294,12 @@ public class SkeletonKnight extends Enemy {
         g2.fillRect(checkX - (int) cam.x - 2, checkY - (int) cam.y - 2, 4, 4);
     }
 
+    /**
+     * Handles the damage taken by the skeleton knight.
+     * @param damage int amount of damage taken
+     * @param knockbackX int knockback force in the x direction
+     * @param knockbackY int knockback force in the y direction
+     */
     public void hit(int damage, int knockbackX, int knockbackY) {
         if (canBeHit() && !hit){
             currentHealth -= damage;
@@ -301,6 +343,9 @@ public class SkeletonKnight extends Enemy {
         }
     }
 
+    /**
+     * Handles the death of the skeleton knight.
+     */
     public void death(){
         if (currentState != State.DEAD) {
             currentState = State.DEAD;
@@ -309,16 +354,17 @@ public class SkeletonKnight extends Enemy {
             maxSpriteCol = 15;
             velocity.x = 0;
             velocity.y = 0;
-            GamePanel.points += 50;
+            GamePanel.points += 100;
             EnemySoundHandler.stopSkeletonAttack();
             EnemySoundHandler.stopSkeletonFootsteps();
             EnemySoundHandler.skeletonDeath();
+            super.death();
         }
     }
 
     /**
-     * Gets the current state of the summoner.
-     * @return The current state.
+     * Gets the current state of the knight
+     * @return The current state
      */
     public State getState(){
         return currentState;

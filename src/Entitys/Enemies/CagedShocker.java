@@ -1,8 +1,8 @@
 /*
- * SkeletonSummoner.java
+ * CagedShocker.java
  * Leo Bogaert
- * May 28, 2025,
- * Extends enemy, represents a skeleton summoner enemy that can summon skeletons and attack the player.
+ * Jun 7, 2025,
+ * Creates a Caged Shocker enemy
  */
 
 package Entitys.Enemies;
@@ -20,7 +20,6 @@ import java.awt.image.VolatileImage;
 
 public class CagedShocker extends Enemy{
 
-    // states
     public enum State {IDLE, WALK, ATTACKING, DEAD}
     private enum Logic {PATROL, AGGRESSIVE}
 
@@ -28,9 +27,8 @@ public class CagedShocker extends Enemy{
     private Logic currentLogic = Logic.PATROL;
 
     private final double visionRadius = 300;
-    private long lastAttackTime = 0;
 
-    private long patrolStateChangeTime = 0, patrolDuration = 0;
+    private long patrolStateChangeTime = 0, patrolDuration = 0, lastAttackTime = 0;
     private boolean patrolWalking = false, footstepsPlaying = false;
 
     private int hitCounter = 0;
@@ -40,8 +38,8 @@ public class CagedShocker extends Enemy{
     private final VolatileImage imageReg, imageHit;
 
     /**
-     * Summoner constructor.
-     * @param pos The initial position of the summoner.
+     * Caged Shocker constructor.
+     * @param pos The initial position of the Caged Shocker.
      */
     public CagedShocker(Vector2 pos) {
         super(pos, 1, 8, 110, 42, 10,  new Rectangle(0, 0, 40, 84));
@@ -53,7 +51,7 @@ public class CagedShocker extends Enemy{
     }
 
     /**
-     * Updates summoner state and behavior.
+     * Updates Caged Shocker state and behavior.
      */
     public void update() {
 
@@ -83,7 +81,7 @@ public class CagedShocker extends Enemy{
                 currentLogic = Logic.PATROL;
             }
 
-            // collision and gravity handling
+            // Collision and gravity handling
             CollisionHandler.checkTileCollision(this);
             boolean onGround = isOnGround();
 
@@ -225,12 +223,11 @@ public class CagedShocker extends Enemy{
             }
         }
 
-
         spriteCounter++;
         if (spriteCounter > 11) {
             spriteCounter = 0;
             spriteCol++;
-            if (currentState == State.DEAD && spriteCol == 8)
+            if (currentState == State.DEAD && spriteCol == 9)
                 EnemySoundHandler.shockerHitGround();
             if (spriteCol >= maxSpriteCol) {
                 if (currentState == State.IDLE) {
@@ -272,6 +269,9 @@ public class CagedShocker extends Enemy{
         return CollisionHandler.isSolidTileAt(checkX, checkY);
     }
 
+    /**
+     * Stops the footsteps sound effect.
+     */
     @Override
     public void stopSteps() {
         if (footstepsPlaying) {
@@ -281,13 +281,17 @@ public class CagedShocker extends Enemy{
         }
     }
 
+    /**
+     * Checks if the footsteps sound effect is currently playing.
+     * @return true if footsteps are playing, false otherwise.
+     */
     @Override
     public boolean getFootstepsPlaying() {
         return footstepsPlaying;
     }
 
     /**
-     * Draws the summoner
+     * Draws the Caged Shocker
      * @param g2 graphics object to draw on
      */
     @Override
@@ -318,8 +322,8 @@ public class CagedShocker extends Enemy{
     }
 
     /**
-     * Sets the attacking state of the summoner.
-     * @param attacking true if summoner is attacking, false otherwise.
+     * Sets the attacking state of the Caged Shocker.
+     * @param attacking true if Caged Shocker is attacking, false otherwise.
      */
     public void setAttacking(boolean attacking) {
         if (attacking) {
@@ -336,7 +340,7 @@ public class CagedShocker extends Enemy{
     }
 
     /**
-     * Debug draw method to visualize the summoner's vision radius and line of sight.
+     * Debug draw method
      * @param g2 Graphics2D object for drawing.
      */
     private void debugDraw(Graphics2D g2) {
@@ -378,7 +382,7 @@ public class CagedShocker extends Enemy{
     }
 
     /**
-     * Handles damage taken by the summoner.
+     * Handles damage taken by the Caged Shocker.
      * @param damage The amount of damage taken.
      * @param knockbackX The knockback force in the X direction.
      * @param knockbackY The knockback force in the Y direction.
@@ -399,7 +403,7 @@ public class CagedShocker extends Enemy{
     }
 
     /**
-     * Handles the death of the summoner.
+     * Handles the death of the Caged Shocker.
      */
     public void death(){
         if (currentState != State.DEAD) {
@@ -409,20 +413,25 @@ public class CagedShocker extends Enemy{
             maxSpriteCol = 11;
             velocity.x = 0;
             velocity.y = 0;
-            GamePanel.points += 250;
+            GamePanel.points += 300;
             EnemySoundHandler.stopShockerSteps();
             EnemySoundHandler.shockerDeath();
+            super.death();
         }
     }
 
     /**
-     * Gets the current state of the summoner.
+     * Gets the current state of the Caged Shocker.
      * @return The current state.
      */
     public State getState(){
         return currentState;
     }
 
+    /**
+     * Sets the current state of the Caged Shocker.
+     * @param state The new state to set.
+     */
     public void setState(State state){
         this.currentState = state;
     }

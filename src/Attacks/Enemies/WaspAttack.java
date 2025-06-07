@@ -16,7 +16,7 @@ import java.awt.*;
 
 public class WaspAttack extends MeleeAttack {
 
-    public static final int COOLDOWN = 500;
+    public static final int COOLDOWN = 4000;
 
     private final Wasp wasp;
 

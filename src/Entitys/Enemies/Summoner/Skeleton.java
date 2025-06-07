@@ -1,3 +1,9 @@
+/*
+ * Skeleton.java
+ * Leo Bogaert
+ * Jun 7, 2025,
+ * Creates a Skeleton enemy
+ */
 package Entitys.Enemies.Summoner;
 
 import Attacks.Enemies.SkeletonAttack;
@@ -15,13 +21,19 @@ import java.awt.image.VolatileImage;
 public class Skeleton extends Enemy {
 
     public enum State {IDLE, WALK, DAMAGED, ATTACKING, DEAD, SPAWNING}
-    private boolean footstepsPlaying = false;
     protected State currentState;
+
+    private boolean footstepsPlaying = false;
+
     private final double visionRadius = 300;
     private long lastAttackTime = 0;
 
-    private static VolatileImage skeletonImage = ImageHandler.loadImage("Assets/Images/Enemies/Skeleton Summoner/Skeleton - Unarmed/Skeleton - Unarmed 43x22.png");
+    private final static VolatileImage skeletonImage = ImageHandler.loadImage("Assets/Images/Enemies/Skeleton Summoner/Skeleton - Unarmed/Skeleton - Unarmed 43x22.png");
 
+    /**
+     * Skeleton constructor.
+     * @param pos The initial position of the Skeleton.
+     */
     public Skeleton(Vector2 pos) {
         super(pos, 2, 8, 43, 22, 2,  new Rectangle(0, 0, 25, 33));
 
@@ -35,6 +47,9 @@ public class Skeleton extends Enemy {
         EnemySoundHandler.skeletonSpawn();
     }
 
+    /**
+     * Updates the Skeleton's state and behavior.
+     */
     public void update() {
 
         if (currentState == State.SPAWNING) {
@@ -146,7 +161,6 @@ public class Skeleton extends Enemy {
             }
         }
 
-
         spriteCounter++;
         if (spriteCounter >= 4) {
             spriteCounter = 0;
@@ -183,6 +197,9 @@ public class Skeleton extends Enemy {
         super.update();
     }
 
+    /**
+     * Stops the footsteps sound when the enemy stops moving.
+     */
     @Override
     public void stopSteps() {
         if (footstepsPlaying) {
@@ -191,11 +208,19 @@ public class Skeleton extends Enemy {
         }
     }
 
+    /**
+     * Checks if the footsteps sound is currently playing.
+     * @return true if footsteps sound is playing, false otherwise.
+     */
     @Override
     public boolean getFootstepsPlaying() {
         return footstepsPlaying;
     }
 
+    /**
+     * Draws the Skeleton
+     * @param g2 Graphics2D object to draw on
+     */
     @Override
     public void draw(Graphics2D g2) {
 //        debugDraw(g2);
@@ -223,6 +248,10 @@ public class Skeleton extends Enemy {
         }
     }
 
+    /**
+     * Sets the Skeleton's attacking state.
+     * @param attacking true if the Skeleton is attacking, false otherwise.
+     */
     public void setAttacking(boolean attacking) {
         if (attacking) {
             currentState = State.ATTACKING;
@@ -237,13 +266,20 @@ public class Skeleton extends Enemy {
         }
     }
 
+    /**
+     * Checks if there is ground ahead of the Skeleton.
+     * @return true if there is ground, false otherwise.
+     */
     public boolean isGroundAhead(double x, double y, double direction) {
-        // Check a point just ahead of the Ghoul's feet in the direction of movement
         int checkX = (int) (x + direction * ((double) width/2.0));
         int checkY = (int) (y + (double) height + 2);
         return CollisionHandler.isSolidTileAt(checkX, checkY);
     }
 
+    /**
+     * Debug draw method
+     * @param g2 Graphics2D object to draw on
+     */
     private void debugDraw(Graphics2D g2) {
         Vector2 cam = GamePanel.tileMap.returnCameraPos();
 
@@ -279,6 +315,12 @@ public class Skeleton extends Enemy {
         g2.fillRect(checkX - (int) cam.x - 2, checkY - (int) cam.y - 2, 4, 4);
     }
 
+    /**
+     * Handles damage taken by the Skeleton.
+     * @param damage The amount of damage taken.
+     * @param knockbackX The knockback force in the X direction.
+     * @param knockbackY The knockback force in the Y direction.
+     */
     public void hit(int damage, int knockbackX, int knockbackY) {
         if (canBeHit() && !hit){
             currentHealth -= damage;
@@ -322,6 +364,9 @@ public class Skeleton extends Enemy {
         }
     }
 
+    /**
+     * Handles the death of the Skeleton.
+     */
     public void death(){
         if (currentState != State.DEAD) {
             currentState = State.DEAD;
@@ -330,10 +375,11 @@ public class Skeleton extends Enemy {
             maxSpriteCol = 15;
             velocity.x = 0;
             velocity.y = 0;
-            GamePanel.points += 25;
+            GamePanel.points += 50;
             EnemySoundHandler.stopSkeletonAttack();
             EnemySoundHandler.stopSkeletonFootsteps();
             EnemySoundHandler.skeletonDeath();
+            super.death();
         }
     }
 

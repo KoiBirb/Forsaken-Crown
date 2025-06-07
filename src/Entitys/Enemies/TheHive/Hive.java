@@ -1,8 +1,8 @@
 /*
- * SkeletonSummoner.java
- * Leo Bogaert
+ * Hive.java
+ * Leo Bogaert,
  * May 28, 2025,
- * Extends enemy, represents a skeleton summoner enemy that can summon skeletons and attack the player.
+ * Creates a Hive enemy that summons Wasps
  */
 
 package Entitys.Enemies.TheHive;
@@ -34,8 +34,8 @@ public class Hive extends Enemy{
     private static final VolatileImage imageReg = ImageHandler.loadImage("Assets/Images/Enemies/The Hive/The Hive 78x43.png");
 
     /**
-     * Summoner constructor.
-     * @param pos The initial position of the summoner.
+     * Hive constructor.
+     * @param pos The initial position of the Hive.
      */
     public Hive(Vector2 pos) {
         super(pos, 0, 8, 78, 43, 1,  new Rectangle(0, 0, 55, 65));
@@ -46,12 +46,10 @@ public class Hive extends Enemy{
         spriteCol = 0;
         maxSpriteCol = 8;
         spriteCounter = 0;
-
-
     }
 
     /**
-     * Updates summoner state and behavior.
+     * Updates Hive state and behavior.
      */
     public void update() {
 
@@ -111,6 +109,9 @@ public class Hive extends Enemy{
         super.update();
     }
 
+    /**
+     * Stops buzzing idle sound
+     */
     @Override
     public void stopSteps() {
         if (footstepsPlaying) {
@@ -119,6 +120,10 @@ public class Hive extends Enemy{
         }
     }
 
+    /**
+     * Checks if idle sound is playing.
+     * @return true if idle is playing, false otherwise.
+     */
     @Override
     public boolean getFootstepsPlaying() {
         return footstepsPlaying;
@@ -126,14 +131,14 @@ public class Hive extends Enemy{
 
     /**
      * Checks for ledges.
-     * @return true if no ledge, false otherwise.
+     * @return false, Hive does not check for ledges.
      */
     public boolean isGroundAhead(double x, double y, double direction) {
         return false;
     }
 
     /**
-     * Draws the summoner
+     * Draws the Hive
      * @param g2 graphics object to draw on
      */
     @Override
@@ -155,7 +160,7 @@ public class Hive extends Enemy{
     }
 
     /**
-     * Summons skeletons
+     * Summons Wasps
      */
     private void summon(){
         summoned = true;
@@ -173,7 +178,7 @@ public class Hive extends Enemy{
     }
 
     /**
-     * Debug draw method to visualize the summoner's vision radius and line of sight.
+     * Debug draw method
      * @param g2 Graphics2D object for drawing.
      */
     private void debugDraw(Graphics2D g2) {
@@ -192,7 +197,7 @@ public class Hive extends Enemy{
     }
 
     /**
-     * Handles damage taken by the summoner.
+     * Handles damage taken by the Hive.
      * @param damage The amount of damage taken.
      * @param knockbackX The knockback force in the X direction.
      * @param knockbackY The knockback force in the Y direction.
@@ -200,7 +205,7 @@ public class Hive extends Enemy{
     public void hit(int damage, int knockbackX, int knockbackY) {}
 
     /**
-     * Handles the death of the summoner.
+     * Handles the death of the Hive.
      */
     public void death(){
         if (currentState != State.EXPLODE) {
@@ -210,19 +215,23 @@ public class Hive extends Enemy{
             maxSpriteCol = 7;
             velocity.x = 0;
             velocity.y = 0;
-            GamePanel.points += 50;
+            GamePanel.points += 100;
             canSeePlayer = false;
         }
     }
 
     /**
-     * Gets the current state of the summoner.
+     * Gets the current state of the Hive.
      * @return The current state.
      */
     public State getState(){
         return currentState;
     }
 
+    /**
+     * Sets the current state of the Hive.
+     * @param state The new state to set.
+     */
     public void setState(State state){
         this.currentState = state;
     }

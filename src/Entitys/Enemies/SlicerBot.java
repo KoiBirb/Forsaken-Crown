@@ -1,8 +1,8 @@
 /*
- * SkeletonSummoner.java
- * Leo Bogaert
- * May 28, 2025,
- * Extends enemy, represents a skeleton summoner enemy that can summon skeletons and attack the player.
+ * SlicerBot.java
+ * Leo Bogaert,
+ * Jun 7, 2025,
+ * Creates a Slicer Bot enemy
  */
 
 package Entitys.Enemies;
@@ -20,7 +20,6 @@ import java.awt.image.VolatileImage;
 
 public class SlicerBot extends Enemy{
 
-    // states
     public enum State {IDLE, WALK, ATTACKING, DEAD, RETRACTING}
     private enum Logic {PATROL, AGGRESSIVE}
 
@@ -30,15 +29,14 @@ public class SlicerBot extends Enemy{
     private final double visionRadius = 200;
     private long lastAttackTime = 0;
 
-    private long patrolStateChangeTime = 0;
-    private long patrolDuration = 0;
+    private long patrolStateChangeTime = 0, patrolDuration = 0;
     private boolean patrolWalking = false, footstepsPlaying = false;
 
     private static final VolatileImage imageReg = ImageHandler.loadImage("Assets/Images/Enemies/Slicer Bot/Sicer Bot Sprite Sheet 16x32.png");
 
     /**
-     * Summoner constructor.
-     * @param pos The initial position of the summoner.
+     * Bot constructor.
+     * @param pos The initial position of the bot.
      */
     public SlicerBot(Vector2 pos) {
         super(pos, 2, 8, 16, 32, 1,  new Rectangle(0, 0, 20, 32));
@@ -47,7 +45,7 @@ public class SlicerBot extends Enemy{
     }
 
     /**
-     * Updates summoner state and behavior.
+     * Updates bot state and behavior.
      */
     public void update() {
 
@@ -57,12 +55,12 @@ public class SlicerBot extends Enemy{
             Vector2 currentPos = getSolidAreaCenter();
             Vector2 topCenter = getSolidAreaXCenter();
 
-            //room check
+            // Room check
             int myRoom = TiledMap.getRoomId(currentPos.x, currentPos.y);
             int playerRoom = TiledMap.getPlayerRoomId();
             boolean inSameRoom = myRoom == playerRoom;
 
-            // line of sight
+            // Line of sight
             double dist = currentPos.distanceTo(playerPos);
             boolean inVision = dist <= visionRadius;
 
@@ -77,7 +75,7 @@ public class SlicerBot extends Enemy{
                 currentLogic = Logic.PATROL;
             }
 
-            // collision and gravity handling
+            // Collision and gravity handling
             CollisionHandler.checkTileCollision(this);
             boolean onGround = isOnGround();
 
@@ -89,7 +87,7 @@ public class SlicerBot extends Enemy{
             }
 
             switch (currentLogic) {
-                case AGGRESSIVE: // chase and attack player
+                case AGGRESSIVE:
                     Vector2 target = hasStartedChasing && canSeePlayer ? playerPos : spawnPos;
                     double dx = target.x - currentPos.x;
                     boolean closeX = Math.abs(dx) <= ts;
@@ -207,7 +205,6 @@ public class SlicerBot extends Enemy{
             }
         }
 
-
         spriteCounter++;
         if (spriteCounter > 6) {
             spriteCounter = 0;
@@ -260,7 +257,7 @@ public class SlicerBot extends Enemy{
     }
 
     /**
-     * Draws the summoner
+     * Draws the bot
      * @param g2 graphics object to draw on
      */
     @Override
@@ -304,8 +301,8 @@ public class SlicerBot extends Enemy{
     }
 
     /**
-     * Sets the attacking state of the summoner.
-     * @param attacking true if summoner is attacking, false otherwise.
+     * Sets the attacking state of the bot.
+     * @param attacking true if bot is attacking, false otherwise.
      */
     public void setAttacking(boolean attacking) {
         if (attacking) {
@@ -322,7 +319,7 @@ public class SlicerBot extends Enemy{
     }
 
     /**
-     * Debug draw method to visualize the summoner's vision radius and line of sight.
+     * Debug draw method
      * @param g2 Graphics2D object for drawing.
      */
     private void debugDraw(Graphics2D g2) {
@@ -364,7 +361,7 @@ public class SlicerBot extends Enemy{
     }
 
     /**
-     * Handles damage taken by the summoner.
+     * Handles damage taken by the bot.
      * @param damage The amount of damage taken.
      * @param knockbackX The knockback force in the X direction.
      * @param knockbackY The knockback force in the Y direction.
@@ -384,7 +381,7 @@ public class SlicerBot extends Enemy{
     }
 
     /**
-     * Handles the death of the summoner.
+     * Handles the death of the bot.
      */
     public void death(){
         if (currentState != State.DEAD) {
@@ -394,14 +391,15 @@ public class SlicerBot extends Enemy{
             maxSpriteCol = 12;
             velocity.x = 0;
             velocity.y = 0;
-            GamePanel.points += 200;
+            GamePanel.points += 100;
             EnemySoundHandler.stopBotSteps();
             EnemySoundHandler.botDeath();
+            super.death();
         }
     }
 
     /**
-     * Gets the current state of the summoner.
+     * Gets the current state of the bot.
      * @return The current state.
      */
     public State getState(){

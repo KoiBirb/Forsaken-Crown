@@ -1,3 +1,10 @@
+/*
+ * Wasp.java
+ * Leo Bogaert
+ * Jun 7, 2025,
+ * Creates the Wasp enemy
+ */
+
 package Entitys.Enemies.TheHive;
 
 import Attacks.Enemies.SummonerAttack;
@@ -23,22 +30,25 @@ public class Wasp extends Enemy {
     private static final VolatileImage WASP_IMAGE = ImageHandler.loadImage("Assets/Images/Enemies/The Hive/Wasp/Wasp 16x16 Sprite Sheet.png");
 
     private final double visionRadius = 250;
-    private long lastAttackTime = 0;
-    private long patrolStateChangeTime = 0;
-    private long patrolDuration = 0;
-    private boolean patrolFlying = false, footstepsPlaying = false;
-    private double passiveCircleAngle = 0;
-    private boolean passiveArcForward = true;
-
-    private long passiveAttackTimer = 0;
-    private long passiveAttackInterval = 0;
+    private long lastAttackTime, passiveAttackTimer, passiveAttackInterval;
     private boolean waitingForAttack = false;
 
+    private long patrolStateChangeTime, patrolDuration;
+    private boolean patrolFlying = false, footstepsPlaying = false, passiveArcForward = true;
+    private double passiveCircleAngle = 0;
+
+    /**
+     * Wasp constructor.
+     * @param pos The initial position of the wasp.
+     */
     public Wasp(Vector2 pos) {
         super(pos, 2, 8, 16, 16, 2, new Rectangle(0, 0, 30, 30));
         this.image = WASP_IMAGE;
     }
 
+    /**
+     * Updates the wasp's state and behavior.
+     */
     public void update() {
         if (currentState != State.DEAD) {
             int ts = TiledMap.getScaledTileSize();
@@ -72,7 +82,7 @@ public class Wasp extends Enemy {
                     if (hasStartedChasing && canSeePlayer && !hit) {
                         long now = System.currentTimeMillis();
                         if (dist <= ts && currentState != State.ATTACKING) {
-                            if (now - lastAttackTime >= SummonerAttack.COOLDOWN) {
+                            if (now - lastAttackTime >= WaspAttack.COOLDOWN) {
                                 setAttacking(true);
                                 new WaspAttack(this);
                                 spriteCol = 0;
@@ -92,7 +102,6 @@ public class Wasp extends Enemy {
                                 break;
                             }
                         } else {
-                            // Fly toward player
                             Vector2 dir = playerPos.subtract(currentPos).returnSetLength(1);
                             velocity.x = dir.x * getSpeed();
                             velocity.y = dir.y * getSpeed();
@@ -122,7 +131,7 @@ public class Wasp extends Enemy {
                             currentState = State.FLY;
                             spriteRow = 0;
                             maxSpriteCol = 3;
-                            // Random direction
+
                             double angle = Math.random() * 2 * Math.PI;
                             velocity.x = Math.cos(angle) * getSpeed();
                             velocity.y = Math.sin(angle) * getSpeed();
@@ -145,20 +154,17 @@ public class Wasp extends Enemy {
 
                 case PASSIVE:
                     if (!hit) {
-                        // Start timer if not already started
                         if (!waitingForAttack) {
-                            passiveAttackInterval = 1000 + (long)(Math.random() * 2000); // 1-3 seconds
+                            passiveAttackInterval = 1000 + (long)(Math.random() * 2000);
                             passiveAttackTimer = System.currentTimeMillis();
                             waitingForAttack = true;
                         }
 
-                        // Check if timer expired
                         if (waitingForAttack && System.currentTimeMillis() - passiveAttackTimer >= passiveAttackInterval) {
                             currentLogic = Logic.AGGRESSIVE;
                             waitingForAttack = false;
                         }
 
-                        // Only move on passive path if not attacking
                         if (currentState != State.ATTACKING) {
                             double arcWidth = 4 * ts;
                             double arcHeight = 0.5 * ts;
@@ -193,7 +199,6 @@ public class Wasp extends Enemy {
                             velocity.x = dir.x * getSpeed();
                             velocity.y = dir.y * getSpeed();
                         } else {
-                            // Stop moving while attacking
                             velocity.x = 0;
                             velocity.y = 0;
                         }
@@ -267,6 +272,9 @@ public class Wasp extends Enemy {
         super.update();
     }
 
+    /**
+     * Stops the flying sound
+     */
     @Override
     public void stopSteps() {
         if (footstepsPlaying){
@@ -275,17 +283,28 @@ public class Wasp extends Enemy {
         }
     }
 
+    /**
+     * Checks if the wasp is currently playing flying sound.
+     * @return false if not playing, true if playing.
+     */
     @Override
     public boolean getFootstepsPlaying() {
-        return false;
-    }
-
-    public boolean isGroundAhead(double x, double y, double direction) {
-        return true; // Not needed for flying, always true
+        return footstepsPlaying;
     }
 
     /**
-     * Draws the summoner
+     * Checks if there is ground ahead of the wasp.
+     * @param x The x-coordinate to check.
+     * @param y The y-coordinate to check.
+     * @param direction The direction to check (1 for right, -1 for left).
+     * @return true if there is ground ahead, false otherwise.
+     */
+    public boolean isGroundAhead(double x, double y, double direction) {
+        return true;
+    }
+
+    /**
+     * Draws the wasp
      * @param g2 graphics object to draw on
      */
     @Override
@@ -316,8 +335,8 @@ public class Wasp extends Enemy {
     }
 
     /**
-     * Sets the attacking state of the summoner.
-     * @param attacking true if summoner is attacking, false otherwise.
+     * Sets the attacking state of the wasp.
+     * @param attacking true if wasp is attacking, false otherwise.
      */
     public void setAttacking(boolean attacking) {
         if (attacking) {
@@ -334,7 +353,7 @@ public class Wasp extends Enemy {
     }
 
     /**
-     * Debug draw method to visualize the summoner's vision radius and line of sight.
+     * Debug draw method
      * @param g2 Graphics2D object for drawing.
      */
     private void debugDraw(Graphics2D g2) {
@@ -368,7 +387,7 @@ public class Wasp extends Enemy {
     }
 
     /**
-     * Handles damage taken by the summoner.
+     * Handles damage taken by the wasp.
      * @param damage The amount of damage taken.
      * @param knockbackX The knockback force in the X direction.
      * @param knockbackY The knockback force in the Y direction.
@@ -396,7 +415,7 @@ public class Wasp extends Enemy {
     }
 
     /**
-     * Handles the death of the summoner.
+     * Handles the death of the wasp.
      */
     public void death(){
         if (currentState != State.DEAD) {
@@ -408,11 +427,14 @@ public class Wasp extends Enemy {
             velocity.y = 0;
             GamePanel.points += 50;
             EnemySoundHandler.stopWaspFly();
-            footstepsPlaying = false;
             EnemySoundHandler.waspDeath();
+            super.death();
         }
     }
 
+    /**
+     * Determines the direction of the wasp based on its velocity.
+     */
     private void determineDirection() {
         if (velocity.x != 0) {
             if (velocity.x > 0) {
@@ -452,13 +474,17 @@ public class Wasp extends Enemy {
     }
 
     /**
-     * Gets the current state of the summoner.
+     * Gets the current state of the wasp.
      * @return The current state.
      */
     public State getState(){
         return currentState;
     }
 
+    /**
+     * Sets the current state of the wasp.
+     * @param state The new state to set.
+     */
     public void setState(State state){
         this.currentState = state;
     }

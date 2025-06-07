@@ -33,10 +33,10 @@ public class BackgroundMusicHandler {
    private MusicType currentMusicType = MusicType.DARK;
    private MusicState currentMusicState = MusicState.MAIN;
 
-    private long actionSwitchRequestTime = 0;
-    private boolean actionSwitchPending = false;
-    private MusicState requestedMusicState = MusicState.MAIN;
-    private static final long ACTION_SWITCH_GRACE_MS = 800;
+   private long actionSwitchRequestTime = 0;
+   private boolean actionSwitchPending = false;
+   private MusicState requestedMusicState = MusicState.MAIN;
+   private static final long ACTION_SWITCH_GRACE_MS = 800;
 
     /**
      * Constructor for BackgroundMusicHandler
@@ -280,15 +280,25 @@ public class BackgroundMusicHandler {
        };
     }
 
+    /**
+     * gets Dark main music
+     * @return Sound object for Dark main music
+     */
     public Sound getMusicMusicDarkMain() {
         return musicDarkMain;
     }
 
+    /**
+     * Mutes the current music
+     */
     public void muteCurrent() {
         Sound current = getMusic(currentMusicType, currentMusicState);
         current.setVolume(0f);
     }
 
+    /**
+     * Unmutes the current music
+     */
     public void unmuteCurrent() {
         Sound current = getMusic(currentMusicType, currentMusicState);
         current.setVolume(1f);

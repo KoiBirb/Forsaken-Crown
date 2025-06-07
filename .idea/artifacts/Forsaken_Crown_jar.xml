@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Forsaken Crown:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Forsaken_Crown_jar</output-path>
+    <root id="archive" name="Forsaken Crown.jar">
+      <element id="module-output" name="Forsaken Crown" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/src/Assets/json-simple-1.1.1.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

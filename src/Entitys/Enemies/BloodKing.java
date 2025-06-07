@@ -1,8 +1,8 @@
 /*
- * SkeletonSummoner.java
+ * BloodKing.java
  * Leo Bogaert
- * May 28, 2025,
- * Extends enemy, represents a skeleton summoner enemy that can summon skeletons and attack the player.
+ * Jun 7, 2025,
+ * Creates the Blood King Boss
  */
 
 package Entitys.Enemies;
@@ -20,17 +20,17 @@ import Map.TiledMap;
 import java.awt.*;
 import java.awt.image.VolatileImage;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class BloodKing extends Enemy{
 
-    // states
     public enum State {IDLE, WALK, DAMAGED, ATTACKING, DEAD, SPAWNING}
     private enum Action {ATTACK, MOVE}
     private enum Attack {DODGE, SLASH, FINISHER, SLAM, HEART, STAB, HEARTTRANSFD, HEARTTRANSBW, CHARGE}
 
-    private VolatileImage imageReg, imageHit;
+    private final VolatileImage imageReg, imageHit;
 
-    private final java.util.HashMap<Attack, Long> lastUsed = new java.util.HashMap<>();
+    private final HashMap<Attack, Long> lastUsed = new HashMap<>();
     private State currentState;
     private Attack currentAttack = null;
     private ArrayList<Attack> viableAttacks = new ArrayList<>();
@@ -46,16 +46,14 @@ public class BloodKing extends Enemy{
 
     private Vector2 orgPos = new Vector2(0, 0);
 
-    private boolean footstepsPlaying = false;
-    private boolean canMove = true;
-    private boolean directionLocked = false;
+    private boolean footstepsPlaying = false, canMove = true, directionLocked = false;
 
     private long lastDamagedTime = 0;
-    private static final long DAMAGED_DURATION_MS = 400; // adjust as needed
+    private static final long DAMAGED_DURATION_MS = 400;
 
     /**
-     * Summoner constructor.
-     * @param pos The initial position of the summoner.
+     * BloodKing constructor.
+     * @param pos The initial position of the BloodKing.
      */
     public BloodKing(Vector2 pos) {
         super(pos, 2, 8, 168, 79, 40,  new Rectangle(0, 0, 50, 65));
@@ -63,7 +61,7 @@ public class BloodKing extends Enemy{
         imageReg = ImageHandler.loadImage("Images/Boss/Blood_King_combined.png");
         imageHit = ImageHandler.loadImage("Images/Boss/Blood_King_combined_Hit.png");
 
-        this.image = ImageHandler.loadImage("Images/Boss/Blood_King_combined.png");
+        this.image = imageReg;
 
         this.currentState = State.SPAWNING;
 
@@ -378,6 +376,9 @@ public class BloodKing extends Enemy{
         super.update();
     }
 
+    /**
+     * Starts the footsteps sound.
+     */
     @Override
     public void stopSteps() {
         if (footstepsPlaying) {
@@ -386,11 +387,19 @@ public class BloodKing extends Enemy{
         }
     }
 
+    /**
+     * Checks if the enemy is currently playing footsteps sound.
+     * @return true if footsteps are playing, false otherwise.
+     */
     @Override
     public boolean getFootstepsPlaying() {
         return footstepsPlaying;
     }
 
+    /**
+     * Chooses an attack based on the distance to the player.
+     * @param playerDistance The distance to the player.
+     */
     private void chooseAttack(double playerDistance) {
 
         int TileSize = TiledMap.getScaledTileSize();
@@ -454,6 +463,11 @@ public class BloodKing extends Enemy{
         return CollisionHandler.isSolidTileAt(checkX, checkY);
     }
 
+    /**
+     * Checks if the attack is off cooldown.
+     * @param atk The attack to check.
+     * @return true if the attack is off cooldown, false otherwise.
+     */
     private boolean isAttackOffCooldown(Attack atk) {
         long now = System.currentTimeMillis();
         return switch (atk) {
@@ -467,12 +481,16 @@ public class BloodKing extends Enemy{
         };
     }
 
+    /**
+     * Sets the attack as used by updating the lastUsed map with the current time.
+     * @param atk The attack that was used.
+     */
     private void setAttackUsed(Attack atk) {
         lastUsed.put(atk, System.currentTimeMillis());
     }
 
     /**
-     * Draws the summoner
+     * Draws the BloodKing
      * @param g2 graphics object to draw on
      */
     @Override
@@ -525,50 +543,58 @@ public class BloodKing extends Enemy{
 //        debugDraw(g2);
     }
 
+    /**
+     * Gets the y offsets for the image and hitbox based on the sprite row and column.
+     * @return int y offset.
+     */
     private int getHitboxYOffset() {
         if (spriteRow == 12) {
-            switch (spriteCol) {
-                case 1: return -90;
-                case 2: return -80;
-                case 5: return 80;
-                case 6: return 90;
-                default: return 0;
-            }
-        }
-        return 0;
-    }
-
-    private int getHitboxXOffset() {
-        if (spriteRow == 1) {
-            switch (spriteCol) {
-                case 3: return -65;
-                case 4: return -55;
-                case 8: return 160;
-                case 9: return 70;
-                case 14: return 25;
-                default: return 0;
-            }
-        } else if (spriteRow == 0) {
-            switch (spriteCol) {
-                case 5: return 117;
-                case 9: return 17;
-                case 10: return 35;
-                default: return 0;
-            }
+            return switch (spriteCol) {
+                case 1 -> -90;
+                case 2 -> -80;
+                case 5 -> 80;
+                case 6 -> 90;
+                default -> 0;
+            };
         }
         return 0;
     }
 
     /**
-     * Sets the attacking state of the summoner.
-     * @param attacking true if summoner is attacking, false otherwise.
+     * Gets the x offsets for the image and hitbox based on the sprite row and column.
+     * @return int x offset.
+     */
+    private int getHitboxXOffset() {
+        if (spriteRow == 1) {
+            return switch (spriteCol) {
+                case 3 -> -65;
+                case 4 -> -55;
+                case 8 -> 160;
+                case 9 -> 70;
+                case 14 -> 25;
+                default -> 0;
+            };
+        } else if (spriteRow == 0) {
+            return switch (spriteCol) {
+                case 5 -> 117;
+                case 9 -> 17;
+                case 10 -> 35;
+                default -> 0;
+            };
+        }
+        return 0;
+    }
+
+    /**
+     * Sets the attacking state of the BloodKing.
+     * @param attacking true if BloodKing is attacking, false otherwise.
      */
     public void setAttacking(boolean attacking) {
         currentState = attacking ? State.ATTACKING : State.IDLE;
     }
 
     /**
-     * Debug draw method to visualize the summoner's vision radius and line of sight.
+     * Debug draw method
      * @param g2 Graphics2D object for drawing.
      */
     private void debugDraw(Graphics2D g2) {
@@ -621,7 +647,7 @@ public class BloodKing extends Enemy{
     }
 
     /**
-     * Handles damage taken by the summoner.
+     * Handles damage taken by the BloodKing.
      * @param damage The amount of damage taken.
      * @param knockbackX The knockback force in the X direction.
      * @param knockbackY The knockback force in the Y direction.
@@ -649,7 +675,7 @@ public class BloodKing extends Enemy{
     }
 
     /**
-     * Handles the death of the summoner.
+     * Handles the death of the BloodKing.
      */
     public void death(){
         if (currentState != State.DEAD) {
@@ -668,17 +694,25 @@ public class BloodKing extends Enemy{
     }
 
     /**
-     * Gets the current state of the summoner.
+     * Gets the current state of the BloodKing.
      * @return The current state.
      */
     public State getState(){
         return currentState;
     }
 
+    /**
+     * Sets the current state of the BloodKing.
+     * @param state The new state to set.
+     */
     public void setState(State state){
         this.currentState = state;
     }
 
+    /**
+     * Sets the BloodKing ability to move.
+     * @return true if the BloodKing can move, false otherwise.
+     */
     public void canMove (boolean canMove) {
         this.canMove = canMove;
     }

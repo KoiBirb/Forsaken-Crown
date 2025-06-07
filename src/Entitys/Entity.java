@@ -77,7 +77,7 @@ public abstract class Entity {
 
 
     /**
-     * Update the entity
+     * Update the entity position and solid area
      */
     public void update() {
         position.add(velocity);

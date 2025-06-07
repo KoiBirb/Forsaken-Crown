@@ -2,7 +2,7 @@
  * SkeletonSummoner.java
  * Leo Bogaert
  * May 28, 2025,
- * Extends enemy, represents a skeleton summoner enemy that can summon skeletons and attack the player.
+ * Creates a Skeleton Summoner enemy
  */
 
 package Entitys.Enemies.Summoner;
@@ -22,7 +22,6 @@ import java.util.ArrayList;
 
 public class SkeletonSummoner extends Enemy{
 
-    // states
     public enum State {IDLE, WALK, DAMAGED, ATTACKING, DEAD, SUMMONING}
     private enum Logic {PATROL, AGGRESSIVE, PASSIVE}
 
@@ -31,14 +30,14 @@ public class SkeletonSummoner extends Enemy{
 
     private final double visionRadius = 300;
     private long lastAttackTime = 0;
+
     boolean summoned = false;
     private final ArrayList<Skeleton> summons = new ArrayList<>();
 
-    private long patrolStateChangeTime = 0;
-    private long patrolDuration = 0;
+    private long patrolStateChangeTime = 0, patrolDuration = 0;
     private boolean patrolWalking = false, footstepsPlaying = false;
 
-    private static VolatileImage imageReg = ImageHandler.loadImage("Assets/Images/Enemies/Skeleton Summoner/Summoner/Skeleton Summoner 132x83.png");;
+    private static final VolatileImage imageReg = ImageHandler.loadImage("Assets/Images/Enemies/Skeleton Summoner/Summoner/Skeleton Summoner 132x83.png");;
 
     /**
      * Summoner constructor.
@@ -95,7 +94,7 @@ public class SkeletonSummoner extends Enemy{
                 currentLogic = Logic.PATROL;
             }
 
-            // collision and gravity handling
+            // Collision and gravity handling
             CollisionHandler.checkTileCollision(this);
             boolean onGround = isOnGround();
 
@@ -236,7 +235,6 @@ public class SkeletonSummoner extends Enemy{
                                     maxSpriteCol = 11;
                                 }
                             } else if (absDx > maxDist) {
-                                // Too far, move closer
                                 double moveDir = dxPassive > 0 ? 1 : -1;
                                 if (isGroundAhead(currentPos.x, currentPos.y, moveDir)) {
                                     velocity.x = moveDir * getSpeed();
@@ -251,7 +249,6 @@ public class SkeletonSummoner extends Enemy{
                                     maxSpriteCol = 11;
                                 }
                             } else {
-                                // In range, idle
                                 velocity.x = 0;
                                 currentState = State.IDLE;
                                 spriteRow = 0;
@@ -277,7 +274,6 @@ public class SkeletonSummoner extends Enemy{
                 }
             }
         }
-
 
             spriteCounter++;
             if (spriteCounter >= 5) {
@@ -323,6 +319,9 @@ public class SkeletonSummoner extends Enemy{
             super.update();
     }
 
+    /**
+     * stops the Summoner's footsteps sound.
+     */
     @Override
     public void stopSteps() {
         if (footstepsPlaying) {
@@ -331,6 +330,10 @@ public class SkeletonSummoner extends Enemy{
         }
     }
 
+    /**
+     * Checks if the footsteps sound is playing.
+     * @return true if footsteps are playing, false otherwise.
+     */
     @Override
     public boolean getFootstepsPlaying() {
         return footstepsPlaying;
@@ -418,7 +421,7 @@ public class SkeletonSummoner extends Enemy{
     }
 
     /**
-     * Debug draw method to visualize the summoner's vision radius and line of sight.
+     * Debug draw method
      * @param g2 Graphics2D object for drawing.
      */
     private void debugDraw(Graphics2D g2) {
@@ -505,6 +508,7 @@ public class SkeletonSummoner extends Enemy{
             EnemySoundHandler.stopSummonerFootsteps();
             EnemySoundHandler.stopSummonerAttack();
             EnemySoundHandler.summonerDeath();
+            super.death();
         }
     }
 
@@ -516,6 +520,10 @@ public class SkeletonSummoner extends Enemy{
         return currentState;
     }
 
+    /**
+     * Sets the current state of the summoner.
+     * @param state The new state to set.
+     */
     public void setState(State state){
         this.currentState = state;
     }

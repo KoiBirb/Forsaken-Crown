@@ -1,8 +1,8 @@
 /*
- * SkeletonSummoner.java
+ * HeavySlicer.java
  * Leo Bogaert
- * May 28, 2025,
- * Extends enemy, represents a skeleton summoner enemy that can summon skeletons and attack the player.
+ * Jun 7, 2025,
+ * Creates a Heavy Slicer enemy
  */
 
 package Entitys.Enemies;
@@ -21,7 +21,6 @@ import java.awt.image.VolatileImage;
 
 public class HeavySlicer extends Enemy{
 
-    // states
     public enum State {IDLE, WALK, ATTACKING, DEAD}
     private enum Logic {PATROL, AGGRESSIVE}
 
@@ -42,8 +41,8 @@ public class HeavySlicer extends Enemy{
     private final VolatileImage imageReg, imageHit;
 
     /**
-     * Summoner constructor.
-     * @param pos The initial position of the summoner.
+     * Heavy Slicer constructor.
+     * @param pos The initial position of the Heavy Slicer.
      */
     public HeavySlicer(Vector2 pos) {
         super(pos, 1, 8, 48, 32, 12,  new Rectangle(0, 0, 50, 64));
@@ -55,7 +54,7 @@ public class HeavySlicer extends Enemy{
     }
 
     /**
-     * Updates summoner state and behavior.
+     * Updates Heavy Slicer state and behavior.
      */
     public void update() {
 
@@ -273,6 +272,9 @@ public class HeavySlicer extends Enemy{
         return CollisionHandler.isSolidTileAt(checkX, checkY);
     }
 
+    /**
+     * Stops the footsteps sound if it is playing.
+     */
     @Override
     public void stopSteps() {
         if (footstepsPlaying) {
@@ -282,18 +284,22 @@ public class HeavySlicer extends Enemy{
         }
     }
 
+    /**
+     * Checks if footsteps sound is currently playing.
+     * @return true if footsteps are playing, false otherwise.
+     */
     @Override
     public boolean getFootstepsPlaying() {
         return footstepsPlaying;
     }
 
     /**
-     * Draws the summoner
+     * Draws the Heavy Slicer
      * @param g2 graphics object to draw on
      */
     @Override
     public void draw(Graphics2D g2) {
-        debugDraw(g2);
+//        debugDraw(g2);
         Vector2 cam = GamePanel.tileMap.returnCameraPos();
 
         int sx = (int) (position.x - cam.x);
@@ -319,8 +325,8 @@ public class HeavySlicer extends Enemy{
     }
 
     /**
-     * Sets the attacking state of the summoner.
-     * @param attacking true if summoner is attacking, false otherwise.
+     * Sets the attacking state of the Heavy Slicer.
+     * @param attacking true if Heavy Slicer is attacking, false otherwise.
      */
     public void setAttacking(boolean attacking) {
         if (attacking) {
@@ -337,7 +343,7 @@ public class HeavySlicer extends Enemy{
     }
 
     /**
-     * Debug draw method to visualize the summoner's vision radius and line of sight.
+     * Debug draw method to visualize the Heavy Slicer's vision radius and line of sight.
      * @param g2 Graphics2D object for drawing.
      */
     private void debugDraw(Graphics2D g2) {
@@ -379,7 +385,7 @@ public class HeavySlicer extends Enemy{
     }
 
     /**
-     * Handles damage taken by the summoner.
+     * Handles damage taken by the Heavy Slicer.
      * @param damage The amount of damage taken.
      * @param knockbackX The knockback force in the X direction.
      * @param knockbackY The knockback force in the Y direction.
@@ -400,7 +406,7 @@ public class HeavySlicer extends Enemy{
     }
 
     /**
-     * Handles the death of the summoner.
+     * Handles the death of the Heavy Slicer.
      */
     public void death(){
         if (currentState != State.DEAD) {
@@ -410,21 +416,26 @@ public class HeavySlicer extends Enemy{
             maxSpriteCol = 14;
             velocity.x = 0;
             velocity.y = 0;
-            GamePanel.points += 300;
+            GamePanel.points += 250;
             EnemySoundHandler.stopBotSteps();
             EnemySoundHandler.stopSlicerFootsteps();
             EnemySoundHandler.slicerDeath();
+            super.death();
         }
     }
 
     /**
-     * Gets the current state of the summoner.
+     * Gets the current state of the Heavy Slicer.
      * @return The current state.
      */
     public State getState(){
         return currentState;
     }
 
+    /**
+     * Sets the current state of the Heavy Slicer.
+     * @param state The new state to set.
+     */
     public void setState(State state){
         this.currentState = state;
     }
