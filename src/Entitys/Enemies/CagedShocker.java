@@ -413,6 +413,7 @@ public class CagedShocker extends Enemy{
             velocity.y = 0;
             GamePanel.points += 300;
             EnemySoundHandler.stopShockerSteps();
+            EnemySoundHandler.stopBotSteps();
             EnemySoundHandler.shockerDeath();
             super.death();
         }
