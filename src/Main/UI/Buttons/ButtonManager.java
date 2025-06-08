@@ -7,6 +7,7 @@
 
 package Main.UI.Buttons;
 
+import Handlers.Sound.SoundHandlers.EnemySoundHandler;
 import Handlers.Sound.SoundHandlers.PlayerSoundHandler;
 import Main.Main;
 import Main.Panels.EndPanel;
@@ -57,7 +58,7 @@ public class ButtonManager {
                 new Button((int) (GamePanel.screenWidth/5) - 169, (int) (GamePanel.screenHeight * (4.6/6.2)), 120,
                         "Images/UI/Words/Words With BG/UI - Words3.png"),
                 new Button((int) (GamePanel.screenWidth/2) - 169, (int) (GamePanel.screenHeight * (4.6/6.2)), 120,
-                        "Images/UI/Words/Words With BG/UI - Words10.png"),
+                        "Images/UI/Words/Words With BG/UI - Words11.png"),
                 new Button((int) (GamePanel.screenWidth * (4.0/5) - 169), (int) (GamePanel.screenHeight * (4.6/6.2)), 120,
                         "Images/UI/Words/Words With BG/UI - Words16.png")
         };
@@ -234,8 +235,8 @@ public class ButtonManager {
                     break;
                 case 1:
                     GamePanel.isPaused = false;
-                    GamePanel.backgroundMusic.fadeOut(1000);
-                    Main.switchToMenu();
+                    GamePanel.backgroundMusic.unmuteCurrent();
+                    EnemySoundHandler.unmuteAll();
                     break;
                 case 2:
                     GamePanel.help = !GamePanel.help;
