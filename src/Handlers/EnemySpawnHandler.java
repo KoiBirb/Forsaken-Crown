@@ -85,8 +85,8 @@ public class EnemySpawnHandler {
 
         GamePanel.enemies.add(new SkeletonSummoner(new Vector2(1418, 1934)));
 
-        GamePanel.enemies.add(new SkeletonSummoner(new Vector2(2234, 1744)));
-        GamePanel.enemies.add(new SkeletonSummoner(new Vector2(1493, 1744)));
+        GamePanel.enemies.add(new SkeletonSummoner(new Vector2(2400, 1744)));
+        GamePanel.enemies.add(new SkeletonSummoner(new Vector2(2000, 1744)));
 
         GamePanel.enemies.add(new CagedShocker(new Vector2(1474, 1510)));
         GamePanel.enemies.add(new SkeletonSummoner(new Vector2(1931, 1200)));
