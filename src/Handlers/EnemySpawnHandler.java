@@ -10,6 +10,7 @@ package Handlers;
 import Entitys.Enemies.*;
 import Entitys.Enemies.Summoner.SkeletonSummoner;
 import Entitys.Enemies.TheHive.Hive;
+import Handlers.Sound.SoundHandlers.EnemySoundHandler;
 import Main.Panels.GamePanel;
 
 import java.awt.*;
@@ -23,6 +24,8 @@ public class EnemySpawnHandler {
         GamePanel.activeEnemies.clear();
         GamePanel.enemies.clear();
         GamePanel.enemyAttacks.clear();
+
+        EnemySoundHandler.resetAllFootsteps();
 
         GamePanel.enemies.add(new Ghoul(new Vector2(500, 240)));
         GamePanel.enemies.add(new Ghoul(new Vector2(660, 240)));

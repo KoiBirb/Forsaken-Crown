@@ -318,6 +318,28 @@
          slicerFootsteps.setVolume(0f);
      }
 
+     public static synchronized void resetAllFootsteps() {
+         walkingGhouls = 0;
+         walkingSummoners = 0;
+         walkingSkeletons = 0;
+         walkingBots = 0;
+         walkingShockers = 0;
+         walkingKings = 0;
+         walkingSlicers = 0;
+         flyingWasps = 0;
+         idleHive = 0;
+
+         ghoulSteps.stop();
+         summonerSteps.stop();
+         skeletonSteps.stop();
+         botSteps.stop();
+         shockerSteps.stop();
+         kingSteps.stop();
+         slicerFootsteps.stop();
+         waspFly.stop();
+         hiveIdle.stop();
+     }
+
      /**
       * Plays Slicer hit sound
       */
