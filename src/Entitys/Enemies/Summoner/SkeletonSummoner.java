@@ -30,6 +30,7 @@ public class SkeletonSummoner extends Enemy{
 
     private final double visionRadius = 300;
     private long lastAttackTime = 0;
+    private int hitCounter = 0;
 
     boolean summoned = false;
     private final ArrayList<Skeleton> summons = new ArrayList<>();
@@ -37,14 +38,20 @@ public class SkeletonSummoner extends Enemy{
     private long patrolStateChangeTime = 0, patrolDuration = 0;
     private boolean patrolWalking = false, footstepsPlaying = false;
 
-    private static final VolatileImage imageReg = ImageHandler.loadImage("Assets/Images/Enemies/Skeleton Summoner/Summoner/Skeleton Summoner 132x83.png");;
+    private static final VolatileImage imageRegPRE = ImageHandler.loadImage("Assets/Images/Enemies/Skeleton Summoner/Summoner/Skeleton Summoner 132x83.png");
+    private static final VolatileImage imageHitPRE = ImageHandler.loadImage("Assets/Images/Enemies/Skeleton Summoner/Summoner/Skeleton Summoner 132x83 Hit.png");
+
+    private final VolatileImage imageHit, imageReg;
 
     /**
      * Summoner constructor.
      * @param pos The initial position of the summoner.
      */
     public SkeletonSummoner(Vector2 pos) {
-        super(pos, 2, 8, 132, 83, 6, new Rectangle(0, 0, 50, 65));
+        super(pos, 2, 8, 132, 83, 8, new Rectangle(0, 0, 50, 65));
+
+        imageReg = imageRegPRE;
+        imageHit = imageHitPRE;
 
         this.image = imageReg;
     }
@@ -274,6 +281,14 @@ public class SkeletonSummoner extends Enemy{
             }
         }
 
+        if (image != imageReg) {
+            hitCounter++;
+            if (hitCounter > 18) {
+                hitCounter = 0;
+                image = imageReg;
+            }
+        }
+
             spriteCounter++;
             if (spriteCounter >= 5) {
                 spriteCounter = 0;
@@ -467,23 +482,14 @@ public class SkeletonSummoner extends Enemy{
      * @param knockbackY The knockback force in the Y direction.
      */
     public void hit(int damage, int knockbackX, int knockbackY) {
-        if (canBeHit() && !hit){
+        if (image != imageHit){
             currentHealth -= damage;
 
-            if (currentState != State.SUMMONING) {
-                spriteRow = 4;
-                spriteCol = 0;
-                maxSpriteCol = 3;
-            }
+            image = imageHit;
 
-            currentState = State.DAMAGED;
-
-            EnemySoundHandler.stopSummonerAttack();
             super.hit();
             if (currentHealth > 0)
                 EnemySoundHandler.summonerHit();
-
-            hit = true;
         }
 
         if (currentHealth <= 0) {
