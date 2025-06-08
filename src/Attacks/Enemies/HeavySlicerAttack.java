@@ -25,7 +25,7 @@ public class HeavySlicerAttack extends MeleeAttack {
      * @param slicer The HeavySlicer object that is performing the attack.
      */
     public HeavySlicerAttack(HeavySlicer slicer) {
-        super(0);
+        super(4);
 
         this.slicer = slicer;
         GamePanel.enemyAttacks.add(this);
