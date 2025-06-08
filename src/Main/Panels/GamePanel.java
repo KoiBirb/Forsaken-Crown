@@ -52,6 +52,7 @@ public class GamePanel extends JPanel implements Runnable{
 
     private VolatileImage title = ImageHandler.loadImage("Assets/Images/UI/Words/paused.png");
     private VolatileImage Help = ImageHandler.loadImage("Assets/Images/UI/Words/help.png");
+    public static final Color backgroundColor = new Color(11, 11, 11);
 
     public static long initialTime;
     public static int points;

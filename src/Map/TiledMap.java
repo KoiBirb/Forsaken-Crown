@@ -465,7 +465,7 @@ public class TiledMap {
 
         Vector2 roomScreenPos = getScreenRoomPos();
 
-        g2.setColor(Color.BLACK);
+        g2.setColor(GamePanel.backgroundColor);
 
         g2.fillRect(0, 0, (int) screenWidth, (int) roomScreenPos.y - getScaledTileSize() + 2);
 
