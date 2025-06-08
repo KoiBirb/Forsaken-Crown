@@ -1,9 +1,10 @@
 /*
- * SummonerAttack.java
+ * Slam.java
  * Leo Bogaert
- * May 28, 2025,
- * Extends MeleeAttack, used for the summoner attack
+ * Jun 7, 2025,
+ * Extends MeleeAttack, used for the king's slam attack
  */
+
 package Attacks.Enemies.BloodKing;
 
 import Attacks.MeleeAttack;
@@ -17,9 +18,12 @@ import java.awt.*;
 public class Slam extends MeleeAttack {
 
     public static final int COOLDOWN = 2000;
-
     private final BloodKing bloodKing;
 
+    /**
+     * Constructor for the Slam class.
+     * @param bloodKing The BloodKing object that is performing the attack.
+     */
     public Slam (BloodKing bloodKing) {
         super(5);
 

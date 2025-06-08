@@ -1,9 +1,10 @@
 /*
- * SummonerAttack.java
+ * Dodge.java
  * Leo Bogaert
- * May 28, 2025,
- * Extends MeleeAttack, used for the summoner attack
+ * Jun 7, 2025,
+ * Extends MeleeAttack, used for the king's dodge attack
  */
+
 package Attacks.Enemies.BloodKing;
 
 import Attacks.MeleeAttack;
@@ -17,9 +18,12 @@ import java.awt.*;
 public class Dodge extends MeleeAttack {
 
     public static final int COOLDOWN = 6000;
-
     private final BloodKing bloodKing;
 
+    /**
+     * Constructor for the Dodge class.
+     * @param bloodKing The BloodKing object that is performing the attack.
+     */
     public Dodge(BloodKing bloodKing) {
         super(3);
 

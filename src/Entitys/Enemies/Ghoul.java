@@ -1,16 +1,16 @@
+/*
+ * Ghoul.java
+ * Leo Bogaert, Heeyoung Shin
+ * Jun 7, 2025,
+ * Creates a Ghoul enemy
+ */
+
 package Entitys.Enemies;
 
 import Attacks.Enemies.GhoulAttack;
 import Handlers.CollisionHandler;
 import Handlers.ImageHandler;
 import Handlers.Sound.SoundHandlers.EnemySoundHandler;
-/*
- * HeavySlicer.java
- * Leo Bogaert, Heeyoung Shin
- * Jun 7, 2025,
- * Creates a Ghoul enemy
- */
-
 import Handlers.Vector2;
 import Main.Panels.GamePanel;
 import Map.TiledMap;

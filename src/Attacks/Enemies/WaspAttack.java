@@ -1,8 +1,8 @@
 /*
- * GhoulAttack.java
+ * WaspAttack.java
  * Leo Bogaert
  * May 28, 2025,
- * Extends MeleeAttack, used for the ghoul attack
+ * Extends MeleeAttack, used for the wasp attack
  */
 
 package Attacks.Enemies;
@@ -17,9 +17,12 @@ import java.awt.*;
 public class WaspAttack extends MeleeAttack {
 
     public static final int COOLDOWN = 4000;
-
     private final Wasp wasp;
 
+    /**
+     * Constructor for the WaspAttack class.
+     * @param wasp The wasp object that is performing the attack.
+     */
     public WaspAttack(Wasp wasp) {
         super(2);
 

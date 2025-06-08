@@ -4,6 +4,7 @@
  * May 28, 2025,
  * Extends MeleeAttack, used for the summoner attack
  */
+
 package Attacks.Enemies;
 
 import Attacks.MeleeAttack;
@@ -17,9 +18,12 @@ import java.awt.*;
 public class SummonerAttack extends MeleeAttack {
 
     public static final int COOLDOWN = 4000;
-
     private final SkeletonSummoner summoner;
 
+    /**
+     * Constructor for the SummonerAttack class.
+     * @param summoner The SkeletonSummoner object that is performing the attack.
+     */
     public SummonerAttack(SkeletonSummoner summoner) {
         super(4);
 

@@ -1,8 +1,8 @@
 /*
- * GhoulAttack.java
+ * HeavySlicerAttack.java
  * Leo Bogaert
- * May 28, 2025,
- * Extends MeleeAttack, used for the ghoul attack
+ * Jun 7, 2025,
+ * Extends MeleeAttack, used for the Heavy Slicer attack
  */
 
 package Attacks.Enemies;
@@ -18,9 +18,12 @@ import java.awt.*;
 public class HeavySlicerAttack extends MeleeAttack {
 
     public static final int COOLDOWN = 2500;
-
     private final HeavySlicer slicer;
 
+    /**
+     * Constructor for the HeavySlicerAttack class.
+     * @param slicer The HeavySlicer object that is performing the attack.
+     */
     public HeavySlicerAttack(HeavySlicer slicer) {
         super(0);
 

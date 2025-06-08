@@ -1,3 +1,10 @@
+/*
+ * PlayerQuickAttack.java
+ * Leo Bogaert
+ * Jun 7, 2025,
+ * Creates a quick attack for the player
+ */
+
 package Attacks.Player;
 
 import Attacks.MeleeAttack;

@@ -1,9 +1,10 @@
 /*
- * SummonerAttack.java
+ * Stab.java
  * Leo Bogaert
- * May 28, 2025,
- * Extends MeleeAttack, used for the summoner attack
+ * Jun 7, 2025,
+ * Extends MeleeAttack, used for the king's stab attack
  */
+
 package Attacks.Enemies.BloodKing;
 
 import Attacks.MeleeAttack;
@@ -17,9 +18,12 @@ import java.awt.*;
 public class Stab extends MeleeAttack {
 
     public static final int COOLDOWN = 5000;
-
     private final BloodKing bloodKing;
 
+    /**
+     * Constructor for the Stab class.
+     * @param bloodKing The BloodKing object that is performing the attack.
+     */
     public Stab(BloodKing bloodKing) {
         super(3);
 

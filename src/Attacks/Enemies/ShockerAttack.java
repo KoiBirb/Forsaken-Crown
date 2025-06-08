@@ -1,8 +1,8 @@
 /*
- * GhoulAttack.java
+ * ShockerAttack.java
  * Leo Bogaert
- * May 28, 2025,
- * Extends MeleeAttack, used for the ghoul attack
+ * Jun 7, 2025,
+ * Extends MeleeAttack, used for the Shocker attack
  */
 
 package Attacks.Enemies;
@@ -17,9 +17,12 @@ import java.awt.*;
 public class ShockerAttack extends MeleeAttack {
 
     public static final int COOLDOWN = 3500;
-
     private final CagedShocker shocker;
 
+    /**
+     * Constructor for the ShockerAttack class.
+     * @param shocker The CagedShocker object that is performing the attack.
+     */
     public ShockerAttack(CagedShocker shocker) {
         super(4);
 

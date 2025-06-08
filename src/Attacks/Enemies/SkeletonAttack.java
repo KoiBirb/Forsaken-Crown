@@ -1,8 +1,8 @@
 /*
- * SummonerAttack.java
+ * SkeletonAttack.java
  * Leo Bogaert
  * May 28, 2025,
- * Extends MeleeAttack, used for the summoner attack
+ * Extends MeleeAttack, used for the Skeleton attack
  */
 package Attacks.Enemies;
 
@@ -16,9 +16,12 @@ import java.awt.*;
 public class SkeletonAttack extends MeleeAttack {
 
     public static final int COOLDOWN = 750;
-
     private final Skeleton skeleton;
 
+    /**
+     * Constructor for the SkeletonAttack class.
+     * @param skeleton The Skeleton object that is performing the attack.
+     */
     public SkeletonAttack(Skeleton skeleton) {
         super(1);
 

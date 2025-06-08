@@ -14,10 +14,7 @@ import java.awt.*;
 
 public abstract class MeleeAttack {
 
-    protected int damage;
-    protected int spriteCounter;
-    protected int frame;
-    protected boolean chain;
+    protected int damage, spriteCounter, frame;
 
     protected Rectangle hitBox;
 
@@ -57,17 +54,17 @@ public abstract class MeleeAttack {
     }
 
     /**
-     * Getter for chain variable
-     * @return true if active, false otherwise
+     * Gets the hitbox of the attack
+     * @return Rectangle hitBox
      */
-    public boolean getChain() {
-        return chain;
-    }
-
     public Rectangle getHitBox() {
         return hitBox;
     }
 
+    /**
+     * Gets attacks damage
+     * @return int damage value
+     */
     public int getDamage() {
         return damage;
     }

@@ -1,8 +1,8 @@
 /*
- * GhoulAttack.java
+ * SlicerAttack.java
  * Leo Bogaert
- * May 28, 2025,
- * Extends MeleeAttack, used for the ghoul attack
+ * Jun 7, 2025,
+ * Extends MeleeAttack, used for the slicer attack
  */
 
 package Attacks.Enemies;
@@ -17,11 +17,14 @@ import java.awt.*;
 public class SlicerAttack extends MeleeAttack {
 
     public static final int COOLDOWN = 1500;
-
     private final SlicerBot bot;
 
+    /**
+     * Constructor for the SlicerAttack class.
+     * @param bot The SlicerBot object that is performing the attack.
+     */
     public SlicerAttack(SlicerBot bot) {
-        super(0);
+        super(4);
 
         this.bot = bot;
         GamePanel.enemyAttacks.add(this);
@@ -37,7 +40,7 @@ public class SlicerAttack extends MeleeAttack {
         if (frame == 2) {
             GamePanel.enemyAttacks.remove(this);
         } else if (frame == 1 && bot.getState() != SlicerBot.State.DEAD) {
-            hitBox = new Rectangle((bot.getDirection().contains("right")) ? (int) bot.getPosition().x - 4 : (int) bot.getPosition().x - 4, (int) (bot.getPosition().y - 7), 25, 45);
+            hitBox = new Rectangle((int) bot.getPosition().x - 4, (int) (bot.getPosition().y - 7), 25, 45);
         } else {
             hitBox = null;
         }

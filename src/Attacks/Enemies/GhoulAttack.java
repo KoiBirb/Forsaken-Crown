@@ -16,9 +16,12 @@ import java.awt.*;
 public class GhoulAttack extends MeleeAttack {
 
     public static final int COOLDOWN = 3500;
-
     private final Ghoul ghoul;
 
+    /**
+     * Constructor for the GhoulAttack class.
+     * @param ghoul The Ghoul object that is performing the attack.
+     */
     public GhoulAttack(Ghoul ghoul) {
         super(2);
 

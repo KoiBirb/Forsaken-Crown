@@ -1,9 +1,10 @@
 /*
- * SummonerAttack.java
+ * HeartSlam.java
  * Leo Bogaert
- * May 28, 2025,
- * Extends MeleeAttack, used for the summoner attack
+ * Jun 7, 2025,
+ * Extends MeleeAttack, used for the king's heart attack
  */
+
 package Attacks.Enemies.BloodKing;
 
 import Attacks.MeleeAttack;
@@ -17,11 +18,15 @@ import java.awt.*;
 public class HeartSlam extends MeleeAttack {
 
     public static final int COOLDOWN = 10000;
-
     private final BloodKing bloodKing;
 
+    /**
+     * Constructor for the HeartSlam class.
+     * @param bloodKing The BloodKing object that is performing the attack.
+     */
     public HeartSlam (BloodKing bloodKing) {
         super(5);
+
         this.bloodKing = bloodKing;
         GamePanel.enemyAttacks.add(this);
     }

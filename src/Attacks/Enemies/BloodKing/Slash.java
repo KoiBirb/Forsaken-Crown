@@ -1,9 +1,10 @@
 /*
- * SummonerAttack.java
+ * Slash.java
  * Leo Bogaert
- * May 28, 2025,
- * Extends MeleeAttack, used for the summoner attack
+ * Jun 7, 2025,
+ * Extends MeleeAttack, used for the king's slash attack
  */
+
 package Attacks.Enemies.BloodKing;
 
 import Attacks.MeleeAttack;
@@ -17,9 +18,12 @@ import java.awt.*;
 public class Slash extends MeleeAttack {
 
     public static final int COOLDOWN = 1000;
-
     private final BloodKing bloodKing;
 
+    /**
+     * Constructor for the Slash class.
+     * @param bloodKing The BloodKing object that is performing the attack.
+     */
     public Slash(BloodKing bloodKing) {
         super(2);
 

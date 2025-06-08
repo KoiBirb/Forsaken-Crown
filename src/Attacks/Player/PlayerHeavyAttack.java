@@ -1,3 +1,10 @@
+/*
+ * PlayerHeavyAttack.java
+ * Leo Bogaert
+ * Jun 7, 2025,
+ * Creates a heavy attack for the player
+ */
+
 package Attacks.Player;
 
 import Attacks.MeleeAttack;
