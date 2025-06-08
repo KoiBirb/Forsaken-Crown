@@ -52,29 +52,29 @@ public class BackgroundMusicHandler {
        musicBloodAction.setFile("/Audio/Background/Blood/BloodAction.wav");
        musicBossMain.setFile("/Audio/Background/Boss/BossMain.wav");
 
+       musicDarkMain.setVolume(0.0f);
        musicDarkMain.play();
        musicDarkMain.loop();
-       musicDarkMain.setVolume(0.0f);
 
+       musicDarkAction.setVolume(0.0f);
        musicDarkAction.play();
        musicDarkAction.loop();
-       musicDarkAction.setVolume(0.0f);
 
+       musicCastleMain.setVolume(0.0f);
        musicCastleMain.play();
        musicCastleMain.loop();
-       musicCastleMain.setVolume(0.0f);
 
+       musicCastleAction.setVolume(0.0f);
        musicCastleAction.play();
        musicCastleAction.loop();
-       musicCastleAction.setVolume(0.0f);
 
+       musicBloodMain.setVolume(0.0f);
        musicBloodMain.play();
        musicBloodMain.loop();
-       musicBloodMain.setVolume(0.0f);
 
+       musicBloodAction.setVolume(0.0f);
        musicBloodAction.play();
        musicBloodAction.loop();
-       musicBloodAction.setVolume(0.0f);
    }
 
     /**
