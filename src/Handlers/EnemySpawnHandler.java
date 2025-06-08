@@ -90,7 +90,7 @@ public class EnemySpawnHandler {
         GamePanel.enemies.add(new Hive(new Vector2(1430, 1995)));
 
 
-//        GamePanel.enemies.add(new BloodKing(new Vector2(2550, 3102)));
+        GamePanel.enemies.add(new BloodKing(new Vector2(2550, 3102)));
     }
 
     /**
