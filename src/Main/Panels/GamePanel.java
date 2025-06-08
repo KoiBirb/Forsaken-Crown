@@ -83,7 +83,7 @@ public class GamePanel extends JPanel implements Runnable{
      */
     public void setupGame() {
         this.requestFocusInWindow();
-        player = new Player(new Vector2(100,400));
+        player = new Player(new Vector2(100,100));
         ui = new UIManager(player, true);
         checkpointManager = new CheckpointManager();
         EnemySpawnHandler.setup();
