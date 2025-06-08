@@ -598,7 +598,11 @@ public class TiledMap {
      */
     public static int getPlayerRoomId(){
         TiledMap map = GamePanel.tileMap;
-        return map.activeRoomId;
+
+        if (map.activeRoomId == 9 || map.activeRoomId == 11)
+            return 10;
+        else
+            return map.activeRoomId;
     }
 
     /**
