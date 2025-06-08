@@ -323,26 +323,6 @@ public class Skeleton extends Enemy {
         if (canBeHit() && !hit){
             currentHealth -= damage;
 
-            Vector2 ghoulCenter = getSolidAreaCenter();
-            Vector2 playerCenter = GamePanel.player.getSolidAreaCenter();
-
-            if (ghoulCenter.x > playerCenter.x) {
-                knockbackX = -Math.abs(knockbackX);
-            } else {
-                knockbackX = Math.abs(knockbackX);
-            }
-
-            velocity.x += knockbackX;
-            velocity.y += knockbackY;
-            position.x += knockbackX;
-            position.y += knockbackY;
-
-            if (velocity.x > 0) {
-                direction = "right";
-            } else if (velocity.x < 0) {
-                direction = "left";
-            }
-
             spriteRow = 1;
             spriteCol = 0;
             maxSpriteCol = 3;
