@@ -166,54 +166,54 @@ public class SkeletonSummoner extends Enemy{
                     }
                     break;
 
-                case PATROL: // Randomly walk back and forth
-                    boolean onGroundPatrol = isOnGround();
-                    long now = System.currentTimeMillis();
+                case PATROL:
+                        boolean onGroundPatrol = isOnGround();
+                        long now = System.currentTimeMillis();
 
-                    if (now > patrolStateChangeTime) {
-                        patrolWalking = !patrolWalking;
-                        if (patrolWalking) {
-                            patrolDuration = 1000 + (long) (Math.random() * 1500);
-                            currentState = State.WALK;
-                            spriteRow = 1;
-                            maxSpriteCol = 11;
-                            if (Math.random() < 0.5) {
-                                direction = "left";
-                                velocity.x = -getSpeed();
+                        if (now > patrolStateChangeTime) {
+                            patrolWalking = !patrolWalking;
+                            if (patrolWalking) {
+                                patrolDuration = 1000 + (long) (Math.random() * 1500);
+                                currentState = State.WALK;
+                                spriteRow = 1;
+                                maxSpriteCol = 11;
+                                if (Math.random() < 0.5) {
+                                    direction = "left";
+                                    velocity.x = -getSpeed();
+                                } else {
+                                    direction = "right";
+                                    velocity.x = getSpeed();
+                                }
                             } else {
-                                direction = "right";
-                                velocity.x = getSpeed();
+                                patrolDuration = 1000 + (long) (Math.random() * 3000);
+                                currentState = State.IDLE;
+                                spriteRow = 0;
+                                maxSpriteCol = 11;
+                                velocity.x = 0;
                             }
-                        } else {
-                            patrolDuration = 1000 + (long) (Math.random() * 3000);
-                            currentState = State.IDLE;
-                            spriteRow = 0;
-                            maxSpriteCol = 11;
-                            velocity.x = 0;
+                            patrolStateChangeTime = now + patrolDuration;
                         }
-                        patrolStateChangeTime = now + patrolDuration;
-                    }
 
-                    if (patrolWalking && currentState == State.WALK && onGroundPatrol) {
-                        double moveDir = velocity.x < 0 ? -1 : 1;
-                        if (!isGroundAhead(currentPos.x, currentPos.y, moveDir)) {
-                            if (Math.random() < 0.5) {
+                        if (patrolWalking && currentState == State.WALK && onGroundPatrol) {
+                            double moveDir = velocity.x < 0 ? -1 : 1;
+                            boolean groundAhead = isGroundAhead(currentPos.x, currentPos.y, moveDir);
+                            boolean wallHit = CollisionHandler.isSolidTileAt(
+                                (int)(currentPos.x + moveDir * (width / 3.0)), (int)currentPos.y
+                            );
+                            if (!groundAhead || wallHit) {
                                 patrolWalking = false;
                                 currentState = State.IDLE;
                                 spriteRow = 0;
                                 maxSpriteCol = 11;
                                 velocity.x = 0;
+                                direction = "left".equals(direction) ? "right" : "left";
                                 patrolDuration = 1000 + (long) (Math.random() * 3000);
                                 patrolStateChangeTime = now + patrolDuration;
-                            } else {
-                                velocity.x = -velocity.x;
-                                direction = "left".equals(direction) ? "right" : "left";
                             }
+                        } else if (!patrolWalking) {
+                            velocity.x = 0;
                         }
-                    } else if (!patrolWalking) {
-                        velocity.x = 0;
-                    }
-                    break;
+                        break;
 
                 case PASSIVE: // keep distance from player
                     if (currentState != State.SUMMONING) {
@@ -369,6 +369,7 @@ public class SkeletonSummoner extends Enemy{
      */
     @Override
     public void draw(Graphics2D g2) {
+//        debugDraw(g2);
         Vector2 cam = GamePanel.tileMap.returnCameraPos();
 
         int sx = (int) (position.x - cam.x);
@@ -468,11 +469,16 @@ public class SkeletonSummoner extends Enemy{
 
         // ledge check
         double moveDir = (velocity.x < 0) ? -1 : 1;
-        int checkX = (int) (center.x + moveDir * (width /4.0));
+        int checkX = (int) (center.x + moveDir * (width /3.0));
         int checkY = (int) (center.y + height/2.0 + 5);
 
         g2.setColor(Color.MAGENTA);
         g2.fillRect(checkX - (int) cam.x - 2, checkY - (int) cam.y - 2, 4, 4);
+
+        int wallCheckX = (int) (getSolidAreaCenter().x + moveDir * (width / 5.0));
+        int wallCheckY = (int) getSolidAreaCenter().y;
+        g2.setColor(Color.ORANGE);
+        g2.fillRect(wallCheckX - (int) cam.x - 2, wallCheckY - (int) cam.y - 2, 4, 4);
     }
 
     /**

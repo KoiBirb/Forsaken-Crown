@@ -250,7 +250,7 @@ public class SlicerBot extends Enemy{
      * @return true if no ledge, false otherwise.
      */
     public boolean isGroundAhead(double x, double y, double direction) {
-        int checkX = (int) (x + direction * (width /4.0));
+        int checkX = (int) (x + direction * (width /1.5));
         int checkY = (int) (y + height/2.0 + 5);
         return CollisionHandler.isSolidTileAt(checkX, checkY);
     }
@@ -261,7 +261,7 @@ public class SlicerBot extends Enemy{
      */
     @Override
     public void draw(Graphics2D g2) {
-//        debugDraw(g2);
+        debugDraw(g2);
         Vector2 cam = GamePanel.tileMap.returnCameraPos();
 
         int sx = (int) (position.x - cam.x);
@@ -351,7 +351,7 @@ public class SlicerBot extends Enemy{
 
         // ledge check
         double moveDir = (velocity.x < 0) ? -1 : 1;
-        int checkX = (int) (center.x + moveDir * (width /4.0));
+        int checkX = (int) (center.x + moveDir * (width /1.5));
         int checkY = (int) (center.y + height/2.0 + 5);
 
         g2.setColor(Color.MAGENTA);

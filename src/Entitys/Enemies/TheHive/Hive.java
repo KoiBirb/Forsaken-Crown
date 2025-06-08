@@ -172,7 +172,8 @@ public class Hive extends Enemy{
         stopSteps();
 
         for (int i = 1; i <= 6; i++) {
-            Wasp wasp = new Wasp(new Vector2(summonX, position.y + 30));
+            double summonY = position.y + (int)(Math.random() * 61);
+            Wasp wasp = new Wasp(new Vector2(summonX, summonY));
             GamePanel.enemies.add(wasp);
             summons.add(wasp);
         }

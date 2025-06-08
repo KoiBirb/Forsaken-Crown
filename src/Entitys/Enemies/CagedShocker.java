@@ -8,6 +8,7 @@
 package Entitys.Enemies;
 
 import Attacks.Enemies.ShockerAttack;
+import Entitys.Enemies.Summoner.SkeletonSummoner;
 import Handlers.CollisionHandler;
 import Handlers.ImageHandler;
 import Handlers.Sound.SoundHandlers.EnemySoundHandler;
@@ -155,11 +156,10 @@ public class CagedShocker extends Enemy{
                     if (now > patrolStateChangeTime) {
                         patrolWalking = !patrolWalking;
                         if (patrolWalking) {
-                            patrolDuration = 1500 + (long) (Math.random() * 2500);
+                            patrolDuration = 1000 + (long) (Math.random() * 1500);
                             currentState = State.WALK;
                             spriteRow = 1;
                             maxSpriteCol = 11;
-                            if (spriteCol > maxSpriteCol) spriteCol = 0;
                             if (Math.random() < 0.5) {
                                 direction = "left";
                                 velocity.x = -getSpeed();
@@ -168,10 +168,10 @@ public class CagedShocker extends Enemy{
                                 velocity.x = getSpeed();
                             }
                         } else {
-                            patrolDuration = 1500 + (long) (Math.random() * 3500);
+                            patrolDuration = 1000 + (long) (Math.random() * 3000);
                             currentState = State.IDLE;
                             spriteRow = 0;
-                            maxSpriteCol = 23;
+                            maxSpriteCol = 11;
                             velocity.x = 0;
                         }
                         patrolStateChangeTime = now + patrolDuration;
@@ -179,19 +179,19 @@ public class CagedShocker extends Enemy{
 
                     if (patrolWalking && currentState == State.WALK && onGroundPatrol) {
                         double moveDir = velocity.x < 0 ? -1 : 1;
-                        if (!isGroundAhead(currentPos.x, currentPos.y, moveDir)) {
-                            if (Math.random() < 0.5) {
-                                patrolWalking = false;
-                                currentState = State.IDLE;
-                                spriteRow = 0;
-                                maxSpriteCol = 23;
-                                velocity.x = 0;
-                                patrolDuration = 1000 + (long) (Math.random() * 3000);
-                                patrolStateChangeTime = now + patrolDuration;
-                            } else {
-                                velocity.x = -velocity.x;
-                                direction = "left".equals(direction) ? "right" : "left";
-                            }
+                        boolean groundAhead = isGroundAhead(currentPos.x, currentPos.y, moveDir);
+                        boolean wallHit = CollisionHandler.isSolidTileAt(
+                                (int)(currentPos.x + moveDir * (width / 3.0)), (int)currentPos.y
+                        );
+                        if (!groundAhead || wallHit) {
+                            patrolWalking = false;
+                            currentState = State.IDLE;
+                            spriteRow = 0;
+                            maxSpriteCol = 11;
+                            velocity.x = 0;
+                            direction = "left".equals(direction) ? "right" : "left";
+                            patrolDuration = 1000 + (long) (Math.random() * 3000);
+                            patrolStateChangeTime = now + patrolDuration;
                         }
                     } else if (!patrolWalking) {
                         velocity.x = 0;
@@ -377,6 +377,11 @@ public class CagedShocker extends Enemy{
 
         g2.setColor(Color.MAGENTA);
         g2.fillRect(checkX - (int) cam.x - 2, checkY - (int) cam.y - 2, 4, 4);
+
+        int wallCheckX = (int) (getSolidAreaCenter().x + moveDir * (width / 5.0));
+        int wallCheckY = (int) getSolidAreaCenter().y;
+        g2.setColor(Color.ORANGE);
+        g2.fillRect(wallCheckX - (int) cam.x - 2, wallCheckY - (int) cam.y - 2, 4, 4);
     }
 
     /**

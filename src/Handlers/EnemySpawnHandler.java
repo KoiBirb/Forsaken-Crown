@@ -30,7 +30,7 @@ public class EnemySpawnHandler {
         GamePanel.enemies.add(new CagedShocker(new Vector2(1477, 200)));
 
         GamePanel.enemies.add(new Ghoul(new Vector2(2456, 208)));
-        GamePanel.enemies.add(new Ghoul(new Vector2(2500, 208)));
+        GamePanel.enemies.add(new Ghoul(new Vector2(2738, 208)));
         GamePanel.enemies.add(new Hive(new Vector2(2600, 98)));
 
         GamePanel.enemies.add(new Ghoul(new Vector2(2192, 688)));
@@ -39,6 +39,8 @@ public class EnemySpawnHandler {
         GamePanel.enemies.add(new Ghoul(new Vector2(2036, 496)));
         GamePanel.enemies.add(new CagedShocker(new Vector2(2118, 870)));
         GamePanel.enemies.add(new Hive(new Vector2(1895, 687)));
+        GamePanel.enemies.add(new SlicerBot(new Vector2(2693, 816)));
+        GamePanel.enemies.add(new Ghoul(new Vector2(2386, 592)));
 
         GamePanel.enemies.add(new Ghoul(new Vector2(851, 720)));
         GamePanel.enemies.add(new CagedShocker(new Vector2(626, 620)));
@@ -56,6 +58,7 @@ public class EnemySpawnHandler {
         GamePanel.enemies.add(new SkeletonKnight(new Vector2(970, 2608)));
         GamePanel.enemies.add(new SkeletonKnight(new Vector2(293, 2192)));
         GamePanel.enemies.add(new SkeletonKnight(new Vector2(293, 2736)));
+        GamePanel.enemies.add(new SkeletonSummoner(new Vector2(509, 2096)));
 
         GamePanel.enemies.add(new SkeletonSummoner(new Vector2(158, 3115)));
         GamePanel.enemies.add(new SlicerBot(new Vector2(970, 3024)));
@@ -75,19 +78,22 @@ public class EnemySpawnHandler {
         GamePanel.enemies.add(new SkeletonKnight(new Vector2(1667, 2448)));
         GamePanel.enemies.add(new SkeletonKnight(new Vector2(1379, 2160)));
         GamePanel.enemies.add(new SkeletonKnight(new Vector2(1767, 2192)));
+        GamePanel.enemies.add(new Ghoul(new Vector2(1409, 2384)));
 
-        GamePanel.enemies.add(new SlicerBot(new Vector2(2444, 2128)));
+        GamePanel.enemies.add(new SlicerBot(new Vector2(2306, 2128)));
         GamePanel.enemies.add(new SkeletonKnight(new Vector2(2235, 1936)));
 
         GamePanel.enemies.add(new SkeletonSummoner(new Vector2(1418, 1934)));
 
         GamePanel.enemies.add(new SkeletonSummoner(new Vector2(2234, 1744)));
-        GamePanel.enemies.add(new SkeletonSummoner(new Vector2(1793, 1744)));
+        GamePanel.enemies.add(new SkeletonSummoner(new Vector2(1493, 1744)));
 
         GamePanel.enemies.add(new CagedShocker(new Vector2(1474, 1510)));
         GamePanel.enemies.add(new SkeletonSummoner(new Vector2(1931, 1200)));
         GamePanel.enemies.add(new Ghoul(new Vector2(2440, 1424)));
-        GamePanel.enemies.add(new Hive(new Vector2(1430, 1995)));
+        GamePanel.enemies.add(new SkeletonSummoner(new Vector2(2214, 1515)));
+        GamePanel.enemies.add(new Hive(new Vector2(1430, 1200)));
+        GamePanel.enemies.add(new SkeletonKnight(new Vector2(2368, 1069)));
 
 
         GamePanel.enemies.add(new BloodKing(new Vector2(2550, 3102)));

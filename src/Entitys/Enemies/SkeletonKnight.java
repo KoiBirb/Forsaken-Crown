@@ -365,7 +365,7 @@ public class SkeletonKnight extends Enemy {
 
         double moveDir = (velocity.x < 0) ? -1 : 1;
         int checkX = (int) (center.x + moveDir * (width /3.0));
-        int checkY = (int) (center.y + height + 5);
+        int checkY = (int) (center.y + height + 10);
 
         g2.setColor(Color.MAGENTA);
         g2.fillRect(checkX - (int) cam.x - 2, checkY - (int) cam.y - 2, 4, 4);
