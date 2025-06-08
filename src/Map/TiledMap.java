@@ -14,6 +14,8 @@ import java.awt.image.VolatileImage;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Random;
 
 import Handlers.CollisionHandler;
@@ -48,7 +50,7 @@ public class TiledMap {
 
 
     private final int CAMERADELAY = 10;
-    private int cameraDelayCounter,oldRoomWidth,oldRoomHeight;
+    private int cameraDelayCounter, oldRoomWidth, oldRoomHeight;
     private boolean roomChanged;
     private Vector2 cameraPosition;
     private static Vector2 cameraShakeOffset = new Vector2(0, 0);
@@ -146,7 +148,7 @@ public class TiledMap {
     private void floodFillRoom(int startX, int startY, int roomId, boolean[][] visited) {
         int[] dx = {0, 1, 0, -1};
         int[] dy = {-1, 0, 1, 0};
-        java.util.Queue<int[]> queue = new java.util.LinkedList<>();
+        Queue<int[]> queue = new LinkedList<>();
         queue.add(new int[]{startX, startY});
         visited[startY][startX] = true;
         roomIds[startY][startX] = roomId;
