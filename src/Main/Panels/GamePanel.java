@@ -14,6 +14,7 @@ import Handlers.CollisionHandler;
 import Handlers.ImageHandler;
 import Handlers.Sound.SoundHandlers.BackgroundMusicHandler;
 import Handlers.Sound.SoundHandlers.EnemySoundHandler;
+import Handlers.Sound.SoundHandlers.PlayerSoundHandler;
 import Handlers.Vector2;
 import Handlers.EnemySpawnHandler;
 import Main.UI.UIManager;
@@ -150,9 +151,11 @@ public class GamePanel extends JPanel implements Runnable{
             if(isPaused){
                 backgroundMusic.unmuteCurrent();
                 EnemySoundHandler.unmuteAll();
+                PlayerSoundHandler.unmuteAll();
             } else {
                 backgroundMusic.muteCurrent();
                 EnemySoundHandler.muteAll();
+                PlayerSoundHandler.muteAll();
             }
 
             isPaused = !isPaused;

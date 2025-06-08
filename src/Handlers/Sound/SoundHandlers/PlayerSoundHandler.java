@@ -88,6 +88,60 @@ public class PlayerSoundHandler {
     }
 
     /**
+     * Mutes all player sounds by setting their volume to 0.
+     */
+    public static void muteAll() {
+        for (Sound s : swordHits) s.setVolume(0f);
+        for (Sound s : jumps) s.setVolume(0f);
+        for (Sound s : hitCollidable) s.setVolume(0f);
+        for (Sound s : heal) s.setVolume(0f);
+        footsteps.setVolume(0f);
+        healCharge.setVolume(0f);
+        healEnd.setVolume(0f);
+        dashSwingAttack.setVolume(0f);
+        dashHeavyAttack.setVolume(0f);
+        heavyAttack.setVolume(0f);
+        playerDamaged.setVolume(0f);
+        falling.setVolume(0f);
+        spawn.setVolume(0f);
+        death.setVolume(0f);
+        land.setVolume(0f);
+        landHard.setVolume(0f);
+        dash.setVolume(0f);
+        hitTile.setVolume(0f);
+        checkPoint.setVolume(0f);
+        UIHover.setVolume(0f);
+        UIConfirm.setVolume(0f);
+    }
+
+    /**
+     * Unmutes all player sounds by setting their volume to 1.
+     */
+    public static void unmuteAll() {
+        for (Sound s : swordHits) s.setVolume(1f);
+        for (Sound s : jumps) s.setVolume(1f);
+        for (Sound s : hitCollidable) s.setVolume(1f);
+        for (Sound s : heal) s.setVolume(1f);
+        footsteps.setVolume(1f);
+        healCharge.setVolume(1f);
+        healEnd.setVolume(1f);
+        dashSwingAttack.setVolume(1f);
+        dashHeavyAttack.setVolume(1f);
+        heavyAttack.setVolume(1f);
+        playerDamaged.setVolume(1f);
+        falling.setVolume(1f);
+        spawn.setVolume(1f);
+        death.setVolume(1f);
+        land.setVolume(1f);
+        landHard.setVolume(1f);
+        dash.setVolume(1f);
+        hitTile.setVolume(1f);
+        checkPoint.setVolume(1f);
+        UIHover.setVolume(1f);
+        UIConfirm.setVolume(1f);
+    }
+
+    /**
      * Plays hit sound
      */
     public static void hit() {

@@ -237,6 +237,7 @@ public class ButtonManager {
                     GamePanel.isPaused = false;
                     GamePanel.backgroundMusic.unmuteCurrent();
                     EnemySoundHandler.unmuteAll();
+                    PlayerSoundHandler.unmuteAll();
                     break;
                 case 2:
                     GamePanel.help = !GamePanel.help;
