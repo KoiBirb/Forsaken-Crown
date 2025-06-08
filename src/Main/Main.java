@@ -14,6 +14,7 @@ import Main.Panels.MenuPanel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public class Main {
 
@@ -43,6 +44,10 @@ public class Main {
         window.setResizable(false);
         window.setTitle("Forsaken Crown");
         window.setUndecorated(true);
+
+        hideCursor(gamePanel);
+        hideCursor(endPanel);
+        hideCursor(menuPanel);
 
         mainPanel.add(menuPanel, "MENU");
         mainPanel.add(gamePanel, "GAME");
@@ -94,5 +99,11 @@ public class Main {
         EndPanel.endThread = null;
         cardLayout.show(mainPanel, "GAME");
         gamePanel.setupGame();
+    }
+
+    public static void hideCursor(JPanel panel) {
+        panel.setCursor(Toolkit.getDefaultToolkit().createCustomCursor(
+                new BufferedImage(3, 3, BufferedImage.TYPE_INT_ARGB), new Point(0, 0),
+                "null"));
     }
 }
