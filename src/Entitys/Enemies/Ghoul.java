@@ -32,6 +32,7 @@ public class Ghoul extends Enemy {
     public Ghoul(Vector2 pos) {
         super(pos, 1, 8, 62, 33, 3,  new Rectangle(0, 0, 20, 40));
 
+        this.direction = new java.util.Random().nextBoolean() ? "right" : "left";
         this.image = imageReg;
     }
 
@@ -44,9 +45,8 @@ public class Ghoul extends Enemy {
             Vector2 currentTopPos = getSolidAreaXCenter();
 
             //room check
-            int myRoom = TiledMap.getRoomId(currentPos.x, currentPos.y);
             int playerRoom = TiledMap.getPlayerRoomId();
-            boolean inSameRoom = myRoom == playerRoom;
+            boolean inSameRoom = roomNumber == playerRoom;
 
             // los
             double dist = currentPos.distanceTo(playerPos);
@@ -257,9 +257,8 @@ public class Ghoul extends Enemy {
 
         Vector2 playerCenter = GamePanel.player.getSolidAreaXCenter();
         Vector2 topCenter = getSolidAreaXCenter();
-        int myRoom = TiledMap.getRoomId(center.x, center.y);
         int playerRoom = TiledMap.getPlayerRoomId();
-        boolean inSameRoom = myRoom == playerRoom;
+        boolean inSameRoom = roomNumber == playerRoom;
         boolean inVision = center.distanceTo(playerCenter) <= visionRadius;
         boolean canSee = inSameRoom && inVision && hasLineOfSight(topCenter,playerCenter);
 

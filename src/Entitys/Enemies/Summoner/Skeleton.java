@@ -74,9 +74,8 @@ public class Skeleton extends Enemy {
             Vector2 currentPos = getSolidAreaCenter();
             Vector2 currentTopPos = getSolidAreaXCenter();
 
-            int myRoom = TiledMap.getRoomId(currentPos.x, currentPos.y);
             int playerRoom = TiledMap.getPlayerRoomId();
-            boolean inSameRoom = myRoom == playerRoom;
+            boolean inSameRoom = roomNumber == playerRoom;
 
             double dist = currentPos.distanceTo(playerPos);
             boolean inVision = dist <= visionRadius;
@@ -291,9 +290,8 @@ public class Skeleton extends Enemy {
 
         Vector2 playerCenter = GamePanel.player.getSolidAreaXCenter();
         Vector2 topCenter = getSolidAreaXCenter();
-        int myRoom = TiledMap.getRoomId(center.x, center.y);
         int playerRoom = TiledMap.getPlayerRoomId();
-        boolean inSameRoom = myRoom == playerRoom;
+        boolean inSameRoom = roomNumber == playerRoom;
         boolean inVision = center.distanceTo(playerCenter) <= visionRadius;
         boolean canSee = inSameRoom && inVision && hasLineOfSight(topCenter,playerCenter);
 

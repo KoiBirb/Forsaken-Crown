@@ -61,9 +61,8 @@ public class SkeletonSummoner extends Enemy{
             Vector2 topCenter = getSolidAreaXCenter();
 
             //room check
-            int myRoom = TiledMap.getRoomId(currentPos.x, currentPos.y);
             int playerRoom = TiledMap.getPlayerRoomId();
-            boolean inSameRoom = myRoom == playerRoom;
+            boolean inSameRoom = roomNumber == playerRoom;
 
             // line of sight
             double dist = currentPos.distanceTo(playerPos);
@@ -436,9 +435,8 @@ public class SkeletonSummoner extends Enemy{
         // Path
         Vector2 topCenter = getSolidAreaXCenter();
         Vector2 playerCenter = GamePanel.player.getSolidAreaXCenter();
-        int myRoom = TiledMap.getRoomId(center.x, center.y);
         int playerRoom = TiledMap.getPlayerRoomId();
-        boolean inSameRoom = myRoom == playerRoom;
+        boolean inSameRoom = roomNumber == playerRoom;
         boolean inVision = center.distanceTo(playerCenter) <= visionRadius;
         boolean canSee = inSameRoom && inVision && hasLineOfSight(topCenter, playerCenter);
 

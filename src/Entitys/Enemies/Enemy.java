@@ -37,7 +37,7 @@ public abstract class Enemy extends Entitys.Entity {
         this.detectionRadiusTiles = detectionRadiusTiles;
 
         ts = TiledMap.getScaledTileSize();
-        roomNumber = TiledMap.getRoomId(pos.x, pos.y);
+        roomNumber = GamePanel.tileMap.getRoomId(pos.x, pos.y);
     }
 
     /**

@@ -64,10 +64,11 @@ public class Hive extends Enemy{
             Vector2 currentPos = getSolidAreaCenter();
             Vector2 topCenter = getSolidAreaXCenter();
 
+            topCenter.set(topCenter.x, topCenter.y + 30);
+
             //room check
-            int myRoom = TiledMap.getRoomId(currentPos.x, currentPos.y);
             int playerRoom = TiledMap.getPlayerRoomId();
-            boolean inSameRoom = myRoom == playerRoom;
+            boolean inSameRoom = roomNumber == playerRoom;
 
             // line of sight
             double dist = currentPos.distanceTo(playerPos);

@@ -55,7 +55,7 @@ public class Player extends Entity {
 
         spawnPosition = new Vector2(position.x, position.y);
         state = PlayerState.SPAWNING;
-        lives = 1;
+        lives = 3;
         initialHealTickTime = 900;
         canMove = true;
     }
@@ -85,10 +85,8 @@ public class Player extends Entity {
                     }
                     break;
                 default:
-                    if (canMove)
-                        handlePlayerInput();
-                    else
-                        velocity.x = 0;
+                    handlePlayerInput();
+                    if  (!canMove) velocity.x = 0;
                     break;
             }
         } else if (state != PlayerState.DEAD) {
@@ -237,10 +235,10 @@ public class Player extends Entity {
             jump = true;
         }
 
-        if (keyI.wPressed && continuousJump && !keyI.iPressed) {
+        if (keyI.wPressed && continuousJump && state != PlayerState.HEALING) {
             velocity.y = -8;
             isColliding = false;
-            if (state != PlayerState.ATTACKING && state != PlayerState.DASHING) {
+            if (state != PlayerState.DASHING && state != PlayerState.ATTACKING) {
                 spriteRow = 13;
                 maxSpriteCol = 2;
             }
@@ -279,17 +277,16 @@ public class Player extends Entity {
 
         // Attacking
         if (keyI.uPressed && !keyI.iPressed && state != PlayerState.HEALING) {
-            long currentTime = now;
             if (state != PlayerState.ATTACKING) {
                 if (state != PlayerState.DASHING) {
                     if (!chain) {
-                        if (currentTime - lastQuickAttackTime >= PlayerQuickAttack.COOLDOWN) {
+                        if (now - lastQuickAttackTime >= PlayerQuickAttack.COOLDOWN) {
                             spriteRow = 8;
                             maxSpriteCol = 4;
                             new PlayerQuickAttack(this, false);
                             PlayerSoundHandler.hit();
                             chain = true;
-                            lastQuickAttackTime = currentTime;
+                            lastQuickAttackTime = now;
                             state = PlayerState.ATTACKING;
                         }
                     } else {
@@ -298,7 +295,7 @@ public class Player extends Entity {
                         new PlayerQuickAttack(this, true);
                         PlayerSoundHandler.hit();
                         chain = false;
-                        lastQuickAttackTime = currentTime;
+                        lastQuickAttackTime = now;
                         state = PlayerState.ATTACKING;
                     }
                 } else {
@@ -307,14 +304,13 @@ public class Player extends Entity {
                     state = PlayerState.ATTACKING;
                     new PlayerDashSwingAttack(this);
                     PlayerSoundHandler.dashSwingAttack();
-                    lastQuickAttackTime = currentTime;
+                    lastQuickAttackTime = now;
                 }
             }
         }
 
-        if (keyI.jPressed && state != PlayerState.ATTACKING && !keyI.iPressed && state != PlayerState.HEALING) {
-            long currentTime = now;
-            if (currentTime - lastHeavyAttackTime >= PlayerHeavyAttack.COOLDOWN) {
+        if (keyI.jPressed && state != PlayerState.ATTACKING && state != PlayerState.HEALING) {
+            if (now - lastHeavyAttackTime >= PlayerHeavyAttack.COOLDOWN) {
                 if (state == PlayerState.DASHING) {
                     new PlayerDashHeavyAttack(this);
                     PlayerSoundHandler.dashHeavyAttack();
@@ -326,7 +322,7 @@ public class Player extends Entity {
                     spriteRow = 9;
                     maxSpriteCol = 4;
                 }
-                lastHeavyAttackTime = currentTime;
+                lastHeavyAttackTime = now;
                 state = PlayerState.ATTACKING;
             }
         }

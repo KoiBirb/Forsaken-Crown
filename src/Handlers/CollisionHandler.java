@@ -70,7 +70,7 @@ public class CollisionHandler {
 
             if ((tileNum1 == 1 || tileNum2 == 1) ||
                 ((tileNum1 == 4 || tileNum2 == 4) &&
-                 !keyI.sPressed && entity.getVelocity().y >= 0)) {
+                        (!(entity instanceof Player) || !keyI.sPressed)) && entity.getVelocity().y >= 0) {
                     entity.setOnGround(true);
                     entity.setColliding(true);
                     entity.getPosition().y = entityBottomRow * getScaledTileSize() - entity.getSolidArea().height - ((entity.getSolidArea().y - entity.getPosition().y) / 2)-1;
@@ -205,7 +205,7 @@ public class CollisionHandler {
         if (row < 0 || row >= collidableTiles.length || col < 0 || col >= collidableTiles[0].length)
             return false;
 
-        return collidableTiles[row][col] == 1;
+        return collidableTiles[row][col] == 1 || collidableTiles[row][col] == 4;
     }
 
     /**

@@ -571,6 +571,7 @@ public class TiledMap {
                 }
             }
         }
+//        drawRoomIdDebug(g2);
     }
 
     /**
@@ -604,17 +605,21 @@ public class TiledMap {
      * @param y Y coordinate
      * @return int value of room ID, or -1 if out of bounds or no room data
      */
-    public static int getRoomId(double x, double y) {
+    public int getRoomId(double x, double y) {
+
         int scaledTileSize = getScaledTileSize();
-        int tileX = (int) ((x + 10) / scaledTileSize);
-        int tileY = (int) ((y + 10) / scaledTileSize);
+        int tileX = (int) ((x + 5) / scaledTileSize);
+        int tileY = (int) ((y + 5) / scaledTileSize);
 
-        TiledMap map = GamePanel.tileMap;
+        if (tileX < 0 || tileX >= mapWidth || tileY < 0 || tileY >= mapHeight) return -1;
+        if (roomIds == null) return -1;
 
-        if (tileX < 0 || tileX >= map.mapWidth || tileY < 0 || tileY >= map.mapHeight) return -1;
-        if (map.roomIds == null) return -1;
+        int roomId = roomIds[tileY][tileX];
 
-        return map.roomIds[tileY][tileX];
+        if (roomId == 9 || roomId == 11)
+            return 10;
+        else
+            return roomIds[tileY][tileX];
     }
 
     /**
@@ -634,15 +639,24 @@ public class TiledMap {
     }
 
     /**
-     * Returns the tile value from the trap layer for the specified grid coordinates.
-     * Layer 19 is assumed to be the trap layer (spikes).
-     * @param col Column index
-     * @param row Row index
-     * @return Tile ID at the given position or -1 if out of bounds
+     * Draws the room IDs for debugging purposes.
+     * Each room is filled with a color based on its ID.
+     * @param g2 Graphics2D object
      */
-    public int getMapValue(int col, int row) {
-        if (row < 0 || row >= mapHeight || col < 0 || col >= mapWidth) return -1;
-        if (mapLayers.size() <= 19) return -1; // trap layer must exist
-        return mapLayers.get(19)[row][col];
+    public void drawRoomIdDebug(Graphics2D g2) {
+        if (roomIds == null) return;
+        int scaledTileSize = getScaledTileSize();
+        for (int y = 0; y < mapHeight; y++) {
+            for (int x = 0; x < mapWidth; x++) {
+                int roomId = roomIds[y][x];
+                if (roomId > 0) {
+                    // Generate a color based on roomId
+                    g2.setColor(Color.getHSBColor((roomId * 37) % 360 / 360f, 0.5f, 1f));
+                    int drawX = x * scaledTileSize - (int) cameraPosition.x;
+                    int drawY = y * scaledTileSize - (int) cameraPosition.y;
+                    g2.fillRect(drawX, drawY, scaledTileSize, scaledTileSize);
+                }
+            }
+        }
     }
 }

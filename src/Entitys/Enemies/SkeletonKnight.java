@@ -7,6 +7,7 @@
 
 package Entitys.Enemies;
 
+import Attacks.Enemies.ShockerAttack;
 import Attacks.Enemies.SkeletonKnightAttack;
 import Handlers.CollisionHandler;
 import Handlers.ImageHandler;
@@ -21,10 +22,18 @@ import java.awt.image.VolatileImage;
 public class SkeletonKnight extends Enemy {
 
     public enum State {IDLE, WALK, DAMAGED, ATTACKING, DEAD}
-    private boolean footstepsPlaying = false;
+    private enum Logic {PATROL, AGGRESSIVE}
+
+
     protected State currentState;
-    private final double visionRadius = 300;
+    private Logic currentLogic = Logic.PATROL;
+
+    private boolean footstepsPlaying = false;
+    private final double visionRadius = 200;
     private long lastAttackTime = 0;
+
+    private long patrolStateChangeTime = 0, patrolDuration = 0;
+    private boolean patrolWalking = false;
 
     private static final VolatileImage imageReg = ImageHandler.loadImage("Assets/Images/Enemies/Skeleton Summoner/Skeleton Swordsman/Skeleton - Armored Swordsman 44x24.png");
 
@@ -45,77 +54,146 @@ public class SkeletonKnight extends Enemy {
     public void update() {
 
         if (currentState != State.DEAD) {
-
             int ts = TiledMap.getScaledTileSize();
             Vector2 playerPos = GamePanel.player.getSolidAreaCenter();
             Vector2 currentPos = getSolidAreaCenter();
-            Vector2 currentTopPos = getSolidAreaXCenter();
+            Vector2 topCenter = getSolidAreaXCenter();
 
-            int myRoom = TiledMap.getRoomId(currentPos.x, currentPos.y);
+            //room check
             int playerRoom = TiledMap.getPlayerRoomId();
-            boolean inSameRoom = myRoom == playerRoom;
+            boolean inSameRoom = roomNumber == playerRoom;
 
+            // line of sight
             double dist = currentPos.distanceTo(playerPos);
             boolean inVision = dist <= visionRadius;
 
-            canSeePlayer = inSameRoom && inVision && hasLineOfSight(currentTopPos, GamePanel.player.getSolidAreaXCenter());
+            canSeePlayer = inSameRoom && inVision && hasLineOfSight(topCenter,playerPos);
 
-            if (canSeePlayer) hasStartedChasing = true;
+            // Logic handling
+            if (canSeePlayer) {
+                hasStartedChasing = true;
+                currentLogic = Logic.AGGRESSIVE;
+            } else {
+                hasStartedChasing = false;
+                currentLogic = Logic.PATROL;
+            }
 
-            Vector2 target = hasStartedChasing && canSeePlayer ? playerPos : spawnPos;
-            double dx = target.x - currentPos.x;
-            boolean closeX = Math.abs(dx) <= ts;
-
+            // Collision and gravity handling
             CollisionHandler.checkTileCollision(this);
             boolean onGround = isOnGround();
 
-            if (hasStartedChasing && canSeePlayer && !hit) {
-                long now = System.currentTimeMillis();
+            if (!onGround) {
+                velocity.y = Math.min(velocity.y + GRAVITY, TERMINAL_VELOCITY);
+            } else {
+                velocity.y = 0;
+                jumpedOut = false;
+            }
 
-                if (dist <= ts && currentState != State.ATTACKING) {
-                    if (now - lastAttackTime >= SkeletonKnightAttack.COOLDOWN) {
-                        setAttacking(true);
-                        spriteCol = 0;
-                        spriteRow = 3;
-                        maxSpriteCol = 8;
-                        spriteCounter = 0;
-                        velocity.x = 0;
-                        new SkeletonKnightAttack(this);
-                        lastAttackTime = now;
-                    } else {
+            switch (currentLogic) {
+                case AGGRESSIVE: // chase and attack player
+                    Vector2 target = hasStartedChasing && canSeePlayer ? playerPos : spawnPos;
+                    double dx = target.x - currentPos.x;
+                    boolean closeX = Math.abs(dx) <= ts;
+
+                    if (hasStartedChasing && canSeePlayer && !hit) {
+                        long now = System.currentTimeMillis();
+
+                        if (dist <= ts && currentState != State.ATTACKING) {
+                            if (now - lastAttackTime >= ShockerAttack.COOLDOWN) {
+                                setAttacking(true);
+                                spriteCol = 0;
+                                spriteRow = 3;
+                                maxSpriteCol = 8;
+                                spriteCounter = 0;
+                                new SkeletonKnightAttack(this);
+                                velocity.x = 0;
+                                lastAttackTime = now;
+                            } else {
+                                velocity.x = 0;
+                                currentState = State.IDLE;
+                                spriteRow = 1;
+                                maxSpriteCol = 11;
+                                if (spriteCol > maxSpriteCol) spriteCol = 0;
+                                break;
+                            }
+
+                        } else if (!closeX) {
+                            double moveDir = Math.signum(dx);
+                            if (isGroundAhead(currentPos.x, currentPos.y, moveDir)) {
+                                velocity.x = moveDir * getSpeed();
+                                direction = velocity.x < 0 ? "left" : "right";
+                                if (currentState != State.ATTACKING) {
+                                    currentState = State.WALK;
+                                    spriteRow = 2;
+                                    maxSpriteCol = 7;
+                                    if (spriteCol > maxSpriteCol) spriteCol = 0;
+                                }
+                            } else {
+                                velocity.x = 0;
+                                currentState = State.IDLE;
+                                spriteRow = 1;
+                                maxSpriteCol = 11;
+                                if (spriteCol > maxSpriteCol) spriteCol = 0;
+                            }
+                        }
+
+                    } else if (!hit) {
                         velocity.x = 0;
                         currentState = State.IDLE;
                         spriteRow = 1;
                         maxSpriteCol = 11;
-                        if (spriteCol > maxSpriteCol) spriteCol = 0;
                     }
+                    break;
 
-                } else if (!closeX) {
-                    double moveDir = Math.signum(dx);
-                    if (isGroundAhead(currentPos.x, currentPos.y, moveDir)) {
-                        velocity.x = moveDir * getSpeed();
-                        direction = velocity.x < 0 ? "left" : "right";
-                        if (currentState != State.ATTACKING) {
+                case PATROL: // Randomly walk back and forth
+                    boolean onGroundPatrol = isOnGround();
+                    long now = System.currentTimeMillis();
+
+                    if (now > patrolStateChangeTime) {
+                        patrolWalking = !patrolWalking;
+                        if (patrolWalking) {
+                            patrolDuration = 1500 + (long) (Math.random() * 2500);
                             currentState = State.WALK;
                             spriteRow = 2;
                             maxSpriteCol = 7;
                             if (spriteCol > maxSpriteCol) spriteCol = 0;
+                            if (Math.random() < 0.5) {
+                                direction = "left";
+                                velocity.x = -getSpeed();
+                            } else {
+                                direction = "right";
+                                velocity.x = getSpeed();
+                            }
+                        } else {
+                            patrolDuration = 1500 + (long) (Math.random() * 3500);
+                            currentState = State.IDLE;
+                            spriteRow = 1;
+                            maxSpriteCol = 11;
+                            velocity.x = 0;
                         }
-                    } else {
-                        velocity.x = 0;
-                        currentState = State.IDLE;
-                        spriteRow = 1;
-                        maxSpriteCol = 11;
-                        if (spriteCol > maxSpriteCol) spriteCol = 0;
+                        patrolStateChangeTime = now + patrolDuration;
                     }
-                }
 
-            } else if (!hit) {
-                velocity.x = 0;
-                currentState = State.IDLE;
-                spriteRow = 1;
-                maxSpriteCol = 11;
-                if (spriteCol > maxSpriteCol) spriteCol = 0;
+                    if (patrolWalking && currentState == State.WALK && onGroundPatrol) {
+                        double moveDir = velocity.x < 0 ? -1 : 1;
+                        if (!isGroundAhead(currentPos.x, currentPos.y, moveDir)) {
+                            if (Math.random() < 0.5) {
+                                patrolWalking = false;
+                                currentState = State.IDLE;
+                                spriteRow = 1;
+                                maxSpriteCol = 11;
+                                velocity.x = 0;
+                                patrolDuration = 1000 + (long) (Math.random() * 3000);
+                                patrolStateChangeTime = now + patrolDuration;
+                            } else {
+                                velocity.x = -velocity.x;
+                                direction = "left".equals(direction) ? "right" : "left";
+                            }
+                        }
+                    } else if (!patrolWalking) {
+                        velocity.x = 0;
+                    }
+                    break;
             }
 
             if (currentState == State.WALK && onGround) {
@@ -250,8 +328,8 @@ public class SkeletonKnight extends Enemy {
      * @return boolean indicating if there is ground ahead
      */
     public boolean isGroundAhead(double x, double y, double direction) {
-        int checkX = (int) (position.x + direction * ((double) width/2.0));
-        int checkY = (int) (position.y + (double) height + 2);
+        int checkX = (int) (position.x + direction * ((double) width/3.0));
+        int checkY = (int) (position.y + (double) height + 10);
         return CollisionHandler.isSolidTileAt(checkX, checkY);
     }
 
@@ -270,9 +348,8 @@ public class SkeletonKnight extends Enemy {
 
         Vector2 playerCenter = GamePanel.player.getSolidAreaXCenter();
         Vector2 topCenter = getSolidAreaXCenter();
-        int myRoom = TiledMap.getRoomId(center.x, center.y);
         int playerRoom = TiledMap.getPlayerRoomId();
-        boolean inSameRoom = myRoom == playerRoom;
+        boolean inSameRoom = roomNumber == playerRoom;
         boolean inVision = center.distanceTo(playerCenter) <= visionRadius;
         boolean canSee = inSameRoom && inVision && hasLineOfSight(topCenter,playerCenter);
 
@@ -287,8 +364,8 @@ public class SkeletonKnight extends Enemy {
         g2.drawRect((int) (solid.x - cam.x), (int) (solid.y - cam.y), solid.width, solid.height);
 
         double moveDir = (velocity.x < 0) ? -1 : 1;
-        int checkX = (int) (center.x + moveDir * (width /2.0));
-        int checkY = (int) (center.y + height + 2);
+        int checkX = (int) (center.x + moveDir * (width /3.0));
+        int checkY = (int) (center.y + height + 5);
 
         g2.setColor(Color.MAGENTA);
         g2.fillRect(checkX - (int) cam.x - 2, checkY - (int) cam.y - 2, 4, 4);
@@ -303,26 +380,6 @@ public class SkeletonKnight extends Enemy {
     public void hit(int damage, int knockbackX, int knockbackY) {
         if (canBeHit() && !hit){
             currentHealth -= damage;
-
-            Vector2 ghoulCenter = getSolidAreaCenter();
-            Vector2 playerCenter = GamePanel.player.getSolidAreaCenter();
-
-            if (ghoulCenter.x > playerCenter.x) {
-                knockbackX = -Math.abs(knockbackX);
-            } else {
-                knockbackX = Math.abs(knockbackX);
-            }
-
-            velocity.x += knockbackX;
-            velocity.y += knockbackY;
-            position.x += knockbackX;
-            position.y += knockbackY;
-
-            if (velocity.x > 0) {
-                direction = "right";
-            } else if (velocity.x < 0) {
-                direction = "left";
-            }
 
             spriteRow = 1;
             spriteCol = 0;

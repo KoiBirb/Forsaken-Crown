@@ -55,7 +55,7 @@ public class Wasp extends Enemy {
             Vector2 playerPos = GamePanel.player.getSolidAreaCenter();
             Vector2 currentPos = getSolidAreaCenter();
 
-            int myRoom = TiledMap.getRoomId(currentPos.x, currentPos.y);
+            int myRoom = GamePanel.tileMap.getRoomId(currentPos.x, currentPos.y);
             int playerRoom = TiledMap.getPlayerRoomId();
             boolean inSameRoom = myRoom == playerRoom;
 
@@ -368,9 +368,8 @@ public class Wasp extends Enemy {
         // Path
         Vector2 topCenter = getSolidAreaXCenter();
         Vector2 playerCenter = GamePanel.player.getSolidAreaXCenter();
-        int myRoom = TiledMap.getRoomId(center.x, center.y);
         int playerRoom = TiledMap.getPlayerRoomId();
-        boolean inSameRoom = myRoom == playerRoom;
+        boolean inSameRoom = roomNumber == playerRoom;
         boolean inVision = center.distanceTo(playerCenter) <= visionRadius;
         boolean canSee = inSameRoom && inVision && hasLineOfSight(topCenter, playerCenter);
 
