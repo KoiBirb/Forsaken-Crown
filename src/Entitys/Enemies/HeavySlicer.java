@@ -414,7 +414,7 @@ public class HeavySlicer extends Enemy{
             maxSpriteCol = 14;
             velocity.x = 0;
             velocity.y = 0;
-            GamePanel.points += 250;
+            GamePanel.points += 125;
             EnemySoundHandler.stopBotSteps();
             EnemySoundHandler.stopSlicerFootsteps();
             EnemySoundHandler.slicerDeath();

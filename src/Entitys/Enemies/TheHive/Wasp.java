@@ -424,7 +424,7 @@ public class Wasp extends Enemy {
             maxSpriteCol = 4;
             velocity.x = 0;
             velocity.y = 0;
-            GamePanel.points += 50;
+            GamePanel.points += 25;
             EnemySoundHandler.stopWaspFly();
             EnemySoundHandler.waspDeath();
         }
