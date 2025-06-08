@@ -103,10 +103,12 @@ public class BackgroundMusicHandler {
         }
 
         if (desiredType != currentMusicType) {
-            transitionToMusic(getMusic(desiredType, MusicState.MAIN), 2000);
-            currentMusicType = desiredType;
-            currentMusicState = MusicState.MAIN;
-            actionSwitchPending = false;
+            if (!isTransitioning.get()) {
+                transitionToMusic(getMusic(desiredType, MusicState.MAIN), 2000);
+                currentMusicType = desiredType;
+                currentMusicState = MusicState.MAIN;
+                actionSwitchPending = false;
+            }
             return;
         }
 
@@ -117,9 +119,11 @@ public class BackgroundMusicHandler {
                 actionSwitchRequestTime = now;
                 requestedMusicState = desiredState;
             } else if (now - actionSwitchRequestTime >= ACTION_SWITCH_GRACE_MS) {
-                transitionToMusic(getMusic(currentMusicType, desiredState), 1000);
-                currentMusicState = desiredState;
-                actionSwitchPending = false;
+                if (!isTransitioning.get()) {
+                    transitionToMusic(getMusic(currentMusicType, desiredState), 1000);
+                    currentMusicState = desiredState;
+                    actionSwitchPending = false;
+                }
             }
         } else {
             actionSwitchPending = false;

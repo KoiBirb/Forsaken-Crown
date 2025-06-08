@@ -99,7 +99,7 @@ public class SkeletonKnight extends Enemy {
                         long now = System.currentTimeMillis();
 
                         if (dist <= ts && currentState != State.ATTACKING) {
-                            if (now - lastAttackTime >= ShockerAttack.COOLDOWN) {
+                            if (now - lastAttackTime >= SkeletonKnightAttack.COOLDOWN) {
                                 setAttacking(true);
                                 spriteCol = 0;
                                 spriteRow = 3;

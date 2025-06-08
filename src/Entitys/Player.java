@@ -101,7 +101,7 @@ public class Player extends Entity {
             PlayerSoundHandler.stopFootsteps();
             PlayerSoundHandler.stopFalling();
             PlayerSoundHandler.stopHealCharge();
-            GamePanel.backgroundMusic.fadeOut(2000);
+            GamePanel.backgroundMusic.fadeOut(1000);
         }
 
         if (!directionLock)

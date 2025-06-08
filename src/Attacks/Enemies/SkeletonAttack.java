@@ -15,7 +15,7 @@ import java.awt.*;
 
 public class SkeletonAttack extends MeleeAttack {
 
-    public static final int COOLDOWN = 750;
+    public static final int COOLDOWN = 850;
     private final Skeleton skeleton;
 
     /**

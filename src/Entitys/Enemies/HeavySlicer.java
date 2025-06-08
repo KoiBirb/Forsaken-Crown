@@ -108,7 +108,7 @@ public class HeavySlicer extends Enemy{
                                 setAttacking(true);
                                 spriteCol = 0;
                                 spriteRow = 2;
-                                maxSpriteCol = 8;
+                                maxSpriteCol = 7;
                                 spriteCounter = 0;
                                 new HeavySlicerAttack(this);
                                 velocity.x = 0;
