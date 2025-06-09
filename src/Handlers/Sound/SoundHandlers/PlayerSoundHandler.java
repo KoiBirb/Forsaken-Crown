@@ -110,8 +110,6 @@ public class PlayerSoundHandler {
         dash.setVolume(0f);
         hitTile.setVolume(0f);
         checkPoint.setVolume(0f);
-        UIHover.setVolume(0f);
-        UIConfirm.setVolume(0f);
     }
 
     /**
@@ -137,8 +135,6 @@ public class PlayerSoundHandler {
         dash.setVolume(1f);
         hitTile.setVolume(1f);
         checkPoint.setVolume(1f);
-        UIHover.setVolume(1f);
-        UIConfirm.setVolume(1f);
     }
 
     /**
