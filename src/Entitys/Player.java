@@ -97,6 +97,11 @@ public class Player extends Entity {
             velocity.setLength(0);
             deathTime = now;
 
+            if (GamePanel.points >= 500)
+                GamePanel.points -= 500;
+            else
+                GamePanel.points = 0;
+
             PlayerSoundHandler.death();
             PlayerSoundHandler.stopFootsteps();
             PlayerSoundHandler.stopFalling();
