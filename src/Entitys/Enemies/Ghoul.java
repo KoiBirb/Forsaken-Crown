@@ -29,6 +29,10 @@ public class Ghoul extends Enemy {
 
     private static final VolatileImage imageReg = ImageHandler.loadImage("Assets/Images/Enemies/Ghoul/Ghoul Sprite Sheet 62 x 33.png");
 
+    /**
+     * Ghoul constructor
+     * @param pos Initial position of the ghoul
+     */
     public Ghoul(Vector2 pos) {
         super(pos, 1, 8, 62, 33, 3,  new Rectangle(0, 0, 20, 40));
 
@@ -36,6 +40,9 @@ public class Ghoul extends Enemy {
         this.image = imageReg;
     }
 
+    /**
+     * Updates Ghoul state and behavior.
+     */
     public void update() {
 
         if (currentState != State.DEAD) {
