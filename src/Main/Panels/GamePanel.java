@@ -216,7 +216,7 @@ public class GamePanel extends JPanel implements Runnable{
                     if (fadeAlpha <= 0.0) {
                         fadeAlpha = 0.0;
                         fading = false;
-
+                        tileMap.updatePlayerRoom();
                     }
                 }
             }
