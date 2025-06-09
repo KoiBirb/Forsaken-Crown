@@ -207,7 +207,6 @@ public class GamePanel extends JPanel implements Runnable{
                         fadeAlpha = 1.0;
                         fadeIn = false;
                         fadeDelayCounter = fadeDelay;
-                        tileMap.updatePlayerRoom();
                     }
                 } else if (fadeDelayCounter > 0) {
                     fadeDelayCounter--;
@@ -216,7 +215,6 @@ public class GamePanel extends JPanel implements Runnable{
                     if (fadeAlpha <= 0.0) {
                         fadeAlpha = 0.0;
                         fading = false;
-                        tileMap.updatePlayerRoom();
                     }
                 }
             }

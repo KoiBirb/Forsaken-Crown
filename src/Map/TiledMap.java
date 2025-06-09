@@ -59,8 +59,9 @@ public class TiledMap {
 
     private final double SCALE = GamePanel.scale;
     private Vector2 roomScreenPos;
-    private int roomWidth,roomHeight;
-    private int minX, maxX, minY, maxY;
+    private int roomWidth,roomHeight, newRoomWidth, newRoomHeight;
+    private int minX, maxX, minY, maxY, newMinX, newMinY, newMaxX, newMaxY;
+    private int[] roomBounds;
 
     private static final VolatileImage CastleBones = ImageHandler.loadImage("Assets/Images/Tilesets/Map/Castle of Bones Tileset.png");
     private static final VolatileImage DarkEdition = ImageHandler.loadImage("Assets/Images/Tilesets/Map/DARK Edition Tileset No background.png");
@@ -318,6 +319,8 @@ public class TiledMap {
      * Finds room dimensions, and updates camera target position
      */
     public void update() {
+        updatePlayerRoom();
+
         if (shakeDuration > 0) {
             shakeDuration--;
         } else {
@@ -335,17 +338,22 @@ public class TiledMap {
             return;
         }
 
-        int[] roomBounds = findRoomBounds(playerTileX, playerTileY);
-        int newMinX = roomBounds[0], newMaxX = roomBounds[1], newMinY = roomBounds[2], newMaxY = roomBounds[3];
-        int newRoomWidth = (newMaxX - newMinX + 1) * scaledTileSize;
-        int newRoomHeight = (newMaxY - newMinY + 1) * scaledTileSize;
+        if (!roomChanged) {
+            roomBounds = findRoomBounds(playerTileX, playerTileY);
+            newMinX = roomBounds[0];
+            newMaxX = roomBounds[1];
+            newMinY = roomBounds[2];
+            newMaxY = roomBounds[3];
+            newRoomWidth = (newMaxX - newMinX + 1) * scaledTileSize;
+            newRoomHeight = (newMaxY - newMinY + 1) * scaledTileSize;
 
-        if (player.isOnGround() && (roomWidth != newRoomWidth || roomHeight != newRoomHeight)) {
-            roomWidth = newRoomWidth;
-            roomHeight = newRoomHeight;
-            GamePanel.roomTransition();
-            roomChanged = true;
-            cameraDelayCounter = CAMERADELAY;
+            if (player.isOnGround() && (roomWidth != newRoomWidth || roomHeight != newRoomHeight)) {
+                roomWidth = newRoomWidth;
+                roomHeight = newRoomHeight;
+                GamePanel.roomTransition();
+                roomChanged = true;
+                cameraDelayCounter = CAMERADELAY;
+            }
         }
 
         double targetRoomX = (newMinX * scaledTileSize) - (GamePanel.screenWidth / 2.0 - roomWidth / 2.0);
@@ -589,7 +597,8 @@ public class TiledMap {
         if (playerTileX < 0 || playerTileX >= mapWidth || playerTileY < 0 || playerTileY >= mapHeight) return;
         if (roomIds == null) return;
 
-        activeRoomId = roomIds[playerTileY][playerTileX];
+        if (roomIds[playerTileY][playerTileX] != 0 && player.isOnGround())
+            activeRoomId = roomIds[playerTileY][playerTileX];
     }
 
     /**
