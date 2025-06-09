@@ -418,6 +418,7 @@ public class Wasp extends Enemy {
      */
     public void death(){
         if (currentState != State.DEAD) {
+            GamePanel.activeEnemies.remove(this);
             currentState = State.DEAD;
             spriteRow = 3;
             spriteCol = 0;

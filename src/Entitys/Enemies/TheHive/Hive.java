@@ -211,6 +211,7 @@ public class Hive extends Enemy{
      */
     public void death(){
         if (currentState != State.EXPLODE) {
+            GamePanel.activeEnemies.remove(this);
             currentState = State.EXPLODE;
             spriteRow = 3;
             spriteCol = 0;

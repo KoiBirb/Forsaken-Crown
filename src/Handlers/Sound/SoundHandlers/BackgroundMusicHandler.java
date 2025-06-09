@@ -36,7 +36,7 @@ public class BackgroundMusicHandler {
    private long actionSwitchRequestTime = 0;
    private boolean actionSwitchPending = false;
    private MusicState requestedMusicState = MusicState.MAIN;
-   private static final long ACTION_SWITCH_GRACE_MS = 800;
+   private static final long ACTION_SWITCH_GRACE_MS = 700;
 
     /**
      * Constructor for BackgroundMusicHandler
@@ -119,7 +119,9 @@ public class BackgroundMusicHandler {
                 actionSwitchRequestTime = now;
                 requestedMusicState = desiredState;
             } else if (now - actionSwitchRequestTime >= ACTION_SWITCH_GRACE_MS) {
-                if (!isTransitioning.get()) {
+                if (desiredState == MusicState.ACTION && GamePanel.activeEnemies.isEmpty()) {
+                    actionSwitchPending = false;
+                } else if (!isTransitioning.get()) {
                     transitionToMusic(getMusic(currentMusicType, desiredState), 1000);
                     currentMusicState = desiredState;
                     actionSwitchPending = false;

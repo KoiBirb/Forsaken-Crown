@@ -169,7 +169,6 @@ public class GamePanel extends JPanel implements Runnable{
                 tileMap.update();
             }
 
-            backgroundMusic.update();
             EnemySpawnHandler.updateAll();
             checkpointManager.update();
 
@@ -185,12 +184,6 @@ public class GamePanel extends JPanel implements Runnable{
                 effects.get(i).update();
             }
 
-            for (int i = 0; i < activeEnemies.size(); i++) {
-                if (!enemies.contains(activeEnemies.get(i))) {
-                    activeEnemies.remove(activeEnemies.get(i));
-                }
-            }
-
             for (int i = 0; i < enemies.size(); i++) {
                 for (int j = 0; j < playerAttacks.size(); j++) {
                     if (CollisionHandler.attackCollision(playerAttacks.get(j), enemies.get(i))) {
@@ -198,6 +191,8 @@ public class GamePanel extends JPanel implements Runnable{
                     }
                 }
             }
+
+            backgroundMusic.update();
 
             for (int j = 0; j < enemyAttacks.size(); j++) {
                 if (CollisionHandler.attackCollision(enemyAttacks.get(j), player)) {

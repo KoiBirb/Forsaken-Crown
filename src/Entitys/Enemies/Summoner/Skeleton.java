@@ -347,6 +347,7 @@ public class Skeleton extends Enemy {
      */
     public void death(){
         if (currentState != State.DEAD) {
+            GamePanel.activeEnemies.remove(this);
             currentState = State.DEAD;
             spriteRow = 4;
             spriteCol = 0;
