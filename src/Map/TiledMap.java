@@ -421,9 +421,8 @@ public class TiledMap {
             targetY = roomScreenPos.y;
         }
 
-        double smoothing = 0.1;
-        smoothCameraPos.x += (targetX - smoothCameraPos.x) * smoothing;
-        smoothCameraPos.y += (targetY - smoothCameraPos.y) * smoothing;
+        smoothCameraPos.x += (targetX - smoothCameraPos.x) * 0.2;
+        smoothCameraPos.y += (targetY - smoothCameraPos.y) * 0.2;
 
         return new Vector2(smoothCameraPos.x, smoothCameraPos.y);
     }
