@@ -399,28 +399,33 @@ public class TiledMap {
      * Calculates the correct camera position based on the player's position in a room
      * @return Vector2 camera screen position x,y
      */
-    public Vector2 getCameraPos() {
+    private Vector2 smoothCameraPos = new Vector2(0, 0);
 
-        double cameraX = player.getPosition().x - GamePanel.screenWidth / 2;
-        double cameraY = player.getPosition().y - GamePanel.screenHeight / 2;
+    public Vector2 getCameraPos() {
+        double targetX = player.getPosition().x - GamePanel.screenWidth / 2;
+        double targetY = player.getPosition().y - GamePanel.screenHeight / 2;
 
         int cameraMargin = 400;
 
         if (roomWidth > GamePanel.screenWidth) {
-            cameraX = (cameraX < roomScreenPos.x) ? Math.max(roomScreenPos.x - cameraMargin, cameraX) :
-                    Math.min(cameraX, roomScreenPos.x + roomWidth - cameraMargin * 3.88);
+            targetX = (targetX < roomScreenPos.x) ? Math.max(roomScreenPos.x - cameraMargin, targetX) :
+                    Math.min(targetX, roomScreenPos.x + roomWidth - cameraMargin * 3.88);
         } else {
-            cameraX = roomScreenPos.x;
+            targetX = roomScreenPos.x;
         }
 
         if (roomHeight > GamePanel.screenHeight) {
-            cameraY = (cameraY < roomScreenPos.y) ? Math.max(roomScreenPos.y - 2 * cameraMargin, cameraY) :
-                    Math.min(cameraY, roomScreenPos.y + roomHeight - 3 * cameraMargin);
+            targetY = (targetY < roomScreenPos.y) ? Math.max(roomScreenPos.y - 2 * cameraMargin, targetY) :
+                    Math.min(targetY, roomScreenPos.y + roomHeight - 3 * cameraMargin);
         } else {
-            cameraY = roomScreenPos.y;
+            targetY = roomScreenPos.y;
         }
 
-        return new Vector2(cameraX, cameraY);
+        double smoothing = 0.1;
+        smoothCameraPos.x += (targetX - smoothCameraPos.x) * smoothing;
+        smoothCameraPos.y += (targetY - smoothCameraPos.y) * smoothing;
+
+        return new Vector2(smoothCameraPos.x, smoothCameraPos.y);
     }
 
     /**
