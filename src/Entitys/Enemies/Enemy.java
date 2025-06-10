@@ -164,6 +164,6 @@ public abstract class Enemy extends Entitys.Entity {
      * Increases player mana on death
      */
     public void death(){
-        GamePanel.player.increaseMana(2);
+        GamePanel.player.increaseMana(1);
     }
 }
