@@ -471,6 +471,18 @@ public class Player extends Entity {
      * @param knockbackY int vertical knockback
      */
     public void hit(int damage, int knockbackX, int knockbackY) {
+        if (state == PlayerState.HEALING) {
+            heal = false;
+            healStartTime = 0;
+            lastHealTickTime = 0;
+            PlayerSoundHandler.healEnd();
+            PlayerSoundHandler.stopHealCharge();
+            spriteRow = 11;
+            spriteCol = 0;
+            maxSpriteCol = 5;
+            spriteCounter = 0;
+        }
+
         if (currentHealth > 0 && image != imageHit) {
 
             if (state != PlayerState.ATTACKING) {
