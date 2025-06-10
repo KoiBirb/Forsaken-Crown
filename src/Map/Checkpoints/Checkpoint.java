@@ -54,6 +54,7 @@ public class Checkpoint {
             if (!isActive && GamePanel.player.getSolidArea().intersects(solidArea)) {
                 isActive = true;
                 PlayerSoundHandler.checkpoint();
+                GamePanel.points += 200;
                 maxCol = 6;
                 GamePanel.player.setSpawnPosition(new Vector2(position.x + 20, position.y - 5));
             } else {
