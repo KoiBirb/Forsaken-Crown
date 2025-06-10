@@ -55,7 +55,7 @@ public class GamePanel extends JPanel implements Runnable{
     private VolatileImage Help = ImageHandler.loadImage("Assets/Images/UI/Words/help.png");
     public static final Color backgroundColor = new Color(11, 11, 11);
 
-    public static long initialTime;
+    public static long initialTime, pauseTime;
     public static int points;
 
     public static boolean fading = false, fadeIn = true;
@@ -149,10 +149,12 @@ public class GamePanel extends JPanel implements Runnable{
         if(keyI.lPressed){
 
             if(isPaused){
+                pauseTime = System.currentTimeMillis();
                 backgroundMusic.unmuteCurrent();
                 EnemySoundHandler.unmuteAll();
                 PlayerSoundHandler.unmuteAll();
             } else {
+                initialTime -= (System.currentTimeMillis() - pauseTime);
                 backgroundMusic.muteCurrent();
                 EnemySoundHandler.muteAll();
                 PlayerSoundHandler.muteAll();
