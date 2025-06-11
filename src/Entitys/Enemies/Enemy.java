@@ -81,7 +81,7 @@ public abstract class Enemy extends Entitys.Entity {
                 return false;
 
             int tile = collidableTiles[row][col];
-            if (tile == 1) return false;
+            if (tile == 1 || tile == 4) return false;
         }
         return true;
     }
