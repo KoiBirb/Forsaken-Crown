@@ -24,7 +24,7 @@ public class WaspAttack extends MeleeAttack {
      * @param wasp The wasp object that is performing the attack.
      */
     public WaspAttack(Wasp wasp) {
-        super(2);
+        super(1);
 
         this.wasp = wasp;
         GamePanel.enemyAttacks.add(this);

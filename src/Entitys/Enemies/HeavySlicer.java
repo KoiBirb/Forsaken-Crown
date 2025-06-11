@@ -45,7 +45,7 @@ public class HeavySlicer extends Enemy{
      * @param pos The initial position of the Heavy Slicer.
      */
     public HeavySlicer(Vector2 pos) {
-        super(pos, 1, 8, 48, 32, 12,  new Rectangle(0, 0, 50, 64));
+        super(pos, 1, 8, 48, 32, 10,  new Rectangle(0, 0, 50, 64));
 
         imageReg = imageRegPRELOAD;
         imageHit = imageHitPRELOAD;

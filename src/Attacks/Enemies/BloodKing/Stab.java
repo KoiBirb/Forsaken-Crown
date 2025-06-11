@@ -25,7 +25,7 @@ public class Stab extends MeleeAttack {
      * @param bloodKing The BloodKing object that is performing the attack.
      */
     public Stab(BloodKing bloodKing) {
-        super(3);
+        super(2);
 
         this.bloodKing = bloodKing;
         EnemySoundHandler.stabWarn();

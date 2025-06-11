@@ -25,7 +25,7 @@ public class Slash extends MeleeAttack {
      * @param bloodKing The BloodKing object that is performing the attack.
      */
     public Slash(BloodKing bloodKing) {
-        super(2);
+        super(1);
 
         this.bloodKing = bloodKing;
         GamePanel.enemyAttacks.add(this);

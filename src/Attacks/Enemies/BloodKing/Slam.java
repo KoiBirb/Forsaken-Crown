@@ -25,7 +25,7 @@ public class Slam extends MeleeAttack {
      * @param bloodKing The BloodKing object that is performing the attack.
      */
     public Slam (BloodKing bloodKing) {
-        super(5);
+        super(3);
 
         this.bloodKing = bloodKing;
         GamePanel.enemyAttacks.add(this);

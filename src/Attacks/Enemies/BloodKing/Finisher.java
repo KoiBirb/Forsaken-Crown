@@ -25,7 +25,7 @@ public class Finisher extends MeleeAttack {
      * @param bloodKing The BloodKing object that is performing the attack.
      */
     public Finisher(BloodKing bloodKing) {
-        super(6);
+        super(5);
 
         this.bloodKing = bloodKing;
         EnemySoundHandler.finisherCharge();

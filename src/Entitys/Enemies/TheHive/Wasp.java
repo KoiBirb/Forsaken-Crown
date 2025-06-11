@@ -42,7 +42,7 @@ public class Wasp extends Enemy {
      * @param pos The initial position of the wasp.
      */
     public Wasp(Vector2 pos) {
-        super(pos, 2, 8, 16, 16, 2, new Rectangle(0, 0, 30, 30));
+        super(pos, 2, 8, 16, 16, 1, new Rectangle(0, 0, 30, 30));
         this.image = WASP_IMAGE;
     }
 

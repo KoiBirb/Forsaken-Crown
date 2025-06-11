@@ -35,9 +35,9 @@ public class GhoulAttack extends MeleeAttack {
     @Override
     public void update() {
 
-        if (frame == 7) {
+        if (frame == 7 || ghoul.getState() != Ghoul.State.ATTACKING) {
             GamePanel.enemyAttacks.remove(this);
-        } else if (frame == 2 && ghoul.getState() != Ghoul.State.DEAD && ghoul.getState() != Ghoul.State.DAMAGED) {
+        } else if (frame == 2) {
             hitBox = new Rectangle((ghoul.getDirection().contains("right")) ? (int) ghoul.getPosition().x - 4 : (int) ghoul.getPosition().x - 50, (int) (ghoul.getPosition().y - 7), 80, 45);
         } else {
             hitBox = null;
