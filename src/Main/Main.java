@@ -7,7 +7,9 @@
 
 package Main;
 
+import Handlers.EnemySpawnHandler;
 import Handlers.ScoreHandler;
+import Handlers.Sound.SoundHandlers.EnemySoundHandler;
 import Main.Panels.EndPanel;
 import Main.Panels.GamePanel;
 import Main.Panels.MenuPanel;
@@ -76,6 +78,8 @@ public class Main {
      * Switch to the death screen
      */
     public static void switchToEnd(boolean victory) {
+        EnemySoundHandler.muteAll();
+
         if (victory) {
             EndPanel.victory = true;
             gameState = GameState.VICTORY;
@@ -98,6 +102,7 @@ public class Main {
         MenuPanel.menuThread = null;
         EndPanel.endThread = null;
         cardLayout.show(mainPanel, "GAME");
+        EnemySoundHandler.unmuteAll();
         gamePanel.setupGame();
     }
 

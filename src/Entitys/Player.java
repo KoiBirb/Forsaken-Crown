@@ -171,8 +171,9 @@ public class Player extends Entity {
 
         if (state == PlayerState.DEAD && now - deathTime >= 4500) {
             lives--;
-            if (lives <= 0)
+            if (lives <= 0) {
                 switchToEnd(false);
+            }
             EnemySpawnHandler.setup();
             resetPlayer();
         }
