@@ -20,7 +20,7 @@ public class Checkpoint {
 
     private final Vector2 position;
     private final Rectangle solidArea;
-    private static final VolatileImage checkpointImage = ImageHandler.loadImage("Assets/Images/Tilesets/Objects/Save/spritesheet_vertical.png");
+    private static final VolatileImage checkpointImage = ImageHandler.loadImage("Images/Save/spritesheet_vertical.png");
 
     private boolean isActive;
     private final int roomId;

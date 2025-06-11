@@ -56,7 +56,7 @@ public class ButtonManager {
         };
         pauseButtons = new Button[]{
                 new Button((int) (GamePanel.screenWidth/5) - 169, (int) (GamePanel.screenHeight * (4.6/6.2)), 120,
-                        "Images/UI/Words/Words With BG/UI - Words3.png"),
+                        "Images/UI/Words/Words With BG/UI - Words10.png"),
                 new Button((int) (GamePanel.screenWidth/2) - 169, (int) (GamePanel.screenHeight * (4.6/6.2)), 120,
                         "Images/UI/Words/Words With BG/UI - Words11.png"),
                 new Button((int) (GamePanel.screenWidth * (4.0/5) - 169), (int) (GamePanel.screenHeight * (4.6/6.2)), 120,
@@ -231,7 +231,8 @@ public class ButtonManager {
         if (keyI.uPressed) {
             switch (selectedIndex) {
                 case 0:
-                    System.exit(0);
+                    GamePanel.isPaused = false;
+                    Main.switchToMenu();
                     break;
                 case 1:
                     GamePanel.isPaused = false;

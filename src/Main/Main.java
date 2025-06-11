@@ -10,6 +10,7 @@ package Main;
 import Handlers.EnemySpawnHandler;
 import Handlers.ScoreHandler;
 import Handlers.Sound.SoundHandlers.EnemySoundHandler;
+import Handlers.Sound.SoundHandlers.PlayerSoundHandler;
 import Main.Panels.EndPanel;
 import Main.Panels.GamePanel;
 import Main.Panels.MenuPanel;
@@ -102,7 +103,11 @@ public class Main {
         MenuPanel.menuThread = null;
         EndPanel.endThread = null;
         cardLayout.show(mainPanel, "GAME");
+
+        GamePanel.backgroundMusic.unmuteCurrent();
         EnemySoundHandler.unmuteAll();
+        PlayerSoundHandler.unmuteAll();
+
         gamePanel.setupGame();
     }
 

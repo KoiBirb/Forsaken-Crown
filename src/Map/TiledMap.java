@@ -63,12 +63,12 @@ public class TiledMap {
     private int minX, maxX, minY, maxY, newMinX, newMinY, newMaxX, newMaxY;
     private int[] roomBounds;
 
-    private static final VolatileImage CastleBones = ImageHandler.loadImage("Assets/Images/Tilesets/Map/Castle of Bones Tileset.png");
-    private static final VolatileImage DarkEdition = ImageHandler.loadImage("Assets/Images/Tilesets/Map/DARK Edition Tileset No background.png");
-    private static final VolatileImage BloodTemple = ImageHandler.loadImage("Assets/Images/Tilesets/Map/Blood Temple Tileset.png");
-    private static final VolatileImage Glow1 = ImageHandler.loadImage("Assets/Images/Tilesets/Map/pixil-frame-0 (6).png");
-    private static final VolatileImage Glow2 = ImageHandler.loadImage("Assets/Images/Tilesets/Map/pixil-frame-0 (5).png");
-    private static final VolatileImage Victorian = ImageHandler.loadImage("Assets/Images/Tilesets/Map/victorian tileset.png");
+    private static final VolatileImage CastleBones = ImageHandler.loadImage("Images/Tilesets/Castle of Bones Tileset.png");
+    private static final VolatileImage DarkEdition = ImageHandler.loadImage("Images/Tilesets/DARK Edition Tileset No background.png");
+    private static final VolatileImage BloodTemple = ImageHandler.loadImage("Images/Tilesets/Blood Temple Tileset.png");
+    private static final VolatileImage Glow1 = ImageHandler.loadImage("Images/Tilesets/pixil-frame-0 (6).png");
+    private static final VolatileImage Glow2 = ImageHandler.loadImage("Images/Tilesets/pixil-frame-0 (5).png");
+    private static final VolatileImage Victorian = ImageHandler.loadImage("Images/Tilesets/victorian tileset.png");
     private static final VolatileImage Spikes = ImageHandler.loadImage("Assets/Images/Traps/Spikes 48x16.png");
 
     /**
