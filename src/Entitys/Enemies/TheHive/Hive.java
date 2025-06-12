@@ -218,7 +218,7 @@ public class Hive extends Enemy{
             maxSpriteCol = 7;
             velocity.x = 0;
             velocity.y = 0;
-            GamePanel.points += 50;
+            GamePanel.points += 75;
             canSeePlayer = false;
         }
     }

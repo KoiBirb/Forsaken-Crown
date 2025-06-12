@@ -390,7 +390,7 @@ public class SlicerBot extends Enemy{
             maxSpriteCol = 12;
             velocity.x = 0;
             velocity.y = 0;
-            GamePanel.points += 25;
+            GamePanel.points += 30;
             EnemySoundHandler.stopBotSteps();
             EnemySoundHandler.botDeath();
             super.death();

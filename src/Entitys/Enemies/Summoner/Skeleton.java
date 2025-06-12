@@ -354,7 +354,7 @@ public class Skeleton extends Enemy {
             maxSpriteCol = 15;
             velocity.x = 0;
             velocity.y = 0;
-            GamePanel.points += 25;
+            GamePanel.points += 30;
             EnemySoundHandler.stopSkeletonAttack();
             EnemySoundHandler.stopSkeletonFootsteps();
             EnemySoundHandler.skeletonDeath();

@@ -412,7 +412,7 @@ public class SkeletonKnight extends Enemy {
             maxSpriteCol = 15;
             velocity.x = 0;
             velocity.y = 0;
-            GamePanel.points += 50;
+            GamePanel.points += 75;
             EnemySoundHandler.stopSkeletonAttack();
             EnemySoundHandler.stopSkeletonFootsteps();
             EnemySoundHandler.skeletonDeath();

@@ -515,7 +515,7 @@ public class SkeletonSummoner extends Enemy{
             maxSpriteCol = 12;
             velocity.x = 0;
             velocity.y = 0;
-            GamePanel.points += 100;
+            GamePanel.points += 125;
             EnemySoundHandler.stopSummonerFootsteps();
             EnemySoundHandler.stopSummonerAttack();
             EnemySoundHandler.summonerDeath();
