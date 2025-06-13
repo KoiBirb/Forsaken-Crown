@@ -222,7 +222,7 @@ public class Player extends Entity {
         }
 
         // Jumping
-        if (keyI.wPressed && state != PlayerState.HEALING) {
+        if ((keyI.wPressed || keyI.oPressed) && state != PlayerState.HEALING) {
             int coyoteTime = 100;
             if (jump && (onGround || now - lastGroundedTime <= coyoteTime) && jumpKeyPressStartTime == 0) {
                 jumpKeyPressStartTime = now;
@@ -241,7 +241,7 @@ public class Player extends Entity {
             jump = true;
         }
 
-        if (keyI.wPressed && continuousJump && state != PlayerState.HEALING) {
+        if ((keyI.wPressed || keyI.oPressed) && continuousJump && state != PlayerState.HEALING) {
             velocity.y = -8;
             isColliding = false;
             if (state != PlayerState.DASHING && state != PlayerState.ATTACKING) {
